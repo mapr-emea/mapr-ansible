@@ -1,6 +1,6 @@
 ---
-# Install mapr-posix-client-basic
-- name: Install mapr-posix-client-basic
+# Install mapr-posix-client-platinum
+- name: Install mapr-posix-client-platinum
   package: name={{ item }} state=present
   with_items:
   - mapr-posix-client-basic
@@ -11,5 +11,5 @@
 # Other actions
 - name: Create /mapr dir
   file: path=/mapr state=directory
-- name: Start the mapr-posix-client-basic service
-  service: name=mapr-posix-client-basic state=started enabled=yes
+- name: Start the mapr-posix-client-platinum service
+  service: name=mapr-posix-client-platinum state=started enabled=yes

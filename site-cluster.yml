@@ -148,6 +148,10 @@
   hosts: mapr-posix-client-basic
   roles:
     - mapr-posix-client-basic
+- name: Install mapr-posix-client-platinum (FUSE)
+  hosts: mapr-posix-client-platinum
+  roles:
+    - mapr-posix-client-platinum
 - name: Install Spark on YARN
   hosts: mapr-spark-yarn
   roles:

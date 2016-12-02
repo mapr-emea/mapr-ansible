@@ -1,14 +1,6 @@
-- MySQL packages in variable
-- Nfs local in variable
-- mapr-core with package
-- Nfs in variable
-
-- Uninstall removed components
+- Uninstall removed components from inventory
 - Import GPG key
 - Make installable for local install
-- OpenJDK suse doesn't work?
-- Add pre checks on supported OS
-- add posix platinum
 
 
 
