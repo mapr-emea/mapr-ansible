@@ -22,6 +22,15 @@
     gpgcheck: yes
     gpgkey: "{{ mapr_gpg_url }}"
   when: ansible_os_family == 'RedHat'
+- name: Create MapR Patch Repository for RedHat
+  yum_repository:
+    name: maprpatch
+    description: MapR Technologies
+    file: external_repos
+    baseurl: "{{ mapr_patch_url }}/redhat/"
+    gpgcheck: yes
+    gpgkey: "{{ mapr_gpg_url }}"
+  when: ansible_os_family == 'RedHat'
 
 # Ubuntu / Debian
 - name: Import RPM key for Ubuntu
@@ -41,10 +50,16 @@
     update_cache: yes
     validate_certs: yes
   when: ansible_os_family == 'Debian'
+- name: Create MapR Patch Repository for Ubuntu
+  apt_repository:
+    repo: "deb {{ mapr_patch_url }}/ubuntu/ binary trusty"
+    state: present
+    update_cache: yes
+    validate_certs: yes
+  when: ansible_os_family == 'Debian'
 - name: Update cache for Ubuntu
   apt: update_cache=yes
   when: ansible_os_family == 'Debian'
-
 
 # Suse
 - name: Import RPM key for Suse
@@ -61,6 +76,13 @@
   zypper_repository:
     name: maprecosystem
     repo: "{{ mapr_ecosystem_url }}/suse/"
+    disable_gpg_check: no
+    state: present
+  when: ansible_os_family == 'Suse'
+- name: Create MapR Patch Repository for Suse
+  zypper_repository:
+    name: maprpatch
+    repo: "{{ mapr_patch_url }}/redhat/"
     disable_gpg_check: no
     state: present
   when: ansible_os_family == 'Suse'

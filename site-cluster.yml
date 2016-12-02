@@ -151,10 +151,12 @@
   hosts: mapr-posix-client-basic
   roles:
     - mapr-posix-client-basic
+    - mapr-patch-posix-client-basic
 - name: Install mapr-posix-client-platinum (FUSE)
   hosts: mapr-posix-client-platinum
   roles:
     - mapr-posix-client-platinum
+    - mapr-patch-posix-client-platinum
 - name: Install Spark on YARN
   hosts: mapr-spark-yarn
   roles:
@@ -199,7 +201,11 @@
   hosts: mapr-fluentd
   roles:
     - mapr-log-monitoring-configure
-#- name: Restarting mapr-warden
-#  hosts: base
-#  roles:
-#    - mapr-configure-warden-restart
+- name: MapR Patches
+  hosts: mapr-patch
+  roles:
+    - mapr-patch
+- name: Restarting mapr-warden
+  hosts: base
+  roles:
+    - mapr-configure-warden-restart

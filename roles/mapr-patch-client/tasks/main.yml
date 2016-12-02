@@ -1,0 +1,4 @@
+---
+# Install MapR Patches Client
+- name: Install mapr-patch-client
+  package: name=mapr-patch-client state=present

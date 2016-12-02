@@ -1,0 +1,8 @@
+---
+# Install MapR Patches Client
+- name: Install mapr-patch-posix-client-basic
+  package: name=mapr-patch-posix-client-basic state=present
+- name: Set /opt/mapr/conf/mapruserticket in fuse.conf
+  lineinfile: dest=/opt/mapr/conf/fuse.conf regexp="^fuse\.ticketfile\.location" line="fuse.ticketfile.location=/opt/mapr/conf/mapruserticket"
+- name: Start the mapr-posix-client-basic service
+  service: name=mapr-posix-client-basic state=restarted enabled=yes

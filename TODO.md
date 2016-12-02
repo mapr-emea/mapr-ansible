@@ -1,11 +1,5 @@
 - Uninstall removed components from inventory
 - Make installable for local install
-- Patches
-
-
-
-
-
 - Add precheck for disks
 
 - RStudio for Redhat, Centos, Suse

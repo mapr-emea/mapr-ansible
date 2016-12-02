@@ -21,6 +21,7 @@
   roles:
     - mapr-configure-repository
     - mapr-client
+    - mapr-patch-client
     - mapr-configure-subnets
     - {role: mapr-client-configure-unsecure, when: mapr_security == 'none'}
     - {role: mapr-client-configure-nativesecurity-secure, when: mapr_security == 'native'}
@@ -92,7 +93,9 @@
   hosts: mapr-posix-client-basic
   roles:
     - mapr-posix-client-basic
+    - mapr-patch-posix-client-basic
 - name: Install mapr-posix-client-platinum (FUSE)
   hosts: mapr-posix-client-platinum
   roles:
     - mapr-posix-client-platinum
+    - mapr-patch-posix-client-platinum
