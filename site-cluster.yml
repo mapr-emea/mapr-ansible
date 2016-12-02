@@ -1,3 +1,7 @@
+- name: Setup MapR repositories
+  hosts: mapr-core
+  roles:
+    - mapr-configure-repository
 - name: Apply common configuration to all nodes
   hosts: common
   roles:
@@ -18,7 +22,6 @@
 - name: Install MapR Core
   hosts: mapr-core
   roles:
-    - mapr-configure-repository
     - mapr-core
     - mapr-configure-subnets
 - name: Install Zookeeper
