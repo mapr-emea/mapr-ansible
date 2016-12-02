@@ -5,3 +5,6 @@
    tasks:
     - debug: msg="Test {{ item }} {{ ansible_os_family }}"
       with_items: "{{ vars['packages_' + ansible_os_family] }}"
+
+
+

@@ -116,10 +116,6 @@
   hosts: mapr-hue
   roles:
     - mapr-hue
-- name: Install Oozie
-  hosts: mapr-oozie
-  roles:
-    - mapr-oozie
 - name: Install HttpFS
   hosts: mapr-httpfs
   roles:
@@ -144,6 +140,10 @@
   hosts: mapr-core
   roles:
    - mapr-configure-warden-restart
+- name: Install Oozie
+  hosts: mapr-oozie
+  roles:
+    - mapr-oozie
 - name: Install mapr-posix-client-basic (FUSE)
   hosts: mapr-posix-client-basic
   roles:

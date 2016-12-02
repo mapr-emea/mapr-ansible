@@ -1,5 +1,4 @@
 ---
 # Install MapR FileServer (MFS)
-
 - name: Install mapr-fileserver
   package: name=mapr-fileserver state=present
