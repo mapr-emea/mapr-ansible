@@ -1,14 +1,14 @@
 - name: Apply common configuration to all nodes
   hosts: common
   roles:
-    - {role: common-oracle-jdk, when: jdk == 'oraclejdk'}
+    - common-prereq
+    - {role: common-oraclejdk18, when: jdk == 'oraclejdk18'}
     - {role: common-openjdk18, when: jdk == 'openjdk18'}
     - common-mapruser
     - common-rpcbind
     - common-ntp
     - common-misc
     - common-sysctl
-    - common-prereq
 # used by configure.sh and drill
 - name: Setup global vars
   hosts: all
