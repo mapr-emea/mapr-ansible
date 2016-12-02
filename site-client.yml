@@ -93,9 +93,9 @@
   hosts: mapr-posix-client-basic
   roles:
     - mapr-posix-client-basic
-    - mapr-patch-posix-client-basic
+#    - mapr-patch-posix-client-basic
 - name: Install mapr-posix-client-platinum (FUSE)
   hosts: mapr-posix-client-platinum
   roles:
     - mapr-posix-client-platinum
-    - mapr-patch-posix-client-platinum
+#    - mapr-patch-posix-client-platinum

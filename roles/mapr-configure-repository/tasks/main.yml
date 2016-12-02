@@ -50,13 +50,13 @@
     update_cache: yes
     validate_certs: yes
   when: ansible_os_family == 'Debian'
-- name: Create MapR Patch Repository for Ubuntu
-  apt_repository:
-    repo: "deb {{ mapr_patch_url }}/ubuntu/ binary trusty"
-    state: present
-    update_cache: yes
-    validate_certs: yes
-  when: ansible_os_family == 'Debian' and mapr_patch_url is defined
+#- name: Create MapR Patch Repository for Ubuntu
+#  apt_repository:
+#    repo: "deb {{ mapr_patch_url }}/ubuntu/ dists binary"
+#    state: present
+#    update_cache: yes
+#    validate_certs: yes
+#  when: ansible_os_family == 'Debian' and mapr_patch_url is defined
 - name: Update cache for Ubuntu
   apt: update_cache=yes
   when: ansible_os_family == 'Debian'
