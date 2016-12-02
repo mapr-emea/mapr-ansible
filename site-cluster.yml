@@ -202,10 +202,10 @@
   roles:
     - mapr-log-monitoring-configure
 - name: MapR Patches
-  hosts: mapr-patch
+  hosts: mapr-core
   roles:
     - mapr-patch
 - name: Restarting mapr-warden
-  hosts: base
+  hosts: mapr-core
   roles:
     - mapr-configure-warden-restart
