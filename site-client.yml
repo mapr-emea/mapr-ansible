@@ -93,9 +93,10 @@
   hosts: mapr-posix-client-basic
   roles:
     - mapr-posix-client-basic
-#    - mapr-patch-posix-client-basic
+    - {role: mapr-patch-posix-client-basic, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
+
 - name: Install mapr-posix-client-platinum (FUSE)
   hosts: mapr-posix-client-platinum
   roles:
     - mapr-posix-client-platinum
-#    - mapr-patch-posix-client-platinum
+    - {role: mapr-patch-posix-client-platinum, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}

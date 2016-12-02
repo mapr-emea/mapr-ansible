@@ -12,7 +12,7 @@ ansible -i myhosts/hosts_3nodes  -m raw -a "ln -s /usr/bin/python3 /usr/bin/pyth
 
 * Redhat 7 or higher
 * CentOS 7 or higher
-* Ubuntu 14.x or higher
+* Ubuntu 14.x (not 16.x)
 * Suse SLES 12 or higher
 
 ## Verify inventory file

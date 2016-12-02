@@ -1,11 +1,16 @@
- - hosts: all
-   vars:
-      packages_Suse: ['testen1', 'testen2']
-      packages_RedHat: ['testen3', 'testen4']
-   tasks:
-    - debug: msg="Test {{ item }} {{ ansible_os_family }}"
-      with_items: "{{ vars['packages_' + ansible_os_family] }}"
-    - debug: msg="Ha {{ inventory_hostname not in groups["mapr-mcs"] }}"
-    - debug: msg="{{ mapr_patch_url is defined }}"
+- name: MapR Patches
+  hosts: mapr-core
+  roles:
+   - {role: mapr-patch, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
+
+# - hosts: all
+#   vars:
+#      packages_Suse: ['testen1', 'testen2']
+#      packages_RedHat: ['testen3', 'testen4']
+#   tasks:
+#    - debug: msg="Test {{ item }} {{ ansible_os_family }}"
+#      with_items: "{{ vars['packages_' + ansible_os_family] }}"
+#    - debug: msg="Ha {{ inventory_hostname not in groups["mapr-mcs"] }}"
+#    - debug: msg="{{ mapr_patch_url is defined }}"
 
 

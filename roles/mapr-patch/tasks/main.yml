@@ -1,5 +1,12 @@
 ---
+- name: Stop Warden
+  service: name=mapr-warden state=stopped enabled=yes
+- name: Stop Zookeeper
+  service: name=mapr-zookeeper state=stopped enabled=yes
 # Install MapR Patches
 - name: Install mapr-patch
   package: name=mapr-patch state=present
-  when: mapr_patch_url is defined and ansible_os_family != 'Debian'
+- name: Start Zookeeper
+  service: name=mapr-zookeeper state=started enabled=yes
+- name: Start Warden
+  service: name=mapr-warden state=started enabled=yes

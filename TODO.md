@@ -1,7 +1,6 @@
 - Uninstall removed components from inventory
 - Make installable for local install
 - Add precheck for disks
-- Fuse patches not signed!
 
 - RStudio for Redhat, Centos, Suse
 - Add storm

@@ -28,7 +28,7 @@
     description: MapR Technologies
     file: external_repos
     baseurl: "{{ mapr_patch_url }}/redhat/"
-    gpgcheck: yes
+    gpgcheck: no
     gpgkey: "{{ mapr_gpg_url }}"
   when: ansible_os_family == 'RedHat' and mapr_patch_url is defined
 
@@ -83,6 +83,6 @@
   zypper_repository:
     name: maprpatch
     repo: "{{ mapr_patch_url }}/redhat/"
-    disable_gpg_check: no
+    disable_gpg_check: yes
     state: present
   when: ansible_os_family == 'Suse' and mapr_patch_url is defined
