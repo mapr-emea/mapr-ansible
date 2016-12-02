@@ -79,7 +79,7 @@ Helpers are located in the `helper` folder.
 
 ### Create several users to test ACE
 
-This document contains the ACE file/Volume demo: https://docs.google.com/document/d/11DkezjtZcwVdXtrfBU3eBnNNObakILyYVJmyaKHdUHs/edit#heading=h.v7cls48r0iz7
+This document contains the ACE file/Volume demo
 To create the users and groups just run:
 
 Run:
