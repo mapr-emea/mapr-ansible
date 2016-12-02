@@ -5,7 +5,7 @@
 - name: Start the ntp service
   vars:
     service_Suse: ntpd
-    service_Redhat: ntpd
+    service_RedHat: ntpd
     service_Debian: ntp
   service: name="{{ vars['service_' + ansible_os_family] }}" state=started enabled=yes
 

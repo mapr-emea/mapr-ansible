@@ -4,7 +4,7 @@
 - name: Install mapr-nfs
   vars:
     packages_Suse: ['mapr-nfs', 'nfs-utils', 'rpcbind']
-    packages_Redhat: ['mapr-nfs', 'nfs-utils', 'rpcbind']
+    packages_RedHat: ['mapr-nfs', 'nfs-utils', 'rpcbind']
     packages_Debian: ['mapr-nfs', 'nfs-common', 'rpcbind']
   package: name={{ item }} state=present
   with_items: "{{ vars['packages_' + ansible_os_family] }}"

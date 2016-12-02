@@ -1,7 +1,7 @@
 ---
 - name: Check operation system
-  fail: msg="Only Suse, Debian, Ubuntu, Redhat and CentOS are supported"
-  when: ansible_os_family not in ["Suse", "Redhat", "Debian"]
+  fail: msg="Only Suse, Debian, Ubuntu, RedHat and CentOS are supported"
+  when: ansible_os_family not in ["Suse", "RedHat", "Debian"]
 
 - name: Ensure permissions for PAM config /etc/pam.d/system-auth-pc
   file: path=/etc/pam.d/system-auth-pc state=directory mode=0644

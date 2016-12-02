@@ -15,6 +15,14 @@ ansible -i myhosts/hosts_3nodes  -m raw -a "ln -s /usr/bin/python3 /usr/bin/pyth
 * Ubuntu 14.x or higher
 * Suse SLES 12 or higher
 
+## Verify inventory file
+
+Execute:
+
+```
+ansible -i myhosts/<yourfile>  -m command -a "hostname -f" all
+``
+
 ## Use the UI installer
 
 This script sets up the Java, mapr user with password `mapr123`, install ntp and rpcbind. Last step is that it launches the MapR-UI installer on the master-node.

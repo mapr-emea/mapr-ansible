@@ -3,7 +3,7 @@
 - name: Install mapr-core
   vars:
     packages_Suse: ['mariadb', 'mariadb-client', 'mapr-core-internal', 'python-mysql']
-    packages_Redhat: ['mariadb-server', 'mariadb', 'MySQL-python']
+    packages_RedHat: ['mariadb-server', 'mariadb', 'MySQL-python']
     packages_Debian: ['mysql-server', 'mysql-client', 'python-mysqldb']
   package: name={{ item }} state=present
   with_items: "{{ vars['packages_' + ansible_os_family] }}"
@@ -11,14 +11,14 @@
 - name: Remove localhost binding
   vars:
     mysqlpath_Suse: /etc/my.cnf
-    mysqlpath_Redhat: /etc/my.cnf
+    mysqlpath_RedHat: /etc/my.cnf
     mysqlpath_Debian: /etc/mysql/my.cnf
   lineinfile: dest={{ vars['mysqlpath_' + ansible_os_family] }} regexp="^bind-address" state=absent
 
 - name: Start the mysqld service
   vars:
     service_Suse: mysql
-    service_Redhat: mariadb
+    service_RedHat: mariadb
     service_Debian: mysql
   service: name={{ vars['service_' + ansible_os_family] }} state=restarted enabled=yes
 
