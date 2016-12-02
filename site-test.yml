@@ -1,4 +1,4 @@
-- name: Setup global vars
-  hosts: all
+- name: Core
+  hosts: mapr-core
   roles:
-    - mapr-configure-repository
+    - mapr-core

@@ -1,52 +1,27 @@
 ---
 # Install MySQL
-# Redhat / CentOS
-- name: Install MySQL (Redhat / CentOS)
-  yum: name={{ item }} state=present update_cache=yes
-  with_items:
-  - mariadb-server
-  - mariadb
-  - MySQL-python
-  when: ansible_os_family == 'RedHat'
-- name: Remove localhost binding
-  lineinfile: dest=/etc/my.cnf regexp="^bind-address" state=absent
-  when: ansible_os_family == 'RedHat'
-- name: Start the mysqld service (Redhat / CentOS)
-  service: name=mariadb state=restarted enabled=yes
-  when: ansible_os_family == 'RedHat'
-# Debian / Ubuntu
-- name: Install MySQL (Debian / Ubuntu)
-  apt: name={{ item }} state=present update_cache=yes
-  with_items:
-  - mysql-server
-  - mysql-client
-  - python-mysqldb
-  when: ansible_os_family == 'Debian'
-- name: Remove localhost binding
-  lineinfile: dest=/etc/mysql/my.cnf regexp="^bind-address" state=absent
-  when: ansible_os_family == 'Debian'
-- name: Start the mysqld service (Debian / Ubuntu)
-  service: name=mysql state=restarted enabled=yes
-  when: ansible_os_family == 'Debian'
-# Suse
-- name: Install MySQL (Suse)
-  zypper: name={{ item }} state=present
-  with_items:
-  - mariadb
-  - mariadb-client
-  - python-mysql
-  when: ansible_os_family == 'Suse'
-- name: Remove localhost binding
-  lineinfile: dest=/etc/my.cnf regexp="^bind-address" state=absent
-  when: ansible_os_family == 'Suse'
-#- name: Suse seems to create a database with root password which unknown, so delete /var/lib/mysql
-#  file: path=/var/lib/mysql state=absent
-#  when: ansible_os_family == 'Suse'
-- name: Start the mysqld service (Suse)
-  service: name=mysql state=started enabled=yes
-  when: ansible_os_family == 'Suse'
+- name: Install mapr-core
+  vars:
+    packages_Suse: ['mariadb', 'mariadb-client', 'mapr-core-internal', 'python-mysql']
+    packages_Redhat: ['mariadb-server', 'mariadb', 'MySQL-python']
+    packages_Debian: ['mysql-server', 'mysql-client', 'python-mysqldb']
+  package: name={{ item }} state=present
+  with_items: "{{ vars['packages_' + ansible_os_family] }}"
 
-# Other tasks
+- name: Remove localhost binding
+  vars:
+    mysqlpath_Suse: /etc/my.cnf
+    mysqlpath_Redhat: /etc/my.cnf
+    mysqlpath_Debian: /etc/mysql/my.cnf
+  lineinfile: dest={{ vars['mysqlpath_' + ansible_os_family] }} regexp="^bind-address" state=absent
+
+- name: Start the mysqld service
+  vars:
+    service_Suse: mysql
+    service_Redhat: mariadb
+    service_Debian: mysql
+  service: name={{ vars['service_' + ansible_os_family] }} state=restarted enabled=yes
+
 - name: Create mapr mysql user localhost
   mysql_user: name={{ mapr_mysql_user }} password={{ mapr_mysql_password }} host=localhost priv=*.*:ALL,GRANT state=present
 - name: Create mapr mysql user {{ ansible_fqdn }}

@@ -1,17 +1,7 @@
 ---
 # Install Hive CLI
-# Redhat / CentOS
-- name: Install mapr-hive (Redhat / CentOS)
-  yum: name=mapr-hive state=present
-  when: ansible_os_family == 'RedHat'
-# Debian / Ubuntu
-- name: Install mapr-hive (Debian / Ubuntu)
-  apt: name=mapr-hive state=present allow_unauthenticated=yes
-  when: ansible_os_family == 'Debian'
-# Suse
-- name: Install mapr-hive (Suse)
-  zypper: name=mapr-hive state=present
-  when: ansible_os_family == 'Suse'
+- name: Install mapr-hive
+  package: name=mapr-hive state=present
 
 # Other actions
 - name: Create hive mysql db

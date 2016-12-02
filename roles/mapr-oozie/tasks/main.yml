@@ -1,17 +1,7 @@
 ---
 # Install Oozie and MySQL
-# Redhat / CentOS
-- name: Install mapr-oozie (Redhat / CentOS)
-  yum: name=mapr-oozie state=present
-  when: ansible_os_family == 'RedHat'
-# Debian / Ubuntu
-- name: Install mapr-oozie (Debian / Ubuntu)
-  apt: name=mapr-oozie state=present allow_unauthenticated=yes
-  when: ansible_os_family == 'Debian'
-# Suse
-- name: Install mapr-oozie (Suse)
-  zypper: name=mapr-oozie state=present
-  when: ansible_os_family == 'Suse'
+- name: Install mapr-oozie
+  package: name=mapr-oozie state=present
 
 # Other
 - name: Get MySQL Host

@@ -1,40 +1,16 @@
 ---
 # Install NFS
-# Redhat / CentOS
-- name: Install mapr-nfs (Redhat / CentOS)
-  yum: name={{ item }} state=present
-  with_items:
-#  - mapr-nfs
-  - mapr-loopbacknfs
-  - nfs-utils
-  - rpcbind
-  when: ansible_os_family == 'RedHat'
-# Debian / Ubuntu
-- name: Install mapr-nfs (Debian / Ubuntu)
-  apt: name={{ item }} state=present allow_unauthenticated=yes
-  with_items:
-#  - mapr-nfs
-  - mapr-loopbacknfs
-  - nfs-common
-  - rpcbind
-  when: ansible_os_family == 'Debian'
-# Other
-- name: Install mapr-nfs (Suse)
-  zypper: name={{ item }} state=present
-  with_items:
-#  - mapr-nfs
-  - mapr-loopbacknfs
-  - nfs-utils
-  - rpcbind
-  when: ansible_os_family == 'Suse'
+- name: Install mapr-nfs
+  vars:
+    packages_Suse: ['mapr-loopbacknfs', 'nfs-utils', 'rpcbind']
+    packages_Redhat: ['mapr-loopbacknfs', 'nfs-utils', 'rpcbind']
+    packages_Debian: ['mapr-loopbacknfs', 'nfs-common', 'rpcbind']
+  package: name={{ item }} state=present
+  with_items: "{{ vars['packages_' + ansible_os_family] }}"
 
 # Other actions
-#- name: Copy nfsserver.conf
-#  copy: remote_src=True src=/opt/mapr/conf/nfsserver.conf dest=/usr/local/mapr-loopbacknfs/conf/nfsserver.conf
 - name: Copy mapr-clusters.conf
   copy: remote_src=True src=/opt/mapr/conf/mapr-clusters.conf dest=/usr/local/mapr-loopbacknfs/conf/mapr-clusters.conf
-#- name: Start NFS server
-#  service: name=mapr-nfsserver state=restarted enabled=yes
 - name: Start NFS Loopback
   service: name=mapr-loopbacknfs state=restarted enabled=yes
 - name: Create /mapr dir

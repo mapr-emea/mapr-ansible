@@ -1,29 +1,13 @@
 ---
 # Install NFS
-# Redhat / CentOS
-- name: Install mapr-nfs (Redhat / CentOS)
-  yum: name={{ item }} state=present
-  with_items:
-  - mapr-nfs
-  - nfs-utils
-  - rpcbind
-  when: ansible_os_family == 'RedHat'
-# Debian / Ubuntu
-- name: Install mapr-nfs (Debian / Ubuntu)
-  apt: name={{ item }} state=present allow_unauthenticated=yes
-  with_items:
-  - mapr-nfs
-  - nfs-common
-  - rpcbind
-  when: ansible_os_family == 'Debian'
-# Other
-- name: Install mapr-nfs (Suse)
-  zypper: name={{ item }} state=present
-  with_items:
-  - mapr-nfs
-  - nfs-utils
-  - rpcbind
-  when: ansible_os_family == 'Suse'
+
+- name: Install mapr-nfs
+  vars:
+    packages_Suse: ['mapr-nfs', 'nfs-utils', 'rpcbind']
+    packages_Redhat: ['mapr-nfs', 'nfs-utils', 'rpcbind']
+    packages_Debian: ['mapr-nfs', 'nfs-common', 'rpcbind']
+  package: name={{ item }} state=present
+  with_items: "{{ vars['packages_' + ansible_os_family] }}"
 
 # Other actions
 - name: Create /mapr dir

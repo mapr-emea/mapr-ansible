@@ -1,25 +1,11 @@
 ---
 # Install mapr-posix-client-basic
-# Redhat / CentOS
-- name: Install mapr-posix-client-basic (Redhat / CentOS)
-  yum: name={{ item }} state=present
+- name: Install mapr-posix-client-basic
+  package: name={{ item }} state=present
   with_items:
   - mapr-posix-client-basic
   - rpcbind
-  when: ansible_os_family == 'RedHat'
-# Debian / Ubuntu
-- name: Install mapr-posix-client-basic (Debian / Ubuntu)
-  apt: name={{ item }} state=present allow_unauthenticated=yes
-  with_items:
-  - mapr-posix-client-basic
-  - rpcbind
-  when: ansible_os_family == 'Debian'
-# Other
-- name: Install mapr-posix-client-basic (Suse)
-  zypper: name={{ item }} state=present
-  with_items:
-  - mapr-posix-client-basic
-  - rpcbind
+
   when: ansible_os_family == 'Suse'
 - name: Set /opt/mapr/conf/mapruserticket in fuse.conf
   lineinfile: dest=/opt/mapr/conf/fuse.conf regexp="^fuse\.ticketfile\.location" line="fuse.ticketfile.location=/opt/mapr/conf/mapruserticket"

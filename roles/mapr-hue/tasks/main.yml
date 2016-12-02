@@ -1,26 +1,8 @@
 ---
 # Install Hue
-# Redhat / CentOS
 - name: Install mapr-hue
-  yum: name={{ item }} state=present
+  package: name={{ item }} state=present
   with_items:
   - mapr-hue-base
   - mapr-hue
   - mapr-hue-livy
-  when: ansible_os_family == 'RedHat'
-# Debian / Ubuntu
-- name: Install mapr-hue (Debian / Ubuntu)
-  apt: name={{ item }} state=present allow_unauthenticated=yes
-  with_items:
-  - mapr-hue-base
-  - mapr-hue
-  - mapr-hue-livy
-  when: ansible_os_family == 'Debian'
-# Suse
-- name: Install mapr-hue (Suse)
-  zypper: name={{ item }} state=present
-  with_items:
-  - mapr-hue-base
-  - mapr-hue
-  - mapr-hue-livy
-  when: ansible_os_family == 'Suse'

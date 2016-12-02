@@ -1,17 +1,7 @@
 ---
 # Install Spark on YARN
-# Redhat / CentOS
-- name: Install mapr-spark (Redhat / CentOS)
-  yum: name=mapr-spark state=present
-  when: ansible_os_family == 'RedHat'
-# Debian / Ubuntu
-- name: Install mapr-spark (Debian / Ubuntu)
-  apt: name=mapr-spark state=present allow_unauthenticated=yes
-  when: ansible_os_family == 'Debian'
-# Suse
-- name: Install mapr-spark (Suse)
-  zypper: name=mapr-spark state=present
-  when: ansible_os_family == 'Suse'
+- name: Install mapr-spark
+  package: name=mapr-spark state=present
 - name: Link hive-site.xml to Spark (otherwise Spark startup throws errors)
   file: src=/opt/mapr/hive/hive-{{ hive_version }}/conf/hive-site.xml dest=/opt/mapr/spark/spark-{{ spark_version }}/conf/hive-site.xml state=link
 # Other actions

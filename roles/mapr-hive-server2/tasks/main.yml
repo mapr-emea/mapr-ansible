@@ -1,17 +1,7 @@
 ---
 # Install Hive Server 2
-# Redhat / CentOS
-- name: Install mapr-hiveserver2 (Redhat / CentOS)
-  yum: name=mapr-hiveserver2 state=present
-  when: ansible_os_family == 'RedHat'
-# Debian / Ubuntu
-- name: Install mapr-hiveserver2 (Debian / Ubuntu)
-  apt: name=mapr-hiveserver2 state=present allow_unauthenticated=yes
-  when: ansible_os_family == 'Debian'
-# Suse
-- name: Install mapr-hiveserver2 (Suse)
-  zypper: name=mapr-hiveserver2 state=present
-  when: ansible_os_family == 'Suse'
+- name: Install mapr-hiveserver2
+  package: name=mapr-hiveserver2 state=present
 
 # Other actions
 - name: Set owner mapr-system user

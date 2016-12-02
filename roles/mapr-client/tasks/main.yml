@@ -1,18 +1,8 @@
 ---
 # Install MapR Client
 
-# Redhat / CentOS
-- name: Install mapr-client (Redhat / CentOS)
-  yum: name=mapr-client state=present
-  when: ansible_os_family == 'RedHat'
-# Debian / Ubuntu
-- name: Install mapr-client (Debian / Ubuntu)
-  apt: name=mapr-client state=present allow_unauthenticated=yes
-  when: ansible_os_family == 'Debian'
-# Suse
-- name: Install mapr-client (Suse)
-  zypper: name=mapr-client state=present
-  when: ansible_os_family == 'Suse'
+- name: Install mapr-client
+  package: name=mapr-client state=present
 
 # Required for Spark
 - name: YARN proxy Jar

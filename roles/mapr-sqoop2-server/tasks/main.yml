@@ -1,17 +1,7 @@
 ---
 # Install Sqoop2 Server
-# Redhat / CentOS
-- name: Install mapr-sqoop2-server (Redhat / CentOS)
-  yum: name=mapr-sqoop2-server state=present
-  when: ansible_os_family == 'RedHat'
-# Debian / Ubuntu
-- name: Install mapr-sqoop2-server (Debian / Ubuntu)
-  apt: name=mapr-sqoop2-server state=present allow_unauthenticated=yes
-  when: ansible_os_family == 'Debian'
-# Suse
-- name: Install mapr-sqoop2-server (Suse)
-  zypper: name=mapr-sqoop2-server state=present
-  when: ansible_os_family == 'Suse'
+- name: Install mapr-sqoop2-server
+  package: name=mapr-sqoop2-server state=present
 
 # Other actions
 - name: Set owner mapr-system user

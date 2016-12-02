@@ -1,17 +1,7 @@
 ---
 # Install MapReduce2
-# Redhat / CentOS
-- name: Install mapr-mapreduce2 (Redhat / CentOS)
-  yum: name=mapr-mapreduce2 state=present
-  when: ansible_os_family == 'RedHat'
-# Debian / Ubuntu
-- name: Install mapr-mapreduce2 (Debian / Ubuntu)
-  apt: name=mapr-mapreduce2 state=present allow_unauthenticated=yes
-  when: ansible_os_family == 'Debian'
-# Suse
-- name: Install mapr-mapreduce2 (Suse)
-  zypper: name=mapr-mapreduce2 state=present
-  when: ansible_os_family == 'Suse'
+- name: Install mapr-mapreduce2
+  package: name=mapr-mapreduce2 state=present
 
 - name: Configure core-site.xml
   template: src=core-site.secure.xml dest=/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/etc/hadoop/core-site.xml
