@@ -1,0 +1,19 @@
+---
+
+# Configure secure client
+- name: Delete existing keys
+  file: state=absent path=/opt/mapr/conf/{{ item }}
+  with_items:
+  - ssl_truststore
+  - mapruserticket
+- name: Copy keys to all nodes
+  copy: src=/tmp/{{ item }} dest=/opt/mapr/conf/{{ item }}
+  with_items:
+  - ssl_truststore
+  - mapruserticket
+ # copy to other nodes
+ # run configure on other nodes
+
+- name: Configure.sh for mapr-client - nativesecurity - secure
+  shell: /opt/mapr/server/configure.sh -N {{ cluster_name }} -Z {{ zookeeper_string }} -C {{ cldb_string }} -u {{ mapr_user }} -g {{mapr_group}} -secure -c
+

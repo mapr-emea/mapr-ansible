@@ -1,0 +1,15 @@
+---
+# Install MapR Kibana
+
+# Redhat / CentOS
+- name: Install mapr-kibana (Redhat / CentOS)
+  yum: name=mapr-kibana state=present
+  when: ansible_os_family == 'RedHat'
+# Debian / Ubuntu
+- name: Install mapr-kibana (Debian / Ubuntu)
+  apt: name=mapr-kibana state=present allow_unauthenticated=yes
+  when: ansible_os_family == 'Debian'
+# Suse
+- name: Install mapr-kibana (Suse)
+  zypper: name=mapr-kibana state=present
+  when: ansible_os_family == 'Suse'

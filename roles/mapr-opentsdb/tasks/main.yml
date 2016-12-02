@@ -1,0 +1,15 @@
+---
+# Install MapR OpenTSDB
+
+# Redhat / CentOS
+- name: Install mapr-opentsdb (Redhat / CentOS)
+  yum: name=mapr-opentsdb state=present
+  when: ansible_os_family == 'RedHat'
+# Debian / Ubuntu
+- name: Install mapr-opentsdb (Debian / Ubuntu)
+  apt: name=mapr-opentsdb state=present allow_unauthenticated=yes
+  when: ansible_os_family == 'Debian'
+# Suse
+- name: Install mapr-opentsdb (Suse)
+  zypper: name=mapr-opentsdb state=present
+  when: ansible_os_family == 'Suse'

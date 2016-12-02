@@ -1,0 +1,23 @@
+---
+# Install Zookeeper
+# Redhat / CentOS
+- name: Install mapr-zookeeper (Redhat / CentOS)
+  yum: name={{ item }} state=present
+  with_items:
+  - mapr-zookeeper
+  - mapr-zk-internal
+  when: ansible_os_family == 'RedHat'
+# Debian / Ubuntu
+- name: Install mapr-zookeeper (Debian / Ubuntu)
+  apt: name={{ item }} state=present allow_unauthenticated=yes
+  with_items:
+  - mapr-zookeeper
+  - mapr-zk-internal
+  when: ansible_os_family == 'Debian'
+# Suse
+- name: Install mapr-zookeeper (Suse)
+  zypper: name={{ item }} state=present
+  with_items:
+  - mapr-zookeeper
+  - mapr-zk-internal
+  when: ansible_os_family == 'Suse'

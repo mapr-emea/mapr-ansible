@@ -1,0 +1,20 @@
+---
+# Install Spark on YARN
+# Redhat / CentOS
+- name: Install mapr-spark-historyserver (Redhat / CentOS)
+  yum: name=mapr-spark-historyserver state=present
+  when: ansible_os_family == 'RedHat'
+# Debian / Ubuntu
+- name: Install mapr-spark-historyserver(Debian / Ubuntu)
+  apt: name=mapr-spark-historyserver state=present allow_unauthenticated=yes
+  when: ansible_os_family == 'Debian'
+# Suse
+- name: Install mapr-spark-historyserver (Suse)
+  zypper: name=mapr-spark-historyserver state=present
+  when: ansible_os_family == 'Suse'
+
+# Other actions
+- name: Configure.sh -R
+  shell: /opt/mapr/server/configure.sh -R
+- name: Set owner mapr-system user
+  file: path=/opt/mapr/spark owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes

@@ -1,0 +1,10 @@
+---
+- name: Ensure permissions for PAM config /etc/pam.d/system-auth-pc
+  file: path=/etc/pam.d/system-auth-pc state=directory mode=0644
+  when: ansible_os_family == 'RedHat'
+
+- stat: path=/opt/mapr/zkdata
+  register: zkdataDir
+- name: Ensure owner mapr:mapr for /opt/mapr/zkdata if directory already exists
+  file: path=/opt/mapr/zkdata state=directory owner={{ mapr_user }} group={{ mapr_group }}
+  when: zkdataDir.stat.isdir is defined and zkdataDir.stat.isdir

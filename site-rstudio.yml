@@ -1,0 +1,8 @@
+- name: Install R Lang
+  hosts: ext-rlang
+  roles:
+    - ext-rlang
+- name: Install R Studio Server Pro
+  hosts: ext-rstudioserverpro
+  roles:
+    - ext-rstudioserverpro

@@ -1,0 +1,22 @@
+---
+# Debian / Ubuntu
+- name: Install pre-required packages for R
+  apt: name={{ item }} state=present update_cache=yes
+  with_items:
+  - unixodbc
+  - unixodbc-dev
+  when: ansible_os_family == 'Debian'
+- name: Install R Lang
+  apt: name={{ item }} state=present update_cache=yes
+  with_items:
+  - r-base
+  - r-base-core
+  when: ansible_os_family == 'Debian'
+
+- name: Create lib folder in MapR-FS
+  file: path="/mapr/{{ cluster_name }}/R-Shared/shared-libs" state=directory mode=0777
+
+# copy Renviron
+- name: Copy Renviron file
+  template: src=Renviron.ubuntu dest=/usr/lib/R/etc/Renviron
+  when: ansible_os_family == 'Debian'

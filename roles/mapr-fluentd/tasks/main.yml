@@ -1,0 +1,15 @@
+---
+# Install MapR fluentd
+
+# Redhat / CentOS
+- name: Install mapr-fluentd (Redhat / CentOS)
+  yum: name=mapr-fluentd state=present
+  when: ansible_os_family == 'RedHat'
+# Debian / Ubuntu
+- name: Install mapr-fluentd (Debian / Ubuntu)
+  apt: name=mapr-fluentd state=present allow_unauthenticated=yes
+  when: ansible_os_family == 'Debian'
+# Suse
+- name: Install mapr-fluentd (Suse)
+  zypper: name=mapr-fluentd state=present
+  when: ansible_os_family == 'Suse'

@@ -1,0 +1,15 @@
+---
+# Install MapR collectd
+
+# Redhat / CentOS
+- name: Install mapr-collectd (Redhat / CentOS)
+  yum: name=mapr-collectd state=present
+  when: ansible_os_family == 'RedHat'
+# Debian / Ubuntu
+- name: Install mapr-collectd (Debian / Ubuntu)
+  apt: name=mapr-collectd state=present allow_unauthenticated=yes
+  when: ansible_os_family == 'Debian'
+# Suse
+- name: Install mapr-collectd (Suse)
+  zypper: name=mapr-collectd state=present
+  when: ansible_os_family == 'Suse'

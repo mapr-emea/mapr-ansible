@@ -1,0 +1,59 @@
+<configuration>
+
+    <property>
+        <name>hbase.rootdir</name>
+        <value>maprfs:///hbase</value>
+    </property>
+
+    <property>
+        <name>hbase.cluster.distributed</name>
+        <value>true</value>
+    </property>
+
+    <property>
+        <name>hbase.zookeeper.quorum</name>
+        <value>{{ zookeeper_string }}</value>
+    </property>
+
+    <property>
+        <name>hbase.zookeeper.property.clientPort</name>
+        <value>5181</value>
+    </property>
+
+    <property>
+        <name>dfs.support.append</name>
+        <value>true</value>
+    </property>
+
+    <property>
+        <name>hbase.fsutil.maprfs.impl</name>
+        <value>org.apache.hadoop.hbase.util.FSMapRUtils</value>
+    </property>
+
+    <property>
+        <name>hbase.regionserver.handler.count</name>
+        <value>30</value>
+        <!-- default is 25 -->
+    </property>
+
+
+    <!-- Allows file/db client to use 64 threads -->
+    <property>
+        <name>fs.mapr.threads</name>
+        <value>64</value>
+    </property>
+
+    <property>
+        <name>mapr.hbase.default.db</name>
+        <value>maprdb</value>
+    </property>
+    <property>
+        <name>hbase.thrift.ssl.enabled</name>
+        <value>false</value>
+    </property>
+
+    <property>
+        <name>hbase.regionserver.thrift.http</name>
+        <value>true</value>
+    </property>
+</configuration>

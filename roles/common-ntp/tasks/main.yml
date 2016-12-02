@@ -1,0 +1,22 @@
+---
+# Redhat / CentOS
+- name: Install ntp (Redhat / CentOS)
+  yum: name=ntp state=present update_cache=yes
+  when: ansible_os_family == 'RedHat'
+- name: Start the ntp service (Redhat / CentOS)
+  service: name=ntpd state=started enabled=yes
+  when: ansible_os_family == 'RedHat'
+# Debian / Ubuntu
+- name: Install ntp (Debian / Ubuntu)
+  apt: name=ntp state=present update_cache=yes
+  when: ansible_os_family == 'Debian'
+- name: Start the ntp service (Debian / Ubuntu)
+  service: name=ntp state=started enabled=yes
+  when: ansible_os_family == 'Debian'
+# Suse
+- name: Install ntp (Suse)
+  zypper: name=ntp state=present
+  when: ansible_os_family == 'Suse'
+- name: Start the ntp service (Suse)
+  service: name=ntpd state=started enabled=yes
+  when: ansible_os_family == 'Suse'

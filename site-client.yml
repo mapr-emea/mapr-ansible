@@ -1,0 +1,94 @@
+- name: Apply common configuration to all nodes
+  hosts: common
+  roles:
+    - {role: common-oracle-jdk, when: jdk == 'oraclejdk'}
+    - {role: common-openjdk18, when: jdk == 'openjdk18'}
+    - common-mapruser
+    - common-rpcbind
+    - common-ntp
+    - common-misc
+    - common-sysctl
+- name: Fetch files from cluster required for client
+  hosts: mapr-cldb[0]
+  roles:
+    - mapr-client-configure-nativesecurity-fetch
+- name: Setup global vars
+  hosts: all
+  roles:
+    - mapr-configure-vars
+- name: Install MapR client
+  hosts: mapr-client
+  roles:
+    - mapr-configure-repository
+    - mapr-client
+    - mapr-configure-subnets
+    - {role: mapr-client-configure-unsecure, when: mapr_security == 'none'}
+    - {role: mapr-client-configure-nativesecurity-secure, when: mapr_security == 'native'}
+- name: Install Drill on YARN
+  hosts: mapr-drill-yarn
+  roles:
+    - mapr-drill-yarn
+- name: Install Flume
+  hosts: mapr-flume
+  roles:
+    - mapr-flume
+- name: Install HBase CLI
+  hosts: mapr-hbase-cli
+  roles:
+    - mapr-hbase-cli
+- name: Install HBase REST and Thrift Server
+  hosts: mapr-hbase-thrift-rest
+  roles:
+    - mapr-hbase-thrift-rest
+- name: Setup Hive Variables
+  hosts: all
+  roles:
+    - mapr-hive-vars
+- name: Install Hive CLI
+  hosts: mapr-hive-cli
+  roles:
+    - mapr-hive-cli
+- name: Install Hive Server 2
+  hosts: mapr-hive-server2
+  roles:
+    - mapr-hive-server2
+- name: Install Mahout
+  hosts: mapr-mahout
+  roles:
+    - mapr-mahout
+- name: Install Pig
+  hosts: mapr-pig
+  roles:
+    - mapr-pig
+- name: Install Sqoop 2 Server
+  hosts: mapr-sqoop2-server
+  roles:
+    - mapr-sqoop2-server
+- name: Install Sqoop 2 Client
+  hosts: mapr-sqoop2-client
+  roles:
+    - mapr-sqoop2-client
+- name: Install Hue
+  hosts: mapr-hue
+  roles:
+    - mapr-hue
+- name: Install Oozie
+  hosts: mapr-oozie
+  roles:
+    - mapr-oozie
+- name: Install HttpFS
+  hosts: mapr-httpfs
+  roles:
+    - mapr-httpfs
+- name: Install Spark on YARN
+  hosts: mapr-spark-yarn
+  roles:
+    - mapr-spark-yarn
+- name: Install NFS loopback
+  hosts: mapr-nfsloopback
+  roles:
+    - mapr-nfsloopback
+- name: Install mapr-posix-client-basic (FUSE)
+  hosts: mapr-posix-client-basic
+  roles:
+    - mapr-posix-client-basic

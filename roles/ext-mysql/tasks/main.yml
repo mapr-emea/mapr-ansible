@@ -1,0 +1,55 @@
+---
+# Install MySQL
+# Redhat / CentOS
+- name: Install MySQL (Redhat / CentOS)
+  yum: name={{ item }} state=present update_cache=yes
+  with_items:
+  - mariadb-server
+  - mariadb
+  - MySQL-python
+  when: ansible_os_family == 'RedHat'
+- name: Remove localhost binding
+  lineinfile: dest=/etc/my.cnf regexp="^bind-address" state=absent
+  when: ansible_os_family == 'RedHat'
+- name: Start the mysqld service (Redhat / CentOS)
+  service: name=mariadb state=restarted enabled=yes
+  when: ansible_os_family == 'RedHat'
+# Debian / Ubuntu
+- name: Install MySQL (Debian / Ubuntu)
+  apt: name={{ item }} state=present update_cache=yes
+  with_items:
+  - mysql-server
+  - mysql-client
+  - python-mysqldb
+  when: ansible_os_family == 'Debian'
+- name: Remove localhost binding
+  lineinfile: dest=/etc/mysql/my.cnf regexp="^bind-address" state=absent
+  when: ansible_os_family == 'Debian'
+- name: Start the mysqld service (Debian / Ubuntu)
+  service: name=mysql state=restarted enabled=yes
+  when: ansible_os_family == 'Debian'
+# Suse
+- name: Install MySQL (Suse)
+  zypper: name={{ item }} state=present
+  with_items:
+  - mariadb
+  - mariadb-client
+  - python-mysql
+  when: ansible_os_family == 'Suse'
+- name: Remove localhost binding
+  lineinfile: dest=/etc/my.cnf regexp="^bind-address" state=absent
+  when: ansible_os_family == 'Suse'
+#- name: Suse seems to create a database with root password which unknown, so delete /var/lib/mysql
+#  file: path=/var/lib/mysql state=absent
+#  when: ansible_os_family == 'Suse'
+- name: Start the mysqld service (Suse)
+  service: name=mysql state=started enabled=yes
+  when: ansible_os_family == 'Suse'
+
+# Other tasks
+- name: Create mapr mysql user localhost
+  mysql_user: name={{ mapr_mysql_user }} password={{ mapr_mysql_password }} host=localhost priv=*.*:ALL,GRANT state=present
+- name: Create mapr mysql user {{ ansible_fqdn }}
+  mysql_user: name={{ mapr_mysql_user }} password={{ mapr_mysql_password }} host={{ ansible_fqdn }} priv=*.*:ALL,GRANT state=present
+- name: Create mapr mysql user %
+  mysql_user: name={{ mapr_mysql_user }} password={{ mapr_mysql_password }} host=% priv=*.*:ALL,GRANT state=present

@@ -1,0 +1,25 @@
+---
+# Install MapR Client
+
+# Redhat / CentOS
+- name: Install mapr-client (Redhat / CentOS)
+  yum: name=mapr-client state=present
+  when: ansible_os_family == 'RedHat'
+# Debian / Ubuntu
+- name: Install mapr-client (Debian / Ubuntu)
+  apt: name=mapr-client state=present allow_unauthenticated=yes
+  when: ansible_os_family == 'Debian'
+# Suse
+- name: Install mapr-client (Suse)
+  zypper: name=mapr-client state=present
+  when: ansible_os_family == 'Suse'
+
+# Required for Spark
+- name: YARN proxy Jar
+  copy: src=/tmp/hadoop-yarn-server-web-proxy-{{ hadoop_version }}-{{ mapr_build }}.jar dest=/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/share/hadoop/yarn/
+# Required for Hive server
+- name: YARN RM Jar
+  copy: src=/tmp/hadoop-yarn-server-common-{{ hadoop_version }}-{{ mapr_build }}.jar dest=/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/share/hadoop/yarn/
+- name: YARN RM Jar
+  copy: src=/tmp/hadoop-yarn-server-resourcemanager-{{ hadoop_version }}-{{ mapr_build }}.jar dest=/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/share/hadoop/yarn/
+

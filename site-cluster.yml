@@ -1,0 +1,198 @@
+- name: Apply common configuration to all nodes
+  hosts: common
+  roles:
+    - {role: common-oracle-jdk, when: jdk == 'oraclejdk'}
+    - {role: common-openjdk18, when: jdk == 'openjdk18'}
+    - common-mapruser
+    - common-rpcbind
+    - common-ntp
+    - common-misc
+    - common-sysctl
+    - common-prereq
+# used by configure.sh and drill
+- name: Setup global vars
+  hosts: all
+  roles:
+    - mapr-configure-vars
+    - mapr-configure-vars-hs
+- name: Install MapR Core
+  hosts: mapr-core
+  roles:
+    - mapr-configure-repository
+    - mapr-core
+    - mapr-configure-subnets
+- name: Install Zookeeper
+  hosts: mapr-zookeeper
+  roles:
+    - mapr-zookeeper
+- name: Install CLDB
+  hosts: mapr-cldb
+  roles:
+    - mapr-cldb
+- name: Install Gateway
+  hosts: mapr-gateway
+  roles:
+    - mapr-gateway
+- name: Install Filesystem, MapReduce2, YARN Node Manager
+  hosts: mapr-datanode
+  roles:
+    - mapr-fileserver
+    - mapr-mapreduce2
+    - mapr-nodemanager
+- name: Install YARN Resource Manager
+  hosts: mapr-resourcemanager
+  roles:
+    - mapr-resourcemanager
+- name: Install MySQL
+  hosts: ext-mysql
+  roles:
+    - ext-mysql
+- name: Install Drill Standalone
+  hosts: mapr-drill-standalone
+  roles:
+    - mapr-drill-standalone
+- name: Install Drill on YARN
+  hosts: mapr-drill-yarn
+  roles:
+    - mapr-drill-yarn
+- name: Install Flume
+  hosts: mapr-flume
+  roles:
+    - mapr-flume
+- name: Install HBase CLI
+  hosts: mapr-hbase-cli
+  roles:
+    - mapr-hbase-cli
+- name: Install HBase REST and Thrift Server
+  hosts: mapr-hbase-thrift-rest
+  roles:
+    - mapr-hbase-thrift-rest
+- name: Install History Server
+  hosts: mapr-historyserver
+  roles:
+    - mapr-historyserver
+- name: Setup Hive Variables
+  hosts: all
+  roles:
+    - mapr-hive-vars
+    - mapr-hive-vars-mysql
+- name: Install Hive CLI
+  hosts: mapr-hive-cli
+  roles:
+    - mapr-hive-cli
+- name: Install Hive MetaStore
+  hosts: mapr-hive-metastore
+  roles:
+    - mapr-hive-metastore
+- name: Install Hive Server 2
+  hosts: mapr-hive-server2
+  roles:
+    - mapr-hive-server2
+- name: Install Hive WebHCat
+  hosts: mapr-hive-webhcat
+  roles:
+    - mapr-hive-webhcat
+- name: Install Mahout
+  hosts: mapr-mahout
+  roles:
+    - mapr-mahout
+- name: Install MCS
+  hosts: mapr-mcs
+  roles:
+    - mapr-mcs
+- name: Install Pig
+  hosts: mapr-pig
+  roles:
+    - mapr-pig
+- name: Install Sqoop 2 Server
+  hosts: mapr-sqoop2-server
+  roles:
+    - mapr-sqoop2-server
+- name: Install Sqoop 2 Client
+  hosts: mapr-sqoop2-client
+  roles:
+    - mapr-sqoop2-client
+- name: Install Hue
+  hosts: mapr-hue
+  roles:
+    - mapr-hue
+- name: Install Oozie
+  hosts: mapr-oozie
+  roles:
+    - mapr-oozie
+- name: Install HttpFS
+  hosts: mapr-httpfs
+  roles:
+    - mapr-httpfs
+- name: Install NFS
+  hosts: mapr-nfs
+  roles:
+    - mapr-nfs
+- name: Configure and start (unsecure)
+  hosts: mapr-core
+  roles:
+   - {role: mapr-configure-unsecure, when: mapr_security == 'none'}
+- name: Configure and start (native-security)
+  hosts: mapr-core
+  roles:
+   - {role: mapr-configure-nativesecurity-secure, when: mapr_security == 'native'}
+- name: Restarting mapr-zookeeper
+  hosts: mapr-zookeeper
+  roles:
+   - mapr-configure-zookeeper-restart
+- name: Restarting mapr-warden
+  hosts: mapr-core
+  roles:
+   - mapr-configure-warden-restart
+- name: Install mapr-posix-client-basic (FUSE)
+  hosts: mapr-posix-client-basic
+  roles:
+    - mapr-posix-client-basic
+- name: Install Spark on YARN
+  hosts: mapr-spark-yarn
+  roles:
+    - mapr-spark-yarn
+- name: Install Spark History Server
+  hosts: mapr-spark-historyserver
+  roles:
+    - mapr-spark-historyserver
+- name: Restarting mapr-warden
+  hosts: mapr-core
+  roles:
+    - mapr-configure-warden-restart
+- name: Install MapR collectd
+  hosts: mapr-collectd
+  roles:
+    - mapr-collectd
+- name: Install MapR OpenTSDB
+  hosts: mapr-opentsdb
+  roles:
+    - mapr-opentsdb
+- name: Install MapR Grafana
+  hosts: mapr-grafana
+  roles:
+    - mapr-grafana
+- name: MapR Configure Metrics Monitoring
+  hosts: mapr-collectd
+  roles:
+    - mapr-metric-monitoring-configure
+- name: Install MapR fluentd
+  hosts: mapr-fluentd
+  roles:
+    - mapr-fluentd
+- name: Install MapR ElasticSearch
+  hosts: mapr-elasticsearch
+  roles:
+    - mapr-elasticsearch
+- name: Install MapR Kibana
+  hosts: mapr-kibana
+  roles:
+    - mapr-kibana
+- name: MapR Configure Log Monitoring
+  hosts: mapr-fluentd
+  roles:
+    - mapr-log-monitoring-configure
+#- name: Restarting mapr-warden
+#  hosts: base
+#  roles:
+#    - mapr-configure-warden-restart

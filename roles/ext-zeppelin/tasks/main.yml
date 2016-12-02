@@ -1,0 +1,59 @@
+---
+# Download, Compile and Install Zeppelin
+# Redhat /CentOS
+- name: Downloading NodeJS Setup (RedHat / CentOs)
+  get_url: url=https://rpm.nodesource.com/setup force=yes mode=0755 dest=/tmp/nodejs_setup timeout=120
+  when: ansible_os_family == 'RedHat'
+- name:
+  shell: /tmp/nodejs_setup
+  when: ansible_os_family == 'RedHat'
+- name: Install build dependencies (RedHat / CentOs)
+  yum: name={{ item }} state=present
+  with_items:
+  - git
+  - nodejs
+#  - npm
+#  - libfontconfig
+  when: ansible_os_family == 'RedHat'
+ # Suse
+- name: Create NodeJS Repo for Suse
+  zypper_repository: name=Node.js disable_gpg_check=yes repo=http://download.opensuse.org/repositories/devel:/languages:/nodejs/openSUSE_13.1/
+  when: ansible_os_family == 'Suse'
+- name: Install build dependencies  (Suse)
+  zypper: name={{ item }} state=present
+  with_items:
+  - git
+  - nodejs
+  - npm
+  when: ansible_os_family == 'Suse'
+- name: Install build dependencies (Debian / Ubuntu)
+  apt: name={{ item }} state=present
+  with_items:
+  - git
+  - nodejs
+  - npm
+  when: ansible_os_family == 'Debian'
+- name: Download and extract Maven 3.3.9
+  unarchive: src=http://www-eu.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz dest=/usr/local/ copy=no
+- name: Create mvn link
+  file: src=/usr/local/apache-maven-3.3.9/bin/mvn dest=/usr/local/bin/mvn state=link
+- name: Clone Zeppelin Git Repo
+  git: repo={{ zeppelin_git_repo }} dest=/tmp/zeppelin.git version={{ zeppelin_git_hash }}
+- name: Build Zeppelin with Maven
+  shell: export JAVA_HOME={{ jdk_folder }} && /usr/local/bin/mvn -Pmapr51 -Pyarn -Pbuild-distr -Pspark-1.6 -Phadoop-2.6 -Ppyspark package -DskipTests -B -f /tmp/zeppelin.git/pom.xml
+- name: Create /opt/mapr/zeppelin dir
+  file: path=/opt/mapr/zeppelin state=directory
+- name: Create /opt/mapr/zeppelin/notebooks dir
+  file: path=/opt/mapr/zeppelin/notebooks state=directory
+#- name: Copy Zeppelin to /opt/mapr/zeppelin
+#  unarchive: src=/tmp/zeppelin.git/zeppelin-distribution/target/zeppelin-{{ zeppelin_version }}.tar.gz dest=/opt/mapr/zeppelin/ copy=no
+- name: Copy Zeppelin to /opt/mapr/zeppelin
+  shell: cp -R /tmp/zeppelin.git/zeppelin-distribution/target/zeppelin-{{ zeppelin_version }}/zeppelin-{{ zeppelin_version }}/ /opt/mapr/zeppelin/
+- name: Configure zeppelin-env.sh
+  template: src=zeppelin-env.unsecure.sh dest=/opt/mapr/zeppelin/zeppelin-{{ zeppelin_version }}/conf/zeppelin-env.sh
+- name: Configure zeppelin-site.xml
+  template: src=zeppelin-site.unsecure.xml dest=/opt/mapr/zeppelin/zeppelin-{{ zeppelin_version }}/conf/zeppelin-site.xml
+- name: Set owner mapr-system user
+  file: path=/opt/mapr/zeppelin owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
+- name: Start Zeppelin
+  shell: su - {{ mapr_user }} -c "/opt/mapr/zeppelin/zeppelin-{{ zeppelin_version }}/bin/zeppelin-daemon.sh start"

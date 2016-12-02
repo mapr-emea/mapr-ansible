@@ -1,0 +1,52 @@
+---
+# RedHat / CentOS
+- name: Create MapR Releases Repository for RedHat
+  yum_repository:
+    name: maprtech
+    description: MapR Technologies
+    file: external_repos
+    baseurl: "{{ mapr_release_url }}/redhat/"
+    gpgcheck: no
+    gpgkey: "{{ mapr_gpg_url }}"
+  when: ansible_os_family == 'RedHat'
+- name: Create MapR Ecosystem Repository for RedHat
+  yum_repository:
+    name: maprecosystem
+    description: MapR Technologies
+    file: external_repos
+    baseurl: "{{ mapr_ecosystem_url }}/redhat/"
+    gpgcheck: no
+    gpgkey: "{{ mapr_gpg_url }}"
+  when: ansible_os_family == 'RedHat'
+
+# Ubuntu / Debian
+- name: Create MapR Releases Repository for Ubuntu
+  apt_repository:
+    repo: "deb {{ mapr_release_url }}/ubuntu/ mapr optional"
+    state: present
+    update_cache: yes
+    validate_certs: no
+  when: ansible_os_family == 'Debian'
+- name: Create MapR Ecosystem Repository for Ubuntu
+  apt_repository:
+    repo: "deb {{ mapr_ecosystem_url }}/ubuntu/ binary trusty"
+    state: present
+    update_cache: yes
+    validate_certs: no
+  when: ansible_os_family == 'Debian'
+
+# Suse
+- name: Create MapR Releases Repository for Suse
+  zypper_repository:
+    name: maprtech
+    repo: "{{ mapr_release_url }}/suse/"
+    disable_gpg_check: yes
+    state: present
+  when: ansible_os_family == 'Suse'
+- name: Create MapR Ecosystem Repository for Suse
+  zypper_repository:
+    name: maprecosystem
+    repo: "{{ mapr_ecosystem_url }}/suse/"
+    disable_gpg_check: yes
+    state: present
+  when: ansible_os_family == 'Suse'

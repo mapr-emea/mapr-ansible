@@ -1,0 +1,29 @@
+---
+# Install Spark on YARN
+# Redhat / CentOS
+- name: Install mapr-spark (Redhat / CentOS)
+  yum: name=mapr-spark state=present
+  when: ansible_os_family == 'RedHat'
+# Debian / Ubuntu
+- name: Install mapr-spark (Debian / Ubuntu)
+  apt: name=mapr-spark state=present allow_unauthenticated=yes
+  when: ansible_os_family == 'Debian'
+# Suse
+- name: Install mapr-spark (Suse)
+  zypper: name=mapr-spark state=present
+  when: ansible_os_family == 'Suse'
+- name: Link hive-site.xml to Spark (otherwise Spark startup throws errors)
+  file: src=/opt/mapr/hive/hive-{{ hive_version }}/conf/hive-site.xml dest=/opt/mapr/spark/spark-{{ spark_version }}/conf/hive-site.xml state=link
+# Other actions
+- name: Create maprfs:///apps/spark
+  shell: hadoop fs -mkdir -p /apps/spark
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: inventory_hostname == groups["mapr-spark-yarn"][0]
+- name: Owner maprfs:///apps/spark
+  shell: hadoop fs -chown mapr:mapr /apps/spark
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: inventory_hostname == groups["mapr-spark-yarn"][0]
+- name: Set owner mapr-system user
+  file: path=/opt/mapr/spark owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes

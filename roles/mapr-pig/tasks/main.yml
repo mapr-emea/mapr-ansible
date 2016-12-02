@@ -1,0 +1,14 @@
+---
+# Install Pig
+# Redhat / CentOS
+- name: Install mapr-pig (Redhat / CentOS)
+  yum: name=mapr-pig state=present
+  when: ansible_os_family == 'RedHat'
+# Debian / Ubuntu
+- name: Install mapr-pig (Debian / Ubuntu)
+  apt: name=mapr-pig state=present allow_unauthenticated=yes
+  when: ansible_os_family == 'Debian'
+# Suse
+- name: Install mapr-pig (Suse)
+  zypper: name=mapr-pig state=present
+  when: ansible_os_family == 'Suse'

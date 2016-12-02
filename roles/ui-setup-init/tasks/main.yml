@@ -1,0 +1,7 @@
+---
+
+- name: Download installer
+  get_url: url=http://package.mapr.com/releases/installer/mapr-setup.sh force=yes mode=0755 dest=/tmp/mapr-setup.sh
+
+- name: Start Setup
+  shell: y '' | /tmp/mapr-setup.sh

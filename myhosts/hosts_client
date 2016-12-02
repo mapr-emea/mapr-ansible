@@ -1,0 +1,85 @@
+# If you do not want to install a component leave the block empty
+
+
+###### These ones are not installed, just required for config generation ############
+
+# Zookeeper
+[mapr-zookeeper]
+10.0.0.71 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.72 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.73 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# Container Location DataBase
+[mapr-cldb]
+10.0.0.71 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.72 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.73 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+
+# Hive Meta Store
+[mapr-hive-metastore]
+10.0.0.72 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+######################################################################################
+
+# sets up ntp, rpcbind, Java and mapr default user with standard password mapr123
+[common]
+10.0.0.41 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# MapR-Client
+[mapr-client]
+10.0.0.41 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# Spark on YARN, requires Hive!
+[mapr-spark-yarn]
+10.0.0.41 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# NFS loopback, ATTENTION: install only on edge node (mapr-client)!!!
+[mapr-nfsloopback]
+
+# Apache Drill
+[mapr-drill-yarn]
+
+# Flume
+[mapr-flume]
+
+# HBase CLI
+[mapr-hbase-cli]
+10.0.0.41 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# HBase REST and Thrift
+[mapr-hbase-thrift-rest]
+
+# Hive CLI
+[mapr-hive-cli]
+10.0.0.41 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# Hive Server2
+[mapr-hive-server2]
+
+# HttpFS
+[mapr-httpfs]
+
+[mapr-hue]
+
+# Mahout
+[mapr-mahout]
+
+# Sqoop2 Server
+[mapr-sqoop2-server]
+
+# Sqoop2 Client
+[mapr-sqoop2-client]
+
+# Pig
+[mapr-pig]
+
+# Oozie
+[mapr-oozie]
+
+# MapR NFS loopback (only for MapR client!)
+[mapr-nfsloopback]
+
+# MapR Fuse Posix Client
+[mapr-posix-client-basic]
+10.0.0.41 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo

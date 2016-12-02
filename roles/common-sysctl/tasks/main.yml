@@ -1,0 +1,10 @@
+---
+- name: Set vm.swappiness in /etc/sysctl.conf
+  lineinfile: dest=/etc/sysctl.conf regexp="^vm\.swappiness" line="vm.swappiness = 1"
+- name: Set net.ipv4.tcp_retries2 in /etc/sysctl.conf
+  lineinfile: dest=/etc/sysctl.conf regexp="^net\.ipv4\.tcp_retries2" line="net.ipv4.tcp_retries2 = 5"
+- name: Set vm.overcommit_memory in /etc/sysctl.conf
+  lineinfile: dest=/etc/sysctl.conf regexp="^vm\.overcommit_memory" line="vm.overcommit_memory = 0"
+- name: Reload Sysctl
+  command: sysctl -p
+  ignore_errors: True

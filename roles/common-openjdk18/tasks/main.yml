@@ -1,0 +1,24 @@
+---
+# Redhat / CentOS
+- name: Install OpenJDK 1.8.0 (Redhat / CentOS)
+  yum: name={{ item }} state=present update_cache=yes
+  with_items:
+  - java-1.8.0-openjdk
+  - java-1.8.0-openjdk-devel
+  - java-1.8.0-openjdk-headless
+  when: ansible_os_family == 'RedHat'
+# Debian / Ubuntu
+- name: Install OpenJDK 1.8.0  (Debian / Ubuntu)
+  apt: name={{ item }} state=present update_cache=yes
+  with_items:
+  - openjdk-8-jdk
+  - openjdk-8-jdk-headless
+  when: ansible_os_family == 'Debian'
+# Suse
+- name: Install OpenJDK 1.8.0 (Suse)
+  zypper: name={{ item }} state=present
+  with_items:
+  - java-1_8_0-openjdk
+  - java-1_8_0-openjdk-devel
+  - java-1_8_0-openjdk-headless
+  when: ansible_os_family == 'Suse'

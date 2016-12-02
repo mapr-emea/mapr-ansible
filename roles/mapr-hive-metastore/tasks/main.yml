@@ -1,0 +1,18 @@
+---
+# Install Hive Metastore
+# Redhat / CentOS
+- name: Install mapr-hivemetastore (Redhat / CentOS)
+  yum: name=mapr-hivemetastore state=present
+  when: ansible_os_family == 'RedHat'
+# Debian / Ubuntu
+- name: Install mapr-hivemetastore (Debian / Ubuntu)
+  apt: name=mapr-hivemetastore state=present allow_unauthenticated=yes
+  when: ansible_os_family == 'Debian'
+# Suse
+- name: Install mapr-hivemetastore (Suse)
+  zypper: name=mapr-hivemetastore state=present
+  when: ansible_os_family == 'Suse'
+
+# Other actions
+- name: Set owner mapr-system user
+  file: path=/opt/mapr/hive owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes

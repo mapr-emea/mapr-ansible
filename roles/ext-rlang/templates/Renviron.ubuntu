@@ -1,0 +1,59 @@
+### etc/Renviron.  Generated from Renviron.in by configure.
+###
+### ${R_HOME}/etc/Renviron
+###
+### Record R system environment variables.
+
+R_PLATFORM=${R_PLATFORM-'x86_64-suse-linux-gnu'}
+## Default printer paper size: first record if user set R_PAPERSIZE
+R_PAPERSIZE_USER=${R_PAPERSIZE}
+R_PAPERSIZE=${R_PAPERSIZE-'a4'}
+## Default print command
+R_PRINTCMD=${R_PRINTCMD-''}
+# for Rd2pdf, reference manual
+R_RD4PDF=${R_RD4PDF-'times,hyper'}
+## used for options("texi2dvi")
+R_TEXI2DVICMD=${R_TEXI2DVICMD-${TEXI2DVI-'texi2dvi'}}
+## used by INSTALL, untar() and installing grDevices
+R_GZIPCMD=${R_GZIPCMD-'/usr/bin/gzip'}
+## Default zip/unzip commands
+R_UNZIPCMD=${R_UNZIPCMD-''}
+R_ZIPCMD=${R_ZIPCMD-''}
+R_BZIPCMD=${R_BZIPCMD-'/usr/bin/bzip2'}
+## Default browser
+R_BROWSER=${R_BROWSER-'xdg-open'}
+## Default editor
+EDITOR=${EDITOR-${VISUAL-vi}}
+## Default pager
+PAGER=${PAGER-'/usr/bin/more'}
+## Default PDF viewer
+R_PDFVIEWER=${R_PDFVIEWER-'/usr/bin/xdg-open'}
+## Used by libtool
+LN_S='ln -s'
+MAKE=${MAKE-'make'}
+## Prefer a POSIX-compliant sed on e.g. Solaris
+SED=${SED-'/usr/bin/sed'}
+## Prefer a tar that can automagically read compressed archives
+## Used in R CMD INSTALL for binary packages
+TAR=${TAR-'/bin/tar'}
+
+## System and compiler types.
+R_SYSTEM_ABI='linux,gcc,gxx,gfortran,?'
+R_LIBS_SITE='/mapr/{{ cluster_name }}/R-Shared/shared-libs'
+#R_LIBS_USER=${R_LIBS_USER-'~/Library/R/3.2/library'}
+#R_LIBS_USER=${R_LIBS_USER-'~/R/x86_64-pc-linux-gnu-library/3.0'}
+R_LIBS_USER=/mapr/{{ cluster_name }}/R-Shared/shared-libs
+
+### Local Variables: ***
+### mode: sh ***
+### sh-indentation: 2 ***
+### End: ***
+## MAPR
+HADOOP_CMD=/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/bin/hadoop
+HADOOP_CONF=/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/etc/hadoop
+HADOOP_STREAMING=/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/share/hadoop/tools/lib/hadoop-streaming-{{ hadoop_version }}-{{mapr_build}}.jar
+SPARK_HOME=/opt/mapr/spark/spark-{{ spark_version }}
+SPARKR_SUBMIT_ARGS=" --master yarn --properties-file /opt/mapr/spark/spark-{{ spark_version }}/conf/spark-defaults.conf sparkr-shell"
+
+LC_ALL=C
+LC_CTYPE=C

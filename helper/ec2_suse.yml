@@ -1,0 +1,49 @@
+ - hosts: localhost
+   vars_prompt:
+     - name: name
+       prompt: "What is the instance name"
+       default: "CarstenHufeSuse"
+       private: no
+     - name: count
+       prompt: "Number of instances"
+       default: 1
+       private: no
+   tasks:
+    - ec2:
+        region: eu-west-1
+        key_name: Carsten Hufe
+        instance_type: r3.xlarge
+        image: ami-f4278487 # SUSE Linux Enterprise Server 12 SP1
+        wait: yes
+        wait_timeout: 500
+        count: "{{ count }}"
+        instance_tags:
+            Name: "{{ name }}"
+            Owner: CarstenHufe
+        volumes:
+          - device_name: /dev/sda1
+            volume_type: standard
+            volume_size: 100
+            delete_on_termination: true
+          - device_name: /dev/sdb
+            volume_type: standard
+            volume_size: 20
+            delete_on_termination: true
+          - device_name: /dev/sdc
+            volume_type: standard
+            volume_size: 20
+            delete_on_termination: true
+          - device_name: /dev/sdd
+            volume_type: standard
+            volume_size: 20
+            delete_on_termination: true
+        monitoring: no
+        vpc_subnet_id: subnet-0bd9337d
+        group_id: sg-0a4ca16d
+        assign_public_ip: yes
+        ebs_optimized: yes
+
+#http://docs.aws.amazon.com/cli/latest/userguide/generate-cli-skeleton.html
+#        aws ec2 describe-instances --output text  | awk -F"\t" '$1=="INSTANCES" {print $8}'
+#aws ec2 run-instances --image-id ami-8b8c57f8 --count 1 --key-name "Carsten Hufe" --security-group-ids sg-0a4ca16d --instance-type r3.xlarge --associate-public-ip-address --ebs-optimized --subnet-id subnet-0bd9337d --output text
+#aws ec2 create-tags --resources i-97712d1d --tags Key=Name,Value=CarstenHufeBlub Key=Owner,Value=CarstenHufe"

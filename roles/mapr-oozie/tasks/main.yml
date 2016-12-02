@@ -1,0 +1,39 @@
+---
+# Install Oozie and MySQL
+# Redhat / CentOS
+- name: Install mapr-oozie (Redhat / CentOS)
+  yum: name=mapr-oozie state=present
+  when: ansible_os_family == 'RedHat'
+# Debian / Ubuntu
+- name: Install mapr-oozie (Debian / Ubuntu)
+  apt: name=mapr-oozie state=present allow_unauthenticated=yes
+  when: ansible_os_family == 'Debian'
+# Suse
+- name: Install mapr-oozie (Suse)
+  zypper: name=mapr-oozie state=present
+  when: ansible_os_family == 'Suse'
+
+# Other
+- name: Get MySQL Host
+  set_fact: mysql_item={{ hostvars[item]['ansible_fqdn'] }}
+  with_items:
+    - "{{ groups['ext-mysql'] }}"
+  register: mysql_hosts
+- name: Make MySQL Host String
+  set_fact: oozie_db_host={{ mysql_hosts.results | map(attribute='ansible_facts.mysql_item') | list | join(',')}}
+- name: Create oozie mysql db
+  mysql_db: name={{ oozie_db_schema }} state=present login_host={{ oozie_db_host }} login_user={{ mapr_mysql_user }} login_password={{ mapr_mysql_password }}
+#- name: Downloading MySQL Driver
+#  unarchive: src={{ mysql_jdbc_url }} dest=/tmp copy=no
+#- name: Copy mysql driver
+#  copy: remote_src=True src=/tmp/mysql-connector-java-{{ mysql_jdbc_version }}/mysql-connector-java-{{ mysql_jdbc_version }}-bin.jar dest=/opt/mapr/oozie/oozie-{{ oozie_version }}/libext/
+- name: Copy mysql driver
+  copy: src=mysql-connector-java-5.1.40-bin.jar dest=/opt/mapr/hive/hive-{{ hive_version }}/lib/
+- name: Configure oozie-site.xml
+  template: src=oozie-site.unsecure.xml dest=/opt/mapr/oozie/oozie-{{ oozie_version }}/conf/oozie-site.xml
+- name: Run oozie-setup.sh
+  command: /opt/mapr/oozie/oozie-{{ oozie_version }}/bin/oozie-setup.sh -hadoop {{ hadoop_version }} /opt/mapr/hadoop/hadoop-{{ hadoop_version }}
+- name: Set owner mapr-system user
+  file: path=/opt/mapr/oozie owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
+
+

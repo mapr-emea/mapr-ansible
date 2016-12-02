@@ -1,0 +1,13 @@
+---
+# Configure unsecure cluster
+
+- name: Configure.sh
+  shell: /opt/mapr/server/configure.sh -N {{ cluster_name }} -Z {{ zookeeper_string }} -C {{ cldb_string }} -u {{ mapr_user }} -g {{mapr_group}} -unsecure -HS {{ historyserver_string }}
+#  shell: /opt/mapr/server/configure.sh -N {{ cluster_name }} -Z {{ zookeeper_string }} -C {{ cldb_string }} -u {{ mapr_user }} -g {{mapr_group}} -unsecure -RM {{ resourcemanager_string }} -HS {{ historyserver_string }}
+- name: Write disk tmp file
+  shell: echo {{ disks }} | tr , '\n' > /tmp/disks.txt
+- name: Disk setup
+  command: /opt/mapr/server/disksetup -F -W {{ disk_storage_pool_size }} /tmp/disks.txt
+  ignore_errors: True # TODO error result should be handeled
+
+

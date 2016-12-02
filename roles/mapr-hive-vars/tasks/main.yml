@@ -1,0 +1,8 @@
+---
+- name: Get Thrift server
+  set_fact: metastore_item=thrift://{{ hostvars[item]['ansible_fqdn'] }}:9083
+  with_items:
+    - "{{ groups['mapr-hive-metastore'] }}"
+  register: metastore_hosts
+- name: Make Resource Manager String
+  set_fact: metastore_string={{ metastore_hosts.results | map(attribute='ansible_facts.metastore_item') | list | join(',')}}

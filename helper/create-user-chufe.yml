@@ -1,0 +1,6 @@
+ - hosts: all
+   tasks:
+#    - name: Create staff Group
+#      group: name=staff gid=20 state=present
+    - name: Create chufe User
+      user: name=chufe uid=501 password=mapr123 createhome=yes state=present

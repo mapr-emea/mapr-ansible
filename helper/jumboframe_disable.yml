@@ -1,0 +1,4 @@
+- hosts: all
+   tasks:
+    - lineinfile: state=absent dest=/etc/sysconfig/network-scripts/ifcfg-bond0 line="MTU=9216"
+    - service: name=network state=restarted enabled=yes

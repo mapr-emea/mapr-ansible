@@ -1,0 +1,12 @@
+---
+# Install MapR OpenTSDB configure
+
+- name: Get OpenTSDB FQDNs
+  set_fact: opentsdb_item={{ hostvars[item]['ansible_fqdn'] }}
+  with_items:
+    - "{{ groups['mapr-opentsdb'] }}"
+  register: opentsdb_hosts
+- name: Make OpenTSDB String
+  set_fact: opentsdb_string={{ opentsdb_hosts.results | map(attribute='ansible_facts.opentsdb_item') | list | join(',')}}
+- name: Configure.sh
+  shell: /opt/mapr/server/configure.sh -R -OT {{ opentsdb_string }}

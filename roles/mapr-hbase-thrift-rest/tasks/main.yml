@@ -1,0 +1,42 @@
+---
+# Redhat / CentOS
+# Install HBase REST
+- name: Install mapr-hbase-rest (Redhat / CentOS)
+  yum: name=mapr-hbase-rest state=present
+  when: ansible_os_family == 'RedHat'
+# Install HBase Thrift
+- name: Install mapr-hbasethrift (Redhat / CentOS)
+  yum: name=mapr-hbasethrift state=present
+  when: ansible_os_family == 'RedHat'
+# Debian / Ubuntu
+# Install HBase REST
+- name: Install mapr-hbase-rest (Debian / Ubuntu)
+  apt: name=mapr-hbase-rest state=present allow_unauthenticated=true
+  when: ansible_os_family == 'Debian'
+# Install HBase Thrift
+- name: Install mapr-hbasethrift (Debian / Ubuntu)
+  apt: name=mapr-hbasethrift state=present allow_unauthenticated=yes
+  when: ansible_os_family == 'Debian'
+# Suse
+# Install HBase REST
+- name: Install mapr-hbase-rest (Suse)
+  zypper: name=mapr-hbase-rest state=present
+  when: ansible_os_family == 'Suse'
+# Install HBase Thrift
+- name: Install mapr-hbasethrift (Suse)
+  zypper: name=mapr-hbasethrift state=present
+  when: ansible_os_family == 'Suse'
+
+# Other actions
+- name: Configure hbase-site.xml - unsecure
+  template: src=hbase-site.unsecure.xml dest=/opt/mapr/hbase/hbase-{{ hbase_version }}/conf/hbase-site.xml
+  when: hbase_thrift_rest_security == 'none'
+- name: Configure hbase-site.xml - maprauth_and_ssl
+  template: src=hbase-site.maprauth_and_ssl.xml dest=/opt/mapr/hbase/hbase-{{ hbase_version }}/conf/hbase-site.xml
+  when: hbase_thrift_rest_security == 'maprauth_and_ssl'
+- name: Set MAPR_HBASE_SERVER_OPTS using HYBRID_LOGIN_OPTS
+  lineinfile: >
+    dest=/opt/mapr/conf/env.sh
+    line="export MAPR_HBASE_SERVER_OPTS=\"${HYBRID_LOGIN_OPTS} ${MAPR_SSL_OPTS} -Dmapr.library.flatclass\""
+    regexp="^export MAPR_HBASE_SERVER_OPTS"
+  when: hbase_thrift_rest_security == 'maprauth_and_ssl'

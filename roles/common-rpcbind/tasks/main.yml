@@ -1,0 +1,16 @@
+---
+# Redhat / CentOS
+- name: Install RPC bind (Redhat / CentOS)
+  yum: name=rpcbind state=present update_cache=yes
+  when: ansible_os_family == 'RedHat'
+# Debian / Ubuntu
+- name: Install RPC bind (Debian / Ubuntu)
+  apt: name=rpcbind state=present update_cache=yes
+  when: ansible_os_family == 'Debian'
+# Suse
+- name: Install RPC bind (Suse)
+  zypper: name=rpcbind state=present
+  when: ansible_os_family == 'Suse'
+# Other actions
+- name: Start the RPC bind service
+  service: name=rpcbind state=started enabled=yes

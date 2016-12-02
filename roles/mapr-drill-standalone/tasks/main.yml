@@ -1,0 +1,54 @@
+---
+# Install Apache Drill Standalone
+
+# Redhat / CentOS
+- name: Install mapr-drill (Redhat / CentOS)
+  yum: name=mapr-drill state=present
+  when: ansible_os_family == 'RedHat'
+# Debian / Ubuntu
+- name: Install mapr-drill (Debian / Ubuntu)
+  apt: name=mapr-drill state=present allow_unauthenticated=yes
+  when: ansible_os_family == 'Debian'
+# Suse
+- name: Install mapr-drill (Suse)
+  zypper: name=mapr-drill state=present
+  when: ansible_os_family == 'Suse'
+
+# Other actions
+- name: Set owner mapr-system user
+  file: path=/opt/mapr/drill owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
+
+- name: Configure drill-override.conf - unsecure
+  template: src=drill-override.unsecure.conf dest=/opt/mapr/drill/drill-{{ drill_version }}/conf/drill-override.conf
+  when: drill_security == 'none'
+
+- name: Configure drill-override.conf - pam
+  template: src=drill-override.pam.conf dest=/opt/mapr/drill/drill-{{ drill_version }}/conf/drill-override.conf
+  when: drill_security == 'pam'
+- name: Set MAPR_IMPERSONATION_ENABLED=true in drill-env.sh
+  lineinfile: >
+    dest=/opt/mapr/drill/drill-{{ drill_version }}/conf/drill-env.sh
+    regexp="^export MAPR_IMPERSONATION_ENABLED"
+    line="export MAPR_IMPERSONATION_ENABLED=true"
+  when: drill_security == 'pam'
+- name: Set MAPR_TICKETFILE_LOCATION=/opt/mapr/conf/mapruserticket in drill-env.sh
+  lineinfile: >
+    dest=/opt/mapr/drill/drill-{{ drill_version }}/conf/drill-env.sh
+    regexp="^export MAPR_TICKETFILE_LOCATION"
+    line="export MAPR_TICKETFILE_LOCATION=/opt/mapr/conf/mapruserticket"
+  when: drill_security == 'pam'
+- name: Set DRILL_JAVA_LIB_PATH using JPAM in drill-env.sh
+  lineinfile: >
+    dest=/opt/mapr/drill/drill-{{ drill_version }}/conf/drill-env.sh
+    line="export DRILLBIT_JAVA_OPTS=\"-Djava.library.path=/opt/mapr/lib/\""
+    regexp="^export DRILLBIT_JAVA_OPTS"
+    insertafter="^\# export DRILLBIT_JAVA_OPTS"
+  when: drill_security == 'pam'
+#- name: Set DRILL_JAVA_LIB_PATH using JPAM in drill-env.sh
+#  lineinfile: >
+#    dest=/opt/mapr/drill/drill-{{ drill_version }}/conf/drill-env.sh
+#    line="export DRILL_JAVA_LIB_PATH==\"/opt/mapr/lib/\""
+#    regexp="^export DRILL_JAVA_LIB_PATH"
+#    insertafter="^\# export DRILL_JAVA_LIB_PATH"
+#  when: drill_security == 'pam'
+

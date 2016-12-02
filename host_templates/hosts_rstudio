@@ -1,0 +1,7 @@
+# If you do not want to install a component leave the block empty
+
+# R Lang
+[ext-rlang]
+
+# RStudioServer Pro
+[ext-rstudioserverpro]

@@ -1,0 +1,15 @@
+---
+# Install CLDB
+
+# Redhat / CentOS
+- name: Install mapr-cldb (Redhat / CentOS)
+  yum: name=mapr-cldb state=present
+  when: ansible_os_family == 'RedHat'
+# Debian / Ubuntu
+- name: Install mapr-cldb (Debian / Ubuntu)
+  apt: name=mapr-cldb state=present allow_unauthenticated=yes
+  when: ansible_os_family == 'Debian'
+# Suse
+- name: Install mapr-cldb (Suse)
+  zypper: name=mapr-cldb state=present
+  when: ansible_os_family == 'Suse'

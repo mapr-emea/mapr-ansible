@@ -1,0 +1,6 @@
+# If you do not want to install a component leave the block empty
+
+# Zeppelin
+[ext-zeppelin]
+10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
+

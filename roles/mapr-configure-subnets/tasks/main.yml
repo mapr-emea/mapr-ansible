@@ -1,0 +1,4 @@
+---
+
+- name: Set MapR Subnet
+  lineinfile: dest=/opt/mapr/conf/env.sh regexp="^export MAPR_SUBNETS" insertafter="^\#export MAPR_SUBNETS" line="export MAPR_SUBNETS={{ mapr_subnets }}"

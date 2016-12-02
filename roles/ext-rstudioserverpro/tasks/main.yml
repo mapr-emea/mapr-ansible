@@ -1,0 +1,17 @@
+---
+# Debian / Ubuntu
+- name: Install R Studio Server
+  apt: deb={{ rstudio_server_pro_deb }}
+  when: ansible_os_family == 'Debian'
+
+- name: Create projects folder in MapR-FS
+  file: path="/mapr/{{ cluster_name }}/R-Shared/rprojects" state=directory mode=0777
+
+- name: Copy rserver.conf
+  template: src=rserver.conf.ubuntu dest=/etc/rstudio/rserver.conf
+  when: ansible_os_family == 'Debian'
+- name: Copy rsession.conf
+  template: src=rsession.conf.ubuntu dest=/etc/rstudio/rsession.conf
+  when: ansible_os_family == 'Debian'
+- name: Restart RStudio Server Pro and disable service startup
+  service: name=rstudio-server state=restarted enabled=no

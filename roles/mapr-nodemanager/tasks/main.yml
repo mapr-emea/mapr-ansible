@@ -1,0 +1,14 @@
+---
+# Install YARN Node Manager
+# Redhat / CentOS
+- name: Install mapr-nodemanager (Redhat / CentOS)
+  yum: name=mapr-nodemanager state=present
+  when: ansible_os_family == 'RedHat'
+# Debian / Ubuntu
+- name: Install mapr-nodemanager (Debian / Ubuntu)
+  apt: name=mapr-nodemanager state=present allow_unauthenticated=yes
+  when: ansible_os_family == 'Debian'
+# Suse
+- name: Install mapr-nodemanager (Suse)
+  zypper: name=mapr-nodemanager state=present
+  when: ansible_os_family == 'Suse'

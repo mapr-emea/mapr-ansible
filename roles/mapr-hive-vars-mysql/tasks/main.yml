@@ -1,0 +1,8 @@
+---
+- name: Get MySQL Host
+  set_fact: mysql_item={{ hostvars[item]['ansible_fqdn'] }}
+  with_items:
+    - "{{ groups['ext-mysql'] }}"
+  register: mysql_hosts
+- name: Make MySQL Host String
+  set_fact: hive_db_host={{ mysql_hosts.results | map(attribute='ansible_facts.mysql_item') | list | join(',')}}

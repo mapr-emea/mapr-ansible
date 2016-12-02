@@ -1,0 +1,23 @@
+ - hosts: all
+   tasks:
+    - name: Create financegroup Group
+      group: name=financegroup gid=5501 state=present
+    - name: Create opsgroup Group
+      group: name=opsgroup gid=5502 state=present
+    - name: Create bobgroup Group
+      group: name=bobgroup gid=5503 state=present
+
+    - name: Create finance1 User
+      user: name=finance1 uid=6001 groups=financegroup password={{ mapr_passwd }} createhome=yes state=present
+
+    - name: Create finance2 User
+      user: name=finance2 uid=6002 groups=financegroup password={{ mapr_passwd }} createhome=yes state=present
+
+    - name: Create ops1 User
+      user: name=ops1 uid=6003 groups=opsgroup password={{ mapr_passwd }} createhome=yes state=present
+
+    - name: Create bob User
+      user: name=bob uid=6004 groups=bobgroup,financegroup password={{ mapr_passwd }} createhome=yes state=present
+
+    - name: Create bob User
+      user: name=sam uid=6005 password={{ mapr_passwd }} createhome=yes state=present

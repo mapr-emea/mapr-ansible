@@ -1,0 +1,14 @@
+---
+# Install HBase CLI
+# Redhat / CentOS
+- name: Install mapr-hbase (Redhat / CentOS)
+  yum: name=mapr-hbase state=present
+  when: ansible_os_family == 'RedHat'
+# Debian / Ubuntu
+- name: Install mapr-hbase (Debian / Ubuntu)
+  apt: name=mapr-hbase state=present allow_unauthenticated=yes
+  when: ansible_os_family == 'Debian'
+# Suse
+- name: Install mapr-hbase (Suse)
+  zypper: name=mapr-hbase state=present
+  when: ansible_os_family == 'Suse'

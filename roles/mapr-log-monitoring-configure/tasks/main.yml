@@ -1,0 +1,12 @@
+---
+# Install MapR log monitoring configure
+
+- name: Get ElasticSearch FQDNs
+  set_fact: elasticsearch_item={{ hostvars[item]['ansible_fqdn'] }}
+  with_items:
+    - "{{ groups['mapr-elasticsearch'] }}"
+  register: elasticsearch_hosts
+- name: Make ElasticSearch String
+  set_fact: elasticsearch_string={{ elasticsearch_hosts.results | map(attribute='ansible_facts.elasticsearch_item') | list | join(',')}}
+- name: Configure.sh
+  shell: /opt/mapr/server/configure.sh -R -ES {{ elasticsearch_string }}

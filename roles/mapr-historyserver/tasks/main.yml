@@ -1,0 +1,14 @@
+---
+# Install History Server
+# Redhat / CentOS
+- name: Install mapr-historyserver (Redhat / CentOS)
+  yum: name=mapr-historyserver state=present
+  when: ansible_os_family == 'RedHat'
+# Debian / Ubuntu
+- name: Install mapr-historyserver (Debian / Ubuntu)
+  apt: name=mapr-historyserver state=present allow_unauthenticated=yes
+  when: ansible_os_family == 'Debian'
+# Suse
+- name: Install mapr-historyserver (Suse)
+  zypper: name=mapr-historyserver state=present
+  when: ansible_os_family == 'Suse'

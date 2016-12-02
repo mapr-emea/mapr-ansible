@@ -1,0 +1,15 @@
+---
+# Install MapR FileServer (MFS)
+
+# Redhat / CentOS
+- name: Install mapr-fileserver (Redhat / CentOS)
+  yum: name=mapr-fileserver state=present
+  when: ansible_os_family == 'RedHat'
+# Debian / Ubuntu
+- name: Install mapr-fileserver (Debian / Ubuntu)
+  apt: name=mapr-fileserver state=present allow_unauthenticated=yes
+  when: ansible_os_family == 'Debian'
+# Suse
+- name: Install mapr-fileserver (Suse)
+  zypper: name=mapr-fileserver state=present
+  when: ansible_os_family == 'Suse'

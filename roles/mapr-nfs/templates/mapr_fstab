@@ -1,0 +1,12 @@
+# Copyright (c) 2009 & onwards. MapR Tech, Inc., All rights reserved
+
+# MapR fstab: MapR filestem information
+#   Filesystems in this file are mounted after nfsserver is
+#       started (/etc/init.d/mapr-nfsserver start)
+#   on shutdown the listed Filesystems are unmounted
+#       (/etc/init.d/mapr-nfsserver stop)
+#
+# format:
+# <file system> <mount point> <options>
+
+localhost:/mapr /mapr nolock,nfsvers=3

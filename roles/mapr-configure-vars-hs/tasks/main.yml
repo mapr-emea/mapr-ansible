@@ -1,0 +1,13 @@
+---
+# Configure unsecure cluster
+
+- name: Get Job History Server
+  set_fact: historyserver_item={{ hostvars[item]['ansible_fqdn'] }}
+  with_items:
+    - "{{ groups['mapr-historyserver'] }}"
+  register: historyserver_hosts
+
+- name: Make History Server String
+  set_fact: historyserver_string={{ historyserver_hosts.results | map(attribute='ansible_facts.historyserver_item') | list | join(',')}}
+
+

@@ -1,0 +1,5 @@
+[datanodes]
+10.0.0.11 ansible_user=centos ansible_become=yes ansible_become_method=sudo
+
+[master]
+10.0.0.11 ansible_user=centos ansible_become=yes ansible_become_method=sudo

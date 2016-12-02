@@ -1,0 +1,19 @@
+---
+# Install Apache Drill on YARN
+
+# Redhat / CentOS
+- name: Install mapr-drill-yarn (Redhat / CentOS)
+  yum: name=mapr-drill-yarn state=present
+  when: ansible_os_family == 'RedHat'
+# Debian / Ubuntu
+- name: Install mapr-drill-yarn (Debian / Ubuntu)
+  apt: name=mapr-drill-yarn state=present allow_unauthenticated=yes
+  when: ansible_os_family == 'Debian'
+# Suse
+- name: Install mapr-drill-yarn (Suse)
+  zypper: name=mapr-drill-yarn state=present
+  when: ansible_os_family == 'Suse'
+
+# Other actions
+- name: Set owner mapr-system user
+  file: path=/opt/mapr/drill owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes

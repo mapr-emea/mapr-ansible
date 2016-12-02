@@ -1,0 +1,15 @@
+---
+# Install CLDB
+
+# Redhat / CentOS
+- name: Install mapr-gateway (Redhat / CentOS)
+  yum: name=mapr-gateway state=present
+  when: ansible_os_family == 'RedHat'
+# Debian / Ubuntu
+- name: Install mapr-gateway (Debian / Ubuntu)
+  apt: name=mapr-gateway state=present allow_unauthenticated=yes
+  when: ansible_os_family == 'Debian'
+# Suse
+- name: Install mapr-gateway (Suse)
+  zypper: name=mapr-gateway state=present
+  when: ansible_os_family == 'Suse'

@@ -1,0 +1,15 @@
+---
+# Install MapR grafana
+
+# Redhat / CentOS
+- name: Install mapr-grafana (Redhat / CentOS)
+  yum: name=mapr-grafana state=present
+  when: ansible_os_family == 'RedHat'
+# Debian / Ubuntu
+- name: Install mapr-grafana (Debian / Ubuntu)
+  apt: name=mapr-grafana state=present allow_unauthenticated=yes
+  when: ansible_os_family == 'Debian'
+# Suse
+- name: Install mapr-grafana (Suse)
+  zypper: name=mapr-grafana state=present
+  when: ansible_os_family == 'Suse'

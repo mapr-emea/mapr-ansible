@@ -1,0 +1,1 @@
+export METASTORE_PORT=9083

@@ -1,0 +1,15 @@
+---
+# Install MapR elasticsearch
+
+# Redhat / CentOS
+- name: Install mapr-elasticsearch (Redhat / CentOS)
+  yum: name=mapr-elasticsearch state=present
+  when: ansible_os_family == 'RedHat'
+# Debian / Ubuntu
+- name: Install mapr-elasticsearch (Debian / Ubuntu)
+  apt: name=mapr-elasticsearch state=present allow_unauthenticated=yes
+  when: ansible_os_family == 'Debian'
+# Suse
+- name: Install mapr-elasticsearch (Suse)
+  zypper: name=mapr-elasticsearch state=present
+  when: ansible_os_family == 'Suse'
