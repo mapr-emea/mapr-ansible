@@ -20,7 +20,7 @@
   - ssl_keystore
   - ssl_truststore
 #  - mapruserticket
-  when: inventory_hostname == groups["mapr-core"][0]
+  when: inventory_hostname == groups["mapr-cldb"][0]
 - name: Copy keys to all nodes
   copy: src=/tmp/{{ item }} dest=/opt/mapr/conf/{{ item }}
   with_items:

@@ -13,83 +13,83 @@
 
 # Zookeeper
 [mapr-zookeeper:children]
-base
+common
 
-# Container Location DataBase
+# Container Location Datacommon
 [mapr-cldb:children]
-base
+common
 
 # MapR Control System
 [mapr-mcs:children]
-base
+common
 
 # Gateway for Streams and MapR-DB
 [mapr-gateway:children]
-base
+common
 
 # YARN resource manager
 [mapr-resourcemanager:children]
-base
+common
 
 # Job History Server, IMPORTANT: only one
 [mapr-historyserver:children]
-base
+common
 
 # Contains YARN Node Manager, MapReduce2 and MapR FileServer (MFS)
 [mapr-datanode:children]
-base
+common
 
 # MySQL, required for Hive MetaStore and Oozie, IMPORTANT: only one
 [ext-mysql:children]
-base
+common
 
 # Spark on YARN
 [mapr-spark-yarn:children]
-base
+common
 
 # Spark HistoryServer
 [mapr-spark-historyserver:children]
-# base
+# common
 
 # NFS
 [mapr-nfs:children]
-base
+common
 
 # Apache Drill
 [mapr-drill-standalone:children]
-base
+common
 
 # Apache Drill
 [mapr-drill-yarn:children]
-#base
+#common
 
 # Flume
 [mapr-flume:children]
-base
+common
 
-# HBase CLI
-[mapr-hbase-cli:children]
-base
+# Hcommon CLI
+[mapr-hcommon-cli:children]
+common
 
-# HBase REST and Thrift
-[mapr-hbase-thrift-rest:children]
-base
+# Hcommon REST and Thrift
+[mapr-hcommon-thrift-rest:children]
+common
 
 # Hive CLI
 [mapr-hive-cli:children]
-base
+common
 
 # Hive Meta Store
 [mapr-hive-metastore:children]
-base
+common
 
 # Hive Server2
 [mapr-hive-server2:children]
-base
+common
 
 # Hive HCatalog
 [mapr-hive-hcatalog:children]
-base
+common
 
 # Hive WebHCat
 [mapr-hive-webhcat:children]
@@ -105,18 +105,18 @@ base
 
 # Sqoop2 Server
 [mapr-sqoop2-server:children]
-# base
+# common
 
 # Sqoop2 Client
 [mapr-sqoop2-client:children]
-# base
+# common
 
 # Pig
 [mapr-pig:children]
 
 # Oozie
 [mapr-oozie:children]
-# base
+# common
 
 # HttpFS
 [mapr-httpfs:children]
@@ -127,23 +127,23 @@ mapr-core
 
 # OpenTSDB
 [mapr-opentsdb]
-base
+common
 
 # Grafana
 [mapr-grafana]
-base
+common
 
 # FluentD
 [mapr-fluentd:children]
-base
+common
 
 # ElasticSearch
 [mapr-elasticsearch]
-base
+common
 
 # Kibana
 [mapr-kibana]
-base
+common
 
 # MapR NFS loopback (only for MapR client!)
 [mapr-nfsloopback]
@@ -156,12 +156,12 @@ base
 
 # Zeppelin
 [ext-zeppelin:children]
-# base
+# common
 
 # R Lang
 [ext-rlang:children]
-# base
+# common
 
 # RStudioServer Pro
 [ext-rstudioserverpro:children]
-# base
+# common
