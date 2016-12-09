@@ -11,7 +11,7 @@
 #  - mapruserticket
 - name: Configure.sh to generate keys just run on frist mapr-core node
   shell: /opt/mapr/server/configure.sh -N {{ cluster_name }} -Z {{ zookeeper_string }} -C {{ cldb_string }} -u {{ mapr_user }} -g {{ mapr_group }} -genkeys -secure -HS {{ historyserver_string }}
-  when: inventory_hostname == groups["mapr-core"][0] and generate_keys == true
+  when: inventory_hostname == groups["mapr-cldb"][0] and generate_keys == true
 - name: Copy keys to local
   fetch: src=/opt/mapr/conf/{{ item }} dest=/tmp/{{ item }} flat=yes
   with_items:
