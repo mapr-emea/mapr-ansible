@@ -7,11 +7,16 @@
   package: name=mapr-hbasethrift state=present
 
 # Other actions
+- name: Find HBase Path
+  find: paths="/opt/mapr/hbase/" patterns="hbase*" file_type=directory
+  register: hbase_path_result
+  failed_when: hbase_path_result.matched != 1
+- debug: msg="HBase Path {{ hbase_path_result.files[0].path }}"
 - name: Configure hbase-site.xml - unsecure
-  template: src=hbase-site.unsecure.xml dest=/opt/mapr/hbase/hbase-{{ hbase_version }}/conf/hbase-site.xml
+  template: src=hbase-site.unsecure.xml dest={{ hbase_path_result.files[0].path }}/conf/hbase-site.xml
   when: hbase_thrift_rest_security == 'none'
 - name: Configure hbase-site.xml - maprauth_and_ssl
-  template: src=hbase-site.maprauth_and_ssl.xml dest=/opt/mapr/hbase/hbase-{{ hbase_version }}/conf/hbase-site.xml
+  template: src=hbase-site.maprauth_and_ssl.xml dest={{ hbase_path_result.files[0].path }}/conf/hbase-site.xml
   when: hbase_thrift_rest_security == 'maprauth_and_ssl'
 - name: Set MAPR_HBASE_SERVER_OPTS using HYBRID_LOGIN_OPTS
   lineinfile: >

@@ -1,7 +1,7 @@
 - name: Apply common configuration to all nodes
   hosts: common
   roles:
-    - {role: common-oracle-jdk, when: jdk == 'oraclejdk'}
+    - {role: common-oraclejdk18, when: jdk == 'oraclejdk'}
     - {role: common-openjdk18, when: jdk == 'openjdk18'}
     - common-mapruser
     - common-rpcbind

@@ -5,10 +5,17 @@
   - ssl_truststore
   - mapruserticket
   when: inventory_hostname == groups["mapr-cldb"][0]
+
+
+- name: Find Hadoop YARN server JARs
+  find: paths="/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/share/hadoop/yarn/" patterns="hadoop-yarn-server-*" file_type=file
+  register: yarnserver_jar_path_result
+  failed_when: yarnserver_jar_path_result.matched == 0
+- name: Transform to Hadoop YARN server JARs list
+  set_fact: yarnserver_jars_list={{ yarnserver_jar_path_result.files | map(attribute='path') | list }}
+- debug: msg="Find Hadoop YARN server JARs {{ item | basename }}"
+  with_items: "{{ yarnserver_jars_list }}"
 - name: Copy Jars to local, required for Hive Server and Spark
-  fetch: src=/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/share/hadoop/yarn/{{ item }} dest=/tmp/{{ item }} flat=yes
-  with_items:
-  - hadoop-yarn-server-web-proxy-{{ hadoop_version }}-{{ mapr_build }}.jar
-  - hadoop-yarn-server-common-{{ hadoop_version }}-{{ mapr_build }}.jar
-  - hadoop-yarn-server-resourcemanager-{{ hadoop_version }}-{{ mapr_build }}.jar
+  fetch: src={{ item }} dest=/tmp/{{ item | basename }} flat=yes
+  with_items: "{{ yarnserver_jars_list }}"
   when: inventory_hostname == groups["mapr-cldb"][0]

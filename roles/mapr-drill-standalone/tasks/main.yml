@@ -8,35 +8,41 @@
 - name: Set owner mapr-system user
   file: path=/opt/mapr/drill owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
 
+- name: Find Drill Path
+  find: paths="/opt/mapr/drill/" patterns="drill*" file_type=directory
+  register: drill_path_result
+  failed_when: drill_path_result.matched != 1
+- debug: msg="Drill Path {{ drill_path_result.files[0].path }}"
+
 - name: Configure drill-override.conf - unsecure
-  template: src=drill-override.unsecure.conf dest=/opt/mapr/drill/drill-{{ drill_version }}/conf/drill-override.conf
+  template: src=drill-override.unsecure.conf dest={{ drill_path_result.files[0].path }}/conf/drill-override.conf
   when: drill_security == 'none'
 
 - name: Configure drill-override.conf - pam
-  template: src=drill-override.pam.conf dest=/opt/mapr/drill/drill-{{ drill_version }}/conf/drill-override.conf
+  template: src=drill-override.pam.conf dest={{ drill_path_result.files[0].path }}/conf/drill-override.conf
   when: drill_security == 'pam'
 - name: Set MAPR_IMPERSONATION_ENABLED=true in drill-env.sh
   lineinfile: >
-    dest=/opt/mapr/drill/drill-{{ drill_version }}/conf/drill-env.sh
+    dest={{ drill_path_result.files[0].path }}/conf/drill-env.sh
     regexp="^export MAPR_IMPERSONATION_ENABLED"
     line="export MAPR_IMPERSONATION_ENABLED=true"
   when: drill_security == 'pam'
 - name: Set MAPR_TICKETFILE_LOCATION=/opt/mapr/conf/mapruserticket in drill-env.sh
   lineinfile: >
-    dest=/opt/mapr/drill/drill-{{ drill_version }}/conf/drill-env.sh
+    dest={{ drill_path_result.files[0].path }}/conf/drill-env.sh
     regexp="^export MAPR_TICKETFILE_LOCATION"
     line="export MAPR_TICKETFILE_LOCATION=/opt/mapr/conf/mapruserticket"
   when: drill_security == 'pam'
 - name: Set DRILL_JAVA_LIB_PATH using JPAM in drill-env.sh
   lineinfile: >
-    dest=/opt/mapr/drill/drill-{{ drill_version }}/conf/drill-env.sh
+    dest={{ drill_path_result.files[0].path }}/conf/drill-env.sh
     line="export DRILLBIT_JAVA_OPTS=\"-Djava.library.path=/opt/mapr/lib/\""
     regexp="^export DRILLBIT_JAVA_OPTS"
     insertafter="^\# export DRILLBIT_JAVA_OPTS"
   when: drill_security == 'pam'
 #- name: Set DRILL_JAVA_LIB_PATH using JPAM in drill-env.sh
 #  lineinfile: >
-#    dest=/opt/mapr/drill/drill-{{ drill_version }}/conf/drill-env.sh
+#    dest={{ drill_path_result.files[0].path }}/conf/drill-env.sh
 #    line="export DRILL_JAVA_LIB_PATH==\"/opt/mapr/lib/\""
 #    regexp="^export DRILL_JAVA_LIB_PATH"
 #    insertafter="^\# export DRILL_JAVA_LIB_PATH"

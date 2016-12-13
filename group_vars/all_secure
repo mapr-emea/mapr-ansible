@@ -8,13 +8,7 @@ jdk: oraclejdk18
 jdk_folder: /opt/java/jdk1.8.0_111
 oracle_jdk_url: http://download.oracle.com/otn-pub/java/jdk/8u111-b14/jdk-8u111-linux-x64.tar.gz
 
-mapr_build: mapr-1607
 hadoop_version: 2.7.0
-spark_version: 1.6.1
-oozie_version: 4.2.0
-hive_version: 1.2
-hbase_version: 1.1.1
-drill_version: 1.8.0
 zeppelin_version: 0.6.0-SNAPSHOT
 zeppelin_git_repo: https://github.com/apache/incubator-zeppelin.git
 # zeppelin_git_hash: v0.6.1
