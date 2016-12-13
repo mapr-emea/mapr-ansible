@@ -1,6 +1,8 @@
 - Uninstall removed components from inventory
 - Make installable for local install
 - Add precheck for disks
+- add sdparm lsbcore...
+- read versions from FS not from config.
 
 - RStudio for Redhat, Centos, Suse
 - Add storm

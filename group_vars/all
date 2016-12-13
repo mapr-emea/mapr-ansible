@@ -1,5 +1,5 @@
 mapr_release_url: http://package.mapr.com/releases/v5.2.0
-mapr_ecosystem_url: http://package.mapr.com/releases/MEP/MEP-1.1.0/
+mapr_ecosystem_url: http://package.mapr.com/releases/MEP/MEP-2.0.0/
 mapr_gpg_url: http://package.mapr.com/releases/pub/maprgpg.key
 
 # Patches are only installed when variable mapr_patch_url is set
@@ -12,11 +12,11 @@ oracle_jdk_url: http://download.oracle.com/otn-pub/java/jdk/8u111-b14/jdk-8u111-
 
 mapr_build: mapr-1607
 hadoop_version: 2.7.0
-spark_version: 1.6.1
+spark_version: 2.0.1
 oozie_version: 4.2.0
 hive_version: 1.2
 hbase_version: 1.1.1
-drill_version: 1.8.0
+drill_version: 1.9.0
 zeppelin_version: 0.6.0-SNAPSHOT
 zeppelin_git_repo: https://github.com/apache/incubator-zeppelin.git
 # zeppelin_git_hash: v0.6.1
