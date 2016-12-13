@@ -7,3 +7,9 @@
     packages_Debian: ['mapr-core', 'mapr-core-internal', 'mapr-kafka']
   package: name={{ item }} state=present
   with_items: "{{ vars['packages_' + ansible_os_family] }}"
+- name: Configure core-site.xml
+  vars:
+    aws_credentials_file: "{{ lookup('env','HOME') }}/.aws/credentials"
+    aws_access_key_id: "{{ lookup('ini', 'aws_access_key_id section=default file={{ aws_credentials_file }}')  }}"
+    aws_secret_access_key: "{{ lookup('ini', 'aws_secret_access_key section=default file={{ aws_credentials_file }}')  }}"
+  template: src=core-site.xml dest=/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/etc/hadoop/core-site.xml

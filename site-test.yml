@@ -1,8 +1,17 @@
-- hosts: all
-  vars:
-      packages_Suse: ['testen1', 'testen2']
-      packages_RedHat: ['testen3', 'testen4']
-  tasks:
+---
+- name: Install MapR Core
+  hosts: mapr-core
+  roles:
+    - mapr-core
+
+
+
+
+#- hosts: all
+#  vars:
+#      packages_Suse: ['testen1', 'testen2']
+#      packages_RedHat: ['testen3', 'testen4']
+#  tasks:
 #    - find: paths="/opt/mapr/spark" patterns="spark*" file_type=directory
 #      register: spark_path_result
 #      failed_when: spark_path_result.matched != 1
@@ -29,15 +38,15 @@
 #      failed_when: hadoop_version | trim == ''
 #    - debug: msg="Hadoop Path {{ hadoop_version.stdout }}"
 
-    - name: Find Hadoop YARN server JARs
-      find: paths="/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/share/hadoop/yarn/" patterns="hadoop-yarn-server-*" file_type=file
-      register: yarnserver_jar_path_result
-      failed_when: yarnserver_jar_path_result.matched == 0
-    - name: Transform to Hadoop YARN server JARs list
-      set_fact: yarnserver_jars_list={{ yarnserver_jar_path_result.files | map(attribute='path') | list }}
-    - debug: msg="Find Hadoop YARN server JARs {{ item | basename }}"
-      with_items: "{{ yarnserver_jars_list }}"
-    - debug: "{{ lookup('file', '/tmp/*') }}"
+#    - name: Find Hadoop YARN server JARs
+#      find: paths="/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/share/hadoop/yarn/" patterns="hadoop-yarn-server-*" file_type=file
+#      register: yarnserver_jar_path_result
+#      failed_when: yarnserver_jar_path_result.matched == 0
+#    - name: Transform to Hadoop YARN server JARs list
+#      set_fact: yarnserver_jars_list={{ yarnserver_jar_path_result.files | map(attribute='path') | list }}
+#    - debug: msg="Find Hadoop YARN server JARs {{ item | basename }}"
+#      with_items: "{{ yarnserver_jars_list }}"
+#    - debug: "{{ lookup('file', '/tmp/*') }}"
 #    - name: Link hive-site.xml to Spark (otherwise Spark startup throws errors)
 #      file: src=/opt/mapr/hive/hive-{{ hive_version }}/conf/hive-site.xml dest=/opt/mapr/spark/spark-*/conf/hive-site.xml state=link
 #    - debug: msg="Test {{ item }} {{ ansible_os_family }}"
