@@ -1,10 +1,10 @@
 ---
-- name: Install MapR Core
-  hosts: mapr-core
-  roles:
-    - mapr-core
-
-
+- hosts: all
+  vars:
+      motd_value: "{{ lookup('env','HOME') }}/.aws/credentialsa"
+  tasks:
+    - debug: msg={{ lookup('file', motd_value) }}
+      ignore_errors: True
 
 
 #- hosts: all
