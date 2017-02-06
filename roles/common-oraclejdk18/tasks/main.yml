@@ -14,8 +14,8 @@
 # Other actions
 - name: Copy Local Policy
   copy: src="../files/UnlimitedJCEPolicyJDK8/local_policy.jar" dest="{{ jdk_folder }}/jre/lib/security/" mode=0644
-- name: Copy US Export Policy
-  copy: src="../files/UnlimitedJCEPolicyJDK8/US_export_policy.jar" dest="{{ jdk_folder }}/jre/lib/security/" mode=0644
+# - name: Copy US Export Policy
+#  copy: src="../files/UnlimitedJCEPolicyJDK8/US_export_policy.jar" dest="{{ jdk_folder }}/jre/lib/security/" mode=0644
 - name: Add JAVA_HOME to /etc/profile
   lineinfile: dest=/etc/profile state=present line="export JAVA_HOME={{ jdk_folder }}"
 

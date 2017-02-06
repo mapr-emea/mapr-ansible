@@ -1,4 +1,7 @@
  - hosts: all
+   vars:
+      mapr_passwd: $6$X4.bqoTK$RTAwnhg2BG/y.3Dugw9Vc31ZdXFsZAitwKtKuu3HgKSNutcQmZ7zLy4cXasivlv2gKD8QGouAjND5fU7H.HDW0
+
    tasks:
     - name: Create financegroup Group
       group: name=financegroup gid=5501 state=present
@@ -21,3 +24,6 @@
 
     - name: Create bob User
       user: name=sam uid=6005 password={{ mapr_passwd }} createhome=yes state=present
+
+    - name: Create test1
+      user: name=test1 uid=300 password={{ mapr_passwd }} createhome=yes state=present
