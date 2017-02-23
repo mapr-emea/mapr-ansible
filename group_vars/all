@@ -7,14 +7,16 @@ mapr_patch_url: http://package.mapr.com/patches/releases/v5.2.0/
 
 # JDK choose: openjdk18 or oraclejdk18
 jdk: openjdk18
-jdk_folder: /opt/java/jdk1.8.0_111
+#jdk_folder: /opt/java/jdk1.8.0_111
+# redhat openjdk java path
+jdk_folder: /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.121-0.b13.el7_3.x86_64
 oracle_jdk_url: http://download.oracle.com/otn-pub/java/jdk/8u111-b14/jdk-8u111-linux-x64.tar.gz
 
 hadoop_version: 2.7.0
-zeppelin_version: 0.6.0-SNAPSHOT
+zeppelin_version: 0.7.0
 zeppelin_git_repo: https://github.com/apache/incubator-zeppelin.git
 # zeppelin_git_hash: v0.6.1
-zeppelin_git_hash: 5af7747
+zeppelin_git_hash: v0.7.0
 
 # Get url from https://www.rstudio.com/products/rstudio/download-commercial/
 rstudio_server_pro_deb: http://download2.rstudio.org/rstudio-server-pro-0.99.903-amd64.deb

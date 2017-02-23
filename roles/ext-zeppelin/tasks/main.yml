@@ -33,6 +33,8 @@
   - nodejs
   - npm
   when: ansible_os_family == 'Debian'
+- name: Allow bower to build with root
+  template: src=bowerrc dest=~/.bowerrc
 - name: Download and extract Maven 3.3.9
   unarchive: src=http://www-eu.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz dest=/usr/local/ copy=no
 - name: Create mvn link
@@ -40,7 +42,8 @@
 - name: Clone Zeppelin Git Repo
   git: repo={{ zeppelin_git_repo }} dest=/tmp/zeppelin.git version={{ zeppelin_git_hash }}
 - name: Build Zeppelin with Maven
-  shell: export JAVA_HOME={{ jdk_folder }} && /usr/local/bin/mvn -Pmapr51 -Pyarn -Pbuild-distr -Pspark-1.6 -Phadoop-2.6 -Ppyspark package -DskipTests -B -f /tmp/zeppelin.git/pom.xml
+  shell: /usr/local/bin/mvn clean package -Pmapr51 -Pyarn -Pbuild-distr -Pspark-2.0  -Pscala-2.11 -Phadoop-2.7 -Ppyspark -DskipTests -B -f /tmp/zeppelin.git/pom.xml
+#  shell: export JAVA_HOME={{ jdk_folder }} && /usr/local/bin/mvn clean package -Pmapr51 -Pyarn -Pbuild-distr -Pspark-2.0  -Pscala-2.11 -Phadoop-2.7 -Ppyspark -DskipTests -B -f /tmp/zeppelin.git/pom.xml
 - name: Create /opt/mapr/zeppelin dir
   file: path=/opt/mapr/zeppelin state=directory
 - name: Create /opt/mapr/zeppelin/notebooks dir
@@ -60,4 +63,6 @@
 - name: Set owner mapr-system user
   file: path=/opt/mapr/zeppelin owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
 - name: Start Zeppelin
-  shell: su - {{ mapr_user }} -c "/opt/mapr/zeppelin/zeppelin-{{ zeppelin_version }}/bin/zeppelin-daemon.sh start"
+  shell: /opt/mapr/zeppelin/zeppelin-{{ zeppelin_version }}/bin/zeppelin-daemon.sh start
+  become: true
+  become_user: "{{ mapr_user }}"
