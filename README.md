@@ -21,7 +21,7 @@ Execute:
 
 ```
 ansible -i myhosts/<yourfile>  -m command -a "hostname -f" all
-``
+```
 
 ## Use the UI installer
 
@@ -37,13 +37,6 @@ ansible-playbook -i hosts_run-installer-template site-run-installer.yml
 
 Goto `https://<masternode>:9443` and login with mapr and password mapr123.
 Click wizard and install.
-
-If you want to enable native security after successful installation goto /group_vars/all and add
-the cluster name you used in UI installation (only required for secured cluster) and run
-
-```
-ansible-playbook -i hosts_run-installer-template site-run-installer-nativesecurity.yml
-```
 
 ## Inventory file templates
 
