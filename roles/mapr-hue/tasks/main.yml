@@ -3,6 +3,5 @@
 - name: Install mapr-hue
   package: name={{ item }} state=present
   with_items:
-  - mapr-hue-base
   - mapr-hue
   - mapr-hue-livy
