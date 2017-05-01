@@ -6,6 +6,7 @@
   hosts: common
   roles:
     - common-prereq
+    - common-selinux
     - {role: common-oraclejdk18, when: jdk == 'oraclejdk18'}
     - {role: common-openjdk18, when: jdk == 'openjdk18'}
     - common-mapruser

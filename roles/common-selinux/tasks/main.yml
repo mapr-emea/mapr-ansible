@@ -1,0 +1,5 @@
+---
+- name: Install required Ansible package to handle SElinux
+  package: name=libselinux-python state=present
+- name: Disable SElinux
+  selinux: state=disabled

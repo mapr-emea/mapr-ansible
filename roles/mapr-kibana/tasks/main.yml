@@ -3,3 +3,14 @@
 
 - name: Install mapr-kibana
   package: name=mapr-kibana state=present
+# Fix for OTSDB-4
+- name: Set owner mapr-system user
+  file: path=/opt/mapr/kibana owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
+
+- name: Find Kibana Path
+  find: paths="/opt/mapr/kibana/" patterns="kibana*" file_type=directory
+  register: kibana_path_result
+  failed_when: kibana_path_result.matched != 1
+# fix for KIB-1
+- name: Set vm.overcommit_memory in /etc/sysctl.conf
+  lineinfile: dest={{ kibana_path_result.files[0].path }}/bin/export_cert.sh regexp="^CLUSTERNAME" line="CLUSTERNAME={{ cluster_name }}"

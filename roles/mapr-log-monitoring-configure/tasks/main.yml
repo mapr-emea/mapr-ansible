@@ -10,3 +10,5 @@
   set_fact: elasticsearch_string={{ elasticsearch_hosts.results | map(attribute='ansible_facts.elasticsearch_item') | list | join(',')}}
 - name: Configure.sh
   shell: /opt/mapr/server/configure.sh -R -ES {{ elasticsearch_string }}
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
