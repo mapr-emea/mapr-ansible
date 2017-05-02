@@ -1,8 +1,7 @@
-# Managed by Satellite
-#- name: Setup MapR repositories
-#  hosts: mapr-core
-#  roles:
-#    - mapr-configure-repository
+- name: Setup MapR repositories
+  hosts: mapr-core
+  roles:
+    - mapr-configure-repository
 - name: Apply common configuration to all nodes
   hosts: common
   roles:
@@ -10,9 +9,9 @@
     - common-selinux
     - {role: common-oraclejdk18, when: jdk == 'oraclejdk18'}
     - {role: common-openjdk18, when: jdk == 'openjdk18'}
-#    - common-mapruser
+    - common-mapruser
     - common-rpcbind
-#    - common-ntp
+    - common-ntp
     - common-misc
     - common-sysctl
 # used by configure.sh and drill
