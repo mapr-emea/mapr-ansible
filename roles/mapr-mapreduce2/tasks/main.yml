@@ -3,5 +3,5 @@
 - name: Install mapr-mapreduce2
   package: name=mapr-mapreduce2 state=present
 
-- name: Configure core-site.xml
-  template: src=core-site.secure.xml dest=/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/etc/hadoop/core-site.xml
+#- name: Configure core-site.xml
+#  template: src=core-site.secure.xml dest=/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/etc/hadoop/core-site.xml
