@@ -1,0 +1,31 @@
+---
+- name: Copy keytab to host
+  copy: src={{ mapr_kerberos_local_keytabs_dir }}/yarn.{{ ansible_fqdn }}.keytab dest=/tmp/yarn.mapr.keytab
+- name: Verify mapr principal
+  command: kinit -k -t /tmp/yarn.mapr.keytab mapr/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}
+- name: Display current ticket mapr
+  command: klist
+  register: klist_out
+- debug: msg="{{ klist_out }}"
+- name: Destroy current ticket
+  command: kdestroy
+- name: Verify HTTP principal
+  command: kinit -kt /tmp/yarn.mapr.keytab HTTP/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}
+- name: Display current ticket HTTP
+  command: klist
+  register: klist_out
+- debug: msg="{{ klist_out }}"
+- name: Destroy current ticket
+  command: kdestroy
+- name: Delete keytab
+  file: path=/tmp/yarn.mapr.keytab state=absent
+- name: Copy cluster keytab to host
+  copy: src={{ mapr_kerberos_local_keytabs_dir }}/mapr.keytab dest=/tmp/mapr.keytab
+- name: Verify mapr principal
+  command: kinit -k -t /tmp/mapr.keytab mapr/{{ cluster_name }}
+- name: Display current ticket mapr
+  command: klist
+  register: klist_out
+- debug: msg="{{ klist_out }}"
+- name: Destroy current ticket
+  command: kdestroy

@@ -1,0 +1,5 @@
+---
+- name: Setup Kerberos Client
+  hosts: ext-kerberos-setup
+  roles:
+    - ext-kerberos5-setup

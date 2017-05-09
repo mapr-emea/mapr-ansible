@@ -1,0 +1,4 @@
+add_entry -password -p mapr/{{ cluster_name }} -k 1 -e  RC4-HMAC
+CocaCola$123
+wkt /tmp/mapr.keytab
+quit

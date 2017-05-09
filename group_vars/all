@@ -22,10 +22,16 @@ zeppelin_git_hash: v0.7.0
 rstudio_server_pro_deb: http://download2.rstudio.org/rstudio-server-pro-0.99.903-amd64.deb
 
 ####### Enable security features ##########
-# none, native
-mapr_security: none
+# none, native, kerberos
+mapr_security: kerberos
+mapr_kerberos_realm: PS.MAPR.COM
+mapr_kerberos_admin_server: 10.0.0.202
+mapr_kerberos_kdc: 10.0.0.202
+mapr_kerberos_domain: ps.mapr.com
+mapr_kerberos_local_keytabs_dir: /Users/chufe/Documents/mykeytabs
+
 # Will delete existing keys (cldb.key, maprserverticket, ssl_truststore, ssl_keystore) and generate new one: true /false
-generate_keys: false
+generate_keys: true
 # Hive security: none, maprsasl or pam
 hive_server_security: none
 # Drill security (only standalone): none, pam

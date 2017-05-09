@@ -136,6 +136,10 @@
   hosts: mapr-core
   roles:
    - {role: mapr-configure-nativesecurity-secure, when: mapr_security == 'native'}
+- name: Configure and start (kerberos)
+  hosts: mapr-core
+  roles:
+   - {role: mapr-configure-kerberos, when: mapr_security == 'kerberos'}
 - name: Restarting mapr-zookeeper
   hosts: mapr-zookeeper
   roles:

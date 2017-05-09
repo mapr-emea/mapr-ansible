@@ -1,0 +1,113 @@
+---
+- name: Create kerberos user for cluster
+  ldap_entry:
+    dn: "CN=testuser,CN=Users,DC=ps,DC=mapr,DC=com"
+    state: present
+#    start_tls: true
+    objectClass:
+      - organizationalPerson
+      - person
+      - top
+      - user
+    attributes:
+      cn: "testuser"
+      displayName: "testuser"
+      name: "testuser"
+      sAMAccountName: "testuser"
+      instanceType: 4
+      objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=ps,DC=mapr,DC=com
+#      unicodePwd: Q29jYUNvbGEkMTIz
+      userAccountControl: 66080
+    server_uri: ldap://server01.ps.mapr.com
+    bind_dn: CN=Administrator,CN=Users,DC=ps,DC=mapr,DC=com
+    bind_pw: "@k6$gNvKVtE"
+  when: inventory_hostname == groups["ext-kerberos-create-ad-user"][0]
+
+# python-ldap benötigt, openldap-clients
+#- name: Delete kerberos users
+#  vars:
+#    kerbusers: ["mapr", "HTTP"]
+#  ldap_entry:
+#    dn: "CN={{ item }}-{{ ansible_hostname }},CN=Users,DC=ps,DC=mapr,DC=com"
+#    state: absent
+#    server_uri: ldap://10.0.0.202/
+#    bind_dn: CN=Administrator,CN=Users,DC=ps,DC=mapr,DC=com
+#    bind_pw: "@k6$gNvKVtE"
+#  with_items: "{{ kerbusers }}"
+
+
+- name: Create kerberos user for cluster
+  ldap_entry:
+    dn: "CN=mapr-{{ cluster_name }},CN=Users,DC=ps,DC=mapr,DC=com"
+    state: present
+#    start_tls: true
+    objectClass:
+      - organizationalPerson
+      - person
+      - top
+      - user
+    attributes:
+      cn: "mapr-{{ cluster_name }}"
+#      start_tls: true
+      displayName: "mapr-{{ cluster_name }}"
+      name: "mapr-{{ cluster_name }}"
+      sAMAccountName: "mapr-{{ cluster_name }}"
+      instanceType: 4
+#      unicodePwd:
+      objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=ps,DC=mapr,DC=com
+      servicePrincipalName: "mapr/{{ cluster_name }}"
+      userPrincipalName: "mapr/{{ cluster_name }}@{{ mapr_kerberos_domain }}"
+      userAccountControl: 66080
+    server_uri: ldap://10.0.0.202/
+    bind_dn: CN=Administrator,CN=Users,DC=ps,DC=mapr,DC=com
+    bind_pw: "@k6$gNvKVtE"
+  when: inventory_hostname == groups["ext-kerberos-create-ad-user"][0]
+
+- name: Create kerberos users
+  vars:
+    kerbusers: ["mapr", "HTTP"]
+  ldap_entry:
+    dn: "CN={{ item }}-{{ ansible_hostname }},CN=Users,DC=ps,DC=mapr,DC=com"
+    state: present
+#    start_tls: true
+    objectClass:
+      - organizationalPerson
+      - person
+      - top
+      - user
+    attributes:
+      cn: "{{ item }}-{{ ansible_hostname }}"
+#      start_tls: true
+      displayName: "{{ item }}-{{ ansible_hostname }}"
+      name: "{{ item }}-{{ ansible_hostname }}"
+      sAMAccountName: "{{ item }}-{{ ansible_hostname }}"
+      instanceType: 4
+#      unicodePwd:
+      objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=ps,DC=mapr,DC=com
+      servicePrincipalName: "{{ item }}/{{ ansible_fqdn }}"
+      userPrincipalName: "{{ item }}/{{ ansible_fqdn }}@{{ mapr_kerberos_domain }}"
+      userAccountControl: 66080
+    server_uri: ldap://10.0.0.202/
+    bind_dn: CN=Administrator,CN=Users,DC=ps,DC=mapr,DC=com
+    bind_pw: "@k6$gNvKVtE"
+  with_items: "{{ kerbusers }}"
+    # http://stackoverflow.com/questions/4322243/adding-a-user-with-a-password-in-active-directory-ldaps
+- name: Delete existing tmp keytab
+  file: path=/tmp/mapr.keytab state=absent
+- name: Delete existing tmp keytab
+  file: path=/tmp/yarn.keytab state=absent
+- name: Copy ktutil CMDs YARN
+  template: src=yarn_kutil.txt dest=/tmp/yarn_kutil.txt
+- name: Create yarn.keytab
+  shell: cat /tmp/yarn_kutil.txt | ktutil
+- name: Copy ktutil CMDs mapr
+  template: src=mapr_kutil.txt dest=/tmp/mapr_kutil.txt
+- name: Create mapr.keytab
+  shell: cat /tmp/mapr_kutil.txt | ktutil
+- fetch: src=/tmp/yarn.keytab dest={{ mapr_kerberos_local_keytabs_dir }}/yarn.{{ ansible_fqdn }}.keytab flat=yes
+- fetch: src=/tmp/mapr.keytab dest={{ mapr_kerberos_local_keytabs_dir }}/mapr.keytab flat=yes
+  when: inventory_hostname == groups["ext-kerberos-create-ad-user"][0]
+#- name: Delete existing tmp keytab
+#  file: path=/tmp/yarn.keytab state=absent
+#- name: Delete existing tmp keytab
+#  file: path=/tmp/mapr.keytab state=absent
