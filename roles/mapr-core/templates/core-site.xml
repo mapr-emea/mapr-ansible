@@ -17,12 +17,12 @@
     </property>
     {% endif %}
     <property>
-        <name>hadoop.proxyuser.mapr.groups</name>
+        <name>hadoop.proxyuser.{{ mapr_user }}.groups</name>
         <value>*</value>
         <description>Allow the superuser mapr to impersonate any member of any group</description>
     </property>
     <property>
-        <name>hadoop.proxyuser.mapr.hosts</name>
+        <name>hadoop.proxyuser.{{ mapr_user }}.hosts</name>
         <value>*</value>
         <description>The superuser can connect from any host to impersonate a user</description>
     </property>

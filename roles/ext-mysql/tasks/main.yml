@@ -1,6 +1,6 @@
 ---
 # Install MySQL
-- name: Install mapr-core
+- name: Install MySQL / MariaDB
   vars:
     packages_Suse: ['mariadb', 'mariadb-client', 'mapr-core-internal', 'python-mysql']
     packages_RedHat: ['mariadb-server', 'mariadb', 'MySQL-python']

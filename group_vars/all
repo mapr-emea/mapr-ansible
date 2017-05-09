@@ -3,7 +3,7 @@ mapr_ecosystem_url: http://package.mapr.com/releases/MEP/MEP-3.0.0/
 mapr_gpg_url: http://package.mapr.com/releases/pub/maprgpg.key
 
 # Patches are only installed when variable mapr_patch_url is set
-mapr_patch_url: http://package.mapr.com/patches/releases/v5.2.0/
+#mapr_patch_url: http://package.mapr.com/patches/releases/v5.2.0/
 
 # JDK choose: openjdk18 or oraclejdk18
 jdk: openjdk18
