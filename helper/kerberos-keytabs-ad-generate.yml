@@ -1,0 +1,4 @@
+- name: Create user
+  hosts: ext-kerberos
+  roles:
+    - ../roles/ext-kerberos-keytabs-ad-generate

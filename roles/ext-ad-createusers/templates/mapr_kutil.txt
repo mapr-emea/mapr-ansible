@@ -1,6 +1,0 @@
-add_entry -password -p mapr/{{ ansible_fqdn }} -k 1 -e  RC4-HMAC
-CocaCola$123
-add_entry -password -p HTTP/{{ ansible_fqdn }} -k 1 -e  RC4-HMAC
-CocaCola$123
-wkt /tmp/yarn.keytab
-quit

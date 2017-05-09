@@ -1,4 +1,0 @@
-- name: Create user
-  hosts: ext-kerberos-create-ad-user
-  roles:
-    - ext-ad-createusers

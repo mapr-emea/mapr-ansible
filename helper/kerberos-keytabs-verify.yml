@@ -1,5 +1,5 @@
 ---
 - name: Verify keytabs
-  hosts: ext-kerberos-verify-keytabs
+  hosts: ext-kerberos
   roles:
-    - ext-kerberos-verify-keytabs
+    - ../roles/ext-kerberos-verify-keytabs

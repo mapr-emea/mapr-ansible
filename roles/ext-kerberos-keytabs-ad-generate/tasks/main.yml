@@ -1,0 +1,35 @@
+---
+    # http://stackoverflow.com/questions/4322243/adding-a-user-with-a-password-in-active-directory-ldaps
+- name: Delete existing keytabs
+  file: path=/tmp/{{ item }} state=absent
+  with_items:
+    - mapr.keytab
+    - http.keytab
+    - cluster.keytab
+
+- name: Copy ktutil scripts
+  template: src={{ item }} dest=/tmp/{{ item }}
+  with_items:
+    - cluster_kutil.txt
+    - http_kutil.txt
+    - mapr_kutil.txt
+- name: Create yarn.keytab
+  shell: cat /tmp/{{ item }} | ktutil
+  with_items:
+    - cluster_kutil.txt
+    - http_kutil.txt
+    - mapr_kutil.txt
+- name: Fetch cluster keytab (only from first node)
+  fetch: src=/tmp/cluster.keytab dest={{ mapr_kerberos_local_keytabs_dir }}/cluster.keytab flat=yes
+  when: inventory_hostname == groups["ext-kerberos"][0]
+- fetch: src=/tmp/{{ item }}.keytab dest={{ mapr_kerberos_local_keytabs_dir }}/{{ item }}.{{ ansible_fqdn }}.keytab flat=yes
+  with_items:
+    - http
+    - mapr
+
+- name: Clean up existing keytabs
+  file: path=/tmp/{{ item }} state=absent
+  with_items:
+    - mapr.keytab
+    - http.keytab
+    - cluster.keytab

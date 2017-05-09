@@ -1,0 +1,4 @@
+add_entry -password -p HTTP/{{ ansible_fqdn }} -k 1 -e  RC4-HMAC
+{{ mapr_kerberos_keytab_passwd }}
+wkt /tmp/http.keytab
+quit

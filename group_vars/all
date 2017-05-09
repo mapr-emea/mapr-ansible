@@ -24,10 +24,6 @@ rstudio_server_pro_deb: http://download2.rstudio.org/rstudio-server-pro-0.99.903
 ####### Enable security features ##########
 # none, native, kerberos
 mapr_security: kerberos
-mapr_kerberos_realm: PS.MAPR.COM
-mapr_kerberos_admin_server: 10.0.0.202
-mapr_kerberos_kdc: 10.0.0.202
-mapr_kerberos_domain: ps.mapr.com
 mapr_kerberos_local_keytabs_dir: /Users/chufe/Documents/mykeytabs
 
 # Will delete existing keys (cldb.key, maprserverticket, ssl_truststore, ssl_keystore) and generate new one: true /false
