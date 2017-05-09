@@ -28,7 +28,7 @@
 
     <property>
         <name>yarn.nodemanager.keytab</name>
-        <value>/opt/mapr/conf/yarn.mapr.keytab</value>    <!-- path to the YARN keytab -->
+        <value>/opt/mapr/conf/mapr.keytab</value>    <!-- path to the YARN keytab -->
 
     </property>
     <property>
@@ -37,7 +37,7 @@
     </property>
     <property>
         <name>yarn.resourcemanager.keytab</name>
-        <value>/opt/mapr/conf/yarn.mapr.keytab</value>    <!-- path to the YARN keytab -->
+        <value>/opt/mapr/conf/mapr.keytab</value>    <!-- path to the YARN keytab -->
     </property>
     <property>
         <name>yarn.resourcemanager.principal</name>
@@ -45,7 +45,7 @@
     </property>
     <property>
         <name>yarn.resourcemanager.webapp.spnego-keytab-file</name>
-        <value>/opt/mapr/conf/yarn.mapr.keytab</value>
+        <value>/opt/mapr/conf/mapr.keytab</value>
     </property>
     <property>
         <name>yarn.resourcemanager.webapp.spnego-principal</name>
@@ -54,7 +54,7 @@
 
     <property>
         <name>yarn.nodemanager.webapp.spnego-keytab-file</name>
-        <value>/opt/mapr/conf/yarn.mapr.keytab</value>
+        <value>/opt/mapr/conf/mapr.keytab</value>
     </property>
     <property>
         <name>yarn.nodemanager.webapp.spnego-principal</name>

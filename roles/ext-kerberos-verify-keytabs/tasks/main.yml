@@ -1,11 +1,6 @@
 ---
-- name: Copy cluster keytab
-  copy: src={{ mapr_kerberos_local_keytabs_dir }}/cluster.keytab dest=/tmp/cluster.keytab
-- name: Copy host keytabs
-  copy: src={{ mapr_kerberos_local_keytabs_dir }}/{{ item }}.{{ ansible_fqdn }}.keytab dest=/tmp/{{ item }}.keytab
-  with_items:
-    - mapr
-    - http
+- name: Copy mapr.keytab
+  copy: src={{ mapr_kerberos_local_keytabs_dir }}/{{ ansible_fqdn }}.keytab dest=/tmp/mapr.keytab
 
 - name: Verify mapr/<hostname> keytab
   command: kinit -k -t /tmp/mapr.keytab mapr/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}
@@ -17,7 +12,7 @@
   command: kdestroy
 
 - name: Verify HTTP/<hostname> keytab
-  command: kinit -k -t /tmp/http.keytab HTTP/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}
+  command: kinit -k -t /tmp/mapr.keytab HTTP/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}
 - name: Display current ticket mapr
   command: klist
   register: klist_out
@@ -26,7 +21,7 @@
   command: kdestroy
 
 - name: Verify Cluster keytab
-  command: kinit -k -t /tmp/cluster.keytab mapr/{{ cluster_name }}
+  command: kinit -k -t /tmp/mapr.keytab mapr/{{ cluster_name }}
 - name: Display current ticket mapr
   command: klist
   register: klist_out
@@ -34,9 +29,5 @@
 - name: Destroy current ticket
   command: kdestroy
 
-- name: Clean up existing keytabs
-  file: path=/tmp/{{ item }} state=absent
-  with_items:
-    - mapr.keytab
-    - http.keytab
-    - cluster.keytab
+- name: Clean up existing keytab
+  file: path=/tmp/mapr.keytab state=absent

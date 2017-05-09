@@ -1,9 +1,7 @@
 ---
 # Configure secure cluster
-- name: Copy yarn.mapr.keytab to host
-  copy: src={{ mapr_kerberos_local_keytabs_dir }}/yarn.{{ ansible_fqdn }}.keytab dest=/opt/mapr/conf/yarn.mapr.keytab
-- name: Copy mapr.keytab to host
-  copy: src={{ mapr_kerberos_local_keytabs_dir }}/mapr.keytab dest=/opt/mapr/conf/mapr.keytab
+- name: Copy mapr.service.keytab to host
+  copy: src={{ mapr_kerberos_local_keytabs_dir }}/{{ ansible_fqdn }}.keytab dest=/opt/mapr/conf/mapr.keytab
 - name: Delete existing keys
   file: state=absent path=/opt/mapr/conf/{{ item }}
   with_items:
