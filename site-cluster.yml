@@ -116,10 +116,6 @@
   hosts: mapr-sqoop2-client
   roles:
     - mapr-sqoop2-client
-- name: Install Hue
-  hosts: mapr-hue
-  roles:
-    - mapr-hue
 - name: Install HttpFS
   hosts: mapr-httpfs
   roles:
@@ -171,6 +167,14 @@
   hosts: mapr-spark-historyserver
   roles:
     - mapr-spark-historyserver
+- name: Setup Hue Vars
+  hosts: all
+  roles:
+    - mapr-hue-vars
+- name: Install Hue
+  hosts: mapr-hue
+  roles:
+    - mapr-hue
 - name: Restarting mapr-warden
   hosts: mapr-core
   roles:

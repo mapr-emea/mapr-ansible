@@ -5,3 +5,39 @@
   with_items:
   - mapr-hue
   - mapr-hue-livy
+
+# Drill
+- name: Find Drill Path
+  find: paths="/opt/mapr/drill/" patterns="drill*" file_type=directory
+  register: hue_drill_path
+- name: Find Drill JDBC Jar
+  find: paths="{{ hue_drill_path.files[0].path }}/jars/jdbc-driver/" patterns="drill-jdbc-all-*.jar" file_type=file
+  register: hue_drill_jdbc_jar
+  when: hue_drill_path.matched == 1
+
+- name: Find Hue Path
+  find: paths="/opt/mapr/hue/" patterns="hue*" file_type=directory
+  register: hue_path_result
+  failed_when: hue_path_result.matched != 1
+- name: Configure hue.ini
+  template: src=hue.ini dest={{ hue_path_result.files[0].path }}/desktop/conf/hue.ini
+
+- name: Find Hue Livy Path
+  find: paths="/opt/mapr/hue-livy/" patterns="hue-livy*" file_type=directory
+  register: hue_livy_path_result
+  failed_when: hue_livy_path_result.matched != 1
+- name: Configure livy.conf
+  template: src=livy.conf dest={{ hue_livy_path_result.files[0].path }}/conf/livy.conf
+# Create database
+- name: Copy create_mysql_tables.sh
+  template: src=create_mysql_tables.sh dest=/opt/mapr/hue/create_mysql_tables.sh mode=0755
+- name: Create Hue mysql db
+  mysql_db: name={{ hue_db_schema }} state=present login_host={{ hue_db_host }} login_user={{ mapr_mysql_user }} login_password={{ mapr_mysql_password }}
+  when: hue_db_host is defined
+- name: Create tables
+  shell: /opt/mapr/hue/create_mysql_tables.sh
+- name: Register role
+  shell: /opt/mapr/server/configure.sh -R
+
+
+#http://maprdocs.mapr.com/home/Hue/ConfigureDBsforHueStorage.html

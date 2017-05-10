@@ -29,10 +29,10 @@
   copy: src=mysql-connector-java-5.1.40-bin.jar dest={{ oozie_path_result.files[0].path }}/libext/
 - name: Configure oozie-site.xml - unsecure
   template: src=oozie-site.unsecure.xml dest={{ oozie_path_result.files[0].path }}/conf/oozie-site.xml
-  when: httpfs_security == 'none'
+  when: oozie_security == 'none' or oozie_security == 'maprsasl' # automatically enabled when MapR security is enabled
 - name: Configure oozie-site.xml - Kerberos
   template: src=oozie-site.kerberos.xml dest={{ oozie_path_result.files[0].path }}/conf/oozie-site.xml
-  when: httpfs_security == 'kerberos'
+  when: oozie_security == 'kerberos'
 - name: Run oozie-setup.sh
   command: "{{ oozie_path_result.files[0].path }}/bin/oozie-setup.sh -hadoop {{ hadoop_version }} /opt/mapr/hadoop/hadoop-{{ hadoop_version }}"
 - name: Set owner mapr-system user

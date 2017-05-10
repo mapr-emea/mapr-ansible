@@ -1,0 +1,68 @@
+---
+- name: Get HttpFS server
+  set_fact: httpfs_item=http://{{ hostvars[item]['ansible_fqdn'] }}:14000/webhdfs/v1
+  with_items:
+    - "{{ groups['mapr-httpfs'] }}"
+  register: httpfs_hosts
+- name: Make HttpFS String
+  set_fact: hue_httpfs_string={{ httpfs_hosts.results | map(attribute='ansible_facts.httpfs_item') | list | join(',')}}
+
+- name: Get Resource Manager
+  set_fact: resourcemanager_item={{ hostvars[item]['ansible_fqdn'] }}
+  with_items:
+    - "{{ groups['mapr-resourcemanager'] }}"
+  register: resourcemanager_hosts
+  when: groups['mapr-resourcemanager'] is defined
+#- debug: var=resourcemanager_hosts
+- name: Make Resource Manager String
+  set_fact: hue_resourcemanager_string={{ resourcemanager_hosts.results[0].ansible_facts.resourcemanager_item }}
+  when: groups['mapr-resourcemanager'] is defined
+#- debug: var=hue_resourcemanager_string
+
+- name: Get HistoryServer server
+  set_fact: historyserver_item={{ hostvars[item]['ansible_fqdn'] }}
+  with_items:
+    - "{{ groups['mapr-historyserver'] }}"
+  register: historyserver_hosts
+- name: Make HistoryServer String
+  set_fact: hue_historyserver_string={{ historyserver_hosts.results | map(attribute='ansible_facts.historyserver_item') | list | join(',')}}
+
+- name: Get Spark HistoryServer server
+  set_fact: sparkhistoryserver_item={{ hostvars[item]['ansible_fqdn'] }}
+  with_items:
+    - "{{ groups['mapr-spark-historyserver'] }}"
+  register: sparkhistoryserver_hosts
+- name: Make Spark HistoryServer String
+  set_fact: hue_sparkhistoryserver_string={{ sparkhistoryserver_hosts.results | map(attribute='ansible_facts.sparkhistoryserver_item') | list | join(',')}}
+
+- name: Get Oozie server
+  set_fact: oozie_item=http://{{ hostvars[item]['ansible_fqdn'] }}:11000/oozie/
+  with_items:
+    - "{{ groups['mapr-oozie'] }}"
+  register: oozie_hosts
+- name: Make Oozie String
+  set_fact: hue_oozie_string={{ oozie_hosts.results | map(attribute='ansible_facts.oozie_item') | list | join(',')}}
+
+- name: Find Hive Path
+  find: paths="/opt/mapr/hive/" patterns="hive*" file_type=directory
+  register: hue_hive_path_result
+
+- name: Get HiveServer 2
+  set_fact: hiveserver2_item={{ hostvars[item]['ansible_fqdn'] }}
+  with_items:
+    - "{{ groups['mapr-hive-server2'] }}"
+  register: hiveserver2_hosts
+- name: Make HiveServer 2 String
+  set_fact: hue_hiveserver2_string={{ hiveserver2_hosts.results | map(attribute='ansible_facts.hiveserver2_item') | list | join(',')}}
+
+- name: Find Spark Path
+  find: paths="/opt/mapr/spark/" patterns="spark*" file_type=directory
+  register: hue_spark_path_result
+
+- name: Get MySQL Host
+  set_fact: mysql_item={{ hostvars[item]['ansible_fqdn'] }}
+  with_items:
+    - "{{ groups['ext-mysql'] }}"
+  register: mysql_hosts
+- name: Make MySQL Host String
+  set_fact: hue_db_host={{ mysql_hosts.results | map(attribute='ansible_facts.mysql_item') | list | join(',')}}

@@ -2,7 +2,7 @@
 - name: Install misc stuff - Midnight commander, wget, Python MySQL
   vars:
     packages_Suse: ['mc', 'wget', 'python-mysql']
-    packages_RedHat: ['mc', 'wget', 'MySQL-python']
+    packages_RedHat: ['mc', 'wget', 'MySQL-python', 'mariadb', 'mariadb-devel', 'gcc'] # gcc for hue
     packages_Debian: ['mc', 'wget', 'python-mysqldb']
   package: name={{ item }} state=present
   with_items: "{{ vars['packages_' + ansible_os_family] }}"

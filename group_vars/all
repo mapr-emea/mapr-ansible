@@ -22,20 +22,21 @@ mapr_kerberos_local_keytabs_dir: /Users/chufe/Documents/mykeytabs
 # Will delete existing keys (cldb.key, maprserverticket, ssl_truststore, ssl_keystore) and generate new one: true /false
 generate_keys: true
 
-# Hive security: none, maprsasl or pam
-hive_server_security: none
+# Hive security: none, maprsasl, pam or kerberos
+hive_server_security: kerberos
 # Drill security (only standalone): none, pam
-drill_security: none
-# HBase REST/Thrift: none, maprauth_and_ssl (MapR-SSL and Basic-auth + SSL enabled)
-hbase_thrift_rest_security: none
-# HttpFS: none, kerberos # TODO sasl
+drill_security: pam
+# HBase REST/Thrift: none, kerberos, maprsasl, maprsasl_and_ssl (MapR-SSL and Basic-auth + SSL enabled)
+hbase_thrift_rest_security: kerberos
+# HttpFS: none, pam, kerberos
 httpfs_security: kerberos
-# Oozie: none, kerberos # TODO sasl,  impl for Oracle
+# Oozie: none, maprsasl, kerberos # TODO impl for Oracle
 oozie_security: kerberos
 # Spark settings
 spark_authenticate: true
 spark_ssl_encryption: true
 spark_sasl_encryption: true
+# Hue will use PAM auth and depending what was configured for other components use these settings
 ###########################################
 
 mapr_subnets: 10.0.0.0/24
@@ -43,11 +44,12 @@ mapr_group: mapr
 mapr_group_gid: 5000
 mapr_user: mapr
 mapr_user_uid: 5000
-cluster_name: demo2.mapr.com
+cluster_name: demo.mapr.com
 
 mapr_mysql_user: mapr
 mapr_mysql_password: mapr123
 
+hue_db_schema: hue
 hive_db_schema: hive
 oozie_db_schema: oozie
 

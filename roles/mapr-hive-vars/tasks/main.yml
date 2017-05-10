@@ -4,5 +4,5 @@
   with_items:
     - "{{ groups['mapr-hive-metastore'] }}"
   register: metastore_hosts
-- name: Make Resource Manager String
+- name: Make Hive MetaStore String
   set_fact: metastore_string={{ metastore_hosts.results | map(attribute='ansible_facts.metastore_item') | list | join(',')}}
