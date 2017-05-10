@@ -13,28 +13,29 @@ jdk_folder: /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.121-0.b13.el7_3.x86_64
 oracle_jdk_url: http://download.oracle.com/otn-pub/java/jdk/8u111-b14/jdk-8u111-linux-x64.tar.gz
 
 hadoop_version: 2.7.0
-zeppelin_version: 0.7.0
-zeppelin_git_repo: https://github.com/apache/incubator-zeppelin.git
-# zeppelin_git_hash: v0.6.1
-zeppelin_git_hash: v0.7.0
-
-# Get url from https://www.rstudio.com/products/rstudio/download-commercial/
-rstudio_server_pro_deb: http://download2.rstudio.org/rstudio-server-pro-0.99.903-amd64.deb
 
 ####### Enable security features ##########
 # none, native, kerberos
 mapr_security: kerberos
 mapr_kerberos_realm: PS.MAPR.COM
 mapr_kerberos_local_keytabs_dir: /Users/chufe/Documents/mykeytabs
-
 # Will delete existing keys (cldb.key, maprserverticket, ssl_truststore, ssl_keystore) and generate new one: true /false
 generate_keys: true
+
 # Hive security: none, maprsasl or pam
 hive_server_security: none
 # Drill security (only standalone): none, pam
 drill_security: none
 # HBase REST/Thrift: none, maprauth_and_ssl (MapR-SSL and Basic-auth + SSL enabled)
 hbase_thrift_rest_security: none
+# HttpFS: none, kerberos # TODO sasl
+httpfs_security: kerberos
+# Oozie: none, kerberos # TODO sasl,  impl for Oracle
+oozie_security: kerberos
+# Spark settings
+spark_authenticate: true
+spark_ssl_encryption: true
+spark_sasl_encryption: true
 ###########################################
 
 mapr_subnets: 10.0.0.0/24
@@ -60,3 +61,11 @@ mapr_passwd: $6$X4.bqoTK$RTAwnhg2BG/y.3Dugw9Vc31ZdXFsZAitwKtKuu3HgKSNutcQmZ7zLy4
 
 disks: /dev/xvdb,/dev/xvdc,/dev/xvdd
 disk_storage_pool_size: 3
+
+# Third party components
+zeppelin_version: 0.7.0
+zeppelin_git_repo: https://github.com/apache/incubator-zeppelin.git
+zeppelin_git_hash: v0.7.0
+
+# Get url from https://www.rstudio.com/products/rstudio/download-commercial/
+rstudio_server_pro_deb: http://download2.rstudio.org/rstudio-server-pro-0.99.903-amd64.deb

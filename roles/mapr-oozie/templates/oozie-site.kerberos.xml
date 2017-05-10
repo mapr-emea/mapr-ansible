@@ -17,6 +17,53 @@
   limitations under the License.
 -->
 <configuration>
+    <!-- property>
+        <name>oozie.credentials.credentialclasses</name>
+        <value>
+            hcat=org.apache.oozie.action.hadoop.HCatCredentials,
+            hbase=org.apache.oozie.action.hadoop.HbaseCredentials,
+            hive2=org.apache.oozie.action.hadoop.Hive2Credentials
+        </value>
+    </property -->
+    <property>
+        <name>oozie.authentication.type</name>
+        <value>kerberos</value>
+        <description>
+            Defines authentication used for Oozie HTTP endpoint.
+            Supported values are: simple | kerberos | #AUTHENTICATION_HANDLER_CLASSNAME#
+        </description>
+    </property>
+    <property>
+        <name>oozie.service.HadoopAccessorService.keytab.file</name>
+        <value>/opt/mapr/conf/mapr.keytab</value>
+        <description>
+            Location of the Oozie user keytab file.
+        </description>
+    </property>
+
+    <property>
+        <name>local.realm</name>
+        <value>{{ mapr_kerberos_realm }}</value>
+        <description>
+            Kerberos Realm used by Oozie and Hadoop. Using ‘local.realm’ aligns with Hadoop configuration
+        </description>
+    </property>
+
+    <property>
+        <name>oozie.service.HadoopAccessorService.kerberos.principal</name>
+        <value>mapr/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}</value>
+        <description>
+            Kerberos principal for Oozie service.
+        </description>
+    </property>
+
+    <property>
+        <name>oozie.authentication.kerberos.principal</name>
+        <value>HTTP/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}</value>
+        <description>
+            Indicates the Kerberos principal to be used for the HTTP endpoint. The principal MUST start with ‘HTTP/’ per the Kerberos HTTP SPNEGO specification.
+        </description>
+    </property>
 
     <property>
         <name>oozie.service.ProxyUserService.proxyuser.{{ mapr_user }}.hosts</name>

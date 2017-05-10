@@ -13,4 +13,4 @@
   failed_when: httpfs_path_result.matched != 1
 - name: Configure httpfs-site.xml for Kerberos
   template: src=httpfs-site.kerberos.xml dest={{ httpfs_path_result.files[0].path }}/etc/hadoop/httpfs-site.xml
-  when: mapr_security == 'kerberos'
+  when: httpfs_security == 'kerberos'

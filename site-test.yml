@@ -1,4 +1,21 @@
-- name: Install HttpFS
-  hosts: mapr-httpfs
+- name: Setup Hive Variables
+  hosts: all
   roles:
-    - mapr-httpfs
+    - mapr-hive-vars
+    - mapr-hive-vars-mysql
+- name: Install Hive CLI
+  hosts: mapr-hive-cli
+  roles:
+    - mapr-hive-cli
+- name: Install Hive MetaStore
+  hosts: mapr-hive-metastore
+  roles:
+    - mapr-hive-metastore
+- name: Install Hive Server 2
+  hosts: mapr-hive-server2
+  roles:
+    - mapr-hive-server2
+- name: Install Hive WebHCat
+  hosts: mapr-hive-webhcat
+  roles:
+    - mapr-hive-webhcat

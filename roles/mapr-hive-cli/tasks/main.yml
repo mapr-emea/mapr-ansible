@@ -27,12 +27,31 @@
 - name: Configure hive-site.xml - maprsasl
   template: src=hive-site.maprsasl.xml dest={{ hive_path_result.files[0].path }}/conf/hive-site.xml
   when: hive_server_security == 'maprsasl'
+- name: Set MAPR_HIVE_SERVER_LOGIN_OPTS in env.sh to maprsasl
+  lineinfile: dest=/opt/mapr/conf/env.sh insertbefore="^export\ MAPR_HIVE_SERVER_LOGIN_OPTS" regexp="^MAPR_HIVE_SERVER_LOGIN_OPTS" line="MAPR_HIVE_SERVER_LOGIN_OPTS=\"-Dhadoop.login=maprsasl\""
+  when: mapr_security == 'kerberos'
+- name: Set MAPR_HIVE_LOGIN_OPTS= in env.sh to maprsasl
+  lineinfile: dest=/opt/mapr/conf/env.sh insertbefore="^export\ MAPR_HIVE_LOGIN_OPTS=" regexp="^MAPR_HIVE_LOGIN_OPTS=" line="MAPR_HIVE_LOGIN_OPTS=\"-Dhadoop.login=maprsasl\""
+  when: mapr_security == 'kerberos'
+
 - name: Configure hive-site.xml - pam
   template: src=hive-site.pam.xml dest={{ hive_path_result.files[0].path }}/conf/hive-site.xml
   when: hive_server_security == 'pam'
+- name: Configure hive-site.xml - kerberos
+  template: src=hive-site.kerberos.xml dest={{ hive_path_result.files[0].path }}/conf/hive-site.xml
+  when: hive_server_security == 'kerberos'
+- name: Set MAPR_HIVE_SERVER_LOGIN_OPTS in env.sh to hybrid for Kerberos
+  lineinfile: dest=/opt/mapr/conf/env.sh insertbefore="^export\ MAPR_HIVE_SERVER_LOGIN_OPTS" regexp="^MAPR_HIVE_SERVER_LOGIN_OPTS" line="MAPR_HIVE_SERVER_LOGIN_OPTS=\"-Dhadoop.login=hybrid\""
+  when: mapr_security == 'kerberos'
+- name: Set MAPR_HIVE_LOGIN_OPTS= in env.sh to hybrid for Kerberos
+  lineinfile: dest=/opt/mapr/conf/env.sh insertbefore="^export\ MAPR_HIVE_LOGIN_OPTS=" regexp="^MAPR_HIVE_LOGIN_OPTS=" line="MAPR_HIVE_LOGIN_OPTS=\"-Dhadoop.login=hybrid\""
+  when: mapr_security == 'kerberos'
 - name: Configure hive-env.sh
   template: src=hive-env.sh dest={{ hive_path_result.files[0].path }}/conf/hive-env.sh
 - name: Add HIVE_HOME to /etc/profile
   lineinfile: dest=/etc/profile state=present line="export HIVE_HOME={{ hive_path_result.files[0].path }}"
 - name: Set owner mapr-system user
   file: path=/opt/mapr/hive owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
+- name: Create MySQL tables for hive
+  shell: "{{ hive_path_result.files[0].path }}/bin/schematool -dbType mysql -initSchema"
+  when: inventory_hostname == groups["mapr-hive-cli"][0]
