@@ -66,4 +66,8 @@
         <name>oozie.service.JPAService.jdbc.password</name>
         <value>{{ mapr_mysql_password }}</value>
     </property>
+    <property>
+        <name>oozie.email.smtp.host</name>
+        <value>{{ ansible_fqdn }}</value>
+    </property>
 </configuration>

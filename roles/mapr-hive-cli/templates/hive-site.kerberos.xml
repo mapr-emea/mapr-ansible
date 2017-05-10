@@ -69,7 +69,7 @@
     </property>
     <property>
         <name>hive.server2.authentication.kerberos.principal</name>
-        <value>mapr/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}</value>
+        <value>mapr/_HOST@{{ mapr_kerberos_realm }}</value>
         <description>HiveServer2 principal. If _HOST is used as the FQDN portion, it will be replaced with the actual hostname of the running instance.</description>
     </property>
     <property>
@@ -84,7 +84,7 @@
     </property>
     <property>
         <name>hive.metastore.kerberos.principal</name>
-        <value>mapr/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}</value>
+        <value>mapr/_HOST@{{ mapr_kerberos_realm }}</value>
         <description>The service principal for the metastore thrift server. The special string _HOST will be replaced automatically with the correct hostname.</description>
     </property>
 </configuration>
