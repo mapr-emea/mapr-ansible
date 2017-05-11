@@ -1,12 +1,22 @@
-- name: Setup Hue Vars
+#- name: Setup Hue Vars
+#  hosts: all
+#  roles:
+#    - mapr-hue-vars
+#- name: Install Hue
+#  hosts: mapr-hue
+#  roles:
+#    - mapr-hue
+- name: Setup global vars
   hosts: all
   roles:
-    - mapr-hue-vars
-- name: Install Hue
-  hosts: mapr-hue
+    - mapr-configure-vars
+    - mapr-configure-vars-hs
+- name: Install HBase REST and Thrift Server
+  hosts: mapr-hbase-thrift-rest
   roles:
-    - mapr-hue
-- name: Restarting mapr-warden
-  hosts: mapr-core
-  roles:
-    - mapr-configure-warden-restart
+    - mapr-hbase-thrift-rest
+#- name: Restarting mapr-warden
+#  hosts: mapr-core
+#  roles:
+#    - mapr-configure-roles
+#    - mapr-configure-warden-restart

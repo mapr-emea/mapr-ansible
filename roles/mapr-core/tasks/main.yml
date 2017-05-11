@@ -14,9 +14,17 @@
     aws_secret_access_key: "{{ lookup('ini', 'aws_secret_access_key section=default file={{ aws_credentials_file }}')  }}"
   template: src=core-site.xml dest=/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/etc/hadoop/core-site.xml
   ignore_errors: True
+- name: Configure yarn-site.xml for Unsecure
+  template: src=yarn-site.unsecure.xml dest=/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/etc/hadoop/yarn-site.xml
+  when: mapr_security == 'none'
+# Resuse unsecure template
+- name: Configure yarn-site.xml for Native Security
+  template: src=yarn-site.unsecure.xml dest=/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/etc/hadoop/yarn-site.xml
+  when: mapr_security == 'none'
 - name: Configure yarn-site.xml for Kerberos
   template: src=yarn-site.kerberos.xml dest=/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/etc/hadoop/yarn-site.xml
   when: mapr_security == 'kerberos'
+
 - name: Set MAPR_LOGIN_OPTS in env.sh to hybrid
   lineinfile: dest=/opt/mapr/conf/env.sh regexp="^MAPR_LOGIN_OPTS" line="MAPR_LOGIN_OPTS=\"-Dhadoop.login=hybrid ${MAPR_JAAS_CONFIG_OPTS} ${MAPR_ZOOKEEPER_OPTS}\""
   when: mapr_security == 'kerberos'

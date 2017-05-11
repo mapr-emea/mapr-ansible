@@ -56,3 +56,8 @@
   shell: "{{ hive_path_result.files[0].path }}/bin/schematool -dbType mysql -initSchema"
   when: inventory_hostname == groups["mapr-hive-cli"][0]
   ignore_errors: True # TODO error result should be handeled
+# required for Hue
+- name: Create maprfs:///user/hive/warehouse
+  shell: hadoop fs -mkdir -p /user/hive/warehouse
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket

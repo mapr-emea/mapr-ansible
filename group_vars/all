@@ -15,7 +15,7 @@ oracle_jdk_url: http://download.oracle.com/otn-pub/java/jdk/8u111-b14/jdk-8u111-
 hadoop_version: 2.7.0
 
 ####### Enable security features ##########
-# none, native, kerberos
+# none, native, kerberos (ATTENTION: kerberos does not use ResourceManager Zero Config)
 mapr_security: kerberos
 mapr_kerberos_realm: PS.MAPR.COM
 mapr_kerberos_local_keytabs_dir: /Users/chufe/Documents/mykeytabs

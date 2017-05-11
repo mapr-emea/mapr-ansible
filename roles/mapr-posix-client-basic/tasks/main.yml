@@ -7,7 +7,6 @@
   - rpcbind
 - name: Set /opt/mapr/conf/mapruserticket in fuse.conf
   lineinfile: dest=/opt/mapr/conf/fuse.conf regexp="^fuse\.ticketfile\.location" line="fuse.ticketfile.location=/opt/mapr/conf/mapruserticket"
-  when: mapr_security == 'native'
 # Other actions
 - name: Create /mapr dir
   file: path=/mapr state=directory

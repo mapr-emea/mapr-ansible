@@ -27,40 +27,6 @@
     <!-- :::CAUTION::: DO NOT EDIT ANYTHING ON OR ABOVE THIS LINE -->
 
     <property>
-        <name>yarn.nodemanager.keytab</name>
-        <value>/opt/mapr/conf/mapr.keytab</value>    <!-- path to the YARN keytab -->
-
-    </property>
-    <property>
-        <name>yarn.nodemanager.principal</name>
-        <value>mapr/_HOST@{{ mapr_kerberos_realm }}</value>
-    </property>
-    <property>
-        <name>yarn.resourcemanager.keytab</name>
-        <value>/opt/mapr/conf/mapr.keytab</value>    <!-- path to the YARN keytab -->
-    </property>
-    <property>
-        <name>yarn.resourcemanager.principal</name>
-        <value>mapr/_HOST@{{ mapr_kerberos_realm }}</value>
-    </property>
-    <property>
-        <name>yarn.resourcemanager.webapp.spnego-keytab-file</name>
-        <value>/opt/mapr/conf/mapr.keytab</value>
-    </property>
-    <property>
-        <name>yarn.resourcemanager.webapp.spnego-principal</name>
-        <value>HTTP/_HOST@{{ mapr_kerberos_realm }}</value>
-    </property>
-
-    <property>
-        <name>yarn.nodemanager.webapp.spnego-keytab-file</name>
-        <value>/opt/mapr/conf/mapr.keytab</value>
-    </property>
-    <property>
-        <name>yarn.nodemanager.webapp.spnego-principal</name>
-        <value>HTTP/_HOST@{{ mapr_kerberos_realm }}</value>
-    </property>
-    <property>
         <name>yarn.nodemanager.container-executor.class</name>
         <value>org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor</value>
     </property>

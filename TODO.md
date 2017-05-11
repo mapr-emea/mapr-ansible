@@ -1,3 +1,9 @@
+
+kinit -k -t /opt/mapr/conf/mapr.keytab -c /tmp/hue_krb5_ccache mapr/ip-10-0-0-181.ps.mapr.com@PS.MAPR.COM
+
+
+Set Oozie email https://oozie.apache.org/docs/3.3.0/DG_EmailActionExtension.html
+
 - Uninstall removed components from inventory
 - Make installable for local install
 - Add precheck for disks

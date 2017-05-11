@@ -51,6 +51,45 @@
   hosts: ext-mysql
   roles:
     - ext-mysql
+- name: Install MCS
+  hosts: mapr-mcs
+  roles:
+    - mapr-mcs
+- name: Install NFS
+  hosts: mapr-nfs
+  roles:
+    - mapr-nfs
+- name: Configure and start (unsecure)
+  hosts: mapr-core
+  roles:
+   - {role: mapr-configure-unsecure, when: mapr_security == 'none'}
+- name: Configure and start (native-security)
+  hosts: mapr-core
+  roles:
+   - {role: mapr-configure-nativesecurity-secure, when: mapr_security == 'native'}
+- name: Configure and start (kerberos)
+  hosts: mapr-core
+  roles:
+   - {role: mapr-configure-kerberos, when: mapr_security == 'kerberos'}
+- name: Restarting mapr-zookeeper
+  hosts: mapr-zookeeper
+  roles:
+   - mapr-configure-zookeeper-restart
+- name: Restarting mapr-warden
+  hosts: mapr-core
+  roles:
+   - mapr-configure-warden-restart
+- name: Install mapr-posix-client-basic (FUSE)
+  hosts: mapr-posix-client-basic
+  roles:
+    - mapr-posix-client-basic
+    - {role: mapr-patch-posix-client-basic, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
+- name: Install mapr-posix-client-platinum (FUSE)
+  hosts: mapr-posix-client-platinum
+  roles:
+    - mapr-posix-client-platinum
+    - {role: mapr-patch-posix-client-platinum, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
+
 - name: Install Drill Standalone
   hosts: mapr-drill-standalone
   roles:
@@ -100,10 +139,6 @@
   hosts: mapr-mahout
   roles:
     - mapr-mahout
-- name: Install MCS
-  hosts: mapr-mcs
-  roles:
-    - mapr-mcs
 - name: Install Pig
   hosts: mapr-pig
   roles:
@@ -120,45 +155,10 @@
   hosts: mapr-httpfs
   roles:
     - mapr-httpfs
-- name: Install NFS
-  hosts: mapr-nfs
-  roles:
-    - mapr-nfs
-- name: Configure and start (unsecure)
-  hosts: mapr-core
-  roles:
-   - {role: mapr-configure-unsecure, when: mapr_security == 'none'}
-- name: Configure and start (native-security)
-  hosts: mapr-core
-  roles:
-   - {role: mapr-configure-nativesecurity-secure, when: mapr_security == 'native'}
-- name: Configure and start (kerberos)
-  hosts: mapr-core
-  roles:
-   - {role: mapr-configure-kerberos, when: mapr_security == 'kerberos'}
-- name: Restarting mapr-zookeeper
-  hosts: mapr-zookeeper
-  roles:
-   - mapr-configure-zookeeper-restart
-- name: Restarting mapr-warden
-  hosts: mapr-core
-  roles:
-   - mapr-configure-warden-restart
 - name: Install Oozie
   hosts: mapr-oozie
   roles:
     - mapr-oozie
-- name: Install mapr-posix-client-basic (FUSE)
-  hosts: mapr-posix-client-basic
-  roles:
-    - mapr-posix-client-basic
-    - {role: mapr-patch-posix-client-basic, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
-
-- name: Install mapr-posix-client-platinum (FUSE)
-  hosts: mapr-posix-client-platinum
-  roles:
-    - mapr-posix-client-platinum
-    - {role: mapr-patch-posix-client-platinum, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
 - name: Install Spark on YARN
   hosts: mapr-spark-yarn
   roles:
@@ -175,9 +175,10 @@
   hosts: mapr-hue
   roles:
     - mapr-hue
-- name: Restarting mapr-warden
+- name: Register roles and restart mapr-warden
   hosts: mapr-core
   roles:
+    - mapr-configure-roles
     - mapr-configure-warden-restart
 - name: Install MapR collectd
   hosts: mapr-collectd

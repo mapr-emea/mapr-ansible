@@ -21,6 +21,39 @@
   failed_when: hue_path_result.matched != 1
 - name: Configure hue.ini
   template: src=hue.ini dest={{ hue_path_result.files[0].path }}/desktop/conf/hue.ini
+  when: mapr_security != 'kerberos'
+
+# WORKAROUND START It seems that HA and look up of resourcemanager does not work with Kerberos
+# This patches hue.sh and looks up active RM before every start and replaces it in hue.ini
+# TODO add bug number
+- name: Configure hue.ini - Workaround
+  template: src=hue.ini dest={{ hue_path_result.files[0].path }}/desktop/conf/huekerb.tpl
+  when: mapr_security == 'kerberos'
+- name: Patch hue.sh 1
+  lineinfile: dest={{ hue_path_result.files[0].path }}/bin/hue.sh insertafter="^export HUE_HOME" regexp="^export MAPR_TICKETFILE_LOCATION" line="export MAPR_TICKETFILE_LOCATION=/opt/mapr/conf/mapruserticket"
+  when: mapr_security == 'kerberos'
+- name: Patch hue.sh 2
+  lineinfile: dest={{ hue_path_result.files[0].path }}/bin/hue.sh insertafter="^export MAPR_TICKETFILE_LOCATION" regexp="^export ACTIVE_RM_MAPR" line="export ACTIVE_RM_MAPR=$(maprcli node list -columns hostname,svc -filter svc==resourcemanager | grep resourcemanager | awk '{print $1;}')"
+  when: mapr_security == 'kerberos'
+- name: Patch hue.sh 3
+  lineinfile: dest={{ hue_path_result.files[0].path }}/bin/hue.sh insertafter="^export ACTIVE_RM_MAPR" regexp="^cat {{ hue_path_result.files[0].path }}/desktop/conf/huekerb.tpl" line="cat {{ hue_path_result.files[0].path }}/desktop/conf/huekerb.tpl | m4 -DACTIVE_RM_MAPR=$ACTIVE_RM_MAPR > {{ hue_path_result.files[0].path }}/desktop/conf/hue.ini"
+  when: mapr_security == 'kerberos'
+# WORKAROUND END
+
+# WORKAROUND START Create crontab to create Kerberos Cache for HUE
+# TODO add bug number
+- name: Initial Hue Kerberos Cache Creation
+  shell: kinit -k -t /opt/mapr/conf/mapr.keytab -c /tmp/hue_krb5_ccache mapr/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}
+  become: true
+  become_user: "{{ mapr_user }}"
+- name: Create crontab to refresh Hue Kerberos Cache
+  cron:
+    name: "Refresh Hue Kerberos Cache"
+    minute: "0"
+    hour: "23"
+    job: "kinit -k -t /opt/mapr/conf/mapr.keytab -c /tmp/hue_krb5_ccache mapr/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}"
+    user: "{{ mapr_user }}"
+# WORKAROUND END
 
 - name: Find Hue Livy Path
   find: paths="/opt/mapr/hue-livy/" patterns="hue-livy*" file_type=directory

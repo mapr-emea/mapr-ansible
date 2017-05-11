@@ -1,0 +1,6 @@
+---
+# Configure unsecure cluster
+
+- name: Configure.sh -R
+  shell: /opt/mapr/server/configure.sh -R
+

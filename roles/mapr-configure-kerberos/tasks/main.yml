@@ -1,7 +1,7 @@
 ---
 # Configure secure cluster
 - name: Copy mapr.service.keytab to host
-  copy: src={{ mapr_kerberos_local_keytabs_dir }}/{{ ansible_fqdn }}.keytab dest=/opt/mapr/conf/mapr.keytab
+  copy: src={{ mapr_kerberos_local_keytabs_dir }}/{{ ansible_fqdn }}.keytab dest=/opt/mapr/conf/mapr.keytab group={{ mapr_group }} owner={{ mapr_user }} mode=0600
 - name: Delete existing keys
   file: state=absent path=/opt/mapr/conf/{{ item }}
   with_items:

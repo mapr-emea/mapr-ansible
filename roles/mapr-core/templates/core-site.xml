@@ -26,5 +26,9 @@
         <value>*</value>
         <description>The superuser can connect from any host to impersonate a user</description>
     </property>
+    <property>
+        <name>hue.kerberos.principal.shortname</name>
+        <value>mapr</value>
+    </property>
 </configuration>
 
