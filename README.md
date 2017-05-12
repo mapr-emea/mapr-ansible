@@ -88,3 +88,40 @@ Run:
 ```
 ansible-playbook -i hosts_template helper/create-user-ace.yml
 ```
+
+### Setup Kerberos, SSSD and PAM with ActiveDirectory (Only tested on Redhat 7.3!!!)
+
+Update values in `helper/group/vars`
+Use `myhosts/hosts_kerberos as template
+
+```
+ansible-playbook -i myhosts/hosts_kerberos helper/kerberos-sssd-setup.yml
+```
+
+Afterwards authenticate with users from AD.
+
+### Create Kerberos users in Active Directory for MapR
+
+Based on number of hosts users are created in AD.
+
+```
+ansible-playbook -i myhosts/hosts_kerberos helper/kerberos-createadusers.yml
+```
+
+### Generate keytabs based on created users in command above.
+
+Keytabs are stored in folder defined in mapr_kerberos_local_keytabs_dir on ansible client machine
+
+```
+ansible-playbook -i myhosts/hosts_kerberos helper/kerberos-keytabs-ad-generate.yml 
+```
+
+
+### Verify keytabs which are the base for MapR installation
+
+Keytabs are stored in folder defined in mapr_kerberos_local_keytabs_dir on ansible client machine.
+When the customer delivers keytabs this can be also used to validate.
+
+```
+ansible-playbook -i myhosts/hosts_kerberos helper/kerberos-keytabs-verify.yml      
+```

@@ -39,6 +39,7 @@ spark_authenticate: true
 spark_ssl_encryption: true
 spark_sasl_encryption: true
 # Hue will use PAM auth and depending what was configured for other components use these settings
+
 ###########################################
 
 mapr_subnets: 10.0.0.0/24
