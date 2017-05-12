@@ -66,7 +66,7 @@
     </property>
     <property>
         <name>yarn.nodemanager.linux-container-executor.group</name>
-        <value>{{ mapr_user }}</value>
+        <value>{{ mapr_group }}</value>
     </property>
     <property>
         <name>yarn.log-aggregation-enable</name>
