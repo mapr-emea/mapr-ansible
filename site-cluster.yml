@@ -143,6 +143,10 @@
   hosts: mapr-pig
   roles:
     - mapr-pig
+- name: Set Sqoop 2 Server Vars
+  hosts: all
+  roles:
+    - mapr-sqoop2-server-vars
 - name: Install Sqoop 2 Server
   hosts: mapr-sqoop2-server
   roles:
@@ -155,6 +159,10 @@
   hosts: mapr-httpfs
   roles:
     - mapr-httpfs
+- name: Set Oozie Vars
+  hosts: all
+  roles:
+    - mapr-oozie-vars
 - name: Install Oozie
   hosts: mapr-oozie
   roles:

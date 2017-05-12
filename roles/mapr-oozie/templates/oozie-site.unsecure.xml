@@ -68,6 +68,22 @@
     </property>
     <property>
         <name>oozie.email.smtp.host</name>
-        <value>{{ ansible_fqdn }}</value>
+        <value>{{ oozie_smtp_host }}</value>
+    </property>
+    <property>
+        <name>oozie.email.smtp.port</name>
+        <value>{{ oozie_smtp_port }}</value>
+    </property>
+    <property>
+        <name>oozie.email.smtp.auth</name>
+        <value>{{ oozie_smtp_auth }}</value>
+    </property>
+    <property>
+        <name>oozie.email.smtp.username</name>
+        <value>{{ oozie_smtp_username }}</value>
+    </property>
+    <property>
+        <name>oozie.email.smtp.password</name>
+        <value>{{ oozie_smtp_password }}</value>
     </property>
 </configuration>

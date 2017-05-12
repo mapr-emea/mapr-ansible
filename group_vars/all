@@ -55,6 +55,12 @@ hue_db_schema: hue
 hive_db_schema: hive
 oozie_db_schema: oozie
 
+# Oozie Email
+oozie_smtp_host: localhost
+oozie_smtp_port: 25
+oozie_smtp_auth: false
+oozie_smtp_username:
+oozie_smtp_password:
 
 # sudo gem install mkpasswd
 #
