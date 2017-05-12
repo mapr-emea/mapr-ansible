@@ -26,7 +26,7 @@ generate_keys: true
 hive_server_security: kerberos
 # Drill security (only standalone): none, pam
 drill_security: pam
-# HBase REST/Thrift: none, kerberos, maprsasl, maprsasl_and_ssl (MapR-SSL and Basic-auth + SSL enabled)
+# HBase REST/Thrift: none, kerberos, maprsasl
 hbase_thrift_rest_security: kerberos
 # HttpFS: none, pam, kerberos
 httpfs_security: kerberos
