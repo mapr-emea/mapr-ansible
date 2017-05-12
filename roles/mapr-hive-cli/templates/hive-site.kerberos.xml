@@ -18,7 +18,7 @@
 -->
 <configuration>
 
-    {%- if hive_db_host is defined -%}
+    {% if hive_db_host is defined %}
     <property>
         <name>javax.jdo.option.ConnectionURL</name>
         <value>jdbc:mysql://{{ hive_db_host }}:3306/{{ hive_db_schema }}?createDatabaseIfNotExist=true</value>
@@ -33,16 +33,16 @@
 
     <property>
         <name>javax.jdo.option.ConnectionUserName</name>
-        <value>{{ mapr_mysql_user }}</value>
+        <value>{{ hive_db_user }}</value>
         <description>username to use against metastore database</description>
     </property>
 
     <property>
         <name>javax.jdo.option.ConnectionPassword</name>
-        <value>{{ mapr_mysql_password }}</value>
+        <value>{{ hive_db_password }}</value>
         <description>password to use against metastore database</description>
     </property>
-    {%- endif -%}
+    {% endif %}
 
     <property>
         <name>hive.metastore.uris</name>

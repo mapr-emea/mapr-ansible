@@ -6,6 +6,19 @@
   - mapr-hue
   - mapr-hue-livy
 
+- name: Create hue user localhost
+  mysql_user: name={{ hue_db_user }} password={{ hue_db_password }} host=localhost priv=*.*:ALL,GRANT state=present
+  when: inventory_hostname == groups["mapr-hue"][0]
+- name: Create hue user {{ ansible_fqdn }}
+  mysql_user: name={{ hue_db_user }} password={{ hue_db_password }} host={{ ansible_fqdn }} priv=*.*:ALL,GRANT state=present
+  when: inventory_hostname == groups["mapr-hue"][0]
+- name: Create hue user %
+  mysql_user: name={{ hue_db_user }} password={{ hue_db_password }} host=% priv=*.*:ALL,GRANT state=present
+  when: inventory_hostname == groups["mapr-hue"][0]
+- name: Create Hue mysql db
+  mysql_db: name={{ hue_db_schema }} state=present login_host={{ hue_db_host }} login_user={{ hue_db_user }} login_password={{ hue_db_password }}
+  when: hue_db_host is defined and inventory_hostname == groups["mapr-hue"][0]
+
 # Drill
 - name: Find Drill Path
   find: paths="/opt/mapr/drill/" patterns="drill*" file_type=directory
@@ -68,9 +81,6 @@
 # Create database
 - name: Copy create_mysql_tables.sh
   template: src=create_mysql_tables.sh dest=/opt/mapr/hue/create_mysql_tables.sh mode=0755
-- name: Create Hue mysql db
-  mysql_db: name={{ hue_db_schema }} state=present login_host={{ hue_db_host }} login_user={{ mapr_mysql_user }} login_password={{ mapr_mysql_password }}
-  when: hue_db_host is defined
 - name: Create tables
   shell: /opt/mapr/hue/create_mysql_tables.sh
 - name: Register role

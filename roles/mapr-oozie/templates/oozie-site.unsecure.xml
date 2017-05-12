@@ -60,11 +60,11 @@
     </property>
     <property>
         <name>oozie.service.JPAService.jdbc.username</name>
-        <value>{{ mapr_mysql_user }}</value>
+        <value>{{ oozie_db_user }}</value>
     </property>
     <property>
         <name>oozie.service.JPAService.jdbc.password</name>
-        <value>{{ mapr_mysql_password }}</value>
+        <value>{{ oozie_db_password }}</value>
     </property>
     <property>
         <name>oozie.email.smtp.host</name>

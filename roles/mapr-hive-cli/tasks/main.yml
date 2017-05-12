@@ -4,13 +4,19 @@
   package: name=mapr-hive state=present
 
 # Other actions
+- name: Create hive user localhost
+  mysql_user: name={{ hive_db_user }} password={{ hive_db_password }} host=localhost priv=*.*:ALL,GRANT state=present
+  when: inventory_hostname == groups["mapr-hive-cli"][0]
+- name: Create hive user {{ ansible_fqdn }}
+  mysql_user: name={{ hive_db_user }} password={{ hive_db_password }} host={{ ansible_fqdn }} priv=*.*:ALL,GRANT state=present
+  when: inventory_hostname == groups["mapr-hive-cli"][0]
+- name: Create hive user %
+  mysql_user: name={{ hive_db_user }} password={{ hive_db_password }} host=% priv=*.*:ALL,GRANT state=present
+  when: inventory_hostname == groups["mapr-hive-cli"][0]
 - name: Create hive mysql db
-  mysql_db: name={{ hive_db_schema }} state=present login_host={{ hive_db_host }} login_user={{ mapr_mysql_user }} login_password={{ mapr_mysql_password }}
-  when: hive_db_host is defined
-#- name: Downloading MySQL Driver
-#  unarchive: src={{ mysql_jdbc_url }} dest=/tmp copy=no
-#- name: Copy mysql driver
-#  copy: remote_src=True src=/tmp/mysql-connector-java-{{ mysql_jdbc_version }}/mysql-connector-java-{{ mysql_jdbc_version }}-bin.jar dest={{ hive_path_result.files[0].path }}/lib/
+  mysql_db: name={{ hive_db_schema }} state=present login_host={{ hive_db_host }} login_user={{ hive_db_user }} login_password={{ hive_db_password }}
+  when: hive_db_host is defined and inventory_hostname == groups["mapr-hive-cli"][0]
+
 - name: Find Hive Path
   find: paths="/opt/mapr/hive/" patterns="hive*" file_type=directory
   register: hive_path_result
