@@ -50,6 +50,7 @@
   shell: kinit -k -t /opt/mapr/conf/mapr.keytab -c /tmp/hue_krb5_ccache mapr/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}
   become: true
   become_user: "{{ mapr_user }}"
+  when: mapr_security == 'kerberos'
 - name: Create crontab to refresh Hue Kerberos Cache
   cron:
     name: "Refresh Hue Kerberos Cache"
@@ -57,6 +58,8 @@
     hour: "23"
     job: "kinit -k -t /opt/mapr/conf/mapr.keytab -c /tmp/hue_krb5_ccache mapr/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}"
     user: "{{ mapr_user }}"
+  when: mapr_security == 'kerberos'
+
 # WORKAROUND END
 
 - name: Find Hue Livy Path

@@ -1,36 +1,50 @@
-- name: Set Sqoop 2 Server Vars
-  hosts: all
-  roles:
-    - mapr-sqoop2-server-vars
-- name: Install Sqoop 2 Server
-  hosts: mapr-sqoop2-server
-  roles:
-    - mapr-sqoop2-server
-- name: Install Sqoop 2 Client
-  hosts: mapr-sqoop2-client
-  roles:
-    - mapr-sqoop2-client
 - name: Setup Hue Vars
   hosts: all
   roles:
     - mapr-hue-vars
+    - mapr-hue-mysql
 - name: Install Hue
   hosts: mapr-hue
   roles:
     - mapr-hue
-
-
-#- name: Setup global vars
-#  hosts: all
-#  roles:
-#    - mapr-configure-vars
-#    - mapr-configure-vars-hs
-#- name: Install HBase REST and Thrift Server
-#  hosts: mapr-hbase-thrift-rest
-#  roles:
-#    - mapr-hbase-thrift-rest
-#- name: Restarting mapr-warden
-#  hosts: mapr-core
-#  roles:
-#    - mapr-configure-roles
-#    - mapr-configure-warden-restart
+- name: Register roles and restart mapr-warden
+  hosts: mapr-core
+  roles:
+    - mapr-configure-roles
+    - mapr-configure-warden-restart
+- name: Install MapR collectd
+  hosts: mapr-collectd
+  roles:
+    - mapr-collectd
+- name: Install MapR OpenTSDB
+  hosts: mapr-opentsdb
+  roles:
+    - mapr-opentsdb
+- name: Install MapR Grafana
+  hosts: mapr-grafana
+  roles:
+    - mapr-grafana
+- name: MapR Configure Metrics Monitoring
+  hosts: mapr-collectd
+  roles:
+    - mapr-metric-monitoring-configure
+- name: Install MapR fluentd
+  hosts: mapr-fluentd
+  roles:
+    - mapr-fluentd
+- name: Install MapR ElasticSearch
+  hosts: mapr-elasticsearch
+  roles:
+    - mapr-elasticsearch
+- name: Install MapR Kibana
+  hosts: mapr-kibana
+  roles:
+    - mapr-kibana
+- name: MapR Configure Log Monitoring
+  hosts: mapr-fluentd
+  roles:
+    - mapr-log-monitoring-configure
+- name: MapR Patches
+  hosts: mapr-core
+  roles:
+    - {role: mapr-patch, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}

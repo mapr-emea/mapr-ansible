@@ -16,24 +16,24 @@ hadoop_version: 2.7.0
 
 ####### Enable security features ##########
 # none, native, kerberos (ATTENTION: kerberos does not use ResourceManager Zero Config)
-mapr_security: kerberos
+mapr_security: native
 mapr_kerberos_realm: PS.MAPR.COM
 mapr_kerberos_local_keytabs_dir: /Users/chufe/Documents/mykeytabs
 # Will delete existing keys (cldb.key, maprserverticket, ssl_truststore, ssl_keystore) and generate new one: true /false
 generate_keys: true
 
 # Hive security: none, maprsasl, pam or kerberos
-hive_server_security: kerberos
+hive_server_security: maprsasl
 # Drill security (only standalone): none, pam
 drill_security: pam
 # HBase REST/Thrift: none, kerberos, maprsasl
-hbase_thrift_rest_security: kerberos
+hbase_thrift_rest_security: maprsasl
 # HttpFS: none, pam, kerberos
-httpfs_security: kerberos
+httpfs_security: pam
 # Oozie: none, maprsasl, kerberos # TODO impl for Oracle
-oozie_security: kerberos
+oozie_security: maprsasl
 # Sqoop2: none, maprsasl, kerberos # TODO database
-sqoop_security: kerberos
+sqoop_security: maprsasl
 # Spark settings
 spark_authenticate: true
 spark_ssl_encryption: true
@@ -44,8 +44,8 @@ spark_sasl_encryption: true
 
 cluster_name: demo.mapr.com
 mapr_subnets: 10.0.0.0/24
-mapr_create_user: false
-mapr_group: maprgrp
+mapr_create_user: true
+mapr_group: mapr
 mapr_user: mapr
 # UID only for creation required.
 mapr_group_gid: 5000
