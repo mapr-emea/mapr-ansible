@@ -1,20 +1,30 @@
-#- name: Setup Hue Vars
-#  hosts: all
-#  roles:
-#    - mapr-hue-vars
-#- name: Install Hue
-#  hosts: mapr-hue
-#  roles:
-#    - mapr-hue
-- name: Setup global vars
+- name: Install Sqoop 2 Server
+  hosts: mapr-sqoop2-server
+  roles:
+    - mapr-sqoop2-server
+- name: Install Sqoop 2 Client
+  hosts: mapr-sqoop2-client
+  roles:
+    - mapr-sqoop2-client
+- name: Setup Hue Vars
   hosts: all
   roles:
-    - mapr-configure-vars
-    - mapr-configure-vars-hs
-- name: Install HBase REST and Thrift Server
-  hosts: mapr-hbase-thrift-rest
+    - mapr-hue-vars
+- name: Install Hue
+  hosts: mapr-hue
   roles:
-    - mapr-hbase-thrift-rest
+    - mapr-hue
+
+
+#- name: Setup global vars
+#  hosts: all
+#  roles:
+#    - mapr-configure-vars
+#    - mapr-configure-vars-hs
+#- name: Install HBase REST and Thrift Server
+#  hosts: mapr-hbase-thrift-rest
+#  roles:
+#    - mapr-hbase-thrift-rest
 #- name: Restarting mapr-warden
 #  hosts: mapr-core
 #  roles:

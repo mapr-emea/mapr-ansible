@@ -32,6 +32,8 @@ hbase_thrift_rest_security: kerberos
 httpfs_security: kerberos
 # Oozie: none, maprsasl, kerberos # TODO impl for Oracle
 oozie_security: kerberos
+# Sqoop2: none, maprsasl, kerberos # TODO database
+sqoop_security: kerberos
 # Spark settings
 spark_authenticate: true
 spark_ssl_encryption: true

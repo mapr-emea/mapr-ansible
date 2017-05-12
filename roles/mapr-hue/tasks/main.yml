@@ -10,6 +10,10 @@
 - name: Find Drill Path
   find: paths="/opt/mapr/drill/" patterns="drill*" file_type=directory
   register: hue_drill_path
+# Pig
+- name: Find Pig Path
+  find: paths="/opt/mapr/pig/" patterns="pig*" file_type=directory
+  register: hue_pig_path
 - name: Find Drill JDBC Jar
   find: paths="{{ hue_drill_path.files[0].path }}/jars/jdbc-driver/" patterns="drill-jdbc-all-*.jar" file_type=file
   register: hue_drill_jdbc_jar

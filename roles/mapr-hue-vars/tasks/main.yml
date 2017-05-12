@@ -55,6 +55,14 @@
 - name: Make HiveServer 2 String
   set_fact: hue_hiveserver2_string={{ hiveserver2_hosts.results | map(attribute='ansible_facts.hiveserver2_item') | list | join(',')}}
 
+- name: Get Sqoop Server 2
+  set_fact: sqoopserver2_item={{ hostvars[item]['ansible_fqdn'] }}
+  with_items:
+    - "{{ groups['mapr-sqoop2-server'] }}"
+  register: sqoopserver2_hosts
+- name: Make Get Sqoop Server 2
+  set_fact: hue_sqoopserver2_string={{ sqoopserver2_hosts.results | map(attribute='ansible_facts.sqoopserver2_item') | list | join(',')}}
+
 - name: Find Spark Path
   find: paths="/opt/mapr/spark/" patterns="spark*" file_type=directory
   register: hue_spark_path_result

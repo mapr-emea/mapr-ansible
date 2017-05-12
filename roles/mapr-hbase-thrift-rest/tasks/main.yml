@@ -29,4 +29,4 @@
     dest=/opt/mapr/conf/env.sh
     line="export MAPR_HBASE_SERVER_OPTS=\"${HYBRID_LOGIN_OPTS} ${MAPR_SSL_OPTS} -Dmapr.library.flatclass\""
     regexp="^export MAPR_HBASE_SERVER_OPTS"
-  when: hbase_thrift_rest_security != 'none'
+  when: hbase_thrift_rest_security = 'kerberos'
