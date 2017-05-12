@@ -20,7 +20,7 @@ mapr_security: kerberos
 mapr_kerberos_realm: PS.MAPR.COM
 mapr_kerberos_local_keytabs_dir: /Users/chufe/Documents/mykeytabs
 # Will delete existing keys (cldb.key, maprserverticket, ssl_truststore, ssl_keystore) and generate new one: true /false
-generate_keys: true
+generate_keys: false
 
 # Hive security: none, maprsasl, pam or kerberos
 hive_server_security: kerberos

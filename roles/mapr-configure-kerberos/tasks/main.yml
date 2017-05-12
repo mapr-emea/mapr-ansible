@@ -33,7 +33,7 @@
 #  - mapruserticket
  # copy to other nodes
  # run configure on other nodes
-- name: Configure.sh secure
+- name: Configure.sh kerberos
   shell: /opt/mapr/server/configure.sh -N {{ cluster_name }} -Z {{ zookeeper_string }} -C {{ cldb_string }} -u {{ mapr_user }} -g {{mapr_group}} -secure -K -P "mapr/{{ cluster_name }}@{{ mapr_kerberos_realm }}" -HS {{ historyserver_string }}
 - name: Write disk tmp file
   shell: echo {{ disks }} | tr , '\n' > /tmp/disks.txt

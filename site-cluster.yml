@@ -118,7 +118,7 @@
   hosts: all
   roles:
     - mapr-hive-vars
-    - mapr-hive-vars-mysql
+    - mapr-hive-mysql
 - name: Install Hive CLI
   hosts: mapr-hive-cli
   roles:
@@ -162,7 +162,7 @@
 - name: Set Oozie Vars
   hosts: all
   roles:
-    - mapr-oozie-vars
+    - mapr-oozie-mysql
 - name: Install Oozie
   hosts: mapr-oozie
   roles:
@@ -179,6 +179,7 @@
   hosts: all
   roles:
     - mapr-hue-vars
+    - mapr-hue-mysql
 - name: Install Hue
   hosts: mapr-hue
   roles:
