@@ -1,8 +1,9 @@
-- name: Install Spark on YARN
-  hosts: mapr-spark-yarn
+- name: Setup Hue Vars
+  hosts: all
   roles:
-    - mapr-spark-yarn
-- name: Install Spark History Server
-  hosts: mapr-spark-historyserver
+    - mapr-hue-vars
+    - mapr-hue-mysql
+- name: Install Hue
+  hosts: mapr-hue
   roles:
-    - mapr-spark-historyserver
+    - mapr-hue

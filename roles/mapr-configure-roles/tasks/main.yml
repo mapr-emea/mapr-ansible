@@ -3,4 +3,5 @@
 
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
+- pause: seconds=10
 
