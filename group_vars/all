@@ -16,37 +16,37 @@ hadoop_version: 2.7.0
 
 ####### Enable security features ##########
 # none, native, kerberos (ATTENTION: kerberos does not use ResourceManager Zero Config)
-mapr_security: native
+mapr_security: kerberos
 mapr_kerberos_realm: PS.MAPR.COM
 mapr_kerberos_local_keytabs_dir: /Users/chufe/Documents/mykeytabs
 # Will delete existing keys (cldb.key, maprserverticket, ssl_truststore, ssl_keystore) and generate new one: true /false
 generate_keys: true
 
 # Hive security: none, maprsasl, pam or kerberos
-hive_server_security: maprsasl
+hive_server_security: kerberos
 # Drill security (only standalone): none, pam
-drill_security: pam
+drill_security: kerberos
 # HBase REST/Thrift: none, kerberos, maprsasl
 hbase_thrift_rest_security: maprsasl
 # HttpFS: none, pam, kerberos
-httpfs_security: pam
+httpfs_security: kerberos
 # Oozie: none, maprsasl, kerberos # TODO impl for Oracle
-oozie_security: maprsasl
+oozie_security: kerberos
 # Sqoop2: none, maprsasl, kerberos # TODO database
-sqoop_security: maprsasl
-# Spark settings
-spark_authenticate: true
-spark_ssl_encryption: true
-spark_sasl_encryption: true
+sqoop_security: kerberos
+# Spark settings, enable only on secure cluster, otherwise installation fails
+spark_authenticate: false
+spark_ssl_encryption: false
+spark_sasl_encryption: false
 # Hue will use PAM auth and depending what was configured for other components use these settings
 
 ###########################################
 
 cluster_name: demo.mapr.com
 mapr_subnets: 10.0.0.0/24
-mapr_create_user: true
-mapr_group: mapr
+mapr_create_user: false
 mapr_user: mapr
+mapr_group: maprgrp
 # UID only for creation required.
 mapr_group_gid: 5000
 mapr_user_uid: 5000
