@@ -1,0 +1,5 @@
+---
+- include: kerberos-sssd-setup.yml
+- include: kerberos-createadusers.yml
+- include: kerberos-keytabs-ad-generate.yml
+- include: kerberos-keytabs-verify.yml

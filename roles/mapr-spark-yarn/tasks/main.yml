@@ -19,7 +19,7 @@
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
   when: inventory_hostname == groups["mapr-spark-yarn"][0]
 - name: Owner maprfs:///apps/spark
-  shell: hadoop fs -chown mapr:mapr /apps/spark
+  shell: hadoop fs -chown {{ mapr_user }}:{{ mapr_group }} /apps/spark
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
   when: inventory_hostname == groups["mapr-spark-yarn"][0]

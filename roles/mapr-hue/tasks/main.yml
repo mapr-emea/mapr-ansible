@@ -66,6 +66,7 @@
 - name: Configure livy.conf
   template: src=livy.conf dest={{ hue_livy_path_result.files[0].path }}/conf/livy.conf
 # Create database
+- pause: seconds=10
 - name: Copy create_mysql_tables.sh
   template: src=create_mysql_tables.sh dest=/opt/mapr/hue/create_mysql_tables.sh mode=0755
 - name: Create tables

@@ -9,7 +9,7 @@
     - common-selinux
     - {role: common-oraclejdk18, when: jdk == 'oraclejdk18'}
     - {role: common-openjdk18, when: jdk == 'openjdk18'}
-    - common-mapruser
+    - {role: common-mapruser, when: mapr_create_user == true}
     - common-rpcbind
     - common-ntp
     - common-misc
