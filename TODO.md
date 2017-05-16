@@ -1,3 +1,5 @@
+ste correct owner /opt/mapr/kibana/kibana-4.5.4/config/key.pem
+
 - Uninstall removed components from inventory
 - Make installable for local install
 - Add precheck for disks

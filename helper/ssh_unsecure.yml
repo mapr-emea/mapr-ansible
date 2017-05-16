@@ -1,0 +1,5 @@
+- hosts: all
+  tasks:
+   - lineinfile: state=present dest=/etc/ssh/sshd_config regexp="^PasswordAuthentication"  line="PasswordAuthentication yes"
+   - user: name=ec2-user password="$6$GzlcP5ei$E6P9QM40O6KJFLZ3wMcg3jzQBNxGXrf8yc77CbCmf0KtFSxK0mpCParhc3WVNEAm4fHKPAqyRV9rsiF6DAFlW0" createhome=yes state=present
+   - service: name=sshd state=restarted enabled=yes

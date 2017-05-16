@@ -25,7 +25,7 @@ generate_keys: true
 # Hive security: none, maprsasl, pam or kerberos
 hive_server_security: kerberos
 # Drill security (only standalone): none, pam
-drill_security: kerberos
+drill_security: pam
 # HBase REST/Thrift: none, kerberos, maprsasl
 hbase_thrift_rest_security: maprsasl
 # HttpFS: none, pam, kerberos
@@ -57,8 +57,8 @@ hue_db_schema: hue
 hive_db_user: hive
 hive_db_password: hive
 hive_db_schema: hive
-oozie_db_user: hive
-oozie_db_password: hive
+oozie_db_user: oozie
+oozie_db_password: oozie
 oozie_db_schema: oozie
 
 
