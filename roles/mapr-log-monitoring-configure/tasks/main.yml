@@ -12,3 +12,6 @@
   shell: /opt/mapr/server/configure.sh -R -ES {{ elasticsearch_string }}
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+# Fix for OTSDB-4
+- name: Set owner mapr-system user / OTSDB-4
+  file: path=/opt/mapr/kibana owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes

@@ -14,9 +14,9 @@
 - name: Configure httpfs-site.xml for unsecure
   template: src=httpfs-site.unsecure.xml dest={{ httpfs_path_result.files[0].path }}/etc/hadoop/httpfs-site.xml
   when: httpfs_security == 'none'
-- name: Configure httpfs-site.xml for PAM
-  template: src=httpfs-site.pam.xml dest={{ httpfs_path_result.files[0].path }}/etc/hadoop/httpfs-site.xml
-  when: httpfs_security == 'pam'
+- name: Configure httpfs-site.xml for MapRSASL/PAM
+  template: src=httpfs-site.maprsasl.xml dest={{ httpfs_path_result.files[0].path }}/etc/hadoop/httpfs-site.xml
+  when: httpfs_security == 'maprsasl'
 - name: Configure httpfs-site.xml for Kerberos
   template: src=httpfs-site.kerberos.xml dest={{ httpfs_path_result.files[0].path }}/etc/hadoop/httpfs-site.xml
   when: httpfs_security == 'kerberos'
