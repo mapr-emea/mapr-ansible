@@ -35,14 +35,14 @@ oozie_security: kerberos
 # Sqoop2: none, maprsasl, kerberos # TODO database
 sqoop_security: kerberos
 # Spark settings, enable only on secure cluster, otherwise installation fails
-spark_authenticate: false
-spark_ssl_encryption: false
-spark_sasl_encryption: false
+spark_authenticate: true
+spark_ssl_encryption: true
+spark_sasl_encryption: true
 # Hue will use PAM auth and depending what was configured for other components use these settings
-
+hue_ssl: true
 ###########################################
 
-cluster_name: demo.mapr.com
+cluster_name: demo2.mapr.com
 mapr_subnets: 10.0.0.0/24
 mapr_create_user: false
 mapr_user: mapr

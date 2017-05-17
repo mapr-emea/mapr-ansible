@@ -23,26 +23,11 @@
   find: paths="/opt/mapr/hue/" patterns="hue*" file_type=directory
   register: hue_path_result
   failed_when: hue_path_result.matched != 1
+- name: Hue SSL key generation
+  command: openssl req -new -nodes -x509 -subj "/C=US/CN=${ansible_fqdn}" -days 3650 -keyout {{ hue_path_result.files[0].path }}/desktop/conf/server.key -out {{ hue_path_result.files[0].path }}/desktop/conf/server.crt -extensions v3_ca creates={{ hue_path_result.files[0].path }}/desktop/conf/server.crt
+  when: hue_ssl == true
 - name: Configure hue.ini
   template: src=hue.ini dest={{ hue_path_result.files[0].path }}/desktop/conf/hue.ini
-  when: mapr_security != 'kerberos'
-
-# WORKAROUND START It seems that HA and look up of resourcemanager does not work with Kerberos
-# This patches hue.sh and looks up active RM before every start and replaces it in hue.ini
-# TODO add bug number
-- name: Configure hue.ini - Workaround
-  template: src=hue.ini dest={{ hue_path_result.files[0].path }}/desktop/conf/huekerb.tpl
-  when: mapr_security == 'kerberos'
-- name: Patch hue.sh 1
-  lineinfile: dest={{ hue_path_result.files[0].path }}/bin/hue.sh insertafter="^export HUE_HOME" regexp="^export MAPR_TICKETFILE_LOCATION" line="export MAPR_TICKETFILE_LOCATION=/opt/mapr/conf/mapruserticket"
-  when: mapr_security == 'kerberos'
-- name: Patch hue.sh 2
-  lineinfile: dest={{ hue_path_result.files[0].path }}/bin/hue.sh insertafter="^export MAPR_TICKETFILE_LOCATION" regexp="^export ACTIVE_RM_MAPR" line="export ACTIVE_RM_MAPR=$(maprcli node list -columns hostname,svc -filter svc==resourcemanager | grep resourcemanager | awk '{print $1;}')"
-  when: mapr_security == 'kerberos'
-- name: Patch hue.sh 3
-  lineinfile: dest={{ hue_path_result.files[0].path }}/bin/hue.sh insertafter="^export ACTIVE_RM_MAPR" regexp="^cat {{ hue_path_result.files[0].path }}/desktop/conf/huekerb.tpl" line="cat {{ hue_path_result.files[0].path }}/desktop/conf/huekerb.tpl | m4 -DACTIVE_RM_MAPR=$ACTIVE_RM_MAPR > {{ hue_path_result.files[0].path }}/desktop/conf/hue.ini"
-  when: mapr_security == 'kerberos'
-# WORKAROUND END
 
 # WORKAROUND START Create crontab to create Kerberos Cache for HUE
 # TODO add bug number
