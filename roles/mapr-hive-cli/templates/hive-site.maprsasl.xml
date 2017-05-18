@@ -18,10 +18,10 @@
 -->
 <configuration>
 
-    {% if hive_db_host is defined %}
+    {% if hive_db_type == 'mysql' %}
     <property>
         <name>javax.jdo.option.ConnectionURL</name>
-        <value>jdbc:mysql://{{ hive_db_host }}:3306/{{ hive_db_schema }}?createDatabaseIfNotExist=true</value>
+        <value>{{ hive_db_jdbc_url }}</value>
         <description>JDBC connect string for a JDBC metastore</description>
     </property>
 
@@ -42,15 +42,40 @@
         <value>{{ hive_db_password }}</value>
         <description>password to use against metastore database</description>
     </property>
+    {% elif hive_db_type == 'oracle' %}
+    <property>
+        <name>javax.jdo.option.ConnectionURL</name>
+        <value>{{ hive_db_jdbc_url }}</value>
+        <description>JDBC connect string for a JDBC metastore</description>
+    </property>
+
+    <property>
+        <name>javax.jdo.option.ConnectionDriverName</name>
+        <value>oracle.jdbc.OracleDriver</value>
+        <description>Driver class name for a JDBC metastore</description>
+    </property>
+
+    <property>
+        <name>javax.jdo.option.ConnectionUserName</name>
+        <value>{{ hive_db_user }}</value>
+        <description>username to use against metastore database</description>
+    </property>
+
+    <property>
+        <name>javax.jdo.option.ConnectionPassword</name>
+        <value>{{ hive_db_password }}</value>
+        <description>password to use against metastore database</description>
+    </property>
+    {% else %}
+    <property>
+        <name>datanucleus.schema.autoCreateTables</name>
+        <value>true</value>
+    </property>
     {% endif %}
 
     <property>
         <name>hive.metastore.uris</name>
         <value>{{ metastore_string }}</value>
-    </property>
-    <property>
-        <name>datanucleus.schema.autoCreateTables</name>
-        <value>true</value>
     </property>
     <!-- For hive server2 -->
     <property>

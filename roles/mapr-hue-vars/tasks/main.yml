@@ -63,6 +63,15 @@
 - name: Make Get Sqoop Server 2
   set_fact: hue_sqoopserver2_string={{ sqoopserver2_hosts.results | map(attribute='ansible_facts.sqoopserver2_item') | list | join(',')}}
 
+- name: Get HBase Thrift Server
+  set_fact: hbasethriftserver_item={{ hostvars[item]['ansible_fqdn'] }}
+  with_items:
+    - "{{ groups['mapr-hbase-thrift-rest'] }}"
+  register: hbasethriftserver_hosts
+- name: Make Get Hbase Hive Thrift Server
+  set_fact: hue_hbasethriftserver_string={{ hbasethriftserver_hosts.results | map(attribute='ansible_facts.hbasethriftserver_item') | list | join(',')}}
+
+
 - name: Find Spark Path
   find: paths="/opt/mapr/spark/" patterns="spark*" file_type=directory
   register: hue_spark_path_result

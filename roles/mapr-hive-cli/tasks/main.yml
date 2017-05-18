@@ -8,9 +8,12 @@
   find: paths="/opt/mapr/hive/" patterns="hive*" file_type=directory
   register: hive_path_result
   failed_when: hive_path_result.matched != 1
-- name: Copy mysql driver
+- name: Copy MySQL driver
   copy: src=mysql-connector-java-5.1.40-bin.jar dest={{ hive_path_result.files[0].path }}/lib/
-  when: hive_db_host is defined
+  when: hive_db_type == 'mysql'
+- name: Copy Oracle driver
+  copy: src={{ oracle_jdbc_driver_path }} dest={{ hive_path_result.files[0].path }}/lib/
+  when: hive_db_type == 'oracle'
 - name: Configure hive-site.xml
   template: src=hive-site.unsecure.xml dest={{ hive_path_result.files[0].path }}/conf/hive-site.xml
   when: hive_server_security == 'none'
@@ -47,8 +50,13 @@
   file: path=/opt/mapr/hive owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
 - name: Create MySQL tables for hive
   shell: "{{ hive_path_result.files[0].path }}/bin/schematool -dbType mysql -initSchema"
-  when: inventory_hostname == groups["mapr-hive-cli"][0]
+  when: inventory_hostname == groups["mapr-hive-cli"][0] and hive_db_type == 'mysql'
   ignore_errors: True # TODO error result should be handeled
+- name: Create Oracle tables for hive
+  shell: "{{ hive_path_result.files[0].path }}/bin/schematool -dbType oracle -initSchema"
+  when: inventory_hostname == groups["mapr-hive-cli"][0] and hive_db_type == 'oracle'
+  ignore_errors: True # TODO error result should be handeled
+
 # required for Hue
 - name: Create maprfs:///user/hive/warehouse
   shell: hadoop fs -mkdir -p /user/hive/warehouse

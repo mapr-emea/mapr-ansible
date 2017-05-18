@@ -24,7 +24,7 @@
     - mapr-patch-client
     - mapr-configure-subnets
     - {role: mapr-client-configure-unsecure, when: mapr_security == 'none'}
-    - {role: mapr-client-configure-nativesecurity-secure, when: mapr_security == 'native'}
+    - {role: mapr-client-configure-nativesecurity-secure, when: mapr_security == 'maprsasl'}
 - name: Install Drill on YARN
   hosts: mapr-drill-yarn
   roles:

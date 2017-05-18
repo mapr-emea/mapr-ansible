@@ -66,7 +66,7 @@
 - name: Configure and start (native-security)
   hosts: mapr-core
   roles:
-   - {role: mapr-configure-nativesecurity-secure, when: mapr_security == 'native'}
+   - {role: mapr-configure-nativesecurity-secure, when: mapr_security == 'maprsasl'}
 - name: Configure and start (kerberos)
   hosts: mapr-core
   roles:
@@ -118,7 +118,7 @@
   hosts: all
   roles:
     - mapr-hive-vars
-    - mapr-hive-mysql
+    - {role: mapr-hive-mysql, when: hive_db_type == 'mysql' and hive_db_mysql_create_schema_and_user == true}
 - name: Install Hive CLI
   hosts: mapr-hive-cli
   roles:
@@ -162,7 +162,7 @@
 - name: Set Oozie Vars
   hosts: all
   roles:
-    - mapr-oozie-mysql
+    - {role: mapr-oozie-mysql, when: oozie_db_type == 'mysql' and hive_db_mysql_create_schema_and_user == true}
 - name: Install Oozie
   hosts: mapr-oozie
   roles:
