@@ -2,7 +2,7 @@
 # Install MySQL
 - name: Install MySQL / MariaDB
   vars:
-    packages_Suse: ['mariadb', 'mariadb-client', 'mapr-core-internal', 'python-mysql']
+    packages_Suse: ['mariadb', 'mariadb-client', 'python-mysql']
     packages_RedHat: ['mariadb-server', 'mariadb', 'MySQL-python']
     packages_Debian: ['mysql-server', 'mysql-client', 'python-mysqldb']
   package: name={{ item }} state=present

@@ -18,11 +18,11 @@ cluster_name: demo.mapr.com
 ####### Enable security features ##########
 # Default value for all components: mapr core and ecosystem
 # Options: none, maprsasl, kerberos
-security_all: kerberos
+security_all: none
 
 # MapR-Core security
 # Options: none, maprsasl, kerberos
-mapr_security: {{ security_all }}
+mapr_security: "{{ security_all }}"
 # Additional information for Kerberos
 mapr_kerberos_realm: PS.MAPR.COM
 mapr_kerberos_local_keytabs_dir: /Users/chufe/Documents/mykeytabs
@@ -31,17 +31,17 @@ mapr_kerberos_local_keytabs_dir: /Users/chufe/Documents/mykeytabs
 generate_keys: true
 
 # Hive security: none, maprsasl, pam or kerberos
-hive_server_security: {{ security_all }}
-# Drill security (only standalone): none, pam
-drill_security: pam
+hive_server_security: "{{ security_all }}"
+# Drill security (only standalone): none, pam (pam only in secured cluster)
+drill_security: none
 # HBase REST/Thrift: none, kerberos, maprsasl
-hbase_thrift_rest_security: {{ security_all }}
+hbase_thrift_rest_security: "{{ security_all }}"
 # HttpFS: none, maprsasl, kerberos
-httpfs_security: {{ security_all }}
+httpfs_security: "{{ security_all }}"
 # Oozie: none, maprsasl, kerberos
-oozie_security: {{ security_all }}
+oozie_security: "{{ security_all }}"
 # Sqoop2: none, maprsasl, kerberos
-sqoop_security: {{ security_all }}
+sqoop_security: "{{ security_all }}"
 # Spark settings, enable only on secure cluster, otherwise installation fails
 spark_authenticate: true
 spark_ssl_encryption: true
@@ -51,7 +51,7 @@ hue_ssl: true
 ###########################################
 
 mapr_subnets: 10.0.0.0/24
-mapr_create_user: false
+mapr_create_user: true
 mapr_user: mapr
 mapr_group: maprgrp
 # UID only for creation required.
@@ -62,28 +62,38 @@ oracle_jdbc_driver_path: /Users/chufe/Downloads/ojdbc6.jar
 
 # Hue with Oracle requires Oracle Instant client http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html
 # Packages: instant-client-basic and instant-client-sdk-linix
+# Types are: embedded, oracle, mysql
+hue_db_type: embedded
+hue_db_mysql_create_schema_and_user: true
+# set only for Oracle or when MySQL is external, comment out it should take host from installed DB (ext-mysql)
+# hue_db_host: {{ hue_db_host }}
 hue_db_user: hue
 hue_db_password: hue
+# For Oracle add SID here
 hue_db_schema: hue
+# MySQL: 3306 / Oracle: 1521
+#hue_db_port: 1521
+hue_db_port: 3306
 
 # Types are: embedded, oracle, mysql
-hive_db_type: mysql
+hive_db_type: embedded
 hive_db_mysql_create_schema_and_user: true
 hive_db_user: hive
 hive_db_password: hive
 hive_db_schema: hive
-# MySQL JDBC Url
-hive_db_jdbc_url: jdbc:mysql://{{ hive_db_host }}:3306/{{ hive_db_schema }}?createDatabaseIfNotExist=true
+# MySQL JDBC Url, if you set it overrides the default which is taken from installed MySQL
+#hive_db_jdbc_url: jdbc:mysql://mysqlhost:3306/hive?createDatabaseIfNotExist=true
+# Oracle JDBC Url
 #hive_db_jdbc_url: jdbc:oracle:thin:@ip-10-0-0-72.ps.mapr.com:1521:mapr
 
 # Types are: embedded, oracle, mysql
-oozie_db_type: mysql
+oozie_db_type: embedded
 oozie_db_mysql_create_schema_and_user: true
 oozie_db_user: oozie
 oozie_db_password: oozie
 oozie_db_schema: oozie
-# MySQL JDBC Url
-oozie_db_jdbc_url: jdbc:mysql://{{ oozie_db_host }}:3306/{{ oozie_db_schema }}
+# MySQL JDBC Url, if you set it overrides the default which is taken from installed MySQL
+#oozie_db_jdbc_url: jdbc:mysql://mysqlhost:3306/oozie
 # Oracle JDBC Url
 #oozie_db_jdbc_url: jdbc:oracle:thin:@ip-10-0-0-72.ps.mapr.com:1521:mapr
 
@@ -98,9 +108,9 @@ oozie_smtp_password:
 # sudo gem install mkpasswd
 #
 # passwd is mapr123
-mapr_passwd: $6$X4.bqoTK$RTAwnhg2BG/y.3Dugw9Vc31ZdXFsZAitwKtKuu3HgKSNutcQmZ7zLy4cXasivlv2gKD8QGouAjND5fU7H.HDW0
+# mapr_passwd: $6$X4.bqoTK$RTAwnhg2BG/y.3Dugw9Vc31ZdXFsZAitwKtKuu3HgKSNutcQmZ7zLy4cXasivlv2gKD8QGouAjND5fU7H.HDW0
 # passwd is mapr
-# mapr_passwd: $6$GzlcP5ei$E6P9QM40O6KJFLZ3wMcg3jzQBNxGXrf8yc77CbCmf0KtFSxK0mpCParhc3WVNEAm4fHKPAqyRV9rsiF6DAFlW0
+mapr_passwd: $6$GzlcP5ei$E6P9QM40O6KJFLZ3wMcg3jzQBNxGXrf8yc77CbCmf0KtFSxK0mpCParhc3WVNEAm4fHKPAqyRV9rsiF6DAFlW0
 
 disks: /dev/xvdb,/dev/xvdc,/dev/xvdd
 disk_storage_pool_size: 3

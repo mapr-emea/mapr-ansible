@@ -162,7 +162,7 @@
 - name: Set Oozie Vars
   hosts: all
   roles:
-    - {role: mapr-oozie-mysql, when: oozie_db_type == 'mysql' and hive_db_mysql_create_schema_and_user == true}
+    - {role: mapr-oozie-mysql, when: oozie_db_type == 'mysql' and oozie_db_mysql_create_schema_and_user == true}
 - name: Install Oozie
   hosts: mapr-oozie
   roles:
@@ -179,7 +179,7 @@
   hosts: all
   roles:
     - mapr-hue-vars
-    - mapr-hue-mysql
+    - {role: mapr-hue-mysql, when: hive_db_type == 'mysql' and hue_db_mysql_create_schema_and_user == true}
 - name: Install Hue
   hosts: mapr-hue
   roles:

@@ -19,11 +19,19 @@
 <configuration>
 
     {% if hive_db_type == 'mysql' %}
+    {% if hive_db_jdbc_url %}
     <property>
         <name>javax.jdo.option.ConnectionURL</name>
         <value>{{ hive_db_jdbc_url }}</value>
         <description>JDBC connect string for a JDBC metastore</description>
     </property>
+    {% else %}
+    <property>
+        <name>javax.jdo.option.ConnectionURL</name>
+        <value>jdbc:mysql://{{ hive_db_host }}:3306/{{ hive_db_schema }}?createDatabaseIfNotExist=true</value>
+        <description>JDBC connect string for a JDBC metastore</description>
+    </property>
+    {% endif %}
 
     <property>
         <name>javax.jdo.option.ConnectionDriverName</name>

@@ -52,3 +52,8 @@
     dest={{ drill_path_result.files[0].path }}/conf/drill-env.sh
     line="export DRILL_JAVA_OPTS=\"$DRILL_JAVA_OPTS -Dmapr_sec_enabled=true -Dhadoop.login=maprsasl_keytab -Dzookeeper.saslprovider=com.mapr.security.maprsasl.MaprSaslProvider -Dmapr.library.flatclass\""
   when: mapr_security != 'none'
+- name: Set DRILL_JAVA_OPTS for unsecure
+  lineinfile: >
+    dest={{ drill_path_result.files[0].path }}/conf/drill-env.sh
+    line="export DRILL_JAVA_OPTS=\"$DRILL_JAVA_OPTS -Djava.security.auth.login.config=/opt/mapr/conf/mapr.login.conf -Dzookeeper.sasl.client=false\""
+  when: mapr_security == 'none'

@@ -53,14 +53,62 @@
   failed_when: hue_livy_path_result.matched != 1
 - name: Configure livy.conf
   template: src=livy.conf dest={{ hue_livy_path_result.files[0].path }}/conf/livy.conf
-# Create database
+
+- name: General packages for Hue with Database
+  vars:
+    packages_RedHat: ['gcc', 'python-devel']
+    packages_Debian: ['gcc', 'python-dev']
+    packages_Suse: ['gcc', 'python-devel']
+  package: name={{ item }} state=present
+  with_items: "{{ vars['packages_' + ansible_os_family] }}"
+
+# MySQL Database
 - name: Copy create_mysql_tables.sh
   template: src=create_mysql_tables.sh dest=/opt/mapr/hue/create_mysql_tables.sh mode=0755
+  when: hue_db_type == 'mysql'
 - name: Create tables
   shell: /opt/mapr/hue/create_mysql_tables.sh
+  when: hue_db_type == 'mysql'
+- name: Required packages for Hue MySQL
+  vars:
+    packages_RedHat: ['mariadb', 'mariadb-devel']
+    packages_Debian: ['mysql-client', 'python-mysqldb']
+    packages_Suse: ['mariadb-client', 'python-mysql']
+  package: name={{ item }} state=present
+  with_items: "{{ vars['packages_' + ansible_os_family] }}"
+  when: hue_db_type == 'mysql'
+
+# Oracle Database
+- name: Find Oracle Path
+  find: paths="/usr/lib/oracle/" patterns="*" file_type=directory
+  register: oracle_version_path
+  when: hue_db_type == 'oracle'
+  failed_when: oracle_version_path.matched != 1
+- name: Find Oracle Path Architecture
+  find: paths="{{ oracle_version_path.files[0].path }}" patterns="*" file_type=directory
+  register: oracle_version_arch_path
+  when: hue_db_type == 'oracle'
+  failed_when: oracle_version_arch_path.matched != 1
+- name: Find Oracle Path Lib
+  find: paths="{{ oracle_version_arch_path.files[0].path }}/lib/" patterns="libclntsh.so.*" file_type=file
+  register: oracle_version_lib_path
+  when: hue_db_type == 'oracle'
+  failed_when: oracle_version_lib_path.matched != 1
+- debug: msg="Lib {{ oracle_version_lib_path.files[0].path }}"
+  when: hue_db_type == 'oracle'
+- name: Create links for Oracle Lib
+  file: src={{ oracle_version_lib_path.files[0].path }} dest={{ oracle_version_arch_path.files[0].path }}/lib/libclntsh.so state=link
+  when: hue_db_type == 'oracle'
+- name: Copy Oracle PIP module for offline install
+  copy: src=cx_Oracle-5.3.tar.gz dest=/tmp/cx_Oracle-5.3.tar.gz
+  when: hue_db_type == 'oracle'
+- name: Copy create_oracle_tables.sh
+  template: src=create_oracle_tables.sh dest=/opt/mapr/hue/create_oracle_tables.sh mode=0755
+  when: hue_db_type == 'oracle'
+- name: Create tables
+  shell: /opt/mapr/hue/create_oracle_tables.sh
+  when: hue_db_type == 'oracle'
 - pause: seconds=30
-#- name: Register role
-#  shell: /opt/mapr/server/configure.sh -R
 
 # http://maprdocs.mapr.com/home/Hue/ConfigureHuetouseKerberosYARN.html
 #http://maprdocs.mapr.com/home/Hue/ConfigureDBsforHueStorage.html

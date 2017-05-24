@@ -55,10 +55,18 @@
         <name>oozie.service.JPAService.jdbc.driver</name>
         <value>com.mysql.jdbc.Driver</value>
     </property>
+    {% if oozie_db_jdbc_url %}
     <property>
         <name>oozie.service.JPAService.jdbc.url</name>
         <value>{{ oozie_db_jdbc_url }}</value>
     </property>
+    {% else %}
+    <property>
+        <name>oozie.service.JPAService.jdbc.url</name>
+        <value>jdbc:mysql://{{ oozie_db_host }}:3306/{{ oozie_db_schema }}?createDatabaseIfNotExist=true</value>
+    </property>
+    {% endif %}
+
     <property>
         <name>oozie.service.JPAService.jdbc.username</name>
         <value>{{ oozie_db_user }}</value>

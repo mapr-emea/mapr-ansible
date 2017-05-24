@@ -14,9 +14,6 @@
 - name: Copy Oracle driver
   copy: src={{ oracle_jdbc_driver_path }} dest={{ hive_path_result.files[0].path }}/lib/
   when: hive_db_type == 'oracle'
-- name: Configure hive-site.xml
-  template: src=hive-site.unsecure.xml dest={{ hive_path_result.files[0].path }}/conf/hive-site.xml
-  when: hive_server_security == 'none'
 - name: Configure hive-site.xml - unsecure
   template: src=hive-site.unsecure.xml dest={{ hive_path_result.files[0].path }}/conf/hive-site.xml
   when: hive_server_security == 'none'
