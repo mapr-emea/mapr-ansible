@@ -13,12 +13,12 @@ jdk_folder: /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.121-0.b13.el7_3.x86_64
 oracle_jdk_url: http://download.oracle.com/otn-pub/java/jdk/8u111-b14/jdk-8u111-linux-x64.tar.gz
 
 hadoop_version: 2.7.0
-cluster_name: demo.mapr.com
+cluster_name: native.mapr.com
 
 ####### Enable security features ##########
 # Default value for all components: mapr core and ecosystem
 # Options: none, maprsasl, kerberos
-security_all: none
+security_all: maprsasl
 
 # MapR-Core security
 # Options: none, maprsasl, kerberos
