@@ -19,7 +19,7 @@
 <configuration>
 
     {% if hive_db_type == 'mysql' %}
-    {% if hive_db_jdbc_url %}
+    {% if hive_db_jdbc_url is defined %}
     <property>
         <name>javax.jdo.option.ConnectionURL</name>
         <value>{{ hive_db_jdbc_url }}</value>
@@ -76,11 +76,14 @@
     </property>
     {% else %}
     <property>
-        <name>datanucleus.schema.autoCreateTables</name>
+        <name>datanucleus.schema.autoCreateAll</name>
         <value>true</value>
     </property>
     {% endif %}
-
+    <property>
+        <name>hive.metastore.schema.verification</name>
+        <value>false</value>
+    </property>
     <property>
         <name>hive.metastore.uris</name>
         <value>{{ metastore_string }}</value>

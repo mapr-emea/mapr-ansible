@@ -55,7 +55,7 @@
         <name>oozie.service.JPAService.jdbc.driver</name>
         <value>com.mysql.jdbc.Driver</value>
     </property>
-    {% if oozie_db_jdbc_url %}
+    {% if oozie_db_jdbc_url is defined %}
     <property>
         <name>oozie.service.JPAService.jdbc.url</name>
         <value>{{ oozie_db_jdbc_url }}</value>

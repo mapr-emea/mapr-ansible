@@ -13,7 +13,7 @@ jdk_folder: /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.121-0.b13.el7_3.x86_64
 oracle_jdk_url: http://download.oracle.com/otn-pub/java/jdk/8u111-b14/jdk-8u111-linux-x64.tar.gz
 
 hadoop_version: 2.7.0
-cluster_name: native.mapr.com
+cluster_name: demo.mapr.com
 
 ####### Enable security features ##########
 # Default value for all components: mapr core and ecosystem
@@ -33,7 +33,7 @@ generate_keys: true
 # Hive security: none, maprsasl, pam or kerberos
 hive_server_security: "{{ security_all }}"
 # Drill security (only standalone): none, pam (pam only in secured cluster)
-drill_security: none
+drill_security: pam
 # HBase REST/Thrift: none, kerberos, maprsasl
 hbase_thrift_rest_security: "{{ security_all }}"
 # HttpFS: none, maprsasl, kerberos
@@ -63,7 +63,7 @@ oracle_jdbc_driver_path: /Users/chufe/Downloads/ojdbc6.jar
 # Hue with Oracle requires Oracle Instant client http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html
 # Packages: instant-client-basic and instant-client-sdk-linix
 # Types are: embedded, oracle, mysql
-hue_db_type: embedded
+hue_db_type: mysql
 hue_db_mysql_create_schema_and_user: true
 # set only for Oracle or when MySQL is external, comment out it should take host from installed DB (ext-mysql)
 # hue_db_host: {{ hue_db_host }}
@@ -76,7 +76,7 @@ hue_db_schema: hue
 hue_db_port: 3306
 
 # Types are: embedded, oracle, mysql
-hive_db_type: embedded
+hive_db_type: mysql
 hive_db_mysql_create_schema_and_user: true
 hive_db_user: hive
 hive_db_password: hive
@@ -87,7 +87,7 @@ hive_db_schema: hive
 #hive_db_jdbc_url: jdbc:oracle:thin:@ip-10-0-0-72.ps.mapr.com:1521:mapr
 
 # Types are: embedded, oracle, mysql
-oozie_db_type: embedded
+oozie_db_type: mysql
 oozie_db_mysql_create_schema_and_user: true
 oozie_db_user: oozie
 oozie_db_password: oozie
