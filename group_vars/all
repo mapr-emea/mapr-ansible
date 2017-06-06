@@ -18,7 +18,7 @@ cluster_name: demo.mapr.com
 ####### Enable security features ##########
 # Default value for all components: mapr core and ecosystem
 # Options: none, maprsasl, kerberos
-security_all: maprsasl
+security_all: kerberos
 
 # MapR-Core security
 # Options: none, maprsasl, kerberos
@@ -53,7 +53,7 @@ hue_ssl: true
 mapr_subnets: 10.0.0.0/24
 mapr_create_user: true
 mapr_user: mapr
-mapr_group: maprgrp
+mapr_group: mapr
 # UID only for creation required.
 mapr_group_gid: 5000
 mapr_user_uid: 5000
