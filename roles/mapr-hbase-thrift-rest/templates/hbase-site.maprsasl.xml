@@ -70,11 +70,6 @@
         <value>org.apache.hadoop.hbase.security.token.TokenProvider,org.apache.hadoop.hbase.security.access.AccessController</value>
     </property>
 
-    <property>
-        <name>hbase.coprocessor.master.classes</name>
-        <value>org.apache.hadoop.hbase.security.access.AccessController</value>
-    </property>
-
     <!-- property>
         <name>hbase.thrift.security.qop</name>
         <value>auth</value>
@@ -90,36 +85,12 @@
         <value>org.apache.hadoop.security.authentication.server.MultiMechsAuthenticationHandler</value>
     </property>
     <property>
-        <name>hbase.security.authorization</name>
-        <value>true</value>
-    </property>
-    <property>
-        <name>hbase.rpc.engine</name>
-        <value>org.apache.hadoop.hbase.ipc.SecureRpcEngine</value>
-    </property>
-    <property>
-        <name>hbase.coprocessor.region.classes</name>
-        <value>org.apache.hadoop.hbase.security.token.TokenProvider,org.apache.hadoop.hbase.security.access.AccessController</value>
-    </property>
-    <property>
         <name>hbase.coprocessor.master.classes</name>
         <value>org.apache.hadoop.hbase.security.access.AccessController</value>
     </property>
     <property>
-        <name>hbase.rest.ssl.enabled</name>
-        <value>true</value>
-    </property>
-    <property>
-        <name>hbase.rest.ssl.keystore.store</name>
-        <value>/opt/mapr/conf/ssl_keystore</value>
-    </property>
-    <property>
-        <name>hbase.rest.ssl.keystore.password</name>
-        <value>mapr123</value>
-    </property>
-    <property>
         <name>hbase.superuser</name>
-        <value>mapr</value>
+        <value>{{ mapr_user }}</value>
     </property>
 
     <property>
@@ -129,18 +100,6 @@
     <property>
         <name>hbase.thrift.support.proxyuser</name>
         <value>true</value>
-    </property>
-    <property>
-        <name>hbase.thrift.ssl.enabled</name>
-        <value>true</value>
-    </property>
-    <property>
-        <name>hbase.thrift.ssl.keystore.store</name>
-        <value>/opt/mapr/conf/ssl_keystore</value>
-    </property>
-    <property>
-        <name>hbase.thrift.ssl.keystore.password</name>
-        <value>mapr123</value>
     </property>
 
 </configuration>

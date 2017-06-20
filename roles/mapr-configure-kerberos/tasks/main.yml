@@ -1,0 +1,42 @@
+---
+# Configure secure cluster
+- name: Copy mapr.keytab to host
+  copy: src={{ mapr_kerberos_local_keytabs_dir }}/{{ ansible_fqdn }}.keytab dest=/opt/mapr/conf/mapr.keytab group={{ mapr_group }} owner={{ mapr_user }} mode=0600
+- name: Delete existing keys
+  file: state=absent path=/opt/mapr/conf/{{ item }}
+  with_items:
+  - maprserverticket
+  - cldb.key
+  - ssl_keystore
+  - ssl_truststore
+  when: generate_keys == true
+#  - mapruserticket
+- name: Configure.sh to generate keys just run on frist mapr-core node
+  shell: /opt/mapr/server/configure.sh -N {{ cluster_name }} -Z {{ zookeeper_string }} -C {{ cldb_string }} -u {{ mapr_user }} -g {{ mapr_group }} -genkeys -secure -K -P "mapr/{{ cluster_name }}@{{ mapr_kerberos_realm }}"  -HS {{ historyserver_string }}
+  when: inventory_hostname == groups["mapr-cldb"][0] and generate_keys == true
+- name: Copy keys to local
+  fetch: src=/opt/mapr/conf/{{ item }} dest=/tmp/{{ item }} flat=yes
+  with_items:
+  - maprserverticket
+  - cldb.key
+  - ssl_keystore
+  - ssl_truststore
+#  - mapruserticket
+  when: inventory_hostname == groups["mapr-cldb"][0]
+- name: Copy keys to all nodes
+  copy: src=/tmp/{{ item }} dest=/opt/mapr/conf/{{ item }}
+  with_items:
+  - maprserverticket
+  - cldb.key
+  - ssl_keystore
+  - ssl_truststore
+#  - mapruserticket
+ # copy to other nodes
+ # run configure on other nodes
+- name: Configure.sh kerberos
+  shell: /opt/mapr/server/configure.sh -N {{ cluster_name }} -Z {{ zookeeper_string }} -C {{ cldb_string }} -u {{ mapr_user }} -g {{mapr_group}} -secure -K -P "mapr/{{ cluster_name }}@{{ mapr_kerberos_realm }}" -HS {{ historyserver_string }}
+- name: Write disk tmp file
+  shell: echo {{ disks }} | tr , '\n' > /tmp/disks.txt
+- name: Disk setup
+  command: /opt/mapr/server/disksetup -F -W {{ disk_storage_pool_size }} /tmp/disks.txt
+  ignore_errors: True # TODO error result should be handeled

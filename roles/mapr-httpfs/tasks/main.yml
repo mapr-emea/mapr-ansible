@@ -6,3 +6,17 @@
 # Other actions
 - name: Set owner mapr-system user
   file: path=/opt/mapr/httpfs owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
+
+- name: Find HttpFS
+  find: paths="/opt/mapr/httpfs/" patterns="httpfs*" file_type=directory
+  register: httpfs_path_result
+  failed_when: httpfs_path_result.matched != 1
+- name: Configure httpfs-site.xml for unsecure
+  template: src=httpfs-site.unsecure.xml dest={{ httpfs_path_result.files[0].path }}/etc/hadoop/httpfs-site.xml
+  when: httpfs_security == 'none'
+- name: Configure httpfs-site.xml for MapRSASL/PAM
+  template: src=httpfs-site.maprsasl.xml dest={{ httpfs_path_result.files[0].path }}/etc/hadoop/httpfs-site.xml
+  when: httpfs_security == 'maprsasl'
+- name: Configure httpfs-site.xml for Kerberos
+  template: src=httpfs-site.kerberos.xml dest={{ httpfs_path_result.files[0].path }}/etc/hadoop/httpfs-site.xml
+  when: httpfs_security == 'kerberos'

@@ -1,0 +1,7 @@
+---
+- name: Setup Kerberos Client
+  hosts: all
+  roles:
+    - ../roles/ext-kerberos5-setup
+    - ../roles/ext-nscd-setup
+    - ../roles/ext-sssd-ad-setup

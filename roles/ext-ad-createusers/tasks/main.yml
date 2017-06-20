@@ -1,0 +1,67 @@
+---
+#- name: Copy LDAP cert
+#  copy: src=certserver01.cer dest=/etc/openldap/certserver01.cer
+#- name: Set certs in /etc/openldap/ldap.conf
+#  lineinfile: dest=/etc/openldap/ldap.conf regexp="^tls_cacertfile" line="tls_cacertfile /etc/openldap/certserver01.cer"
+- name: Copy helper JAR to write AD password
+  copy: src=ad-change-pwd-0.1.jar dest=/tmp/ad-change-pwd-0.1.jar
+- name: Create kerberos user for cluster
+  ldap_entry:
+    dn: "CN=mapr-{{ cluster_name }},{{ mapr_kerberos_ad_user_cn }}"
+    state: present
+#    start_tls: true
+    objectClass:
+      - organizationalPerson
+      - person
+      - top
+      - user
+    attributes:
+      cn: "mapr-{{ cluster_name }}"
+      displayName: "mapr-{{ cluster_name }}"
+      name: "mapr-{{ cluster_name }}"
+      sAMAccountName: "mapr-{{ cluster_name }}"
+      instanceType: 4
+      objectCategory: "{{ mapr_kerberos_ad_object_category }}"
+      servicePrincipalName: "mapr/{{ cluster_name }}"
+      userPrincipalName: "mapr/{{ cluster_name }}@{{ mapr_kerberos_domain }}"
+      userAccountControl: 66080
+    server_uri: "ldap://{{ mapr_kerberos_kdc }}/"
+    bind_dn: "{{ mapr_kerberos_admin_bind_dn }}"
+    bind_pw: "{{ mapr_kerberos_admin_bind_pw }}"
+  when: inventory_hostname == groups["ext-kerberos"][0]
+- name: Set password for cluster user
+  command: "java -jar /tmp/ad-change-pwd-0.1.jar {{ mapr_kerberos_kdc }} 636 '{{ mapr_kerberos_admin_bind_dn }}' '{{ mapr_kerberos_admin_bind_pw }}' 'CN=mapr-{{ cluster_name }},{{ mapr_kerberos_ad_user_cn }}' '{{ mapr_kerberos_keytab_passwd }}'"
+  when: inventory_hostname == groups["ext-kerberos"][0]
+- name: Create kerberos users
+  vars:
+    kerbusers: ["mapr", "HTTP"]
+  ldap_entry:
+    dn: "CN={{ item }}-{{ ansible_hostname }},{{ mapr_kerberos_ad_user_cn }}"
+    state: present
+#    start_tls: true
+    objectClass:
+      - organizationalPerson
+      - person
+      - top
+      - user
+    attributes:
+      cn: "{{ item }}-{{ ansible_hostname }}"
+      displayName: "{{ item }}-{{ ansible_hostname }}"
+      name: "{{ item }}-{{ ansible_hostname }}"
+      sAMAccountName: "{{ item }}-{{ ansible_hostname }}"
+      instanceType: 4
+      objectCategory: "{{ mapr_kerberos_ad_object_category }}"
+      servicePrincipalName: "{{ item }}/{{ ansible_fqdn }}"
+      userPrincipalName: "{{ item }}/{{ ansible_fqdn }}@{{ mapr_kerberos_domain }}"
+      userAccountControl: 66080
+    server_uri: "ldap://{{ mapr_kerberos_kdc }}/"
+    bind_dn: "{{ mapr_kerberos_admin_bind_dn }}"
+    bind_pw: "{{ mapr_kerberos_admin_bind_pw }}"
+  with_items: "{{ kerbusers }}"
+- name: Set password for cluster user
+  vars:
+    kerbusers: ["mapr", "HTTP"]
+  command: "java -jar /tmp/ad-change-pwd-0.1.jar {{ mapr_kerberos_kdc }} 636 '{{ mapr_kerberos_admin_bind_dn }}' '{{ mapr_kerberos_admin_bind_pw }}' 'CN={{ item }}-{{ ansible_hostname }},{{ mapr_kerberos_ad_user_cn }}' '{{ mapr_kerberos_keytab_passwd }}'"
+  with_items: "{{ kerbusers }}"
+
+    # http://stackoverflow.com/questions/4322243/adding-a-user-with-a-password-in-active-directory-ldaps

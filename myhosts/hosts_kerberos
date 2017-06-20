@@ -1,0 +1,182 @@
+# If you do not want to install a component leave the block empty
+[ext-kerberos]
+10.0.0.136 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.153 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.194 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# sets up ntp, rpcbind, Java and mapr default user with standard password mapr123
+[common]
+10.0.0.136 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.153 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.194 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+[mapr-core]
+10.0.0.136 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.153 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.194 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# Zookeeper
+[mapr-zookeeper]
+10.0.0.136 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.153 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.194 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# Container Location DataBase
+[mapr-cldb]
+10.0.0.136 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# Gateway for Streams and MapR-DB
+[mapr-gateway]
+10.0.0.136 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.153 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.194 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# MapR Control System
+[mapr-mcs]
+10.0.0.136 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.194 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# YARN resource manager
+[mapr-resourcemanager]
+10.0.0.153 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.194 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# Job History Server, IMPORTANT: only one
+[mapr-historyserver]
+10.0.0.194 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# Contains YARN Node Manager, MapReduce2 and MapR FileServer (MFS)
+[mapr-datanode]
+10.0.0.136 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.153 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.194 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# MySQL, required for Hive MetaStore and Oozie, IMPORTANT: only one
+[ext-mysql]
+10.0.0.153 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# Spark on YARN
+[mapr-spark-yarn]
+10.0.0.136 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.153 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.194 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# Spark HistoryServer
+[mapr-spark-historyserver]
+10.0.0.153 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# NFS
+[mapr-nfs]
+
+# MapR Fuse Posix Client Basic
+[mapr-posix-client-basic]
+10.0.0.136 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.153 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.194 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# MapR Fuse Posix Client Platinum
+[mapr-posix-client-platinum]
+
+
+# Apache Drill
+[mapr-drill-standalone]
+10.0.0.136 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.153 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.194 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# Apache Drill
+[mapr-drill-yarn]
+
+# Flume
+[mapr-flume]
+
+# HBase CLI
+[mapr-hbase-cli]
+10.0.0.136 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.153 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.194 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# HBase REST and Thrift
+[mapr-hbase-thrift-rest]
+#10.0.0.136 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# Hive CLI
+[mapr-hive-cli]
+10.0.0.136 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.153 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.194 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# Hive Meta Store
+[mapr-hive-metastore]
+10.0.0.136 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.153 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# Hive Server2
+[mapr-hive-server2]
+10.0.0.136 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.153 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# Hive HCatalog
+[mapr-hive-hcatalog]
+
+# Hive WebHCat
+[mapr-hive-webhcat]
+
+# HttpFS
+[mapr-httpfs]
+10.0.0.136 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+[mapr-hue]
+10.0.0.153 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.194 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# Mahout
+[mapr-mahout]
+
+# Sqoop2 Server
+[mapr-sqoop2-server]
+#10.0.0.153 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# Sqoop2 Client
+[mapr-sqoop2-client]
+#10.0.0.136 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+#10.0.0.153 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+#10.0.0.194 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# Pig
+[mapr-pig]
+#10.0.0.136 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+#10.0.0.153 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+#10.0.0.194 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# Oozie
+[mapr-oozie]
+10.0.0.153 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.194 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# CollectD
+[mapr-collectd:children]
+mapr-core
+
+# OpenTSDB
+[mapr-opentsdb]
+10.0.0.136 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# Grafana
+[mapr-grafana]
+10.0.0.136 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# FluentD
+[mapr-fluentd:children]
+mapr-core
+
+# ElasticSearch
+[mapr-elasticsearch]
+10.0.0.194 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+# Kibana
+[mapr-kibana]
+10.0.0.194 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+
+

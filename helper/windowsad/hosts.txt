@@ -1,0 +1,2 @@
+myhostname1
+myhostname2

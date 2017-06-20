@@ -1,0 +1,13 @@
+cluster_name: demo.mapr.com
+mapr_kerberos_realm: PS.MAPR.COM
+mapr_kerberos_ad_workgroup: PS
+mapr_kerberos_admin_server: server01.ps.mapr.com
+mapr_kerberos_kdc: server01.ps.mapr.com
+mapr_kerberos_domain: ps.mapr.com
+mapr_kerberos_local_keytabs_dir: /Users/chufe/Documents/mykeytabs
+mapr_kerberos_admin: Administrator
+mapr_kerberos_admin_bind_dn: CN={{ mapr_kerberos_admin }},CN=Users,DC=ps,DC=mapr,DC=com
+mapr_kerberos_admin_bind_pw: "XLd$B65G%ib"
+mapr_kerberos_ad_object_category: CN=Person,CN=Schema,CN=Configuration,DC=ps,DC=mapr,DC=com
+mapr_kerberos_ad_user_cn: CN=Users,DC=ps,DC=mapr,DC=com
+mapr_kerberos_keytab_passwd: mapr

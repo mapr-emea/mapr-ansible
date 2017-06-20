@@ -1,0 +1,13 @@
+---
+    # http://stackoverflow.com/questions/4322243/adding-a-user-with-a-password-in-active-directory-ldaps
+- name: Delete existing keytab
+  file: path=/tmp/mapr.keytab state=absent
+- name: Copy ktutil script
+  template: src=ktutil.txt dest=/tmp/ktutil.txt
+
+- name: Create mapr.keytab
+  shell: cat /tmp/ktutil.txt | ktutil
+- fetch: src=/tmp/mapr.keytab dest={{ mapr_kerberos_local_keytabs_dir }}/{{ ansible_fqdn }}.keytab flat=yes
+
+- name: Clean up existing keytab
+  file: path=/tmp/mapr.keytab state=absent

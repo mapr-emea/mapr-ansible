@@ -1,30 +1,31 @@
 # If you do not want to install a component leave the block empty
+#[all:vars]
+#cluster_name=demo.mapr.com
+#security_all=kerberos
 
-# sets up ntp, rpcbind, Java and mapr default user with standard password mapr123
 [common]
-10.0.0.14 ansible_user=centos ansible_become=yes ansible_become_method=sudo
+10.0.0.41 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
-# MapR core packages
-[mapr-core]
-10.0.0.14 ansible_user=centos ansible_become=yes ansible_become_method=sudo
+[ext-kerberos:children]
+common
 
-# MapR client packages
-[mapr-client]
+[mapr-core:children]
+common
 
 # Zookeeper
 [mapr-zookeeper:children]
 common
 
-# Container Location Datacommon
+# Container Location DataBase
 [mapr-cldb:children]
-common
-
-# MapR Control System
-[mapr-mcs:children]
 common
 
 # Gateway for Streams and MapR-DB
 [mapr-gateway:children]
+common
+
+# MapR Control System
+[mapr-mcs:children]
 common
 
 # YARN resource manager
@@ -49,30 +50,34 @@ common
 
 # Spark HistoryServer
 [mapr-spark-historyserver:children]
-# common
+common
+
+# MapR Fuse Posix Client Basic
+[mapr-posix-client-basic:children]
+common
+
+# MapR Fuse Posix Client Platinum
+[mapr-posix-client-platinum]
 
 # NFS
-[mapr-nfs:children]
-common
+[mapr-nfs]
 
 # Apache Drill
 [mapr-drill-standalone:children]
 common
 
 # Apache Drill
-[mapr-drill-yarn:children]
-#common
+[mapr-drill-yarn]
 
 # Flume
-[mapr-flume:children]
+[mapr-flume]
+
+# HBase CLI
+[mapr-hbase-cli:children]
 common
 
-# Hcommon CLI
-[mapr-hcommon-cli:children]
-common
-
-# Hcommon REST and Thrift
-[mapr-hcommon-thrift-rest:children]
+# HBase REST and Thrift
+[mapr-hbase-thrift-rest:children]
 common
 
 # Hive CLI
@@ -88,80 +93,57 @@ common
 common
 
 # Hive HCatalog
-[mapr-hive-hcatalog:children]
-common
+[mapr-hive-hcatalog]
 
 # Hive WebHCat
-[mapr-hive-webhcat:children]
+[mapr-hive-webhcat]
 
 # HttpFS
 [mapr-httpfs:children]
+common
 
-# Hue
 [mapr-hue:children]
+common
 
 # Mahout
-[mapr-mahout:children]
+[mapr-mahout]
 
 # Sqoop2 Server
 [mapr-sqoop2-server:children]
-# common
+common
 
 # Sqoop2 Client
 [mapr-sqoop2-client:children]
-# common
+common
 
 # Pig
 [mapr-pig:children]
+common
 
 # Oozie
 [mapr-oozie:children]
-# common
-
-# HttpFS
-[mapr-httpfs:children]
+common
 
 # CollectD
 [mapr-collectd:children]
-mapr-core
+#common
 
 # OpenTSDB
-[mapr-opentsdb]
-common
+[mapr-opentsdb:children]
+#common
 
 # Grafana
-[mapr-grafana]
-common
+[mapr-grafana:children]
+#common
 
 # FluentD
 [mapr-fluentd:children]
-common
+#common
 
 # ElasticSearch
-[mapr-elasticsearch]
-common
+[mapr-elasticsearch:children]
+#common
 
 # Kibana
-[mapr-kibana]
-common
-
-# MapR NFS loopback (only for MapR client!)
-[mapr-nfsloopback]
-
-# MapR Fuse Posix Client Basic
-[mapr-posix-client-basic]
-
-# MapR Fuse Posix Client Platinum
-[mapr-posix-client-platinum]
-
-# Zeppelin
-[ext-zeppelin:children]
-# common
-
-# R Lang
-[ext-rlang:children]
-# common
-
-# RStudioServer Pro
-[ext-rstudioserverpro:children]
-# common
+[mapr-kibana:children]
+#common

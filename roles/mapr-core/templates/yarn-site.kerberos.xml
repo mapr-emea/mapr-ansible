@@ -1,0 +1,75 @@
+<configuration>
+    <!-- Resource Manager MapR HA Configs -->
+    <property>
+        <name>yarn.resourcemanager.ha.custom-ha-enabled</name>
+        <value>true</value>
+        <description>MapR Zookeeper based RM Reconnect Enabled. If this is true, set the failover proxy to be the class
+            MapRZKBasedRMFailoverProxyProvider
+        </description>
+    </property>
+    <property>
+        <name>yarn.client.failover-proxy-provider</name>
+        <value>org.apache.hadoop.yarn.client.MapRZKBasedRMFailoverProxyProvider</value>
+        <description>Zookeeper based reconnect proxy provider. Should be set if and only if mapr-ha-enabled property is
+            true.
+        </description>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.recovery.enabled</name>
+        <value>true</value>
+        <description>RM Recovery Enabled</description>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.ha.custom-ha-rmaddressfinder</name>
+        <value>org.apache.hadoop.yarn.client.MapRZKBasedRMAddressFinder</value>
+    </property>
+
+    <!-- :::CAUTION::: DO NOT EDIT ANYTHING ON OR ABOVE THIS LINE -->
+
+    <property>
+        <name>yarn.nodemanager.keytab</name>
+        <value>/opt/mapr/conf/mapr.keytab</value>    <!-- path to the YARN keytab -->
+
+    </property>
+    <property>
+        <name>yarn.nodemanager.principal</name>
+        <value>mapr/_HOST@{{ mapr_kerberos_realm }}</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.keytab</name>
+        <value>/opt/mapr/conf/mapr.keytab</value>    <!-- path to the YARN keytab -->
+    </property>
+    <property>
+        <name>yarn.resourcemanager.principal</name>
+        <value>mapr/_HOST@{{ mapr_kerberos_realm }}</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.webapp.spnego-keytab-file</name>
+        <value>/opt/mapr/conf/mapr.keytab</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.webapp.spnego-principal</name>
+        <value>HTTP/_HOST@{{ mapr_kerberos_realm }}</value>
+    </property>
+
+    <property>
+        <name>yarn.nodemanager.webapp.spnego-keytab-file</name>
+        <value>/opt/mapr/conf/mapr.keytab</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.webapp.spnego-principal</name>
+        <value>HTTP/_HOST@{{ mapr_kerberos_realm }}</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.container-executor.class</name>
+        <value>org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.linux-container-executor.group</name>
+        <value>{{ mapr_group }}</value>
+    </property>
+    <property>
+        <name>yarn.log-aggregation-enable</name>
+        <value>true</value>
+    </property>
+</configuration>
