@@ -23,12 +23,13 @@ security_all: none
 # MapR-Core security
 # Options: none, maprsasl, kerberos
 mapr_security: "{{ security_all }}"
+generate_keys: false
+
 # Additional information for Kerberos
 mapr_kerberos_realm: PS.MAPR.COM
 mapr_kerberos_local_keytabs_dir: /Users/chufe/Documents/mykeytabs
 
 # Will delete existing keys (cldb.key, maprserverticket, ssl_truststore, ssl_keystore) and generate new one: true /false
-generate_keys: true
 
 # Hive security: none, maprsasl, pam or kerberos
 hive_server_security: "{{ security_all }}"

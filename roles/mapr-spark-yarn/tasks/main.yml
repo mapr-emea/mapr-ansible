@@ -7,11 +7,15 @@
   register: spark_path_result
   failed_when: spark_path_result.matched != 1
 - name: Find Hive Path
+  find: paths="/opt/mapr/" patterns="hive*" file_type=directory
+  register: hive_first_path_result
+- name: Find Hive Path 2
   find: paths="/opt/mapr/hive/" patterns="hive*" file_type=directory
   register: hive_path_result
-  failed_when: hive_path_result.matched != 1
+  when: hive_first_path_result.matched == 1
 - name: Link hive-site.xml to Spark (otherwise Spark startup throws errors)
   file: src={{ hive_path_result.files[0].path }}/conf/hive-site.xml dest={{ spark_path_result.files[0].path }}/conf/hive-site.xml state=link
+  when: hive_first_path_result.matched == 1
 # Other actions
 - name: Create maprfs:///apps/spark
   shell: hadoop fs -mkdir -p /apps/spark
