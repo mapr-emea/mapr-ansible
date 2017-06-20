@@ -1,0 +1,4 @@
+---
+# Uninstall Apache Drill Standalone
+- name: Uninstall mapr-drill
+  package: name=mapr-drill state=absent

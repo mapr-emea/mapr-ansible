@@ -1,0 +1,4 @@
+---
+# Uninstall MapR collectd
+- name: Uninstall mapr-collectd
+  package: name=mapr-collectd state=absent

@@ -64,7 +64,11 @@
 - name: Install MySQL
   hosts: ext-mysql
   roles:
-    - ext-mysql
+    - ext-mysql-install
+- name: Uninstall MySQL
+  hosts: all:!ext-mysql
+  roles:
+    - ext-mysql-uninstall
 - name: Install MCS
   hosts: mapr-mcs
   roles:
@@ -103,15 +107,22 @@
   roles:
     - mapr-posix-client-platinum
     - {role: mapr-patch-posix-client-platinum, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
-
 - name: Install Drill Standalone
   hosts: mapr-drill-standalone
   roles:
-    - mapr-drill-standalone
+    - mapr-drill-standalone-install
+- name: Uninstall Drill Standalone
+  hosts: all:!mapr-drill-standalone
+  roles:
+    - mapr-drill-standalone-uninstall
 - name: Install Drill on YARN
   hosts: mapr-drill-yarn
   roles:
-    - mapr-drill-yarn
+    - mapr-drill-yarn-install
+- name: Uninstall Drill on YARN
+  hosts: all:!mapr-drill-yarn
+  roles:
+    - mapr-drill-yarn-uninstall
 - name: Install Flume
   hosts: mapr-flume
   roles:
@@ -219,7 +230,11 @@
 - name: Install MapR collectd
   hosts: mapr-collectd
   roles:
-    - mapr-collectd
+    - mapr-collectd-install
+- name: Uninstall MapR collectd
+  hosts: all:!mapr-collectd
+  roles:
+    - mapr-collectd-uninstall
 - name: Install MapR OpenTSDB
   hosts: mapr-opentsdb
   roles:
@@ -235,7 +250,11 @@
 - name: Install MapR fluentd
   hosts: mapr-fluentd
   roles:
-    - mapr-fluentd
+    - mapr-fluentd-install
+- name: Uninstall MapR fluentd
+  hosts: all:!mapr-fluentd
+  roles:
+    - mapr-fluentd-uninstall
 - name: Install MapR ElasticSearch
   hosts: mapr-elasticsearch
   roles:

@@ -1,0 +1,4 @@
+---
+# Uninstall MapR fluentd
+- name: Uninstall mapr-fluentd
+  package: name=mapr-fluentd state=absent
