@@ -22,7 +22,8 @@
 # Gateway for Streams and MapR-DB
 [mapr-gateway]
 10.0.0.53 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-10.0.0.77 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+#10.0.0.77 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.134 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 10.0.0.134 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
 # MapR Control System
@@ -52,7 +53,7 @@
 [mapr-spark-yarn]
 10.0.0.53 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 10.0.0.77 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-10.0.0.134 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+#10.0.0.134 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
 # Spark HistoryServer
 [mapr-spark-historyserver]

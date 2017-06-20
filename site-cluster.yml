@@ -23,7 +23,7 @@
 - name: Install MapR Core
   hosts: mapr-core
   roles:
-    - mapr-core
+    - mapr-core-install
     - mapr-configure-subnets
 - name: Install Zookeeper
   hosts: mapr-zookeeper
@@ -32,17 +32,31 @@
 - name: Install CLDB
   hosts: mapr-cldb
   roles:
-    - mapr-cldb
+    - mapr-cldb-install
+- name: Install CLDB
+  hosts: all:!mapr-cldb
+  roles:
+    - mapr-cldb-uninstall
 - name: Install Gateway
   hosts: mapr-gateway
   roles:
-    - mapr-gateway
+    - mapr-gateway-install
+- name: Uninstall Gateway
+  hosts: all:!mapr-gateway
+  roles:
+    - mapr-gateway-uninstall
 - name: Install Filesystem, MapReduce2, YARN Node Manager
   hosts: mapr-datanode
   roles:
-    - mapr-fileserver
-    - mapr-mapreduce2
-    - mapr-nodemanager
+    - mapr-fileserver-install
+    - mapr-mapreduce2-install
+    - mapr-nodemanager-install
+- name: Uninstall Filesystem, MapReduce2, YARN Node Manager
+  hosts: all:!mapr-datanode
+  roles:
+    - mapr-fileserver-uninstall
+    - mapr-mapreduce2-uninstall
+    - mapr-nodemanager-uninstall
 - name: Install YARN Resource Manager
   hosts: mapr-resourcemanager
   roles:
@@ -101,7 +115,11 @@
 - name: Install Flume
   hosts: mapr-flume
   roles:
-    - mapr-flume
+    - mapr-flume-install
+- name: Install Flume
+  hosts: all:!mapr-flume
+  roles:
+    - mapr-flume-uninstall
 - name: Install HBase CLI
   hosts: mapr-hbase-cli
   roles:
@@ -142,7 +160,11 @@
 - name: Install Pig
   hosts: mapr-pig
   roles:
-    - mapr-pig
+    - mapr-pig-install
+- name: Uninstall Pig
+  hosts: all:!mapr-pig
+  roles:
+    - mapr-pig-uninstall
 - name: Set Sqoop 2 Server Vars
   hosts: all
   roles:
@@ -170,7 +192,11 @@
 - name: Install Spark on YARN
   hosts: mapr-spark-yarn
   roles:
-    - mapr-spark-yarn
+    - mapr-spark-yarn-install
+- name: Uninstall Spark on YARN
+  hosts: all:!mapr-spark-yarn
+  roles:
+    - mapr-spark-yarn-uninstall
 - name: Install Spark History Server
   hosts: mapr-spark-historyserver
   roles:
@@ -188,7 +214,8 @@
   hosts: mapr-core
   roles:
     - mapr-configure-roles
-    - mapr-configure-warden-restart
+# CHUFE restart really required? check.
+#    - mapr-configure-warden-restart
 - name: Install MapR collectd
   hosts: mapr-collectd
   roles:
@@ -229,3 +256,10 @@
   hosts: mapr-core
   roles:
     - {role: mapr-patch, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
+
+# CHUFE remove node from MCS with MAPR cli, execute on first CLDB.
+# CHUFE stop warden, but before zookeeper -> zookeeper has core dep?
+- name: Uninstall MapR Core
+  hosts: all:!mapr-core
+  roles:
+    - mapr-core-uninstall

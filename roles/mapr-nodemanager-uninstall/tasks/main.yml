@@ -1,0 +1,4 @@
+---
+# Uninstall YARN Node Manager
+- name: Uninstall mapr-nodemanager
+  package: name=mapr-nodemanager state=absent

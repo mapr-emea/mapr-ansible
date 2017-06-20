@@ -1,5 +1,6 @@
- - hosts: all
+ - hosts: all:!mapr-spark-yarn
    tasks:
-    - debug: msg="Cluster {{ cluster_name }}"
+     - debug: msg="Hello"
+
 
 

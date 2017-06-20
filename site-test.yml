@@ -1,4 +1,12 @@
-- name: Install Spark on YARN
-  hosts: mapr-spark-yarn
+- name: Install Filesystem, MapReduce2, YARN Node Manager
+  hosts: mapr-datanode
   roles:
-    - mapr-spark-yarn
+    - mapr-fileserver-install
+    - mapr-mapreduce2-install
+    - mapr-nodemanager-install
+- name: Uninstall Filesystem, MapReduce2, YARN Node Manager
+  hosts: all:!mapr-datanode
+  roles:
+    - mapr-fileserver-uninstall
+    - mapr-mapreduce2-uninstall
+    - mapr-nodemanager-uninstall

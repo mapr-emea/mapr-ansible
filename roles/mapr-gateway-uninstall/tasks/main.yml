@@ -1,0 +1,4 @@
+---
+# Uninstall CLDB
+- name: Uninstall mapr-gateway
+  package: name=mapr-gateway state=absent

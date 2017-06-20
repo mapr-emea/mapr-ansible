@@ -1,0 +1,9 @@
+---
+# Uninstall MapR Core components for all machines
+- name: Uninstall mapr-core
+  vars:
+    packages_Suse: ['mapr-compat-suse', 'mapr-core', 'mapr-core-internal', 'mapr-kafka']
+    packages_RedHat: ['mapr-core', 'mapr-core-internal', 'mapr-kafka']
+    packages_Debian: ['mapr-core', 'mapr-core-internal', 'mapr-kafka']
+  package: name={{ item }} state=absent
+  with_items: "{{ vars['packages_' + ansible_os_family] }}"

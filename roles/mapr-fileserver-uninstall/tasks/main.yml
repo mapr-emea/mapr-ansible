@@ -1,0 +1,4 @@
+---
+# Uninstall MapR FileServer (MFS)
+- name: Uninstall mapr-fileserver
+  package: name=mapr-fileserver state=absent
