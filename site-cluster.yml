@@ -80,7 +80,11 @@
 - name: Install NFS
   hosts: mapr-nfs
   roles:
-    - mapr-nfs
+    - mapr-nfs-install
+- name: Uninstall NFS
+  hosts: all:!mapr-nfs
+  roles:
+    - mapr-nfs-uninstall
 - name: Configure and start (unsecure)
   hosts: mapr-core
   roles:
@@ -215,7 +219,11 @@
 - name: Install Oozie
   hosts: mapr-oozie
   roles:
-    - mapr-oozie
+    - mapr-oozie-install
+- name: Uninstall Oozie
+  hosts: all:!mapr-oozie
+  roles:
+    - mapr-oozie-uninstall
 - name: Install Spark on YARN
   hosts: mapr-spark-yarn
   roles:
@@ -258,7 +266,11 @@
 - name: Install MapR OpenTSDB
   hosts: mapr-opentsdb
   roles:
-    - mapr-opentsdb
+    - mapr-opentsdb-install
+- name: Uninstall MapR OpenTSDB
+  hosts: all:!mapr-opentsdb
+  roles:
+    - mapr-opentsdb-uninstall
 - name: Install MapR Grafana
   hosts: mapr-grafana
   roles:
@@ -310,6 +322,8 @@
 
 # CHUFE remove node from MCS with MAPR cli, execute on first CLDB.
 # CHUFE stop warden, but before zookeeper -> zookeeper has core dep?
+# CHUFE NFS loopback, NFS server and Fuse must be uninstalled in a group first, if a user wants to change nfs to fuse or vice versa
+# CHUFE maybe do all uninstallations first?
 - name: Uninstall MapR Core
   hosts: all:!mapr-core
   roles:

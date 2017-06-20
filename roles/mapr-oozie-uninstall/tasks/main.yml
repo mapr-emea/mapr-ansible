@@ -1,0 +1,6 @@
+---
+# Uninstall Oozie and MySQL
+- name: Uninstall mapr-oozie
+  package: name=mapr-oozie state=absent
+
+

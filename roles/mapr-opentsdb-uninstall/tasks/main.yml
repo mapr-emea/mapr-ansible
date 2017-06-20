@@ -1,0 +1,4 @@
+---
+# Uninstall MapR OpenTSDB
+- name: Uninstall mapr-opentsdb
+  package: name=mapr-opentsdb state=absent
