@@ -1,0 +1,4 @@
+---
+# Uninstall MapR Kibana
+- name: Uninstall mapr-kibana
+  package: name=mapr-kibana state=absent

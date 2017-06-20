@@ -1,0 +1,4 @@
+---
+# Uninstall MapR grafana
+- name: Uninstall mapr-grafana
+  package: name=mapr-grafana state=absent

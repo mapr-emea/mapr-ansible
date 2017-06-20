@@ -1,0 +1,7 @@
+---
+# Uninstall Hue
+- name: Uninstall mapr-hue
+  package: name={{ item }} state=absent
+  with_items:
+  - mapr-hue
+  - mapr-hue-livy

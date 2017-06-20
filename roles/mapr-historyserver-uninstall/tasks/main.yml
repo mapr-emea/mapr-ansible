@@ -1,0 +1,4 @@
+---
+# Uninstall History Server
+- name: Uninstall mapr-historyserver
+  package: name=mapr-historyserver state=absent

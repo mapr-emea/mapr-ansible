@@ -1,0 +1,4 @@
+---
+# Uninstall MapR elasticsearch
+- name: Uninstall mapr-elasticsearch
+  package: name=mapr-elasticsearch state=absent

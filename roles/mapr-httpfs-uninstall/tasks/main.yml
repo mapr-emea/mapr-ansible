@@ -1,0 +1,4 @@
+---
+# Install HttpFS
+- name: Uninstall mapr-httpfs
+  package: name=mapr-httpfs state=absent

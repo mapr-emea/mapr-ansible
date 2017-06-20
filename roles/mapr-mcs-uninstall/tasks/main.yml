@@ -1,0 +1,4 @@
+---
+# Uninstall MapR Control System (MCS)
+- name: Uninstall mapr-webserver
+  package: name=mapr-webserver state=absent

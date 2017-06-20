@@ -72,7 +72,11 @@
 - name: Install MCS
   hosts: mapr-mcs
   roles:
-    - mapr-mcs
+    - mapr-mcs-install
+- name: Uninstall MCS
+  hosts: all:!mapr-mcs
+  roles:
+    - mapr-mcs-uninstall
 - name: Install NFS
   hosts: mapr-nfs
   roles:
@@ -142,7 +146,11 @@
 - name: Install History Server
   hosts: mapr-historyserver
   roles:
-    - mapr-historyserver
+    - mapr-historyserver-install
+- name: Uninstall History Server
+  hosts: all:!mapr-historyserver
+  roles:
+    - mapr-historyserver-uninstall
 - name: Setup Hive Variables
   hosts: all
   roles:
@@ -167,7 +175,11 @@
 - name: Install Mahout
   hosts: mapr-mahout
   roles:
-    - mapr-mahout
+    - mapr-mahout-install
+- name: Uninstall Mahout
+  hosts: all:!mapr-mahout
+  roles:
+    - mapr-mahout-uninstall
 - name: Install Pig
   hosts: mapr-pig
   roles:
@@ -191,7 +203,11 @@
 - name: Install HttpFS
   hosts: mapr-httpfs
   roles:
-    - mapr-httpfs
+    - mapr-httpfs-install
+- name: Uninstall HttpFS
+  hosts: all:!mapr-httpfs
+  roles:
+    - mapr-httpfs-uninstall
 - name: Set Oozie Vars
   hosts: all
   roles:
@@ -216,11 +232,15 @@
   hosts: all
   roles:
     - mapr-hue-vars
-    - {role: mapr-hue-mysql, when: hive_db_type == 'mysql' and hue_db_mysql_create_schema_and_user == true}
+    - {role: mapr-hue-mysql, when: hue_db_type == 'mysql' and hue_db_mysql_create_schema_and_user == true}
 - name: Install Hue
   hosts: mapr-hue
   roles:
-    - mapr-hue
+    - mapr-hue-install
+- name: Uninstall Hue
+  hosts: all:!mapr-hue
+  roles:
+    - mapr-hue-uninstall
 - name: Register roles and restart mapr-warden
   hosts: mapr-core
   roles:
@@ -242,7 +262,11 @@
 - name: Install MapR Grafana
   hosts: mapr-grafana
   roles:
-    - mapr-grafana
+    - mapr-grafana-install
+- name: Uninstall MapR Grafana
+  hosts: all:!mapr-grafana
+  roles:
+    - mapr-grafana-uninstall
 - name: MapR Configure Metrics Monitoring
   hosts: mapr-collectd
   roles:
@@ -258,11 +282,19 @@
 - name: Install MapR ElasticSearch
   hosts: mapr-elasticsearch
   roles:
-    - mapr-elasticsearch
+    - mapr-elasticsearch-install
+- name: Uninstall MapR ElasticSearch
+  hosts: all:!mapr-elasticsearch
+  roles:
+    - mapr-elasticsearch-uninstall
 - name: Install MapR Kibana
   hosts: mapr-kibana
   roles:
-    - mapr-kibana
+    - mapr-kibana-install
+- name: Uninstall MapR Kibana
+  hosts: all:!mapr-kibana
+  roles:
+    - mapr-kibana-uninstall
 - name: MapR Configure Log Monitoring
   hosts: mapr-fluentd
   roles:
