@@ -14,9 +14,12 @@
     - common-ntp
     - common-misc
     - common-sysctl
+# CHUFE fix mysql with HUE
+# CHUFE historyserver change requires configure
+# CHUFE nach jeder componete configure -R aufrufen
+# CHUFE restart ecosystem component after config
 # CHUFE run configure when security type was changed.
 # CHUFE post restart check
-# CHUFE automate generate_keys true check
 # CHUFE add rolling restart size to all config.
 # CHUFE stop services with mapr cli before uninstalling?
 # Uninstall POSIX clients first, otherwise if user changes from NFS to Fuse it will conflict.
@@ -287,20 +290,6 @@
   hosts: all:!mapr-httpfs
   roles:
     - mapr-httpfs-uninstall
-- name: Set Oozie Vars
-  hosts: all
-  vars:
-        num_mysql_hosts: "{{ groups['ext-mysql']|length }}"
-  roles:
-    - {role: mapr-oozie-mysql, when: oozie_db_type == 'mysql' and oozie_db_mysql_create_schema_and_user == true and num_mysql_hosts != '0' }
-- name: Install Oozie
-  hosts: mapr-oozie
-  roles:
-    - mapr-oozie-install
-- name: Uninstall Oozie
-  hosts: all:!mapr-oozie
-  roles:
-    - mapr-oozie-uninstall
 - name: Install Spark on YARN
   hosts: mapr-spark-yarn
   roles:
@@ -317,6 +306,20 @@
   hosts: all:!mapr-spark-historyserver
   roles:
     - mapr-spark-historyserver-uninstall
+- name: Set Oozie Vars
+  hosts: all
+  vars:
+     num_mysql_hosts: "{{ groups['ext-mysql']|length }}"
+  roles:
+    - {role: mapr-oozie-mysql, when: oozie_db_type == 'mysql' and oozie_db_mysql_create_schema_and_user == true and num_mysql_hosts != '0' }
+- name: Install Oozie
+  hosts: mapr-oozie
+  roles:
+    - mapr-oozie-install
+- name: Uninstall Oozie
+  hosts: all:!mapr-oozie
+  roles:
+    - mapr-oozie-uninstall
 - name: Setup Hue Vars
   hosts: all
   vars:
@@ -336,8 +339,6 @@
   hosts: mapr-core
   roles:
     - mapr-configure-roles
-# CHUFE restart really required? check.
-#    - mapr-configure-warden-restart
 - name: Install MapR collectd
   hosts: mapr-collectd
   roles:
@@ -362,7 +363,6 @@
   hosts: all:!mapr-grafana
   roles:
     - mapr-grafana-uninstall
-# CHUFE check if configure required
 - name: MapR Configure Metrics Monitoring
   hosts: mapr-collectd
   roles:
@@ -391,17 +391,10 @@
   hosts: all:!mapr-kibana
   roles:
     - mapr-kibana-uninstall
-# CHUFE check if configure required
 - name: MapR Configure Log Monitoring
   hosts: mapr-fluentd
   roles:
     - mapr-log-monitoring-configure
-
-# CHUFE really required?
-#- name: Restarting mapr-warden
-#  hosts: mapr-core
-#  roles:
-#   - mapr-configure-warden-restart
 - name: Install MapR Patches
   hosts: mapr-core
   roles:
@@ -412,7 +405,6 @@
   roles:
     - mapr-patch-uninstall
 # CHUFE count for patch changes and do restart
-
 - name: Uninstall MapR Core
   hosts: all:!mapr-core
   roles:

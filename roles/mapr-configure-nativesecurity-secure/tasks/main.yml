@@ -1,17 +1,11 @@
 ---
 # Configure secure cluster
-- name: Delete existing keys
-  file: state=absent path=/opt/mapr/conf/{{ item }}
-  with_items:
-  - maprserverticket
-  - cldb.key
-  - ssl_keystore
-  - ssl_truststore
-  when: generate_keys == true
-#  - mapruserticket
-- name: Configure.sh to generate keys just run on frist mapr-core node
+- name: Check if /opt/mapr/conf/cldb.key exists
+  stat: path=/opt/mapr/conf/cldb.key
+  register: cldb_key_status
+- name: Configure.sh to generate keys only run on first mapr-cldb node
   shell: /opt/mapr/server/configure.sh -N {{ cluster_name }} -Z {{ zookeeper_string }} -C {{ cldb_string }} -u {{ mapr_user }} -g {{ mapr_group }} -genkeys -secure -HS {{ historyserver_string }}
-  when: inventory_hostname == groups["mapr-cldb"][0] and generate_keys == true
+  when: inventory_hostname == groups["mapr-cldb"][0] and not cldb_key_status.stat.exists
 - name: Copy keys to local
   fetch: src=/opt/mapr/conf/{{ item }} dest=/tmp/{{ item }} flat=yes
   with_items:
