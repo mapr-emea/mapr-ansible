@@ -1,0 +1,7 @@
+- name: Retrieve all CLDB changes
+  set_fact: cldb_changes_item={{ hostvars[item]['cldb_haschanged'] }}
+  with_items:
+    - "{{ groups['all'] }}"
+  register: cldb_changes_hosts
+- name: Calculate number of CLDB changes
+  set_fact: cldb_changes={{ cldb_changes_hosts.results | map(attribute='ansible_facts.cldb_changes_item') | map('int') | sum }}

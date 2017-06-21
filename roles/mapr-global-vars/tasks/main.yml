@@ -1,0 +1,9 @@
+---
+- name: Initialize Zookeeper changes variable
+  set_fact: zookeeper_haschanged=0
+- name: Initialize CLDB changes variable
+  set_fact: cldb_haschanged=0
+- name: Initialize mapr-core local changes variable
+  set_fact: core_local_changes=0
+- name: Initialize mapr-mfs local changes variable
+  set_fact: mfs_local_changes=0

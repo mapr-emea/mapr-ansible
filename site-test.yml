@@ -1,5 +1,4 @@
-- name: Uninstall mapr-posix-client-platinum (FUSE)
-  hosts: all:!mapr-posix-client-platinum
+- name: Setup MapR repositories
+  hosts: mapr-core
   roles:
-    - mapr-patch-posix-client-platinum-uninstall
-    - mapr-posix-client-platinum-uninstall
+    - mapr-configure-repository

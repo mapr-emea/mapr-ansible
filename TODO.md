@@ -1,4 +1,12 @@
-
+Test
+- switch from NFS to fuse
+- Add node
+- remove normal node
+- add cldb node
+- add zk node
+- remove zk node
+- add cldb node
+- remote cldb node
 
 ste correct owner /opt/mapr/kibana/kibana-4.5.4/config/key.pem
 

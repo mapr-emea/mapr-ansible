@@ -7,9 +7,10 @@
   service: name=mapr-zookeeper state=stopped
   when: service_status.stat.exists
 - name: Uninstall mapr-zookeeper
-  package: name={{ item }} state=absent
-  with_items:
-  - mapr-zookeeper
-  - mapr-zk-internal
+  package: name=mapr-zk-internal state=absent
+  register: zookeeper_result
+- set_fact: zookeeper_haschanged={{ zookeeper_haschanged | int + 1 }}
+  when: zookeeper_result.changed
 - name: Clean /opt/mapr/zkdata
   file: path=/opt/mapr/zkdata state=absent
+

@@ -7,6 +7,8 @@
     packages_Debian: ['mapr-core', 'mapr-core-internal', 'mapr-kafka']
   package: name={{ item }} state=present
   with_items: "{{ vars['packages_' + ansible_os_family] }}"
+  register: core_result
+- set_fact: core_local_changes="{{ core_result.results | map(attribute='changed') | map('int') | sum  }}"
 - name: Configure core-site.xml
   vars:
     aws_credentials_file: "{{ lookup('env','HOME') }}/.aws/credentials"

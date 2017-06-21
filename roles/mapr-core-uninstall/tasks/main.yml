@@ -2,6 +2,7 @@
 # Uninstall MapR Core components for all machines
 - name: Stop Warden
   service: name=mapr-warden state=stopped
+- pause: seconds=30
 - name: Uninstall mapr-core
   vars:
     packages_Suse: ['mapr-compat-suse', 'mapr-core', 'mapr-core-internal', 'mapr-kafka']
