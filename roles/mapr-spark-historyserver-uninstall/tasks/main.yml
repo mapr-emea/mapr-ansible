@@ -1,0 +1,4 @@
+---
+# Uninstall Spark on YARN
+- name: Uninstall mapr-spark-historyserver
+  package: name=mapr-spark-historyserver state=absent

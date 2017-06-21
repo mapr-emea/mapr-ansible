@@ -1,0 +1,4 @@
+---
+# Uninstall Zookeeper
+- name: Uninstall mapr-zookeeper
+  package: name=mapr-zookeeper state=absent

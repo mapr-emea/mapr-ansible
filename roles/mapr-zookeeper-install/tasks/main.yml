@@ -2,5 +2,5 @@
 # Install Zookeeper
 - name: Install mapr-zookeeper
   package: name=mapr-zookeeper state=present
-  register: zookeeper_result
-- debug: msg={{ zookeeper_result.changed }}
+#  register: zookeeper_result
+#- debug: msg={{ zookeeper_result.changed }}

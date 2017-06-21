@@ -28,7 +28,11 @@
 - name: Install Zookeeper
   hosts: mapr-zookeeper
   roles:
-    - mapr-zookeeper
+    - mapr-zookeeper-install
+- name: Uninstall Zookeeper
+  hosts: all:!mapr-zookeeper
+  roles:
+    - mapr-zookeeper-uninstall
 - name: Install CLDB
   hosts: mapr-cldb
   roles:
@@ -60,7 +64,11 @@
 - name: Install YARN Resource Manager
   hosts: mapr-resourcemanager
   roles:
-    - mapr-resourcemanager
+    - mapr-resourcemanager-install
+- name: Uninstall YARN Resource Manager
+  hosts: all:!mapr-resourcemanager
+  roles:
+    - mapr-resourcemanager-uninstall
 - name: Install MySQL
   hosts: ext-mysql
   roles:
@@ -108,13 +116,23 @@
 - name: Install mapr-posix-client-basic (FUSE)
   hosts: mapr-posix-client-basic
   roles:
-    - mapr-posix-client-basic
-    - {role: mapr-patch-posix-client-basic, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
+    - mapr-posix-client-basic-install
+    - {role: mapr-patch-posix-client-basic-install, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
+- name: Uninstall mapr-posix-client-basic (FUSE)
+  hosts: all:!mapr-posix-client-basic
+  roles:
+    - mapr-patch-posix-client-basic-uninstall
+    - mapr-posix-client-basic-uninstall
 - name: Install mapr-posix-client-platinum (FUSE)
   hosts: mapr-posix-client-platinum
   roles:
-    - mapr-posix-client-platinum
-    - {role: mapr-patch-posix-client-platinum, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
+    - mapr-posix-client-platinum-install
+    - {role: mapr-patch-posix-client-platinum-install, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
+- name: Uninstall mapr-posix-client-platinum (FUSE)
+  hosts: all:!mapr-posix-client-platinum
+  roles:
+    - mapr-patch-posix-client-platinum-install
+    - mapr-posix-client-platinum-install
 - name: Install Drill Standalone
   hosts: mapr-drill-standalone
   roles:
@@ -201,11 +219,19 @@
 - name: Install Sqoop 2 Server
   hosts: mapr-sqoop2-server
   roles:
-    - mapr-sqoop2-server
+    - mapr-sqoop2-server-install
+- name: Uninstall Sqoop 2 Server
+  hosts: all:!mapr-sqoop2-server
+  roles:
+    - mapr-sqoop2-server-uninstall
 - name: Install Sqoop 2 Client
   hosts: mapr-sqoop2-client
   roles:
-    - mapr-sqoop2-client
+    - mapr-sqoop2-client-install
+- name: Uninstall Sqoop 2 Client
+  hosts: all:!mapr-sqoop2-client
+  roles:
+    - mapr-sqoop2-client-uninstall
 - name: Install HttpFS
   hosts: mapr-httpfs
   roles:
@@ -237,7 +263,11 @@
 - name: Install Spark History Server
   hosts: mapr-spark-historyserver
   roles:
-    - mapr-spark-historyserver
+    - mapr-spark-historyserver-install
+- name: Uninstall Spark History Server
+  hosts: all:!mapr-spark-historyserver
+  roles:
+    - mapr-spark-historyserver-uninstall
 - name: Setup Hue Vars
   hosts: all
   roles:

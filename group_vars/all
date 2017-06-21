@@ -23,7 +23,7 @@ security_all: none
 # MapR-Core security
 # Options: none, maprsasl, kerberos
 mapr_security: "{{ security_all }}"
-generate_keys: true
+generate_keys: false
 
 # Additional information for Kerberos
 mapr_kerberos_realm: PS.MAPR.COM

@@ -1,0 +1,4 @@
+---
+# Uninstall YARN Resource Manager
+- name: Uninstall mapr-resourcemanager
+  package: name=mapr-resourcemanager state=absent

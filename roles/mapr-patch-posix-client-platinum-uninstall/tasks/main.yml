@@ -1,0 +1,6 @@
+---
+# Uninstall MapR Patches Client
+- name: Stop the mapr-posix-client-platinum service
+  service: name=mapr-posix-client-platinum state=stopped
+- name: Uninstall mapr-patch-posix-client-platinum
+  package: name=mapr-patch-posix-client-platinum state=absent

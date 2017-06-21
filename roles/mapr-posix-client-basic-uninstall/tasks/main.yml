@@ -1,0 +1,6 @@
+---
+# Uninstall mapr-posix-client-basic
+- name: Stop the mapr-posix-client-basic service
+  service: name=mapr-posix-client-basic state=stopped
+- name: Uninstall mapr-posix-client-basic
+  package: name=mapr-posix-client-basic state=absent
