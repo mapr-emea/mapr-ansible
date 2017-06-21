@@ -1,0 +1,4 @@
+---
+# Uninstall Hive CLI
+- name: Uninstall mapr-hive
+  package: name=mapr-hive state=absent

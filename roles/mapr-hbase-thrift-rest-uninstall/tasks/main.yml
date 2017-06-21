@@ -1,0 +1,7 @@
+---
+# Uninstall HBase REST
+- name: Uninstall mapr-hbase-rest
+  package: name=mapr-hbase-rest state=absent
+# Uninstall HBase Thrift
+- name: Uninstall mapr-hbasethrift
+  package: name=mapr-hbasethrift state=absent

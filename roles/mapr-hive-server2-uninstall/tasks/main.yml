@@ -1,0 +1,4 @@
+---
+# Uninstall Hive Server 2
+- name: Uninstall mapr-hiveserver2
+  package: name=mapr-hiveserver2 state=absent

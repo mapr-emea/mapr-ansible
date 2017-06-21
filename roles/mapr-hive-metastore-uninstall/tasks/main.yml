@@ -1,0 +1,4 @@
+---
+# Uninstall Hive Metastore
+- name: Uninstall mapr-hivemetastore
+  package: name=mapr-hivemetastore state=absent

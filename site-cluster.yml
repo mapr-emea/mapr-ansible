@@ -160,11 +160,19 @@
 - name: Install HBase CLI
   hosts: mapr-hbase-cli
   roles:
-    - mapr-hbase-cli
+    - mapr-hbase-cli-install
+- name: Uninstall HBase CLI
+  hosts: all:!mapr-hbase-cli
+  roles:
+    - mapr-hbase-cli-uninstall
 - name: Install HBase REST and Thrift Server
   hosts: mapr-hbase-thrift-rest
   roles:
-    - mapr-hbase-thrift-rest
+    - mapr-hbase-thrift-rest-install
+- name: Uninstall HBase REST and Thrift Server
+  hosts: all:!mapr-hbase-thrift-rest
+  roles:
+    - mapr-hbase-thrift-rest-uninstall
 - name: Install History Server
   hosts: mapr-historyserver
   roles:
@@ -183,19 +191,35 @@
 - name: Install Hive CLI
   hosts: mapr-hive-cli
   roles:
-    - mapr-hive-cli
+    - mapr-hive-cli-install
+- name: Uninstall Hive CLI
+  hosts: all:!mapr-hive-cli
+  roles:
+    - mapr-hive-cli-uninstall
 - name: Install Hive MetaStore
   hosts: mapr-hive-metastore
   roles:
-    - mapr-hive-metastore
+    - mapr-hive-metastore-install
+- name: Uninstall Hive MetaStore
+  hosts: all:!mapr-hive-metastore
+  roles:
+    - mapr-hive-metastore-uninstall
 - name: Install Hive Server 2
   hosts: mapr-hive-server2
   roles:
-    - mapr-hive-server2
+    - mapr-hive-server2-install
+- name: Uninstall Hive Server 2
+  hosts: all:!mapr-hive-server2
+  roles:
+    - mapr-hive-server2-uninstall
 - name: Install Hive WebHCat
   hosts: mapr-hive-webhcat
   roles:
-    - mapr-hive-webhcat
+    - mapr-hive-webhcat-install
+- name: Uninstall Hive WebHCat
+  hosts: all:!mapr-hive-webhcat
+  roles:
+    - mapr-hive-webhcat-uninstall
 - name: Install Mahout
   hosts: mapr-mahout
   roles:
@@ -347,10 +371,14 @@
   hosts: mapr-core
   roles:
    - mapr-configure-warden-restart
-- name: MapR Patches
+- name: Install MapR Patches
   hosts: mapr-core
   roles:
-    - {role: mapr-patch, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
+    - {role: mapr-patch-install, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
+- name: Uninstall MapR Patches
+  hosts: all:!mapr-core
+  roles:
+    - mapr-patch-uninstall
 
 # CHUFE remove node from MCS with MAPR cli, execute on first CLDB.
 # CHUFE stop warden, but before zookeeper -> zookeeper has core dep?

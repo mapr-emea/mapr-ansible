@@ -1,0 +1,9 @@
+---
+- name: Stop Warden
+  service: name=mapr-warden state=stopped enabled=yes
+- name: Stop Zookeeper
+  service: name=mapr-zookeeper state=stopped enabled=yes
+  when: inventory_hostname in groups["mapr-zookeeper"]
+# Uninstall MapR Patches
+- name: Uninstall mapr-patch
+  package: name=mapr-patch state=absent
