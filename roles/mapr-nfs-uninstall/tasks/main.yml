@@ -10,8 +10,9 @@
   with_items: "{{ vars['packages_' + ansible_os_family] }}"
 
 # Other actions
-- name: Remove /mapr dir
-  file: path=/mapr state=absent
+# conflicts with other posix clients
+#- name: Remove /mapr dir
+#  file: path=/mapr state=absent
 
 
 

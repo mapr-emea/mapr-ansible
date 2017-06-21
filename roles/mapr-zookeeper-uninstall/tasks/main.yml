@@ -1,6 +1,15 @@
 ---
 # Uninstall Zookeeper
-#- name: Stop Zookeeper
-#  service: name=mapr-zookeeper state=stopped
+- name: Check if Service Exists
+  stat: path=/etc/init.d/mapr-zookeeper
+  register: service_status
+- name: Stop Zookeeper
+  service: name=mapr-zookeeper state=stopped
+  when: service_status.stat.exists
 - name: Uninstall mapr-zookeeper
-  package: name=mapr-zookeeper state=absent
+  package: name={{ item }} state=absent
+  with_items:
+  - mapr-zookeeper
+  - mapr-zk-internal
+- name: Clean /opt/mapr/zkdata
+  file: path=/opt/mapr/zkdata state=absent

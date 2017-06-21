@@ -18,7 +18,7 @@
 [mapr-zookeeper]
 10.0.0.53 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 10.0.0.77 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-10.0.0.134 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+#10.0.0.134 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
 # Container Location DataBase
 [mapr-cldb]
