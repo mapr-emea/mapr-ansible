@@ -2,9 +2,9 @@
 # Uninstall MySQL
 - name: Uninstall MySQL / MariaDB
   vars:
-    packages_Suse: ['mariadb', 'mariadb-client', 'python-mysql']
-    packages_RedHat: ['mariadb-server', 'mariadb', 'MySQL-python']
-    packages_Debian: ['mysql-server', 'mysql-client', 'python-mysqldb']
+    packages_Suse: ['mariadb']
+    packages_RedHat: ['mariadb-server']
+    packages_Debian: ['mysql-server']
   package: name={{ item }} state=absent
   with_items: "{{ vars['packages_' + ansible_os_family] }}"
 
