@@ -3,9 +3,9 @@
 
 - name: Uninstall mapr-nfs
   vars:
-    packages_Suse: ['mapr-nfs', 'nfs-utils', 'rpcbind']
-    packages_RedHat: ['mapr-nfs', 'nfs-utils', 'rpcbind']
-    packages_Debian: ['mapr-nfs', 'nfs-common', 'rpcbind']
+    packages_Suse: ['mapr-nfs']
+    packages_RedHat: ['mapr-nfs']
+    packages_Debian: ['mapr-nfs']
   package: name={{ item }} state=absent
   with_items: "{{ vars['packages_' + ansible_os_family] }}"
 

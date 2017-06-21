@@ -14,6 +14,9 @@
     - common-ntp
     - common-misc
     - common-sysctl
+# CHUFE post restart check
+# CHUFE automate generate_keys true
+# CHUFE add rolling restart size to all config.
 # CHUFE stop services with mapr cli before uninstalling?
 # Uninstall POSIX clients first, otherwise if user changes from NFS to Fuse it will conflict.
 - name: Uninstall NFS
@@ -91,6 +94,14 @@
   hosts: all:!mapr-resourcemanager
   roles:
     - mapr-resourcemanager-uninstall
+- name: Install History Server
+  hosts: mapr-historyserver
+  roles:
+    - mapr-historyserver-install
+- name: Uninstall History Server
+  hosts: all:!mapr-historyserver
+  roles:
+    - mapr-historyserver-uninstall
 - name: Install MySQL
   hosts: ext-mysql
   roles:
@@ -115,15 +126,19 @@
 - name: Configure and start (unsecure)
   hosts: mapr-core
   roles:
-   - {role: mapr-configure-unsecure, when: mapr_security == 'none' and ((zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (core_local_changes|int) > 0)}
+   - {role: mapr-configure-unsecure, when: mapr_security == 'none' and ((zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0)}
 - name: Configure and start (native-security)
   hosts: mapr-core
   roles:
-   - {role: mapr-configure-nativesecurity-secure, when: mapr_security == 'maprsasl' and ((zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (core_local_changes|int) > 0)}
+   - {role: mapr-configure-nativesecurity-secure, when: mapr_security == 'maprsasl' and ((zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0)}
 - name: Configure and start (kerberos)
   hosts: mapr-core
   roles:
-   - {role: mapr-configure-kerberos, when: mapr_security == 'kerberos' and ((zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (core_local_changes|int) > 0)}
+   - {role: mapr-configure-kerberos, when: mapr_security == 'kerberos' and ((zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0)}
+- name: Disk setup
+  hosts: mapr-datanode:mapr-cldb
+  roles:
+   - mapr-configure-disks
 - name: Restarting mapr-zookeeper
   hosts: mapr-zookeeper
   roles:
@@ -184,14 +199,6 @@
   hosts: all:!mapr-hbase-cli
   roles:
     - mapr-hbase-cli-uninstall
-- name: Install History Server
-  hosts: mapr-historyserver
-  roles:
-    - mapr-historyserver-install
-- name: Uninstall History Server
-  hosts: all:!mapr-historyserver
-  roles:
-    - mapr-historyserver-uninstall
 - name: Setup Hive Variables
   hosts: all
   vars:
