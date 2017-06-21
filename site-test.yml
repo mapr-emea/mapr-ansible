@@ -1,4 +1,10 @@
-- name: Setup MapR repositories
+- name: Setup global vars
+  hosts: all
+  roles:
+    - mapr-global-vars
+    - mapr-configure-vars
+    - mapr-configure-vars-hs
+- name: Configure and start (unsecure)
   hosts: mapr-core
   roles:
-    - mapr-configure-repository
+   - {role: mapr-configure-unsecure, when: mapr_security == 'none' and ((zookeeper_changes|int) > 0)}

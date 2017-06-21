@@ -14,8 +14,9 @@
     - common-ntp
     - common-misc
     - common-sysctl
+# CHUFE run configure when security type was changed.
 # CHUFE post restart check
-# CHUFE automate generate_keys true
+# CHUFE automate generate_keys true check
 # CHUFE add rolling restart size to all config.
 # CHUFE stop services with mapr cli before uninstalling?
 # Uninstall POSIX clients first, otherwise if user changes from NFS to Fuse it will conflict.
@@ -66,6 +67,10 @@
   hosts: all:!mapr-cldb
   roles:
     - mapr-cldb-uninstall
+- name: Count CLDB changes
+  hosts: all
+  roles:
+    - mapr-cldb-changes
 - name: Install Gateway
   hosts: mapr-gateway
   roles:
@@ -102,14 +107,6 @@
   hosts: all:!mapr-historyserver
   roles:
     - mapr-historyserver-uninstall
-- name: Install MySQL
-  hosts: ext-mysql
-  roles:
-    - ext-mysql-install
-- name: Uninstall MySQL
-  hosts: all:!ext-mysql
-  roles:
-    - ext-mysql-uninstall
 - name: Install MCS
   hosts: mapr-mcs
   roles:
@@ -146,7 +143,7 @@
 - name: Restarting mapr-warden
   hosts: mapr-core
   roles:
-   - { role: mapr-configure-warden-restart, when: (zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (core_local_changes|int) > 0}
+   - { role: mapr-configure-warden-restart, when: (zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0}
 - name: Install mapr-posix-client-basic (FUSE)
   hosts: mapr-posix-client-basic
   roles:
@@ -159,6 +156,14 @@
     - mapr-posix-client-platinum-install
     - {role: mapr-patch-posix-client-platinum-install, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
 # uninstall Fuse on top
+- name: Install MySQL
+  hosts: ext-mysql
+  roles:
+    - ext-mysql-install
+- name: Uninstall MySQL
+  hosts: all:!ext-mysql
+  roles:
+    - ext-mysql-uninstall
 - name: Install Drill Standalone
   hosts: mapr-drill-standalone
   roles:

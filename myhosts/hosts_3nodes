@@ -9,11 +9,13 @@
 10.0.0.15 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 10.0.0.109 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 10.0.0.152 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.159 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
 [mapr-core]
 10.0.0.15 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 10.0.0.109 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 10.0.0.152 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.159 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
 # Zookeeper
 [mapr-zookeeper]
@@ -31,6 +33,7 @@
 10.0.0.15 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 10.0.0.109 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 10.0.0.152 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.159 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
 # MapR Control System
 [mapr-mcs]
@@ -50,10 +53,11 @@
 10.0.0.15 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 10.0.0.109 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 10.0.0.152 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.159 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
 # MySQL, required for Hive MetaStore and Oozie, IMPORTANT: only one
 [ext-mysql]
-10.0.0.109 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.152 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
 # Spark on YARN
 [mapr-spark-yarn]
@@ -152,27 +156,27 @@
 
 # CollectD
 [mapr-collectd:children]
-#mapr-core
+mapr-core
 
 # OpenTSDB
 [mapr-opentsdb]
-#10.0.0.15 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.15 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
 # Grafana
 [mapr-grafana]
-#10.0.0.15 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.15 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
 # FluentD
 [mapr-fluentd:children]
-#mapr-core
+mapr-core
 
 # ElasticSearch
 [mapr-elasticsearch]
-#10.0.0.152 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.152 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
 # Kibana
 [mapr-kibana]
-#10.0.0.152 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.152 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
 
 
