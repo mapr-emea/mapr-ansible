@@ -14,7 +14,7 @@
     - common-ntp
     - common-misc
     - common-sysctl
-
+# CHUFE stop services with mapr cli before uninstalling?
 # Uninstall POSIX clients first, otherwise if user changes from NFS to Fuse it will conflict.
 - name: Uninstall NFS
   hosts: all:!mapr-nfs
@@ -35,6 +35,7 @@
 - name: Setup global vars
   hosts: all
   roles:
+    - mapr-global-vars
     - mapr-configure-vars
     - mapr-configure-vars-hs
 - name: Install MapR Core
