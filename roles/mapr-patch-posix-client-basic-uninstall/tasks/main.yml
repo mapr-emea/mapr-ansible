@@ -1,6 +1,6 @@
 ---
 # Uninstall MapR Patches Client
-- name: Stop the mapr-posix-client-basic service
-  service: name=mapr-posix-client-basic state=stopped
+#- name: Stop the mapr-posix-client-basic service
+#  service: name=mapr-posix-client-basic state=stopped
 - name: Uninstall mapr-patch-posix-client-basic
   package: name=mapr-patch-posix-client-basic state=absent

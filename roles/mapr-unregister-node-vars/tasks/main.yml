@@ -1,0 +1,13 @@
+---
+# Configure unsecure cluster
+- name: Get unprovisioned FQDNs
+  set_fact: unprovision_item={{ hostvars[item]['ansible_fqdn'] }}
+  with_items:
+    - "{{ groups['unprovision'] }}"
+  register: unprovision_hosts
+- name: Make Unprovision String
+  set_fact: unprovision_string={{ unprovision_hosts.results | map(attribute='ansible_facts.unprovision_item') | list | join(',')}}
+#- debug: msg="{{ unprovision_hosts }}"
+
+
+

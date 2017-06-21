@@ -272,8 +272,10 @@
     - mapr-httpfs-uninstall
 - name: Set Oozie Vars
   hosts: all
+  vars:
+        num_mysql_hosts: "{{ groups['ext-mysql']|length }}"
   roles:
-    - {role: mapr-oozie-mysql, when: oozie_db_type == 'mysql' and oozie_db_mysql_create_schema_and_user == true}
+    - {role: mapr-oozie-mysql, when: oozie_db_type == 'mysql' and oozie_db_mysql_create_schema_and_user == true and num_mysql_hosts != '0' }
 - name: Install Oozie
   hosts: mapr-oozie
   roles:
@@ -300,9 +302,11 @@
     - mapr-spark-historyserver-uninstall
 - name: Setup Hue Vars
   hosts: all
+  vars:
+      num_mysql_hosts: "{{ groups['ext-mysql']|length }}"
   roles:
     - mapr-hue-vars
-    - {role: mapr-hue-mysql, when: hue_db_type == 'mysql' and hue_db_mysql_create_schema_and_user == true}
+    - {role: mapr-hue-mysql, when: hue_db_type == 'mysql' and hue_db_mysql_create_schema_and_user == true and num_mysql_hosts != '0' }
 - name: Install Hue
   hosts: mapr-hue
   roles:
@@ -390,7 +394,13 @@
   hosts: all:!mapr-core
   roles:
     - mapr-core-uninstall
-
-# CHUFE remove node from MCS with MAPR cli, execute on first CLDB.
-# CHUFE stop warden, but before zookeeper -> zookeeper has core dep?
-
+- name: Unregister node vars
+  hosts: all
+  roles:
+     - mapr-unregister-node-vars
+- name: Unregister node vars
+  hosts: mapr-cldb[0]
+  vars:
+     num_unprovision: "{{ groups['unprovision']|length }}"
+  roles:
+     - {role: mapr-unregister-node, when: num_unprovision != '0'}

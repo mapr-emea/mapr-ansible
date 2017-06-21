@@ -1,12 +1,14 @@
-- name: Install Filesystem, MapReduce2, YARN Node Manager
-  hosts: mapr-datanode
+- name: Uninstall MapR Core
+  hosts: all:!mapr-core
   roles:
-    - mapr-fileserver-install
-    - mapr-mapreduce2-install
-    - mapr-nodemanager-install
-- name: Uninstall Filesystem, MapReduce2, YARN Node Manager
-  hosts: all:!mapr-datanode
+    - mapr-core-uninstall
+- name: Unregister node vars
+  hosts: all
   roles:
-    - mapr-fileserver-uninstall
-    - mapr-mapreduce2-uninstall
-    - mapr-nodemanager-uninstall
+     - mapr-unregister-node-vars
+- name: Unregister node vars
+  hosts: mapr-cldb[0]
+  vars:
+     num_unprovision: "{{ groups['unprovision']|length }}"
+  roles:
+     - {role: mapr-unregister-node, when: num_unprovision != '0'}

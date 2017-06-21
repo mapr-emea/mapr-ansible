@@ -10,7 +10,7 @@
   with_items: "{{ vars['packages_' + ansible_os_family] }}"
 
 # Other actions
-- name: Create /mapr dir
+- name: Remove /mapr dir
   file: path=/mapr state=absent
 
 
