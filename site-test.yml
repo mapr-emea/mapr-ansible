@@ -1,10 +1,84 @@
-- name: Setup global vars
-  hosts: all
-  roles:
-    - mapr-global-vars
-    - mapr-configure-vars
-    - mapr-configure-vars-hs
-- name: Configure and start (unsecure)
+- name: Register roles and restart mapr-warden
   hosts: mapr-core
   roles:
-   - {role: mapr-configure-unsecure, when: mapr_security == 'none' and ((zookeeper_changes|int) > 0)}
+    - mapr-configure-roles
+- name: Install MapR collectd
+  hosts: mapr-collectd
+  roles:
+    - mapr-collectd-install
+- name: Uninstall MapR collectd
+  hosts: all:!mapr-collectd
+  roles:
+    - mapr-collectd-uninstall
+- name: Install MapR OpenTSDB
+  hosts: mapr-opentsdb
+  roles:
+    - mapr-opentsdb-install
+- name: Uninstall MapR OpenTSDB
+  hosts: all:!mapr-opentsdb
+  roles:
+    - mapr-opentsdb-uninstall
+- name: Install MapR Grafana
+  hosts: mapr-grafana
+  roles:
+    - mapr-grafana-install
+- name: Uninstall MapR Grafana
+  hosts: all:!mapr-grafana
+  roles:
+    - mapr-grafana-uninstall
+- name: MapR Configure Metrics Monitoring
+  hosts: mapr-collectd
+  roles:
+    - mapr-metric-monitoring-configure
+- name: Install MapR fluentd
+  hosts: mapr-fluentd
+  roles:
+    - mapr-fluentd-install
+- name: Uninstall MapR fluentd
+  hosts: all:!mapr-fluentd
+  roles:
+    - mapr-fluentd-uninstall
+- name: Install MapR ElasticSearch
+  hosts: mapr-elasticsearch
+  roles:
+    - mapr-elasticsearch-install
+- name: Uninstall MapR ElasticSearch
+  hosts: all:!mapr-elasticsearch
+  roles:
+    - mapr-elasticsearch-uninstall
+- name: Install MapR Kibana
+  hosts: mapr-kibana
+  roles:
+    - mapr-kibana-install
+- name: Uninstall MapR Kibana
+  hosts: all:!mapr-kibana
+  roles:
+    - mapr-kibana-uninstall
+- name: MapR Configure Log Monitoring
+  hosts: mapr-fluentd
+  roles:
+    - mapr-log-monitoring-configure
+- name: Install MapR Patches
+  hosts: mapr-core
+  roles:
+    - {role: mapr-patch-install, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
+# Cleanup everything
+- name: Uninstall MapR Patches
+  hosts: all:!mapr-core
+  roles:
+    - mapr-patch-uninstall
+# CHUFE count for patch changes and do restart
+- name: Uninstall MapR Core
+  hosts: all:!mapr-core
+  roles:
+    - mapr-core-uninstall
+- name: Unregister node vars
+  hosts: all
+  roles:
+     - mapr-unregister-node-vars
+- name: Unregister node vars
+  hosts: mapr-cldb[0]
+  vars:
+     num_unprovision: "{{ groups['unprovision']|length }}"
+  roles:
+     - {role: mapr-unregister-node, when: num_unprovision != '0'}

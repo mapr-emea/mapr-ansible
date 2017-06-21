@@ -18,7 +18,7 @@ cluster_name: demo.mapr.com
 ####### Enable security features ##########
 # Default value for all components: mapr core and ecosystem
 # Options: none, maprsasl, kerberos
-security_all: none
+security_all: maprsasl
 
 # MapR-Core security
 # Options: none, maprsasl, kerberos
@@ -43,11 +43,11 @@ oozie_security: "{{ security_all }}"
 # Sqoop2: none, maprsasl, kerberos
 sqoop_security: "{{ security_all }}"
 # Spark settings, enable only on secure cluster, otherwise installation fails
-spark_authenticate: false
-spark_ssl_encryption: false
-spark_sasl_encryption: false
+spark_authenticate: true
+spark_ssl_encryption: true
+spark_sasl_encryption: true
 # Hue will use PAM auth and depending what was configured for other components use these settings
-hue_ssl: false
+hue_ssl: true
 ###########################################
 
 mapr_subnets: 10.0.0.0/24

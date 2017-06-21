@@ -9,8 +9,8 @@ Test
 - remote cldb node
 
 demo.mapr.com secure=false ip-10-0-0-109.ps.mapr.com:7222 ip-10-0-0-15.ps.mapr.com:7222
-
-
+demo.mapr.com secure=true ip-10-0-0-38.ps.mapr.com:7222
+my.cluster.com secure=false kerberosEnable=true cldbPrincipal=princiop localhost:7222
 
 
 ip-10-0-0-152 ~]# maprcli service list

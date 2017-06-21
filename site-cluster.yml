@@ -18,6 +18,26 @@
 # CHUFE historyserver change requires configure
 # CHUFE nach jeder componete configure -R aufrufen
 # CHUFE restart ecosystem component after config
+#         - drill-standalone
+#         - hbase-thift-rest
+#         - hive-metastore
+#         - hive-server2
+#         - hive-webhcat (hcat)
+#         - httpfs
+#         - oozie
+#         - sqoop2 server (id sqoop2)
+#         - hue
+#         - spark history server
+#         - livy
+
+#  für remove zusätzlich
+#         - RM
+#         - node manager
+#         - MFS
+#         - cldb
+#         - webserver
+#         - ganzes logging zeug
+#maprcli node services -name hcat -action restart -nodes $(hostname -f)
 # CHUFE run configure when security type was changed.
 # CHUFE post restart check
 # CHUFE add rolling restart size to all config.
