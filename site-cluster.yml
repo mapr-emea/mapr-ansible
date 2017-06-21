@@ -116,9 +116,11 @@
     - mapr-historyserver
 - name: Setup Hive Variables
   hosts: all
+  vars:
+      num_mysql_hosts: "{{ groups['ext-mysql']|length }}"
   roles:
     - mapr-hive-vars
-    - {role: mapr-hive-mysql, when: hive_db_type == 'mysql' and hive_db_mysql_create_schema_and_user == true}
+    - {role: mapr-hive-mysql, when: hive_db_type == 'mysql' and hive_db_mysql_create_schema_and_user == true and num_mysql_hosts != '0'  }
 - name: Install Hive CLI
   hosts: mapr-hive-cli
   roles:
