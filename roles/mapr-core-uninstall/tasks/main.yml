@@ -7,3 +7,7 @@
     packages_Debian: ['mapr-core', 'mapr-core-internal', 'mapr-kafka']
   package: name={{ item }} state=absent
   with_items: "{{ vars['packages_' + ansible_os_family] }}"
+- name: Clean /opt/mapr
+  file: path=/opt/mapr state=absent
+- name: Clean /opt/cores
+  file: path=/opt/cores state=absent

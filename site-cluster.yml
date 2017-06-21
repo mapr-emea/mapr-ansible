@@ -14,6 +14,23 @@
     - common-ntp
     - common-misc
     - common-sysctl
+
+# Uninstall POSIX clients first, otherwise if user changes from NFS to Fuse it will conflict.
+- name: Uninstall NFS
+  hosts: all:!mapr-nfs
+  roles:
+    - mapr-nfs-uninstall
+- name: Uninstall mapr-posix-client-basic (FUSE)
+  hosts: all:!mapr-posix-client-basic
+  roles:
+    - mapr-patch-posix-client-basic-uninstall
+    - mapr-posix-client-basic-uninstall
+- name: Uninstall mapr-posix-client-platinum (FUSE)
+  hosts: all:!mapr-posix-client-platinum
+  roles:
+    - mapr-patch-posix-client-platinum-uninstall
+    - mapr-posix-client-platinum-uninstall
+
 # used by configure.sh and drill
 - name: Setup global vars
   hosts: all
@@ -37,7 +54,7 @@
   hosts: mapr-cldb
   roles:
     - mapr-cldb-install
-- name: Install CLDB
+- name: Uninstall CLDB
   hosts: all:!mapr-cldb
   roles:
     - mapr-cldb-uninstall
@@ -89,10 +106,7 @@
   hosts: mapr-nfs
   roles:
     - mapr-nfs-install
-- name: Uninstall NFS
-  hosts: all:!mapr-nfs
-  roles:
-    - mapr-nfs-uninstall
+# uninstall NFS on top
 - name: Configure and start (unsecure)
   hosts: mapr-core
   roles:
@@ -118,21 +132,13 @@
   roles:
     - mapr-posix-client-basic-install
     - {role: mapr-patch-posix-client-basic-install, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
-- name: Uninstall mapr-posix-client-basic (FUSE)
-  hosts: all:!mapr-posix-client-basic
-  roles:
-    - mapr-patch-posix-client-basic-uninstall
-    - mapr-posix-client-basic-uninstall
+# uninstall Fuse on top
 - name: Install mapr-posix-client-platinum (FUSE)
   hosts: mapr-posix-client-platinum
   roles:
     - mapr-posix-client-platinum-install
     - {role: mapr-patch-posix-client-platinum-install, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
-- name: Uninstall mapr-posix-client-platinum (FUSE)
-  hosts: all:!mapr-posix-client-platinum
-  roles:
-    - mapr-patch-posix-client-platinum-install
-    - mapr-posix-client-platinum-install
+# uninstall Fuse on top
 - name: Install Drill Standalone
   hosts: mapr-drill-standalone
   roles:
@@ -161,10 +167,6 @@
   hosts: mapr-hbase-cli
   roles:
     - mapr-hbase-cli-install
-- name: Uninstall HBase CLI
-  hosts: all:!mapr-hbase-cli
-  roles:
-    - mapr-hbase-cli-uninstall
 - name: Install HBase REST and Thrift Server
   hosts: mapr-hbase-thrift-rest
   roles:
@@ -173,6 +175,10 @@
   hosts: all:!mapr-hbase-thrift-rest
   roles:
     - mapr-hbase-thrift-rest-uninstall
+- name: Uninstall HBase CLI
+  hosts: all:!mapr-hbase-cli
+  roles:
+    - mapr-hbase-cli-uninstall
 - name: Install History Server
   hosts: mapr-historyserver
   roles:
@@ -192,26 +198,14 @@
   hosts: mapr-hive-cli
   roles:
     - mapr-hive-cli-install
-- name: Uninstall Hive CLI
-  hosts: all:!mapr-hive-cli
-  roles:
-    - mapr-hive-cli-uninstall
 - name: Install Hive MetaStore
   hosts: mapr-hive-metastore
   roles:
     - mapr-hive-metastore-install
-- name: Uninstall Hive MetaStore
-  hosts: all:!mapr-hive-metastore
-  roles:
-    - mapr-hive-metastore-uninstall
 - name: Install Hive Server 2
   hosts: mapr-hive-server2
   roles:
     - mapr-hive-server2-install
-- name: Uninstall Hive Server 2
-  hosts: all:!mapr-hive-server2
-  roles:
-    - mapr-hive-server2-uninstall
 - name: Install Hive WebHCat
   hosts: mapr-hive-webhcat
   roles:
@@ -220,6 +214,18 @@
   hosts: all:!mapr-hive-webhcat
   roles:
     - mapr-hive-webhcat-uninstall
+- name: Uninstall Hive Server 2
+  hosts: all:!mapr-hive-server2
+  roles:
+    - mapr-hive-server2-uninstall
+- name: Uninstall Hive MetaStore
+  hosts: all:!mapr-hive-metastore
+  roles:
+    - mapr-hive-metastore-uninstall
+- name: Uninstall Hive CLI
+  hosts: all:!mapr-hive-cli
+  roles:
+    - mapr-hive-cli-uninstall
 - name: Install Mahout
   hosts: mapr-mahout
   roles:
@@ -375,16 +381,16 @@
   hosts: mapr-core
   roles:
     - {role: mapr-patch-install, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
+# Cleanup everything
 - name: Uninstall MapR Patches
   hosts: all:!mapr-core
   roles:
     - mapr-patch-uninstall
-
-# CHUFE remove node from MCS with MAPR cli, execute on first CLDB.
-# CHUFE stop warden, but before zookeeper -> zookeeper has core dep?
-# CHUFE NFS loopback, NFS server and Fuse must be uninstalled in a group first, if a user wants to change nfs to fuse or vice versa
-# CHUFE maybe do all uninstallations first?
 - name: Uninstall MapR Core
   hosts: all:!mapr-core
   roles:
     - mapr-core-uninstall
+
+# CHUFE remove node from MCS with MAPR cli, execute on first CLDB.
+# CHUFE stop warden, but before zookeeper -> zookeeper has core dep?
+
