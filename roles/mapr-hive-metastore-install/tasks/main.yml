@@ -2,7 +2,15 @@
 # Install Hive Metastore
 - name: Install mapr-hivemetastore
   package: name=mapr-hivemetastore state=present
-
+  register: hivemeta_result
+- name: Configure.sh -R
+  shell: /opt/mapr/server/configure.sh -R
+  when: hivemeta_result.changed
+- name: Restart Hive Metastore
+  shell: maprcli node services -name hivemeta -action restart -nodes {{ ansible_fqdn }}
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: hivemeta_result.changed
 # Other actions
-- name: Set owner mapr-system user
-  file: path=/opt/mapr/hive owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
+#- name: Set owner mapr-system user
+#  file: path=/opt/mapr/hive owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes

@@ -1,10 +1,13 @@
 ---
 # Install Hue
 - name: Install mapr-hue
-  package: name={{ item }} state=present
-  with_items:
-  - mapr-hue
-  - mapr-hue-livy
+  package: name=mapr-hue state=present
+  register: hue_result
+
+- name: Install mapr-hue-livy
+  package: name=mapr-hue-livy state=present
+  register: livy_result
+
 
 # Drill
 - name: Find Drill Path
@@ -108,7 +111,21 @@
 - name: Create tables
   shell: /opt/mapr/hue/create_oracle_tables.sh
   when: hue_db_type == 'oracle'
-- pause: seconds=30
+
+
+- name: Configure.sh -R
+  shell: /opt/mapr/server/configure.sh -R
+  when: hue_result.changed or livy_result.changed
+- name: Restart Livy
+  shell: maprcli node services -name livy -action restart -nodes {{ ansible_fqdn }}
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: livy_result.changed
+- name: Restart Hue
+  shell: maprcli node services -name hue -action restart -nodes {{ ansible_fqdn }}
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: hue_result.changed
 
 # http://maprdocs.mapr.com/home/Hue/ConfigureHuetouseKerberosYARN.html
 #http://maprdocs.mapr.com/home/Hue/ConfigureDBsforHueStorage.html

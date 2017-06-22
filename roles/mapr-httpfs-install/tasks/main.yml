@@ -2,6 +2,7 @@
 # Install HttpFS
 - name: Install mapr-httpfs
   package: name=mapr-httpfs state=present
+  register: httpfs_result
 
 # Other actions
 - name: Set owner mapr-system user
@@ -20,3 +21,12 @@
 - name: Configure httpfs-site.xml for Kerberos
   template: src=httpfs-site.kerberos.xml dest={{ httpfs_path_result.files[0].path }}/etc/hadoop/httpfs-site.xml
   when: httpfs_security == 'kerberos'
+
+- name: Configure.sh -R
+  shell: /opt/mapr/server/configure.sh -R
+  when: httpfs_result.changed
+- name: Restart HttpFS
+  shell: maprcli node services -name httpfs -action restart -nodes {{ ansible_fqdn }}
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: httpfs_result.changed

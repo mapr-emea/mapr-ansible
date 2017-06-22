@@ -2,6 +2,7 @@
 # Install Oozie and MySQL
 - name: Install mapr-oozie
   package: name=mapr-oozie state=present
+  register: oozie_result
 
 # Other
 - name: Find Oozie Path
@@ -31,3 +32,11 @@
   file: path=/opt/mapr/oozie owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
 
 
+- name: Configure.sh -R
+  shell: /opt/mapr/server/configure.sh -R
+  when: oozie_result.changed
+- name: Restart Oozie
+  shell: maprcli node services -name oozie -action restart -nodes {{ ansible_fqdn }}
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: oozie_result.changed

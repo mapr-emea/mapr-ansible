@@ -1,21 +1,5 @@
 # CHUFE fix mysql with HUE
-# CHUFE nach jeder componete configure -R aufrufen
-# CHUFE restart ecosystem component after config
 # CHUFE restart CLDB nodes first
-#         - drill-standalone
-#         - hbase-thift-rest (hbaserest hbasethrift)
-#         - hive-metastore
-#         - hive-server2
-#         - hive-webhcat (hcat)
-#         - httpfs
-#         - oozie
-#         - sqoop2 server (id sqoop2)
-#         - hue
-#         - spark history server
-#         - livy
-
-
-#maprcli node services -name hcat -action restart -nodes $(hostname -f)
 # CHUFE run configure when security type was changed. https://stackoverflow.com/questions/38461920/ansible-check-is-string-exists-in-file
 # CHUFE post restart check (check for warden log output?)
 # CHUFE add rolling restart size to all config.
@@ -352,10 +336,6 @@
   hosts: all:!mapr-hue
   roles:
     - mapr-hue-uninstall
-- name: Register roles and restart mapr-warden
-  hosts: mapr-core
-  roles:
-    - mapr-configure-roles
 - name: Install MapR collectd
   hosts: mapr-collectd
   roles:

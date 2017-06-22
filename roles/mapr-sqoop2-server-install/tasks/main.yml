@@ -2,8 +2,8 @@
 # Install Sqoop2 Server
 - name: Install mapr-sqoop2-server
   package: name=mapr-sqoop2-server state=present
-#- name: Create sqoop2 mysql db
-#  mysql_db: name={{ sqoop_db_schema }} state=present login_host={{ sqoop_db_host }} login_user={{ mapr_mysql_user }} login_password={{ mapr_mysql_password }}
+  register: sqoop2_result
+
 # Other actions
 - name: Set owner mapr-system user
   file: path=/opt/mapr/sqoop owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
@@ -23,6 +23,11 @@
   template: src=sqoop.kerberos.properties dest={{ sqoop_path_result.files[0].path }}//conf/sqoop.properties
   when: sqoop_security == 'kerberos'
 
-#- debug: msg="Sqoop Path {{ sqoop_path_result.files[0].path }}"
-#- name: Copy mysql driver
-#  copy: src=mysql-connector-java-5.1.40-bin.jar dest={{ sqoop_path_result.files[0].path }}/server/lib/
+- name: Configure.sh -R
+  shell: /opt/mapr/server/configure.sh -R
+  when: sqoop2_result.changed
+- name: Restart Sqoop2 Server
+  shell: maprcli node services -name sqoop2 -action restart -nodes {{ ansible_fqdn }}
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: sqoop2_result.changed

@@ -2,7 +2,15 @@
 # Install Hive Server 2
 - name: Install mapr-hiveserver2
   package: name=mapr-hiveserver2 state=present
-
+  register: hs2_result
+- name: Configure.sh -R
+  shell: /opt/mapr/server/configure.sh -R
+  when: hs2_result.changed
+- name: Restart Hive Server2
+  shell: maprcli node services -name hs2 -action restart -nodes {{ ansible_fqdn }}
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: hs2_result.changed
 # Other actions
-- name: Set owner mapr-system user
-  file: path=/opt/mapr/hive owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
+#- name: Set owner mapr-system user
+#  file: path=/opt/mapr/hive owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
