@@ -14,6 +14,8 @@ oracle_jdk_url: http://download.oracle.com/otn-pub/java/jdk/8u111-b14/jdk-8u111-
 
 hadoop_version: 2.7.0
 cluster_name: demo.mapr.com
+force_zookeeper_restart: true
+force_warden_restart: true
 
 ####### Enable security features ##########
 # Default value for all components: mapr core and ecosystem

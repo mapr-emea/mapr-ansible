@@ -1,0 +1,11 @@
+---
+# Restart  Warden
+- name: Stop Warden
+  service: name=mapr-warden state=stopped enabled=yes
+- name: Delete /opt/mapr/logs/cldb.log
+  file: path=/opt/mapr/logs/cldb.log state=absent
+- name: Start Warden
+  service: name=mapr-warden state=started enabled=yes
+- name: Wait for CLDB
+  wait_for: path=/opt/mapr/logs/cldb.log state=present search_regex="CLDB State change\ \\:\ RUNNING"
+- pause: seconds=30

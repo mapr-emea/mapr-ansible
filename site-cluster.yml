@@ -1,8 +1,12 @@
 # CHUFE fix mysql with HUE
-# CHUFE restart CLDB nodes first
 # CHUFE run configure when security type was changed. https://stackoverflow.com/questions/38461920/ansible-check-is-string-exists-in-file
-# CHUFE post restart check (check for warden log output?)
 # CHUFE add rolling restart size to all config.
+# legt neue datei an, alte warden löschen oder moven damit wir kein conflict bekommen
+# /opt/mapr/initscripts/mapr-cldb status
+# CLDB running as process 13490.
+#sudo /opt/mapr/initscripts/mapr-mfs status
+#mfs (pid 3097) is running...
+
 - name: Setup MapR repositories
   hosts: mapr-core
   roles:
@@ -143,11 +147,15 @@
 - name: Restarting mapr-zookeeper
   hosts: mapr-zookeeper
   roles:
-   - { role: mapr-configure-zookeeper-restart, when: zookeeper_changes|int > 0 }
+   - { role: mapr-configure-zookeeper-restart, when: force_zookeeper_restart or (zookeeper_changes|int) > 0 }
 - name: Restarting mapr-warden
-  hosts: mapr-core
+  hosts: mapr-core:!mapr-cldb
   roles:
-   - { role: mapr-configure-warden-restart, when: (zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0 or (historyserver_changes|int) > 0}
+   - { role: mapr-configure-warden-restart, when: force_warden_restart or (zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0 or (historyserver_changes|int) > 0}
+- name: Restarting mapr-warden on CLDB nodes
+  hosts: mapr-cldb
+  roles:
+   - { role: mapr-configure-warden-cldb-restart, when: force_warden_restart or (zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0 or (historyserver_changes|int) > 0}
 - name: Install mapr-posix-client-basic (FUSE)
   hosts: mapr-posix-client-basic
   roles:
