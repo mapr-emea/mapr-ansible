@@ -9,3 +9,6 @@
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
 - name: Uninstall mapr-historyserver
   package: name=mapr-historyserver state=absent
+  register: historyserver_result
+- set_fact: historyserver_haschanged={{ historyserver_haschanged | int + 1 }}
+  when: historyserver_result.changed
