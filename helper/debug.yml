@@ -1,6 +1,11 @@
- - hosts: all:!mapr-spark-yarn
+ - hosts: all
    tasks:
-     - debug: msg="Hello"
-
+    - name: Stop Drill
+      shell: maprcli node services -name drill-bits -action stop -nodes  {{ ansible_fqdn }}
+      register: maprcli_result
+      failed_when: maprcli_result.rc == 1 and maprcli_result.stdout.find('is not configured on node') == -1
+      changed_when: maprcli_result.rc == 0
+#      ignore_errors: true
+#    - debug: msg="{{ maprcli_result.stdout.find('is not configured on node') == -1 }}"
 
 

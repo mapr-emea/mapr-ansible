@@ -1,3 +1,26 @@
+# CHUFE fix mysql with HUE
+# CHUFE historyserver change requires configure
+# CHUFE nach jeder componete configure -R aufrufen
+# CHUFE stop services with mapr cli before uninstalling?
+# CHUFE restart ecosystem component after config
+# CHUFE restart CLDB nodes first
+#         - drill-standalone
+#         - hbase-thift-rest (hbaserest hbasethrift)
+#         - hive-metastore
+#         - hive-server2
+#         - hive-webhcat (hcat)
+#         - httpfs
+#         - oozie
+#         - sqoop2 server (id sqoop2)
+#         - hue
+#         - spark history server
+#         - livy
+
+
+#maprcli node services -name hcat -action restart -nodes $(hostname -f)
+# CHUFE run configure when security type was changed. https://stackoverflow.com/questions/38461920/ansible-check-is-string-exists-in-file
+# CHUFE post restart check (check for warden log output?)
+# CHUFE add rolling restart size to all config.
 - name: Setup MapR repositories
   hosts: mapr-core
   roles:
@@ -14,34 +37,6 @@
     - common-ntp
     - common-misc
     - common-sysctl
-# CHUFE fix mysql with HUE
-# CHUFE historyserver change requires configure
-# CHUFE nach jeder componete configure -R aufrufen
-# CHUFE restart ecosystem component after config
-#         - drill-standalone
-#         - hbase-thift-rest
-#         - hive-metastore
-#         - hive-server2
-#         - hive-webhcat (hcat)
-#         - httpfs
-#         - oozie
-#         - sqoop2 server (id sqoop2)
-#         - hue
-#         - spark history server
-#         - livy
-
-#  für remove zusätzlich
-#         - RM
-#         - node manager
-#         - MFS
-#         - cldb
-#         - webserver
-#         - ganzes logging zeug
-#maprcli node services -name hcat -action restart -nodes $(hostname -f)
-# CHUFE run configure when security type was changed.
-# CHUFE post restart check
-# CHUFE add rolling restart size to all config.
-# CHUFE stop services with mapr cli before uninstalling?
 # Uninstall POSIX clients first, otherwise if user changes from NFS to Fuse it will conflict.
 - name: Uninstall NFS
   hosts: all:!mapr-nfs
