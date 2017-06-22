@@ -1,5 +1,5 @@
-- name: Restarting mapr-zookeeper
-  hosts: mapr-zookeeper
+- name: Restarting mapr-warden on CLDB nodes
+  hosts: mapr-cldb
   roles:
-     - mapr-configure-zookeeper-restart
-  serial: "{{ restart_nodes_serial|int }}"
+   - mapr-configure-warden-cldb-restart
+  serial: 1

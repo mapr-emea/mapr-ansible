@@ -6,10 +6,16 @@
   file: path=/opt/mapr/logs/cldb.log state=absent
 - name: Start Warden
   service: name=mapr-warden state=started enabled=yes
+# Check on license is required, because when doing first installation, no license was applied
 - name: Wait for CLDB
-  wait_for: path=/opt/mapr/logs/cldb.log state=present search_regex="CLDB State change\ \\:\ RUNNING"
+  wait_for: path=/opt/mapr/logs/cldb.log state=present search_regex="CLDB State change \\:\ RUNNING|CLDBShutdown\\:\ license not found for CLDB HA"
 - pause: seconds=30
+- name: Check for CLDB not started, because of license
+  shell: "cat /opt/mapr/logs/cldb.log | grep 'license not found for CLDB HA'"
+  failed_when: false
+  register: cldb_license_status
 - name: Check if CLDB process is running
   shell: "/opt/mapr/initscripts/mapr-cldb status"
   register: cldb_status
   failed_when: cldb_status.stdout.find('CLDB running') == -1
+  when: cldb_license_status.rc == 1 # 1 means error from grep, no license error occured
