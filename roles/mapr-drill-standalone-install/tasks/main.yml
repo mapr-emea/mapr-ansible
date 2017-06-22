@@ -61,8 +61,8 @@
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
   when: drill_result.changed
-- name: Restart Drill
-  shell: maprcli node services -name drill-bits -action restart -nodes {{ ansible_fqdn }}
-  environment:
-    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
-  when: drill_result.changed
+#- name: Restart Drill
+#  shell: maprcli node services -name drill-bits -action restart -nodes {{ ansible_fqdn }}
+#  environment:
+#    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+#  when: drill_result.changed

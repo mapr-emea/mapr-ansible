@@ -1,12 +1,8 @@
 # CHUFE fix mysql with HUE
 # CHUFE run configure when security type was changed. https://stackoverflow.com/questions/38461920/ansible-check-is-string-exists-in-file
-# CHUFE add rolling restart size to all config.
-# legt neue datei an, alte warden löschen oder moven damit wir kein conflict bekommen
-# /opt/mapr/initscripts/mapr-cldb status
-# CLDB running as process 13490.
-#sudo /opt/mapr/initscripts/mapr-mfs status
-#mfs (pid 3097) is running...
-
+# CHUFE test with community and two CLDB
+# CHUFE precheck, mysql selected, when hive with mysql or oozie or hue
+# CHUFE precheck, host set when no mysql or oracle used
 - name: Setup MapR repositories
   hosts: mapr-core
   roles:
@@ -148,14 +144,17 @@
   hosts: mapr-zookeeper
   roles:
    - { role: mapr-configure-zookeeper-restart, when: force_zookeeper_restart or (zookeeper_changes|int) > 0 }
+  serial: 1
 - name: Restarting mapr-warden
   hosts: mapr-core:!mapr-cldb
   roles:
    - { role: mapr-configure-warden-restart, when: force_warden_restart or (zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0 or (historyserver_changes|int) > 0}
+  serial: 1
 - name: Restarting mapr-warden on CLDB nodes
   hosts: mapr-cldb
   roles:
    - { role: mapr-configure-warden-cldb-restart, when: force_warden_restart or (zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0 or (historyserver_changes|int) > 0}
+  serial: 1
 - name: Install mapr-posix-client-basic (FUSE)
   hosts: mapr-posix-client-basic
   roles:
@@ -401,15 +400,20 @@
   roles:
     - mapr-log-monitoring-configure
 - name: Install MapR Patches
-  hosts: mapr-core
+  hosts: mapr-core:!mapr-cldb
   roles:
     - {role: mapr-patch-install, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
-# Cleanup everything
+  serial: 1
+- name: Install MapR Patches on CLDB nodes
+  hosts: mapr-cldb
+  roles:
+    - {role: mapr-patch-install, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
+  serial: 1
 - name: Uninstall MapR Patches
   hosts: all:!mapr-core
   roles:
     - mapr-patch-uninstall
-# CHUFE count for patch changes and do restart
+  serial: 1
 - name: Uninstall MapR Core
   hosts: all:!mapr-core
   roles:

@@ -1,9 +1,21 @@
 ---
+- name: "Check if patch is installed"
+  shell: "rpm -qa | grep mapr-patch"
+  register: patch_result # rc == 1, return code of grep, nothing found
+  failed_when: false
 - name: Stop Warden
   service: name=mapr-warden state=stopped enabled=yes
+  when: patch_result.rc == 0
 - name: Stop Zookeeper
   service: name=mapr-zookeeper state=stopped enabled=yes
-  when: inventory_hostname in groups["mapr-zookeeper"]
+  when: inventory_hostname in groups["mapr-zookeeper"] and patch_result.rc == 0
 # Uninstall MapR Patches
 - name: Uninstall mapr-patch
   package: name=mapr-patch state=absent
+  when: patch_result.rc == 0
+- name: Start Zookeeper
+  service: name=mapr-zookeeper state=started enabled=yes
+  when: inventory_hostname in groups["mapr-zookeeper"] and patch_result.rc == 0
+- name: Start Warden
+  service: name=mapr-warden state=started enabled=yes
+  when: patch_result.rc == 0

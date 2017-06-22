@@ -1,7 +1,7 @@
+
  - hosts: all
    tasks:
-    - service: name=mapr-warden state=stopped enabled=yes
-    - file: path=/opt/mapr/logs/cldb.log state=absent
-    - service: name=mapr-warden state=started enabled=yes
-    - wait_for: path=/opt/mapr/logs/cldb.log state=present search_regex="CLDB State change\ \\:\ RUNNING"
-    - sleep: seconds=10
+    - shell: "/opt/mapr/initscripts/mapr-mfs status"
+      register: mfs_status
+      failed_when: mfs_status.stdout.find('is running') == -1
+      serial: 1

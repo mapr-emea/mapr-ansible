@@ -26,8 +26,8 @@
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
   when: sqoop2_result.changed
-- name: Restart Sqoop2 Server
-  shell: maprcli node services -name sqoop2 -action restart -nodes {{ ansible_fqdn }}
-  environment:
-    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
-  when: sqoop2_result.changed
+#- name: Restart Sqoop2 Server
+#  shell: maprcli node services -name sqoop2 -action restart -nodes {{ ansible_fqdn }}
+#  environment:
+#    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+#  when: sqoop2_result.changed

@@ -37,13 +37,13 @@
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
   when: hbaserest_result.changed or hbasethrift_result.changed
-- name: Restart HBase Rest Server
-  shell: maprcli node services -name hbaserest -action restart -nodes {{ ansible_fqdn }}
-  environment:
-    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
-  when: hbaserest_result.changed
-- name: Restart HBase Thrift Server
-  shell: maprcli node services -name hbasethrift -action restart -nodes {{ ansible_fqdn }}
-  environment:
-    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
-  when: hbasethrift_result.changed
+#- name: Restart HBase Rest Server
+#  shell: maprcli node services -name hbaserest -action restart -nodes {{ ansible_fqdn }}
+#  environment:
+#    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+#  when: hbaserest_result.changed
+#- name: Restart HBase Thrift Server
+#  shell: maprcli node services -name hbasethrift -action restart -nodes {{ ansible_fqdn }}
+#  environment:
+#    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+#  when: hbasethrift_result.changed

@@ -9,3 +9,7 @@
 - name: Wait for CLDB
   wait_for: path=/opt/mapr/logs/cldb.log state=present search_regex="CLDB State change\ \\:\ RUNNING"
 - pause: seconds=30
+- name: Check if CLDB process is running
+  shell: "/opt/mapr/initscripts/mapr-cldb status"
+  register: cldb_status
+  failed_when: cldb_status.stdout.find('CLDB running') == -1

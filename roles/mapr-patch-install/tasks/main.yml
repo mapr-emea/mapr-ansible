@@ -1,15 +1,21 @@
 ---
+- name: "Check if patch is installed"
+  shell: "rpm -qa | grep mapr-patch"
+  register: patch_result # rc == 1, return code of grep, nothing found
+  failed_when: false
 - name: Stop Warden
   service: name=mapr-warden state=stopped enabled=yes
+  when: patch_result.rc == 1
 - name: Stop Zookeeper
   service: name=mapr-zookeeper state=stopped enabled=yes
-  when: inventory_hostname in groups["mapr-zookeeper"]
-# CHUFE do restart only on newly installed nodes.
+  when: inventory_hostname in groups["mapr-zookeeper"] and patch_result.rc == 1
 # Install MapR Patches
 - name: Install mapr-patch
   package: name=mapr-patch state=present
+  when: patch_result.rc == 1
 - name: Start Zookeeper
   service: name=mapr-zookeeper state=started enabled=yes
-  when: inventory_hostname in groups["mapr-zookeeper"]
+  when: inventory_hostname in groups["mapr-zookeeper"] patch_result.rc == 1
 - name: Start Warden
   service: name=mapr-warden state=started enabled=yes
+  when: patch_result.rc == 1

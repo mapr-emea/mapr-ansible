@@ -116,16 +116,16 @@
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
   when: hue_result.changed or livy_result.changed
-- name: Restart Livy
-  shell: maprcli node services -name livy -action restart -nodes {{ ansible_fqdn }}
-  environment:
-    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
-  when: livy_result.changed
-- name: Restart Hue
-  shell: maprcli node services -name hue -action restart -nodes {{ ansible_fqdn }}
-  environment:
-    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
-  when: hue_result.changed
+#- name: Restart Livy
+#  shell: maprcli node services -name livy -action restart -nodes {{ ansible_fqdn }}
+#  environment:
+#    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+#  when: livy_result.changed
+#- name: Restart Hue
+#  shell: maprcli node services -name hue -action restart -nodes {{ ansible_fqdn }}
+#  environment:
+#    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+#  when: hue_result.changed
 
 # http://maprdocs.mapr.com/home/Hue/ConfigureHuetouseKerberosYARN.html
 #http://maprdocs.mapr.com/home/Hue/ConfigureDBsforHueStorage.html
