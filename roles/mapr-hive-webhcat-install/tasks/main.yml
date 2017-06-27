@@ -6,8 +6,8 @@
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
   when: webhcat_result.changed
-- name: Restart Hive WebHCat
-  shell: maprcli node services -name hcat -action restart -nodes {{ ansible_fqdn }}
-  environment:
-    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
-  when: webhcat_result.changed
+#- name: Restart Hive WebHCat
+#  shell: maprcli node services -name hcat -action restart -nodes {{ ansible_fqdn }}
+#  environment:
+#    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+#  when: webhcat_result.changed
