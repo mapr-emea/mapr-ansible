@@ -1,0 +1,153 @@
+---
+# Install Hue
+- name: Install mapr-hue
+  package: name=mapr-hue state=present
+  register: hue_result
+
+- name: Install mapr-hue-livy
+  package: name=mapr-hue-livy state=present
+  register: livy_result
+
+
+# Drill
+- name: Find Drill Path
+  find: paths="/opt/mapr/drill/" patterns="drill*" file_type=directory
+  register: hue_drill_path
+# Pig
+- name: Find Pig Path
+  find: paths="/opt/mapr/pig/" patterns="pig*" file_type=directory
+  register: hue_pig_path
+- name: Find Drill JDBC Jar
+  find: paths="{{ hue_drill_path.files[0].path }}/jars/jdbc-driver/" patterns="drill-jdbc-all-*.jar" file_type=file
+  register: hue_drill_jdbc_jar
+  when: hue_drill_path.matched == 1
+
+- name: Find Hue Path
+  find: paths="/opt/mapr/hue/" patterns="hue*" file_type=directory
+  register: hue_path_result
+  failed_when: hue_path_result.matched != 1
+- name: Hue SSL key generation
+  command: openssl req -new -nodes -x509 -subj "/C=US/CN=${ansible_fqdn}" -days 3650 -keyout {{ hue_path_result.files[0].path }}/desktop/conf/server.key -out {{ hue_path_result.files[0].path }}/desktop/conf/server.crt -extensions v3_ca creates={{ hue_path_result.files[0].path }}/desktop/conf/server.crt
+  when: hue_ssl == true
+- name: Configure hue.ini
+  template: src=hue.ini dest={{ hue_path_result.files[0].path }}/desktop/conf/hue.ini
+
+# WORKAROUND START Create crontab to create Kerberos Cache for HUE
+# TODO add bug number
+- name: Initial Hue Kerberos Cache Creation
+  shell: kinit -k -t /opt/mapr/conf/mapr.keytab -c /tmp/hue_krb5_ccache mapr/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}
+  become: true
+  become_user: "{{ mapr_user }}"
+  when: mapr_security == 'kerberos'
+- name: Create crontab to refresh Hue Kerberos Cache
+  cron:
+    name: "Refresh Hue Kerberos Cache"
+    minute: "0"
+    hour: "23"
+    job: "kinit -k -t /opt/mapr/conf/mapr.keytab -c /tmp/hue_krb5_ccache mapr/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}"
+    user: "{{ mapr_user }}"
+  when: mapr_security == 'kerberos'
+
+# WORKAROUND END
+
+- name: Find Hue Livy Path
+  find: paths="/opt/mapr/hue-livy/" patterns="hue-livy*" file_type=directory
+  register: hue_livy_path_result
+  failed_when: hue_livy_path_result.matched != 1
+- name: Configure livy.conf
+  template: src=livy.conf dest={{ hue_livy_path_result.files[0].path }}/conf/livy.conf
+
+- name: General packages for Hue with Database
+  vars:
+    packages_RedHat: ['gcc', 'python-devel']
+    packages_Debian: ['gcc', 'python-dev']
+    packages_Suse: ['gcc', 'python-devel']
+  package: name={{ item }} state=present
+  with_items: "{{ vars['packages_' + ansible_os_family] }}"
+
+# MySQL Database
+- name: Copy create_mysql_tables.sh
+  template: src=create_mysql_tables.sh dest=/opt/mapr/hue/create_mysql_tables.sh mode=0755
+  when: hue_db_type == 'mysql' and inventory_hostname == groups["mapr-hue"][0]
+# http://maprdocs.mapr.com/home/EcosystemRN/HueRN-3.12.0-1703.html?hl=hue%2Cmysql
+#- name: Link Sasl lib
+#  file: src=/lib64/libsasl2.so.3.0.0 dest=/lib64/libsasl2.so.2 state=link
+#  when: hue_db_type == 'mysql' and ansible_os_family == 'RedHat'
+- name: Create tables
+  shell: /opt/mapr/hue/create_mysql_tables.sh
+  when: hue_db_type == 'mysql'
+- name: Required packages for Hue MySQL
+  vars:
+    packages_RedHat: ['mariadb', 'mariadb-devel']
+    packages_Debian: ['mysql-client', 'python-mysqldb']
+    packages_Suse: ['mariadb-client', 'python-mysql']
+  package: name={{ item }} state=present
+  with_items: "{{ vars['packages_' + ansible_os_family] }}"
+  when: hue_db_type == 'mysql'
+
+# Oracle Database
+- name: Find Oracle Path
+  find: paths="/usr/lib/oracle/" patterns="*" file_type=directory
+  register: oracle_version_path
+  when: hue_db_type == 'oracle'
+  failed_when: oracle_version_path.matched != 1
+- name: Find Oracle Path Architecture
+  find: paths="{{ oracle_version_path.files[0].path }}" patterns="*" file_type=directory
+  register: oracle_version_arch_path
+  when: hue_db_type == 'oracle'
+  failed_when: oracle_version_arch_path.matched != 1
+- name: Find Oracle Path Lib
+  find: paths="{{ oracle_version_arch_path.files[0].path }}/lib/" patterns="libclntsh.so.*" file_type=file
+  register: oracle_version_lib_path
+  when: hue_db_type == 'oracle'
+  failed_when: oracle_version_lib_path.matched != 1
+- debug: msg="Lib {{ oracle_version_lib_path.files[0].path }}"
+  when: hue_db_type == 'oracle'
+- name: Create links for Oracle Lib
+  file: src={{ oracle_version_lib_path.files[0].path }} dest={{ oracle_version_arch_path.files[0].path }}/lib/libclntsh.so state=link
+  when: hue_db_type == 'oracle'
+- name: Copy Oracle PIP module for offline install
+  copy: src=cx_Oracle-5.3.tar.gz dest=/tmp/cx_Oracle-5.3.tar.gz
+  when: hue_db_type == 'oracle'
+- name: Copy create_oracle_tables.sh
+  template: src=create_oracle_tables.sh dest=/opt/mapr/hue/create_oracle_tables.sh mode=0755
+  when: hue_db_type == 'oracle'
+- name: Create tables
+  shell: /opt/mapr/hue/create_oracle_tables.sh
+  when: hue_db_type == 'oracle' and inventory_hostname == groups["mapr-hue"][0]
+
+- name: Start all hue instances
+  lineinfile: dest={{ hue_path_result.files[0].path }}/desktop/conf/warden.hue.conf regexp="^services=" line="services=hue:all"
+- name: Start all livy instances
+  lineinfile: dest={{ hue_livy_path_result.files[0].path }}/conf.new/warden.livy.conf regexp="^services=" line="services=livy:all"
+- name: Copy to /opt/mapr/conf/conf.d/warden.hue.conf
+  copy: remote_src=true src={{ hue_path_result.files[0].path }}/desktop/conf/warden.hue.conf dest=/opt/mapr/conf/conf.d/warden.hue.conf mode=0644 owner={{ mapr_user }} group={{ mapr_user }}
+- name: Copy to /opt/mapr/conf/conf.d/warden.livy.conf
+  copy: remote_src=true src={{ hue_livy_path_result.files[0].path }}/conf.new/warden.livy.conf dest=/opt/mapr/conf/conf.d/warden.livy.conf mode=0644 owner={{ mapr_user }} group={{ mapr_user }}
+
+- name: Configure.sh -R
+  shell: /opt/mapr/server/configure.sh -R
+  when: hue_result.changed or livy_result.changed
+- name: Restart Livy
+  shell: maprcli node services -name livy -action restart -nodes {{ ansible_fqdn }}
+  register: task_result
+  until: task_result.rc == 0
+  retries: 10
+  delay: 10
+  ignore_errors: yes
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: livy_result.changed
+- name: Restart Hue
+  shell: maprcli node services -name hue -action restart -nodes {{ ansible_fqdn }}
+  register: task_result
+  until: task_result.rc == 0
+  retries: 10
+  delay: 10
+  ignore_errors: yes
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: hue_result.changed
+
+# http://maprdocs.mapr.com/home/Hue/ConfigureHuetouseKerberosYARN.html
+#http://maprdocs.mapr.com/home/Hue/ConfigureDBsforHueStorage.html

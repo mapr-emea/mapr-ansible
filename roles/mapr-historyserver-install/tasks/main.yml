@@ -1,0 +1,7 @@
+---
+# Install History Server
+- name: Install mapr-historyserver
+  package: name=mapr-historyserver state=present
+  register: historyserver_result
+- set_fact: historyserver_haschanged={{ historyserver_haschanged | int + 1 }}
+  when: historyserver_result.changed

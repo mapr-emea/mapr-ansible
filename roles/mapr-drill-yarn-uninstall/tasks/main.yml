@@ -1,0 +1,4 @@
+---
+# Uninstall Apache Drill on YARN
+- name: Uninstall mapr-drill-yarn
+  package: name=mapr-drill-yarn state=absent

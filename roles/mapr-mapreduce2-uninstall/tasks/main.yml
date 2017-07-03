@@ -1,0 +1,4 @@
+---
+# Uninstall MapReduce2
+- name: Uninstall mapr-mapreduce2
+  package: name=mapr-mapreduce2 state=absent

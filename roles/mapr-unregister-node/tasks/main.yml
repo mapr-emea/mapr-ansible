@@ -1,0 +1,4 @@
+- name: Unregister node
+  shell: maprcli node remove -nodes {{ unprovision_string }}
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket

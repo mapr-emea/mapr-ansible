@@ -1,0 +1,4 @@
+---
+# Uninstall Sqoop2 Client
+- name: Uninstall mapr-sqoop2-client
+  package: name=mapr-sqoop2-client state=absent

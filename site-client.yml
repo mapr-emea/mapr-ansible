@@ -20,27 +20,27 @@
   hosts: mapr-client
   roles:
     - mapr-configure-repository
-    - mapr-client
-    - mapr-patch-client
+    - mapr-client-install
+    - mapr-patch-client-install
     - mapr-configure-subnets
     - {role: mapr-client-configure-unsecure, when: mapr_security == 'none'}
     - {role: mapr-client-configure-nativesecurity-secure, when: mapr_security == 'maprsasl'}
 - name: Install Drill on YARN
   hosts: mapr-drill-yarn
   roles:
-    - mapr-drill-yarn
+    - mapr-drill-yarn-install
 - name: Install Flume
   hosts: mapr-flume
   roles:
-    - mapr-flume
+    - mapr-flume-install
 - name: Install HBase CLI
   hosts: mapr-hbase-cli
   roles:
-    - mapr-hbase-cli
+    - mapr-hbase-cli-install
 - name: Install HBase REST and Thrift Server
   hosts: mapr-hbase-thrift-rest
   roles:
-    - mapr-hbase-thrift-rest
+    - mapr-hbase-thrift-rest-install
 - name: Setup Hive Variables
   hosts: all
   roles:
@@ -48,55 +48,55 @@
 - name: Install Hive CLI
   hosts: mapr-hive-cli
   roles:
-    - mapr-hive-cli
+    - mapr-hive-cli-install
 - name: Install Hive Server 2
   hosts: mapr-hive-server2
   roles:
-    - mapr-hive-server2
+    - mapr-hive-server2-install
 - name: Install Mahout
   hosts: mapr-mahout
   roles:
-    - mapr-mahout
+    - mapr-mahout-install
 - name: Install Pig
   hosts: mapr-pig
   roles:
-    - mapr-pig
+    - mapr-pig-install
 - name: Install Sqoop 2 Server
   hosts: mapr-sqoop2-server
   roles:
-    - mapr-sqoop2-server
+    - mapr-sqoop2-server-install
 - name: Install Sqoop 2 Client
   hosts: mapr-sqoop2-client
   roles:
-    - mapr-sqoop2-client
+    - mapr-sqoop2-client-install
 - name: Install Hue
   hosts: mapr-hue
   roles:
-    - mapr-hue
+    - mapr-hue-install
 - name: Install Oozie
   hosts: mapr-oozie
   roles:
-    - mapr-oozie
+    - mapr-oozie-install
 - name: Install HttpFS
   hosts: mapr-httpfs
   roles:
-    - mapr-httpfs
+    - mapr-httpfs-install
 - name: Install Spark on YARN
   hosts: mapr-spark-yarn
   roles:
-    - mapr-spark-yarn
+    - mapr-spark-yarn-install
 - name: Install NFS loopback
   hosts: mapr-nfsloopback
   roles:
-    - mapr-nfsloopback
+    - mapr-nfsloopback-install
 - name: Install mapr-posix-client-basic (FUSE)
-  hosts: mapr-posix-client-basic
+  hosts: mapr-posix-client-basic-install
   roles:
-    - mapr-posix-client-basic
-    - {role: mapr-patch-posix-client-basic, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
+    - mapr-posix-client-basic-install
+    - {role: mapr-patch-posix-client-basic-install, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
 
 - name: Install mapr-posix-client-platinum (FUSE)
   hosts: mapr-posix-client-platinum
   roles:
-    - mapr-posix-client-platinum
-    - {role: mapr-patch-posix-client-platinum, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
+    - mapr-posix-client-platinum-install
+    - {role: mapr-patch-posix-client-platinum-install, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}

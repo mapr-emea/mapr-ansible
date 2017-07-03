@@ -1,7 +1,0 @@
----
-# Install Zookeeper
-- name: Install mapr-zookeeper
-  package: name={{ item }} state=present
-  with_items:
-  - mapr-zookeeper
-  - mapr-zk-internal

@@ -1,4 +1,11 @@
-- name: Install Spark on YARN
-  hosts: mapr-spark-yarn
+- name: Setup Hue Vars
+  hosts: all
+  vars:
+      num_mysql_hosts: "{{ groups['ext-mysql']|length }}"
   roles:
-    - mapr-spark-yarn
+    - mapr-hue-vars
+    - {role: mapr-hue-mysql, when: hue_db_type == 'mysql' and hue_db_mysql_create_schema_and_user == true and num_mysql_hosts != '0' }
+- name: Install Hue
+  hosts: mapr-hue
+  roles:
+    - mapr-hue-install

@@ -1,6 +1,0 @@
----
-# Install CLDB
-
-- name: Install mapr-cldb
-  package: name=mapr-cldb state=present
-

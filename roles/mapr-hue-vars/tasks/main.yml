@@ -7,12 +7,12 @@
 - name: Make HttpFS String
   set_fact: hue_httpfs_string={{ httpfs_hosts.results | map(attribute='ansible_facts.httpfs_item') | list | join(',')}}
 
-- name: Get Resource Manager
-  set_fact: resourcemanager_item={{ hostvars[item]['ansible_fqdn'] }}
-  with_items:
-    - "{{ groups['mapr-resourcemanager'] }}"
-  register: hue_resourcemanager_hosts
-  when: groups['mapr-resourcemanager'] is defined
+#- name: Get Resource Manager
+#  set_fact: resourcemanager_item={{ hostvars[item]['ansible_fqdn'] }}
+#  with_items:
+#    - "{{ groups['mapr-resourcemanager'] }}"
+#  register: hue_resourcemanager_hosts
+#  when: groups['mapr-resourcemanager'] is defined
 #- debug: var=resourcemanager_hosts
 #- name: Make Resource Manager String
 #  set_fact: hue_resourcemanager_string={{ resourcemanager_hosts.results[0].ansible_facts.resourcemanager_item }}

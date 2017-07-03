@@ -1,0 +1,18 @@
+---
+# Uninstall History Server
+- name: Check for mapr-clusters.conf
+  stat: path=/opt/mapr/conf/mapr-clusters.conf
+  register: clusters_conf
+- name: Stop Historyserver
+  shell: maprcli node services -name historyserver -action stop -nodes {{ ansible_fqdn }}
+  register: maprcli_result
+  failed_when: maprcli_result.rc > 1
+  changed_when: maprcli_result.rc == 0
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: clusters_conf.stat.exists
+- name: Uninstall mapr-historyserver
+  package: name=mapr-historyserver state=absent
+  register: historyserver_result
+- set_fact: historyserver_haschanged={{ historyserver_haschanged | int + 1 }}
+  when: historyserver_result.changed

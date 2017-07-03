@@ -1,0 +1,7 @@
+---
+# Install CLDB
+- name: Install mapr-cldb
+  package: name=mapr-cldb state=present
+  register: cldb_result
+- set_fact: cldb_haschanged={{ cldb_haschanged | int + 1 }}
+  when: cldb_result.changed

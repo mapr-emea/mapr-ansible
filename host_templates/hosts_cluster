@@ -1,4 +1,8 @@
 # If you do not want to install a component leave the block empty
+# sets up ntp, rpcbind, Java and mapr default user with standard password mapr123
+# Write unprovisioned instances here, so that Ansible is aware of host and can uninstall
+# This stays empty unless you want to remove a node
+[unprovision]
 
 # sets up ntp, rpcbind, Java and mapr default user with standard password mapr123
 [common]

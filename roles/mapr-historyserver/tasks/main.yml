@@ -1,4 +1,0 @@
----
-# Install History Server
-- name: Install mapr-historyserver
-  package: name=mapr-historyserver state=present

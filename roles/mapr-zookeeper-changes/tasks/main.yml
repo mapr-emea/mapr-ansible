@@ -1,0 +1,7 @@
+- name: Retrieve all Zookeeper changes
+  set_fact: zookeeper_changes_item={{ hostvars[item]['zookeeper_haschanged'] }}
+  with_items:
+    - "{{ groups['all'] }}"
+  register: zookeeper_changes_hosts
+- name: Calculate number of Zookeeper changes
+  set_fact: zookeeper_changes={{ zookeeper_changes_hosts.results | map(attribute='ansible_facts.zookeeper_changes_item') | map('int') | sum }}

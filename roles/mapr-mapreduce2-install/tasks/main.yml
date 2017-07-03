@@ -1,0 +1,5 @@
+---
+# Install MapReduce2
+- name: Install mapr-mapreduce2
+  package: name=mapr-mapreduce2 state=present
+

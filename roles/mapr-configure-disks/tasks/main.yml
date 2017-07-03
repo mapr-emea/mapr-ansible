@@ -1,0 +1,10 @@
+- name: Write disk tmp file
+  shell: echo {{ disks }} | tr , '\n' > /tmp/disks.txt
+- name: Check if disks have been added
+  stat: path=/opt/mapr/conf/disktab
+  register: disks_added_status
+- name: Disk setup
+  command: /opt/mapr/server/disksetup -F -W {{ disk_storage_pool_size }} /tmp/disks.txt
+  when: not disks_added_status.stat.exists
+- set_fact: mfs_local_changes=1
+  when: not disks_added_status.stat.exists

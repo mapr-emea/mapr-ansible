@@ -1,0 +1,7 @@
+---
+# Install MapR FileServer (MFS)
+- name: Install mapr-fileserver
+  package: name=mapr-fileserver state=present
+  register: fileserver_result
+- set_fact: mfs_local_changes=1
+  when: fileserver_result.changed

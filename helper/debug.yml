@@ -1,5 +1,7 @@
+
  - hosts: all
    tasks:
-    - debug: msg="Cluster {{ cluster_name }}"
-
-
+    - shell: "/opt/mapr/initscripts/mapr-mfs status"
+      register: mfs_status
+      failed_when: mfs_status.stdout.find('is running') == -1
+      serial: 1

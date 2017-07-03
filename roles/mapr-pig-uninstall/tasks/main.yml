@@ -1,0 +1,4 @@
+---
+# Uninstall Pig
+- name: Uninstall mapr-pig
+  package: name=mapr-pig state=absent

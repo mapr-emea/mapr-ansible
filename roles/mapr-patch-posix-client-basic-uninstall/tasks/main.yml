@@ -1,0 +1,10 @@
+---
+# Uninstall MapR Patches Client
+- name: Check if Service Exists
+  stat: path=/etc/init.d/mapr-posix-client-basic
+  register: service_status
+- name: Stop the mapr-posix-client-basic service
+  service: name=mapr-posix-client-basic state=stopped
+  when: service_status.stat.exists
+- name: Uninstall mapr-patch-posix-client-basic
+  package: name=mapr-patch-posix-client-basic state=absent

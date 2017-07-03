@@ -50,6 +50,12 @@ Use `host_templates/hosts_cluster` as template and copy it and the hostnames to 
 ansible-playbook -i hosts_template site-cluster.yml
 ```
 
+The `site-cluster.yml` script always ensures the cluster state. This means you can re-run this script, after you removed or added new components or nodes.
+That an unprovisioned node is still known to Ansible you have to add the removed node to [unprovision] block in inventory file.
+
+ATTENTION: Never move critical components in one run, e.g. you have two CLDB installed on node1 and node2 and you want move it to node3 and node4. In that case first install two new CLDBs and in
+the next run remove the other ones.
+
 ## Install client
 
 Use `host_templates/hosts_client` as template and copy it and the hostnames to the components you want to get installed. If components are not required, just leave the block empty. Then run:

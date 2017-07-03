@@ -1,4 +1,0 @@
----
-# Install Hive WebHCat
-- name: Install mapr-hivewebhcat
-  package: name=mapr-hivewebhcat state=present

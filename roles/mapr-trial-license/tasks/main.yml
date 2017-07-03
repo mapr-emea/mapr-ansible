@@ -1,0 +1,5 @@
+---
+- name: Copy trial_license.sh
+  template: src=trial_license.sh dest=/opt/mapr/bin/trial_license.sh mode=0755
+- name: Apply Trial license
+  shell: /opt/mapr/bin/trial_license.sh

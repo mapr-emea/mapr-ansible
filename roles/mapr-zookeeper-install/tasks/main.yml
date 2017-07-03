@@ -1,0 +1,8 @@
+---
+# Install Zookeeper
+- name: Install mapr-zookeeper
+  package: name=mapr-zookeeper state=present
+  register: zookeeper_result
+#- debug: msg={{ zookeeper_result.changed }}
+- set_fact: zookeeper_haschanged={{ zookeeper_haschanged | int + 1 }}
+  when: zookeeper_result.changed

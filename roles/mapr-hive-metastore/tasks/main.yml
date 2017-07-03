@@ -1,8 +1,0 @@
----
-# Install Hive Metastore
-- name: Install mapr-hivemetastore
-  package: name=mapr-hivemetastore state=present
-
-# Other actions
-- name: Set owner mapr-system user
-  file: path=/opt/mapr/hive owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes

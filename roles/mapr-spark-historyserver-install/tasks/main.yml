@@ -1,0 +1,19 @@
+---
+# Install Spark on YARN
+- name: Install mapr-spark-historyserver
+  package: name=mapr-spark-historyserver state=present
+  register: sparkhs_result
+
+- name: Configure.sh -R
+  shell: /opt/mapr/server/configure.sh -R
+  when: sparkhs_result.changed
+- name: Restart Spark Historyserver
+  shell: maprcli node services -name spark-historyserver -action restart -nodes {{ ansible_fqdn }}
+  register: task_result
+  until: task_result.rc == 0
+  retries: 10
+  delay: 10
+  ignore_errors: yes
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: sparkhs_result.changed

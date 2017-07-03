@@ -1,3 +1,7 @@
+- name: Precheck
+  hosts: all
+  roles:
+    - mapr-precheck
 - name: Setup MapR repositories
   hosts: mapr-core
   roles:
@@ -14,106 +18,202 @@
     - common-ntp
     - common-misc
     - common-sysctl
+# Uninstall POSIX clients first, otherwise if user changes from NFS to Fuse it will conflict.
+- name: Uninstall NFS
+  hosts: all:!mapr-nfs
+  roles:
+    - mapr-nfs-uninstall
+- name: Uninstall mapr-posix-client-basic (FUSE)
+  hosts: all:!mapr-posix-client-basic
+  roles:
+    - mapr-patch-posix-client-basic-uninstall
+    - mapr-posix-client-basic-uninstall
+- name: Uninstall mapr-posix-client-platinum (FUSE)
+  hosts: all:!mapr-posix-client-platinum
+  roles:
+    - mapr-patch-posix-client-platinum-uninstall
+    - mapr-posix-client-platinum-uninstall
+
 # used by configure.sh and drill
 - name: Setup global vars
   hosts: all
   roles:
+    - mapr-global-vars
     - mapr-configure-vars
     - mapr-configure-vars-hs
 - name: Install MapR Core
   hosts: mapr-core
   roles:
-    - mapr-core
+    - mapr-core-install
     - mapr-configure-subnets
 - name: Install Zookeeper
   hosts: mapr-zookeeper
   roles:
-    - mapr-zookeeper
+    - mapr-zookeeper-install
+- name: Uninstall Zookeeper
+  hosts: all:!mapr-zookeeper
+  roles:
+    - mapr-zookeeper-uninstall
+- name: Count Zookeeper changes
+  hosts: all
+  roles:
+    - mapr-zookeeper-changes
 - name: Install CLDB
   hosts: mapr-cldb
   roles:
-    - mapr-cldb
+    - mapr-cldb-install
+- name: Uninstall CLDB
+  hosts: all:!mapr-cldb
+  roles:
+    - mapr-cldb-uninstall
+- name: Count CLDB changes
+  hosts: all
+  roles:
+    - mapr-cldb-changes
 - name: Install Gateway
   hosts: mapr-gateway
   roles:
-    - mapr-gateway
+    - mapr-gateway-install
+- name: Uninstall Gateway
+  hosts: all:!mapr-gateway
+  roles:
+    - mapr-gateway-uninstall
 - name: Install Filesystem, MapReduce2, YARN Node Manager
   hosts: mapr-datanode
   roles:
-    - mapr-fileserver
-    - mapr-mapreduce2
-    - mapr-nodemanager
+    - mapr-fileserver-install
+    - mapr-mapreduce2-install
+    - mapr-nodemanager-install
+- name: Uninstall Filesystem, MapReduce2, YARN Node Manager
+  hosts: all:!mapr-datanode
+  roles:
+    - mapr-fileserver-uninstall
+    - mapr-mapreduce2-uninstall
+    - mapr-nodemanager-uninstall
 - name: Install YARN Resource Manager
   hosts: mapr-resourcemanager
   roles:
-    - mapr-resourcemanager
-- name: Install MySQL
-  hosts: ext-mysql
+    - mapr-resourcemanager-install
+- name: Uninstall YARN Resource Manager
+  hosts: all:!mapr-resourcemanager
   roles:
-    - ext-mysql
-- name: Install MCS
-  hosts: mapr-mcs
-  roles:
-    - mapr-mcs
-- name: Install NFS
-  hosts: mapr-nfs
-  roles:
-    - mapr-nfs
-- name: Configure and start (unsecure)
-  hosts: mapr-core
-  roles:
-   - {role: mapr-configure-unsecure, when: mapr_security == 'none'}
-- name: Configure and start (native-security)
-  hosts: mapr-core
-  roles:
-   - {role: mapr-configure-nativesecurity-secure, when: mapr_security == 'maprsasl'}
-- name: Configure and start (kerberos)
-  hosts: mapr-core
-  roles:
-   - {role: mapr-configure-kerberos, when: mapr_security == 'kerberos'}
-- name: Restarting mapr-zookeeper
-  hosts: mapr-zookeeper
-  roles:
-   - mapr-configure-zookeeper-restart
-- name: Restarting mapr-warden
-  hosts: mapr-core
-  roles:
-   - mapr-configure-warden-restart
-- name: Install mapr-posix-client-basic (FUSE)
-  hosts: mapr-posix-client-basic
-  roles:
-    - mapr-posix-client-basic
-    - {role: mapr-patch-posix-client-basic, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
-- name: Install mapr-posix-client-platinum (FUSE)
-  hosts: mapr-posix-client-platinum
-  roles:
-    - mapr-posix-client-platinum
-    - {role: mapr-patch-posix-client-platinum, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
-
-- name: Install Drill Standalone
-  hosts: mapr-drill-standalone
-  roles:
-    - mapr-drill-standalone
-- name: Install Drill on YARN
-  hosts: mapr-drill-yarn
-  roles:
-    - mapr-drill-yarn
-- name: Install Flume
-  hosts: mapr-flume
-  roles:
-    - mapr-flume
-- name: Install HBase CLI
-  hosts: mapr-hbase-cli
-  roles:
-    - mapr-hbase-cli
-- name: Install HBase REST and Thrift Server
-  hosts: mapr-hbase-thrift-rest
-  roles:
-    - mapr-hbase-thrift-rest
+    - mapr-resourcemanager-uninstall
 - name: Install History Server
   hosts: mapr-historyserver
   roles:
-    - mapr-historyserver
+    - mapr-historyserver-install
+- name: Uninstall History Server
+  hosts: all:!mapr-historyserver
+  roles:
+    - mapr-historyserver-uninstall
+- name: Count Historyserver changes
+  hosts: all
+  roles:
+    - mapr-historyserver-changes
+- name: Install MCS
+  hosts: mapr-mcs
+  roles:
+    - mapr-mcs-install
+- name: Uninstall MCS
+  hosts: all:!mapr-mcs
+  roles:
+    - mapr-mcs-uninstall
+- name: Install NFS
+  hosts: mapr-nfs
+  roles:
+    - mapr-nfs-install
+# uninstall NFS on top
+- name: Configure and start (unsecure)
+  hosts: mapr-core
+  roles:
+   - {role: mapr-configure-unsecure, when: mapr_security == 'none' and ((zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0 or (historyserver_changes|int) > 0)}
+- name: Configure and start (native-security)
+  hosts: mapr-core
+  roles:
+   - {role: mapr-configure-nativesecurity-secure, when: mapr_security == 'maprsasl' and ((zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0 or (historyserver_changes|int) > 0)}
+- name: Configure and start (kerberos)
+  hosts: mapr-core
+  roles:
+   - {role: mapr-configure-kerberos, when: mapr_security == 'kerberos' and ((zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0 or (historyserver_changes|int) > 0)}
+- name: Disk setup
+  hosts: mapr-datanode:mapr-cldb
+  roles:
+   - mapr-configure-disks
+- name: Restarting mapr-zookeeper
+  hosts: mapr-zookeeper
+  roles:
+   - { role: mapr-configure-zookeeper-restart, when: force_zookeeper_restart or (zookeeper_changes|int) > 0 }
+  serial: 1
+- name: Restarting mapr-warden
+  hosts: mapr-core:!mapr-cldb
+  roles:
+   - { role: mapr-configure-warden-restart, when: force_warden_restart or (zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0 or (historyserver_changes|int) > 0}
+  serial: 1
+- name: Restarting mapr-warden on CLDB nodes
+  hosts: mapr-cldb
+  roles:
+   - { role: mapr-configure-warden-cldb-restart, when: force_warden_restart or (zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0 or (historyserver_changes|int) > 0}
+  serial: 1
+- name: Install mapr-posix-client-basic (FUSE)
+  hosts: mapr-posix-client-basic
+  roles:
+    - mapr-posix-client-basic-install
+    - {role: mapr-patch-posix-client-basic-install, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
+# uninstall Fuse on top
+- name: Install mapr-posix-client-platinum (FUSE)
+  hosts: mapr-posix-client-platinum
+  roles:
+    - mapr-posix-client-platinum-install
+    - {role: mapr-patch-posix-client-platinum-install, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
+# uninstall Fuse on top
+- name: Install MySQL
+  hosts: ext-mysql
+  roles:
+    - ext-mysql-install
+- name: Uninstall MySQL
+  hosts: all:!ext-mysql
+  roles:
+    - ext-mysql-uninstall
+- name: Install Drill Standalone
+  hosts: mapr-drill-standalone
+  roles:
+    - mapr-drill-standalone-install
+- name: Uninstall Drill Standalone
+  hosts: all:!mapr-drill-standalone
+  roles:
+    - mapr-drill-standalone-uninstall
+- name: Install Drill on YARN
+  hosts: mapr-drill-yarn
+  roles:
+    - mapr-drill-yarn-install
+- name: Uninstall Drill on YARN
+  hosts: all:!mapr-drill-yarn
+  roles:
+    - mapr-drill-yarn-uninstall
+- name: Install Flume
+  hosts: mapr-flume
+  roles:
+    - mapr-flume-install
+- name: Install Flume
+  hosts: all:!mapr-flume
+  roles:
+    - mapr-flume-uninstall
+- name: Install HBase CLI
+  hosts: mapr-hbase-cli
+  roles:
+    - mapr-hbase-cli-install
+- name: Install HBase REST and Thrift Server
+  hosts: mapr-hbase-thrift-rest
+  roles:
+    - mapr-hbase-thrift-rest-install
+- name: Uninstall HBase REST and Thrift Server
+  hosts: all:!mapr-hbase-thrift-rest
+  roles:
+    - mapr-hbase-thrift-rest-uninstall
+- name: Uninstall HBase CLI
+  hosts: all:!mapr-hbase-cli
+  roles:
+    - mapr-hbase-cli-uninstall
 - name: Setup Hive Variables
   hosts: all
   vars:
@@ -124,27 +224,51 @@
 - name: Install Hive CLI
   hosts: mapr-hive-cli
   roles:
-    - mapr-hive-cli
+    - mapr-hive-cli-install
 - name: Install Hive MetaStore
   hosts: mapr-hive-metastore
   roles:
-    - mapr-hive-metastore
+    - mapr-hive-metastore-install
 - name: Install Hive Server 2
   hosts: mapr-hive-server2
   roles:
-    - mapr-hive-server2
+    - mapr-hive-server2-install
 - name: Install Hive WebHCat
   hosts: mapr-hive-webhcat
   roles:
-    - mapr-hive-webhcat
+    - mapr-hive-webhcat-install
+- name: Uninstall Hive WebHCat
+  hosts: all:!mapr-hive-webhcat
+  roles:
+    - mapr-hive-webhcat-uninstall
+- name: Uninstall Hive Server 2
+  hosts: all:!mapr-hive-server2
+  roles:
+    - mapr-hive-server2-uninstall
+- name: Uninstall Hive MetaStore
+  hosts: all:!mapr-hive-metastore
+  roles:
+    - mapr-hive-metastore-uninstall
+- name: Uninstall Hive CLI
+  hosts: all:!mapr-hive-cli
+  roles:
+    - mapr-hive-cli-uninstall
 - name: Install Mahout
   hosts: mapr-mahout
   roles:
-    - mapr-mahout
+    - mapr-mahout-install
+- name: Uninstall Mahout
+  hosts: all:!mapr-mahout
+  roles:
+    - mapr-mahout-uninstall
 - name: Install Pig
   hosts: mapr-pig
   roles:
-    - mapr-pig
+    - mapr-pig-install
+- name: Uninstall Pig
+  hosts: all:!mapr-pig
+  roles:
+    - mapr-pig-uninstall
 - name: Set Sqoop 2 Server Vars
   hosts: all
   roles:
@@ -152,57 +276,96 @@
 - name: Install Sqoop 2 Server
   hosts: mapr-sqoop2-server
   roles:
-    - mapr-sqoop2-server
+    - mapr-sqoop2-server-install
+- name: Uninstall Sqoop 2 Server
+  hosts: all:!mapr-sqoop2-server
+  roles:
+    - mapr-sqoop2-server-uninstall
 - name: Install Sqoop 2 Client
   hosts: mapr-sqoop2-client
   roles:
-    - mapr-sqoop2-client
+    - mapr-sqoop2-client-install
+- name: Uninstall Sqoop 2 Client
+  hosts: all:!mapr-sqoop2-client
+  roles:
+    - mapr-sqoop2-client-uninstall
 - name: Install HttpFS
   hosts: mapr-httpfs
   roles:
-    - mapr-httpfs
-- name: Set Oozie Vars
-  hosts: all
+    - mapr-httpfs-install
+- name: Uninstall HttpFS
+  hosts: all:!mapr-httpfs
   roles:
-    - {role: mapr-oozie-mysql, when: oozie_db_type == 'mysql' and oozie_db_mysql_create_schema_and_user == true}
-- name: Install Oozie
-  hosts: mapr-oozie
-  roles:
-    - mapr-oozie
+    - mapr-httpfs-uninstall
 - name: Install Spark on YARN
   hosts: mapr-spark-yarn
   roles:
-    - mapr-spark-yarn
+    - mapr-spark-yarn-install
+- name: Uninstall Spark on YARN
+  hosts: all:!mapr-spark-yarn
+  roles:
+    - mapr-spark-yarn-uninstall
 - name: Install Spark History Server
   hosts: mapr-spark-historyserver
   roles:
-    - mapr-spark-historyserver
+    - mapr-spark-historyserver-install
+- name: Uninstall Spark History Server
+  hosts: all:!mapr-spark-historyserver
+  roles:
+    - mapr-spark-historyserver-uninstall
+- name: Set Oozie Vars
+  hosts: all
+  vars:
+     num_mysql_hosts: "{{ groups['ext-mysql']|length }}"
+  roles:
+    - {role: mapr-oozie-mysql, when: oozie_db_type == 'mysql' and oozie_db_mysql_create_schema_and_user == true and num_mysql_hosts != '0' }
+- name: Install Oozie
+  hosts: mapr-oozie
+  roles:
+    - mapr-oozie-install
+- name: Uninstall Oozie
+  hosts: all:!mapr-oozie
+  roles:
+    - mapr-oozie-uninstall
 - name: Setup Hue Vars
   hosts: all
+  vars:
+      num_mysql_hosts: "{{ groups['ext-mysql']|length }}"
   roles:
     - mapr-hue-vars
-    - {role: mapr-hue-mysql, when: hive_db_type == 'mysql' and hue_db_mysql_create_schema_and_user == true}
+    - {role: mapr-hue-mysql, when: hue_db_type == 'mysql' and hue_db_mysql_create_schema_and_user == true and num_mysql_hosts != '0' }
 - name: Install Hue
   hosts: mapr-hue
   roles:
-    - mapr-hue
-- name: Register roles and restart mapr-warden
-  hosts: mapr-core
+    - mapr-hue-install
+- name: Uninstall Hue
+  hosts: all:!mapr-hue
   roles:
-    - mapr-configure-roles
-    - mapr-configure-warden-restart
+    - mapr-hue-uninstall
 - name: Install MapR collectd
   hosts: mapr-collectd
   roles:
-    - mapr-collectd
+    - mapr-collectd-install
+- name: Uninstall MapR collectd
+  hosts: all:!mapr-collectd
+  roles:
+    - mapr-collectd-uninstall
 - name: Install MapR OpenTSDB
   hosts: mapr-opentsdb
   roles:
-    - mapr-opentsdb
+    - mapr-opentsdb-install
+- name: Uninstall MapR OpenTSDB
+  hosts: all:!mapr-opentsdb
+  roles:
+    - mapr-opentsdb-uninstall
 - name: Install MapR Grafana
   hosts: mapr-grafana
   roles:
-    - mapr-grafana
+    - mapr-grafana-install
+- name: Uninstall MapR Grafana
+  hosts: all:!mapr-grafana
+  roles:
+    - mapr-grafana-uninstall
 - name: MapR Configure Metrics Monitoring
   hosts: mapr-collectd
   roles:
@@ -210,24 +373,57 @@
 - name: Install MapR fluentd
   hosts: mapr-fluentd
   roles:
-    - mapr-fluentd
+    - mapr-fluentd-install
+- name: Uninstall MapR fluentd
+  hosts: all:!mapr-fluentd
+  roles:
+    - mapr-fluentd-uninstall
 - name: Install MapR ElasticSearch
   hosts: mapr-elasticsearch
   roles:
-    - mapr-elasticsearch
+    - mapr-elasticsearch-install
+- name: Uninstall MapR ElasticSearch
+  hosts: all:!mapr-elasticsearch
+  roles:
+    - mapr-elasticsearch-uninstall
 - name: Install MapR Kibana
   hosts: mapr-kibana
   roles:
-    - mapr-kibana
+    - mapr-kibana-install
+- name: Uninstall MapR Kibana
+  hosts: all:!mapr-kibana
+  roles:
+    - mapr-kibana-uninstall
 - name: MapR Configure Log Monitoring
   hosts: mapr-fluentd
   roles:
     - mapr-log-monitoring-configure
-- name: Restarting mapr-warden
-  hosts: mapr-core
+- name: Install MapR Patches
+  hosts: mapr-core:!mapr-cldb
   roles:
-   - mapr-configure-warden-restart
-- name: MapR Patches
-  hosts: mapr-core
+    - {role: mapr-patch-install, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
+  serial: 1
+- name: Install MapR Patches on CLDB nodes
+  hosts: mapr-cldb
   roles:
-    - {role: mapr-patch, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
+    - {role: mapr-patch-install, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
+  serial: 1
+- name: Uninstall MapR Patches
+  hosts: all:!mapr-core
+  roles:
+    - mapr-patch-uninstall
+  serial: 1
+- name: Uninstall MapR Core
+  hosts: all:!mapr-core
+  roles:
+    - mapr-core-uninstall
+- name: Unregister node vars
+  hosts: all
+  roles:
+     - mapr-unregister-node-vars
+- name: Unregister node vars
+  hosts: mapr-cldb[0]
+  vars:
+     num_unprovision: "{{ groups['unprovision']|length }}"
+  roles:
+     - {role: mapr-unregister-node, when: num_unprovision != '0'}

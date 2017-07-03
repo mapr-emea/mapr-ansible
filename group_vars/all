@@ -14,16 +14,18 @@ oracle_jdk_url: http://download.oracle.com/otn-pub/java/jdk/8u111-b14/jdk-8u111-
 
 hadoop_version: 2.7.0
 cluster_name: demo.mapr.com
+# required when aborted in wrong stage or changing security type
+force_zookeeper_restart: false
+force_warden_restart: false
 
 ####### Enable security features ##########
 # Default value for all components: mapr core and ecosystem
 # Options: none, maprsasl, kerberos
-security_all: none
+security_all: maprsasl
 
 # MapR-Core security
 # Options: none, maprsasl, kerberos
 mapr_security: "{{ security_all }}"
-generate_keys: true
 
 # Additional information for Kerberos
 mapr_kerberos_realm: PS.MAPR.COM
@@ -44,11 +46,11 @@ oozie_security: "{{ security_all }}"
 # Sqoop2: none, maprsasl, kerberos
 sqoop_security: "{{ security_all }}"
 # Spark settings, enable only on secure cluster, otherwise installation fails
-spark_authenticate: false
-spark_ssl_encryption: false
-spark_sasl_encryption: false
+spark_authenticate: true
+spark_ssl_encryption: true
+spark_sasl_encryption: true
 # Hue will use PAM auth and depending what was configured for other components use these settings
-hue_ssl: false
+hue_ssl: true
 ###########################################
 
 mapr_subnets: 10.0.0.0/24
@@ -67,7 +69,7 @@ oracle_jdbc_driver_path: /Users/chufe/Downloads/ojdbc6.jar
 hue_db_type: mysql
 hue_db_mysql_create_schema_and_user: true
 # set only for Oracle or when MySQL is external, comment out it should take host from installed DB (ext-mysql)
-# hue_db_host: {{ hue_db_host }}
+#hue_db_host: oracle.db
 hue_db_user: hue
 hue_db_password: hue
 # For Oracle add SID here

@@ -1,0 +1,16 @@
+---
+# Uninstall MapR Core components for all machines
+- name: Stop Warden
+  service: name=mapr-warden state=stopped
+- pause: seconds=30
+- name: Uninstall mapr-core
+  vars:
+    packages_Suse: ['mapr-compat-suse', 'mapr-core', 'mapr-core-internal', 'mapr-kafka']
+    packages_RedHat: ['mapr-core', 'mapr-core-internal', 'mapr-kafka']
+    packages_Debian: ['mapr-core', 'mapr-core-internal', 'mapr-kafka']
+  package: name={{ item }} state=absent
+  with_items: "{{ vars['packages_' + ansible_os_family] }}"
+- name: Clean /opt/mapr
+  file: path=/opt/mapr state=absent
+- name: Clean /opt/cores
+  file: path=/opt/cores state=absent

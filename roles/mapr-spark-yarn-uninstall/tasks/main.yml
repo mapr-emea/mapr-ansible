@@ -1,0 +1,6 @@
+---
+# Install Spark on YARN
+- name: Uninstall mapr-spark
+  package: name=mapr-spark state=absent
+- name: Remove /opt/mapr/spark
+  file: path=/opt/mapr/spark state=absent
