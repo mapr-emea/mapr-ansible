@@ -1,0 +1,5 @@
+---
+- name: Setup Kerberos Client
+  hosts: mapr-cldb[0]
+  roles:
+    - ../roles/mapr-trial-license
