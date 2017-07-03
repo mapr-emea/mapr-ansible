@@ -1,6 +1,3 @@
-# CHUFE fix mysql with HUE
-# CHUFE run configure when security type was changed. https://stackoverflow.com/questions/38461920/ansible-check-is-string-exists-in-file
-# CHUFE test with community and two CLDB
 # CHUFE precheck, mysql selected, when hive with mysql or oozie or hue
 # CHUFE precheck, host set when no mysql or oracle used
 - name: Setup MapR repositories

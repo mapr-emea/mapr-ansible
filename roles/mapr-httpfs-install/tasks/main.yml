@@ -22,11 +22,16 @@
   template: src=httpfs-site.kerberos.xml dest={{ httpfs_path_result.files[0].path }}/etc/hadoop/httpfs-site.xml
   when: httpfs_security == 'kerberos'
 
+- name: Start all httpfs instances
+  lineinfile: dest={{ httpfs_path_result.files[0].path }}/etc/hadoop/warden.httpfs.conf regexp="^services=" line="services=httpfs:all"
+- name: Copy to /opt/mapr/conf/conf.d/warden.httpfs.conf
+  copy: remote_src=true src={{ httpfs_path_result.files[0].path }}/etc/hadoop/warden.httpfs.conf dest=/opt/mapr/conf/conf.d/warden.httpfs.conf mode=0644 owner={{ mapr_user }} group={{ mapr_user }}
+
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
   when: httpfs_result.changed
-#- name: Restart HttpFS
-#  shell: maprcli node services -name httpfs -action restart -nodes {{ ansible_fqdn }}
-#  environment:
-#    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
-#  when: httpfs_result.changed
+- name: Restart HttpFS
+  shell: maprcli node services -name httpfs -action restart -nodes {{ ansible_fqdn }}
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: httpfs_result.changed

@@ -68,7 +68,7 @@
 # MySQL Database
 - name: Copy create_mysql_tables.sh
   template: src=create_mysql_tables.sh dest=/opt/mapr/hue/create_mysql_tables.sh mode=0755
-  when: hue_db_type == 'mysql'
+  when: hue_db_type == 'mysql' and inventory_hostname == groups["mapr-hue"][0]
 # http://maprdocs.mapr.com/home/EcosystemRN/HueRN-3.12.0-1703.html?hl=hue%2Cmysql
 - name: Link Sasl lib
   file: src=/lib64/libsasl2.so.3.0.0 dest=/lib64/libsasl2.so.2 state=link
@@ -114,22 +114,30 @@
   when: hue_db_type == 'oracle'
 - name: Create tables
   shell: /opt/mapr/hue/create_oracle_tables.sh
-  when: hue_db_type == 'oracle'
+  when: hue_db_type == 'oracle' and inventory_hostname == groups["mapr-hue"][0]
 
+- name: Start all hue instances
+  lineinfile: dest={{ hue_path_result.files[0].path }}/desktop/conf/warden.hue.conf regexp="^services=" line="services=hue:all"
+- name: Start all livy instances
+  lineinfile: dest={{ hue_livy_path_result.files[0].path }}/conf.new/warden.livy.conf regexp="^services=" line="services=livy:all"
+- name: Copy to /opt/mapr/conf/conf.d/warden.hue.conf
+  copy: remote_src=true src={{ hue_path_result.files[0].path }}/desktop/conf/warden.hue.conf dest=/opt/mapr/conf/conf.d/warden.hue.conf mode=0644 owner={{ mapr_user }} group={{ mapr_user }}
+- name: Copy to /opt/mapr/conf/conf.d/warden.livy.conf
+  copy: remote_src=true src={{ hue_livy_path_result.files[0].path }}/conf.new/warden.livy.conf dest=/opt/mapr/conf/conf.d/warden.livy.conf mode=0644 owner={{ mapr_user }} group={{ mapr_user }}
 
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
   when: hue_result.changed or livy_result.changed
-#- name: Restart Livy
-#  shell: maprcli node services -name livy -action restart -nodes {{ ansible_fqdn }}
-#  environment:
-#    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
-#  when: livy_result.changed
-#- name: Restart Hue
-#  shell: maprcli node services -name hue -action restart -nodes {{ ansible_fqdn }}
-#  environment:
-#    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
-#  when: hue_result.changed
+- name: Restart Livy
+  shell: maprcli node services -name livy -action restart -nodes {{ ansible_fqdn }}
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: livy_result.changed
+- name: Restart Hue
+  shell: maprcli node services -name hue -action restart -nodes {{ ansible_fqdn }}
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: hue_result.changed
 
 # http://maprdocs.mapr.com/home/Hue/ConfigureHuetouseKerberosYARN.html
 #http://maprdocs.mapr.com/home/Hue/ConfigureDBsforHueStorage.html

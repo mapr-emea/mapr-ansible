@@ -3,11 +3,19 @@
 - name: Install mapr-hiveserver2
   package: name=mapr-hiveserver2 state=present
   register: hs2_result
+- name: Find Hive Path
+  find: paths="/opt/mapr/hive/" patterns="hive*" file_type=directory
+  register: hive_path_result
+  failed_when: hive_path_result.matched != 1
+- name: Start all hive server instances
+  lineinfile: dest={{ hive_path_result.files[0].path }}/conf/warden.hs2.conf regexp="^services=" line="services=hs2:all"
+- name: Copy to /opt/mapr/conf/conf.d/warden.hs2.conf
+  copy: remote_src=true src={{ hive_path_result.files[0].path }}/conf/warden.hs2.conf dest=/opt/mapr/conf/conf.d/warden.hs2.conf mode=0644 owner={{ mapr_user }} group={{ mapr_user }}
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
   when: hs2_result.changed
-#- name: Restart Hive Server2
-#  shell: maprcli node services -name hs2 -action restart -nodes {{ ansible_fqdn }}
-#  environment:
-#    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
-#  when: hs2_result.changed
+- name: Restart Hive Server2
+  shell: maprcli node services -name hs2 -action restart -nodes {{ ansible_fqdn }}
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: hs2_result.changed

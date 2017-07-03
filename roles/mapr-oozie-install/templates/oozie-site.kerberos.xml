@@ -160,4 +160,22 @@
         <name>oozie.email.smtp.password</name>
         <value>{{ oozie_smtp_password }}</value>
     </property>
+
+    <property>
+        <name>oozie.services.ext</name>
+        <value>
+            org.apache.oozie.service.ZKLocksService,
+            org.apache.oozie.service.ZKXLogStreamingService,
+            org.apache.oozie.service.ZKJobsConcurrencyService,
+            org.apache.oozie.service.ZKUUIDService
+        </value>
+    </property>
+    <property>
+        <name>oozie.zookeeper.connection.string</name>
+        <value>{{ zookeeper_withport_string }}</value>
+    </property>
+    <property>
+        <name>oozie.zookeeper.namespace</name>
+        <value>oozie</value>
+    </property>
 </configuration>

@@ -57,12 +57,13 @@
     dest={{ drill_path_result.files[0].path }}/conf/drill-env.sh
     line="export DRILL_JAVA_OPTS=\"$DRILL_JAVA_OPTS -Djava.security.auth.login.config=/opt/mapr/conf/mapr.login.conf -Dzookeeper.sasl.client=false\""
   when: mapr_security == 'none'
-
+- name: Copy to /opt/mapr/conf/conf.d/warden.drill-bits.conf
+  copy: remote_src=true src={{ drill_path_result.files[0].path }}/conf/warden.drill-bits.conf dest=/opt/mapr/conf/conf.d/warden.drill-bits.conf mode=0644 owner={{ mapr_user }} group={{ mapr_user }}
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
   when: drill_result.changed
-#- name: Restart Drill
-#  shell: maprcli node services -name drill-bits -action restart -nodes {{ ansible_fqdn }}
-#  environment:
-#    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
-#  when: drill_result.changed
+- name: Restart Drill
+  shell: maprcli node services -name drill-bits -action restart -nodes {{ ansible_fqdn }}
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: drill_result.changed

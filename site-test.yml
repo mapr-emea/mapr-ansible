@@ -1,5 +1,19 @@
-- name: Restarting mapr-warden on CLDB nodes
-  hosts: mapr-cldb
+- name: Setup Hive Variables
+  hosts: all
+  vars:
+      num_mysql_hosts: "{{ groups['ext-mysql']|length }}"
   roles:
-   - mapr-configure-warden-cldb-restart
-  serial: 1
+    - mapr-hive-vars
+#    - {role: mapr-hive-mysql, when: hive_db_type == 'mysql' and hive_db_mysql_create_schema_and_user == true and num_mysql_hosts != '0'  }
+#- name: Install Hive CLI
+#  hosts: mapr-hive-cli
+#  roles:
+#    - mapr-hive-cli-install
+- name: Install Hive MetaStore
+  hosts: mapr-hive-metastore
+  roles:
+    - mapr-hive-metastore-install
+- name: Install Hive Server 2
+  hosts: mapr-hive-server2
+  roles:
+    - mapr-hive-server2-install

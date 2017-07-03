@@ -31,12 +31,16 @@
 - name: Set owner mapr-system user
   file: path=/opt/mapr/oozie owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
 
+- name: Start all oozie instances
+  lineinfile: dest={{ oozie_path_result.files[0].path }}/conf/warden.oozie.conf regexp="^services=" line="services=oozie:all:cldb"
+- name: Topy to /opt/mapr/conf/conf.d/warden.oozie.conf
+  copy: remote_src=true src={{ oozie_path_result.files[0].path }}/conf/warden.oozie.conf dest=/opt/mapr/conf/conf.d/warden.oozie.conf mode=0644 owner={{ mapr_user }} group={{ mapr_user }}
 
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
   when: oozie_result.changed
-#- name: Restart Oozie
-#  shell: maprcli node services -name oozie -action restart -nodes {{ ansible_fqdn }}
-#  environment:
-#    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
-#  when: oozie_result.changed
+- name: Restart Oozie
+  shell: maprcli node services -name oozie -action restart -nodes {{ ansible_fqdn }}
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: oozie_result.changed
