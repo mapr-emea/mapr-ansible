@@ -34,10 +34,10 @@
     regexp="^export MAPR_HBASE_SERVER_OPTS"
   when: hbase_thrift_rest_security == 'kerberos'
 
-- name: Copy to /opt/mapr/conf/conf.d/warden.hbaserest.conf
-  copy: remote_src=true src={{ hbase_path_result.files[0].path }}/conf/warden.hbaserest.conf dest=/opt/mapr/conf/conf.d/warden.hbaserest.conf mode=0644 owner={{ mapr_user }} group={{ mapr_user }}
-- name: Copy to /opt/mapr/conf/conf.d/warden.hbasethrift.conf
-  copy: remote_src=true src={{ hbase_path_result.files[0].path }}/conf/warden.hbasethrift.conf dest=/opt/mapr/conf/conf.d/warden.hbasethrift.conf mode=0644 owner={{ mapr_user }} group={{ mapr_user }}
+#- name: Copy to /opt/mapr/conf/conf.d/warden.hbaserest.conf
+#  copy: remote_src=true src={{ hbase_path_result.files[0].path }}/conf/warden.hbaserest.conf dest=/opt/mapr/conf/conf.d/warden.hbaserest.conf mode=0644 owner={{ mapr_user }} group={{ mapr_user }}
+#- name: Copy to /opt/mapr/conf/conf.d/warden.hbasethrift.conf
+#  copy: remote_src=true src={{ hbase_path_result.files[0].path }}/conf/warden.hbasethrift.conf dest=/opt/mapr/conf/conf.d/warden.hbasethrift.conf mode=0644 owner={{ mapr_user }} group={{ mapr_user }}
 
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
