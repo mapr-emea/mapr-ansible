@@ -7,7 +7,7 @@
     packages_Debian: ['mysql-server', 'mysql-client', 'python-mysqldb']
   package: name={{ item }} state=present
   with_items: "{{ vars['packages_' + ansible_os_family] }}"
-
+  register: mysql_result
 - name: Remove localhost binding
   vars:
     mysqlpath_Suse: /etc/my.cnf
@@ -21,5 +21,5 @@
     service_RedHat: mariadb
     service_Debian: mysql
   service: name={{ vars['service_' + ansible_os_family] }} state=restarted enabled=yes
-
+  when: mysql_result.changed
 
