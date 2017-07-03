@@ -9,7 +9,3 @@
   hosts: mapr-hue
   roles:
     - mapr-hue-install
-- name: Uninstall Hue
-  hosts: all:!mapr-hue
-  roles:
-    - mapr-hue-uninstall

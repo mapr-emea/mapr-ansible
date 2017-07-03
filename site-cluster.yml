@@ -1,5 +1,7 @@
-# CHUFE precheck, mysql selected, when hive with mysql or oozie or hue
-# CHUFE precheck, host set when no mysql or oracle used
+- name: Precheck
+  hosts: all
+  roles:
+    - mapr-precheck
 - name: Setup MapR repositories
   hosts: mapr-core
   roles:

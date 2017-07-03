@@ -130,11 +130,21 @@
   when: hue_result.changed or livy_result.changed
 - name: Restart Livy
   shell: maprcli node services -name livy -action restart -nodes {{ ansible_fqdn }}
+  register: task_result
+  until: task_result.rc == 0
+  retries: 10
+  delay: 10
+  ignore_errors: yes
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
   when: livy_result.changed
 - name: Restart Hue
   shell: maprcli node services -name hue -action restart -nodes {{ ansible_fqdn }}
+  register: task_result
+  until: task_result.rc == 0
+  retries: 10
+  delay: 10
+  ignore_errors: yes
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
   when: hue_result.changed

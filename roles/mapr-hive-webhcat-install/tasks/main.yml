@@ -21,6 +21,11 @@
 
 - name: Restart Hive WebHCat
   shell: maprcli node services -name hcat -action restart -nodes {{ ansible_fqdn }}
+  register: task_result
+  until: task_result.rc == 0
+  retries: 10
+  delay: 10
+  ignore_errors: yes
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
   when: webhcat_result.changed

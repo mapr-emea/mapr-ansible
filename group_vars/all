@@ -69,7 +69,7 @@ oracle_jdbc_driver_path: /Users/chufe/Downloads/ojdbc6.jar
 hue_db_type: mysql
 hue_db_mysql_create_schema_and_user: true
 # set only for Oracle or when MySQL is external, comment out it should take host from installed DB (ext-mysql)
-# hue_db_host: {{ hue_db_host }}
+#hue_db_host: oracle.db
 hue_db_user: hue
 hue_db_password: hue
 # For Oracle add SID here
