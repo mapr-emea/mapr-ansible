@@ -18,11 +18,11 @@
 
 - name: Hive MySQL required
   fail: msg="Hive - Install MySQL or set hive_db_jdbc_url in all configuration when setting hive_db_type = 'mysql'"
-  when: (groups['mapr-hive']|length) > 0 and (groups['ext-mysql']|length) == 0 and hive_db_jdbc_url is undefined and hive_db_type == 'mysql'
+  when: (groups['mapr-hive-cli']|length) > 0 and (groups['ext-mysql']|length) == 0 and hive_db_jdbc_url is undefined and hive_db_type == 'mysql'
 
 - name: Hive Oracle required
   fail: msg="Hive - Set hive_db_jdbc_url in all configuration when setting hive_db_type = 'oracle'"
-  when: (groups['mapr-hive']|length) > 0 and hive_db_jdbc_url is undefined and hive_db_type == 'oracle'
+  when: (groups['mapr-hive-cli']|length) > 0 and hive_db_jdbc_url is undefined and hive_db_type == 'oracle'
 
 - name: Oozie MySQL required
   fail: msg="Oozie - Install MySQL or set oozie_db_jdbc_url in all configuration when setting oozie_db_type = 'mysql'"
