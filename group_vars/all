@@ -1,4 +1,4 @@
-mapr_release_url: http://package.mapr.com/releases/v5.2.1
+mapr_release_url: http://package.mapr.com/releases/v5.2.0
 mapr_ecosystem_url: http://package.mapr.com/releases/MEP/MEP-3.0.0/
 mapr_gpg_url: http://package.mapr.com/releases/pub/maprgpg.key
 
@@ -10,10 +10,10 @@ jdk: openjdk18
 #jdk_folder: /opt/java/jdk1.8.0_111
 # redhat openjdk java path
 jdk_folder: /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.121-0.b13.el7_3.x86_64
-oracle_jdk_url: http://download.oracle.com/otn-pub/java/jdk/8u111-b14/jdk-8u111-linux-x64.tar.gz
+oracle_jdk_url: http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.tar.gz
 
 hadoop_version: 2.7.0
-cluster_name: demo.mapr.com
+cluster_name: validation.mapr.com
 # required when aborted in wrong stage or changing security type
 force_zookeeper_restart: false
 force_warden_restart: false
@@ -21,7 +21,7 @@ force_warden_restart: false
 ####### Enable security features ##########
 # Default value for all components: mapr core and ecosystem
 # Options: none, maprsasl, kerberos
-security_all: maprsasl
+security_all: none
 
 # MapR-Core security
 # Options: none, maprsasl, kerberos
@@ -50,7 +50,7 @@ spark_authenticate: true
 spark_ssl_encryption: true
 spark_sasl_encryption: true
 # Hue will use PAM auth and depending what was configured for other components use these settings
-hue_ssl: true
+hue_ssl: false
 ###########################################
 
 mapr_subnets: 10.0.0.0/24

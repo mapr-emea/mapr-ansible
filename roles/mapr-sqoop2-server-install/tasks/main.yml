@@ -24,7 +24,7 @@
   when: sqoop_security == 'kerberos'
 
 - name: Copy to /opt/mapr/conf/conf.d/warden.sqoop2.conf
-  copy: remote_src=true src={{ sqoop_path_result.files[0].path }}/conf.d/warden.sqoop2.conf dest=/opt/mapr/conf/conf.d/warden.sqoop2.conf mode=0644 owner={{ mapr_user }} group={{ mapr_user }}
+  copy: remote_src=true src={{ sqoop_path_result.files[0].path }}/conf.d/warden.sqoop2.conf dest=/opt/mapr/conf/conf.d/warden.sqoop2.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
 
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R

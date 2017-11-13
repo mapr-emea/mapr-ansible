@@ -10,7 +10,7 @@
 - name: Start all hive meta instances
   lineinfile: dest={{ hive_path_result.files[0].path }}/conf/warden.hivemeta.conf regexp="^services=" line="services=hivemeta:all"
 - name: Copy to /opt/mapr/conf/conf.d/warden.hivemeta.conf
-  copy: remote_src=true src={{ hive_path_result.files[0].path }}/conf/warden.hivemeta.conf dest=/opt/mapr/conf/conf.d/warden.hivemeta.conf mode=0644 owner={{ mapr_user }} group={{ mapr_user }}
+  copy: remote_src=true src={{ hive_path_result.files[0].path }}/conf/warden.hivemeta.conf dest=/opt/mapr/conf/conf.d/warden.hivemeta.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
   when: hivemeta_result.changed

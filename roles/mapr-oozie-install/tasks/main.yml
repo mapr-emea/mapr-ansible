@@ -34,7 +34,7 @@
 - name: Start all oozie instances
   lineinfile: dest={{ oozie_path_result.files[0].path }}/conf/warden.oozie.conf regexp="^services=" line="services=oozie:all:cldb"
 - name: Topy to /opt/mapr/conf/conf.d/warden.oozie.conf
-  copy: remote_src=true src={{ oozie_path_result.files[0].path }}/conf/warden.oozie.conf dest=/opt/mapr/conf/conf.d/warden.oozie.conf mode=0644 owner={{ mapr_user }} group={{ mapr_user }}
+  copy: remote_src=true src={{ oozie_path_result.files[0].path }}/conf/warden.oozie.conf dest=/opt/mapr/conf/conf.d/warden.oozie.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
 
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
