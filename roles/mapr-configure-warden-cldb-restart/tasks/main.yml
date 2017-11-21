@@ -10,6 +10,7 @@
 - name: Wait for CLDB
   wait_for: path=/opt/mapr/logs/cldb.log state=present search_regex="CLDB State change \\:\ RUNNING|CLDBShutdown\\:\ license not found for CLDB HA"
 - pause: seconds=30
+  check_mode: no
 - name: Check for CLDB not started, because of license
   shell: "cat /opt/mapr/logs/cldb.log | grep 'license not found for CLDB HA'"
   failed_when: false
