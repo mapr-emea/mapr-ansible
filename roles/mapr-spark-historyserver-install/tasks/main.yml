@@ -7,6 +7,12 @@
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
   when: sparkhs_result.changed
+- name: Find Spark Path
+  find: paths="/opt/mapr/spark" patterns="spark*" file_type=directory
+  register: spark_path_result
+  failed_when: spark_path_result.matched != 1
+- name: Security opts for Spark History Server
+  lineinfile: regexp='^export SPARK_HISTORY_OPTS=' dest={{ spark_path_result.files[0].path }}/conf/spark-env.sh line='export SPARK_HISTORY_OPTS=" -Dspark.history.fs.logDirectory=maprfs:///apps/spark/logs -Dspark.ui.acls.enable=true"'
 - name: Restart Spark Historyserver
   shell: maprcli node services -name spark-historyserver -action restart -nodes {{ ansible_fqdn }}
   register: task_result

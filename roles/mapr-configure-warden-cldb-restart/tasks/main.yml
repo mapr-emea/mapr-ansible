@@ -14,8 +14,10 @@
   shell: "cat /opt/mapr/logs/cldb.log | grep 'license not found for CLDB HA'"
   failed_when: false
   register: cldb_license_status
+  check_mode: no
 - name: Check if CLDB process is running
   shell: "/opt/mapr/initscripts/mapr-cldb status"
   register: cldb_status
   failed_when: cldb_status.stdout.find('CLDB running') == -1
   when: cldb_license_status.rc == 1 # 1 means error from grep, no license error occured
+  check_mode: no

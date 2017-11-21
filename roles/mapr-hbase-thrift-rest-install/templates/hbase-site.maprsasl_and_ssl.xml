@@ -116,5 +116,18 @@
         <value>mapr123</value>
     </property>
 
+    <property>
+        <name>hbase.thrift.ssl.enabled</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>hbase.thrift.ssl.keystore.store</name>
+        <value>/opt/mapr/conf/ssl_keystore</value>
+    </property>
+    <property>
+        <name>hbase.thrift.ssl.keystore.password</name>
+        <value>mapr123</value>
+    </property>
+
 
 </configuration>

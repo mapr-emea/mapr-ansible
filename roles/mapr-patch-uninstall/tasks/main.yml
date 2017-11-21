@@ -3,6 +3,7 @@
   shell: "rpm -qa | grep mapr-patch"
   register: patch_result # rc == 1, return code of grep, nothing found
   failed_when: false
+  check_mode: no
 - name: Stop Warden
   service: name=mapr-warden state=stopped enabled=yes
   when: patch_result.rc == 0

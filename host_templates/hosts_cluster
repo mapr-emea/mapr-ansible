@@ -112,6 +112,10 @@
 [mapr-mahout]
 10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
 
+# Sqoop1
+[mapr-sqoop1]
+10.0.0.132 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
 # Sqoop2 Server
 [mapr-sqoop2-server]
 10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo

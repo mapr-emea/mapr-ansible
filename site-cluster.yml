@@ -126,15 +126,15 @@
 - name: Configure and start (unsecure)
   hosts: mapr-core
   roles:
-   - {role: mapr-configure-unsecure, when: mapr_security == 'none' and ((zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0 or (historyserver_changes|int) > 0)}
+   - {role: mapr-configure-unsecure, when: mapr_security == 'none' and (force_reconfigure_sh or ((zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0 or (historyserver_changes|int) > 0))}
 - name: Configure and start (native-security)
   hosts: mapr-core
   roles:
-   - {role: mapr-configure-nativesecurity-secure, when: mapr_security == 'maprsasl' and ((zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0 or (historyserver_changes|int) > 0)}
+   - {role: mapr-configure-nativesecurity-secure, when: mapr_security == 'maprsasl' and (force_reconfigure_sh or ((zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0 or (historyserver_changes|int) > 0))}
 - name: Configure and start (kerberos)
   hosts: mapr-core
   roles:
-   - {role: mapr-configure-kerberos, when: mapr_security == 'kerberos' and ((zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0 or (historyserver_changes|int) > 0)}
+   - {role: mapr-configure-kerberos, when: mapr_security == 'kerberos' and (force_reconfigure_sh or ((zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0 or (historyserver_changes|int) > 0))}
 - name: Disk setup
   hosts: mapr-datanode:mapr-cldb
   roles:
@@ -194,7 +194,7 @@
   hosts: mapr-flume
   roles:
     - mapr-flume-install
-- name: Install Flume
+- name: Uninstall Flume
   hosts: all:!mapr-flume
   roles:
     - mapr-flume-uninstall
@@ -269,6 +269,14 @@
   hosts: all:!mapr-pig
   roles:
     - mapr-pig-uninstall
+- name: Install Sqoop
+  hosts: mapr-sqoop1
+  roles:
+    - mapr-sqoop1-install
+- name: Uninstall Flume
+  hosts: all:!mapr-sqoop1
+  roles:
+    - mapr-sqoop1-uninstall
 - name: Set Sqoop 2 Server Vars
   hosts: all
   roles:

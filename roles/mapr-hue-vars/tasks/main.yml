@@ -46,7 +46,9 @@
 - name: Find Hive Path
   find: paths="/opt/mapr/hive/" patterns="hive*" file_type=directory
   register: hue_hive_path_result
-
+- name: Find Hbase Path
+  find: paths="/opt/mapr/hbase/" patterns="hbase*" file_type=directory
+  register: hue_hbase_path_result
 - name: Get HiveServer 2
   set_fact: hiveserver2_item={{ hostvars[item]['ansible_fqdn'] }}
   with_items:

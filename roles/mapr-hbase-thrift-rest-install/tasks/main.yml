@@ -38,6 +38,22 @@
 #  copy: remote_src=true src={{ hbase_path_result.files[0].path }}/conf/warden.hbaserest.conf dest=/opt/mapr/conf/conf.d/warden.hbaserest.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
 #- name: Copy to /opt/mapr/conf/conf.d/warden.hbasethrift.conf
 #  copy: remote_src=true src={{ hbase_path_result.files[0].path }}/conf/warden.hbasethrift.conf dest=/opt/mapr/conf/conf.d/warden.hbasethrift.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
+- name: Start all hbasethrift instances
+  lineinfile: dest={{ hbase_path_result.files[0].path }}/conf/warden.hbasethrift.conf regexp="^services=" line="services=hbasethrift:all"
+- name: Copy to /opt/mapr/conf/conf.d/warden.hbasethrift.conf
+  copy: remote_src=true src={{ hbase_path_result.files[0].path }}/conf/warden.hbasethrift.conf dest=/opt/mapr/conf/conf.d/warden.hbasethrift.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
+  changed_when: false
+- name: Replace ${VERSION} with Hbase version
+  shell: 'sed -i s/\${VERSION}/`cat /opt/mapr/hbase/hbaseversion`/g /opt/mapr/conf/conf.d/warden.hbasethrift.conf'
+  changed_when: false
+#- name: Get HBase version
+#  shell: cat /opt/mapr/hbase/hbaseversion
+#  register: hbase_version_result
+#- name: Replace version in warden.hbasethrift.conf
+#  replace:
+#    path: /opt/mapr/conf/conf.d/warden.hbasethrift.conf
+#    regexp: '(\s+)VERSION(\s+.*)'
+#    replace: "\\1{{ hbase_version_result.stdout }}\\2"
 
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R

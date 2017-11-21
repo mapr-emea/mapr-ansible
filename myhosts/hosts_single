@@ -114,6 +114,10 @@ common
 # Mahout
 [mapr-mahout]
 
+# Sqoop1
+[mapr-sqoop1:children]
+#common
+
 # Sqoop2 Server
 [mapr-sqoop2-server:children]
 #common

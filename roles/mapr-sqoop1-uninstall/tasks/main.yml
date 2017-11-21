@@ -1,0 +1,4 @@
+---
+# Uninstall Sqoop1
+- name: Uninstall mapr-sqoop
+  package: name=mapr-sqoop state=absent

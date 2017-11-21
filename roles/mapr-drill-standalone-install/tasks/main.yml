@@ -5,6 +5,8 @@
   package: name=mapr-drill state=present
   register: drill_result
 # Other actions
+- name: Copy JPam
+  unarchive: src=JPam-Linux_amd64-1.1.tgz dest=/opt
 - name: Set owner mapr-system user
   file: path=/opt/mapr/drill owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
 
@@ -14,6 +16,11 @@
   failed_when: drill_path_result.matched != 1
 - debug: msg="Drill Path {{ drill_path_result.files[0].path }}"
 
+- name: Fix the Java version detection bug in drill-config.sh
+  lineinfile: path={{ drill_path_result.files[0].path }}/bin//drill-config.sh
+              regexp='^"$JAVA" -version 2>&1 | grep "version" | egrep -e "1.4|1.5|1.6" > /dev/null'
+              line='"$JAVA" -version 2>&1 | grep "version" | egrep -e "1\.4|1\.5|1\.6" > /dev/null'
+              state=present
 - name: Configure drill-override.conf - unsecure
   template: src=drill-override.unsecure.conf dest={{ drill_path_result.files[0].path }}/conf/drill-override.conf
   when: drill_security == 'none'
@@ -36,7 +43,7 @@
 - name: Set DRILL_JAVA_LIB_PATH using JPAM in drill-env.sh
   lineinfile: >
     dest={{ drill_path_result.files[0].path }}/conf/drill-env.sh
-    line="export DRILLBIT_JAVA_OPTS=\"-Djava.library.path=/opt/mapr/lib/\""
+    line="export DRILLBIT_JAVA_OPTS=\"-Djava.library.path=/opt/JPam-1.1/\""
     regexp="^export DRILLBIT_JAVA_OPTS"
     insertafter="^\# export DRILLBIT_JAVA_OPTS"
   when: drill_security == 'pam'
@@ -57,6 +64,12 @@
     dest={{ drill_path_result.files[0].path }}/conf/drill-env.sh
     line="export DRILL_JAVA_OPTS=\"$DRILL_JAVA_OPTS -Djava.security.auth.login.config=/opt/mapr/conf/mapr.login.conf -Dzookeeper.sasl.client=false\""
   when: mapr_security == 'none'
+# MAPR-ISSUE no number
+- name: Fix Drill logs dir
+  lineinfile: >
+    dest={{ drill_path_result.files[0].path }}/bin/drill-config.sh
+    regexp="\s*DRILL_LOG_DIR=(.*)/log$"
+    line="    DRILL_LOG_DIR=$DRILL_HOME/logs"
 - name: Copy to /opt/mapr/conf/conf.d/warden.drill-bits.conf
   copy: remote_src=true src={{ drill_path_result.files[0].path }}/conf/warden.drill-bits.conf dest=/opt/mapr/conf/conf.d/warden.drill-bits.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
 - name: Configure.sh -R

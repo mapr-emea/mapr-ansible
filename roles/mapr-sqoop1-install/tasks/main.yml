@@ -1,0 +1,4 @@
+---
+# Install Sqoop1
+- name: Install mapr-sqoop
+  package: name=mapr-sqoop state=present

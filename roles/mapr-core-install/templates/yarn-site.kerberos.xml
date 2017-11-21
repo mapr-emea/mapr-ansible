@@ -72,4 +72,8 @@
         <name>yarn.log-aggregation-enable</name>
         <value>true</value>
     </property>
+    <property>
+        <name>yarn.mapr.ticket.expiration</name>
+        <value>3154000000000</value>
+    </property>
 </configuration>

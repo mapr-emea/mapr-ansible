@@ -12,6 +12,7 @@
   shell: id {{ mapr_user }}
   failed_when: false
   register: result_id_mapruser
+  check_mode: no
 - name: MapR user exists?
   fail: msg="{{ mapr_user }} user does not exist on target system and mapr_create_user is set to false"
   when: mapr_create_user == false and result_id_mapruser.rc == 1
@@ -45,6 +46,7 @@
   failed_when: false
   register: result_oracle_instantclientbasic
   when: (groups['mapr-hue']|length) > 0 and hue_db_type == 'oracle' and inventory_hostname in groups["mapr-hue"]
+  check_mode: no
 - name: Hue Oracle Instant Basic Client
   fail: msg="oracle-instantclient-basic is required on Hue node, please download from http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html"
   when: (groups['mapr-hue']|length) > 0 and hue_db_type == 'oracle' and inventory_hostname in groups["mapr-hue"] and result_oracle_instantclientbasic.rc != 0
@@ -55,6 +57,7 @@
   failed_when: false
   register: result_oracle_instantclientdevel
   when: (groups['mapr-hue']|length) > 0 and hue_db_type == 'oracle' and inventory_hostname in groups["mapr-hue"]
+  check_mode: no
 - name: Hue Oracle Instant DevelClient
   fail: msg="oracle-instantclient-devel is required on Hue node, please download from http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html"
   when: (groups['mapr-hue']|length) > 0 and hue_db_type == 'oracle' and inventory_hostname in groups["mapr-hue"] and result_oracle_instantclientdevel.rc != 0
