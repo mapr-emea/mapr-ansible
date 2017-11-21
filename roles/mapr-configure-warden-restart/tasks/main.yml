@@ -3,7 +3,7 @@
 - name: Restart MapR Warden
   service: name=mapr-warden state=restarted enabled=yes
 - pause: seconds=30
-  when: ansible_ckeck_mode is defined and not ansible_ckeck_mode
+  when: ansible_check_mode is undefined or not ansible_check_mode
 - name: Check if MapR Fileserver is running
   shell: "/opt/mapr/initscripts/mapr-mfs status"
   register: mfs_status

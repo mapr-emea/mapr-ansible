@@ -10,7 +10,7 @@
 - name: Wait for CLDB
   wait_for: path=/opt/mapr/logs/cldb.log state=present search_regex="CLDB State change \\:\ RUNNING|CLDBShutdown\\:\ license not found for CLDB HA"
 - pause: seconds=30
-  when: ansible_ckeck_mode is defined and not ansible_ckeck_mode
+  when: ansible_check_mode is undefined or not ansible_check_mode
 - name: Check for CLDB not started, because of license
   shell: "cat /opt/mapr/logs/cldb.log | grep 'license not found for CLDB HA'"
   failed_when: false
