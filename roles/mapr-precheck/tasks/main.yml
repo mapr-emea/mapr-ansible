@@ -62,4 +62,9 @@
   fail: msg="oracle-instantclient-devel is required on Hue node, please download from http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html"
   when: (groups['mapr-hue']|length) > 0 and hue_db_type == 'oracle' and inventory_hostname in groups["mapr-hue"] and result_oracle_instantclientdevel.rc != 0
   any_errors_fatal: true
+- name: Custom OpenTSDB must NOT be installed on OpenTSDB node
+  fail: msg="Custom OpenTSDB [mapr-opentsdb-custom] must NOT be installed on OpenTSDB node [mapr-opentsdb]"
+  when: inventory_hostname in groups["mapr-opentsdb-custom"] and inventory_hostname in groups["mapr-opentsdb"]
+  any_errors_fatal: true
+
 # CHUFE check posix basic,posix plat, nfs -> only one

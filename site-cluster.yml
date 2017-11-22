@@ -358,12 +358,16 @@
   hosts: all:!mapr-collectd
   roles:
     - mapr-collectd-uninstall
+- name: Install Custom OpenTSDB
+  hosts: mapr-opentsdb-custom
+  roles:
+    - mapr-opentsdb-custom-install
 - name: Install MapR OpenTSDB
   hosts: mapr-opentsdb
   roles:
     - mapr-opentsdb-install
 - name: Uninstall MapR OpenTSDB
-  hosts: all:!mapr-opentsdb
+  hosts: all:!mapr-opentsdb:!mapr-opentsdb-custom
   roles:
     - mapr-opentsdb-uninstall
 - name: Install MapR Grafana
