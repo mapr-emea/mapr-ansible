@@ -1,0 +1,8 @@
+---
+# Install Anaconda
+- name: Find Spark Path
+  find: paths="/opt/mapr/spark" patterns="spark*" file_type=directory
+  register: spark_path_result
+  failed_when: spark_path_result.matched != 1
+- name: Set new Python environment in Spark
+  lineinfile: dest={{ spark_path_result.files[0].path }}/conf/spark-env.sh state=present  regexp="^export\ PYSPARK_PYTHON" line="export PYSPARK_PYTHON={{ anaconda_install_path }}/envs/{{ anaconda_env_name }}/bin/python"

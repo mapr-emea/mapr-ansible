@@ -1,0 +1,14 @@
+custom_channels:
+  pkgs/main: {{ anaconda_repo_path }}/
+  pkgs/free: {{ anaconda_repo_path }}/
+  pkgs/r: {{ anaconda_repo_path }}/
+  pkgs/pro: {{ anaconda_repo_path }}/
+custom_multichannels:
+  defaults: ["{{ anaconda_repo_path }}/pkgs/main", "{{ anaconda_repo_path }}/pkgs/free", "{{ anaconda_repo_path }}/pkgs/r", "{{ anaconda_repo_path }}/pkgs/pro"]
+  local: []
+default_channels:
+  - {{ anaconda_repo_path }}/pkgs/main
+  - {{ anaconda_repo_path }}/pkgs/free
+  - {{ anaconda_repo_path }}/pkgs/r
+  - {{ anaconda_repo_path }}/pkgs/pro
+#  - file:/{{ anaconda_custom_repo_path }}
