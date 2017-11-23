@@ -20,12 +20,12 @@
 - name: Configure hive-site.xml - maprsasl
   template: src=hive-site.maprsasl.xml dest={{ hive_path_result.files[0].path }}/conf/hive-site.xml
   when: hive_server_security == 'maprsasl'
-- name: Set MAPR_HIVE_SERVER_LOGIN_OPTS in env.sh to maprsasl
-  lineinfile: dest=/opt/mapr/conf/env.sh insertbefore="^export\ MAPR_HIVE_SERVER_LOGIN_OPTS" regexp="^MAPR_HIVE_SERVER_LOGIN_OPTS" line="MAPR_HIVE_SERVER_LOGIN_OPTS=\"-Dhadoop.login=maprsasl\""
-  when: mapr_security == 'maprsasl'
-- name: Set MAPR_HIVE_LOGIN_OPTS= in env.sh to maprsasl
-  lineinfile: dest=/opt/mapr/conf/env.sh insertbefore="^export\ MAPR_HIVE_LOGIN_OPTS=" regexp="^MAPR_HIVE_LOGIN_OPTS=" line="MAPR_HIVE_LOGIN_OPTS=\"-Dhadoop.login=maprsasl\""
-  when: mapr_security == 'maprsasl'
+#- name: Set MAPR_HIVE_SERVER_LOGIN_OPTS in env.sh to maprsasl
+#  lineinfile: dest=/opt/mapr/conf/env.sh insertbefore="^export\ MAPR_HIVE_SERVER_LOGIN_OPTS" regexp="^MAPR_HIVE_SERVER_LOGIN_OPTS" line="MAPR_HIVE_SERVER_LOGIN_OPTS=\"-Dhadoop.login=maprsasl\""
+#  when: mapr_security == 'maprsasl'
+#- name: Set MAPR_HIVE_LOGIN_OPTS= in env.sh to maprsasl
+#  lineinfile: dest=/opt/mapr/conf/env.sh insertbefore="^export\ MAPR_HIVE_LOGIN_OPTS=" regexp="^MAPR_HIVE_LOGIN_OPTS=" line="MAPR_HIVE_LOGIN_OPTS=\"-Dhadoop.login=maprsasl\""
+#  when: mapr_security == 'maprsasl'
 
 - name: Configure hive-site.xml - pam
   template: src=hive-site.pam.xml dest={{ hive_path_result.files[0].path }}/conf/hive-site.xml

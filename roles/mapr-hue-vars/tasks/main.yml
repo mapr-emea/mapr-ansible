@@ -66,7 +66,7 @@
   set_fact: hue_sqoopserver2_string={{ sqoopserver2_hosts.results | map(attribute='ansible_facts.sqoopserver2_item') | list | join(',')}}
 
 - name: Get HBase Thrift Server
-  set_fact: hbasethriftserver_item={{ hostvars[item]['ansible_fqdn'] }}
+  set_fact: hbasethriftserver_item=({{ hostvars[item]['ansible_fqdn']}}|{{hostvars[item]['ansible_fqdn'] }}:9090)
   with_items:
     - "{{ groups['mapr-hbase-thrift-rest'] }}"
   register: hbasethriftserver_hosts
