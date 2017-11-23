@@ -1,9 +1,9 @@
-mapr_release_url: http://package.mapr.com/releases/v5.2.0
-mapr_ecosystem_url: http://package.mapr.com/releases/MEP/MEP-3.0.0/
+mapr_release_url: http://package.mapr.com/releases/v5.2.2
+mapr_ecosystem_url: http://package.mapr.com/releases/MEP/MEP-3.0.2/
 mapr_gpg_url: http://package.mapr.com/releases/pub/maprgpg.key
 
 # Patches are only installed when variable mapr_patch_url is set
-#mapr_patch_url: http://package.mapr.com/patches/releases/v5.2.0/
+#mapr_patch_url: http://package.mapr.com/patches/releases/v5.2.2/
 
 # JDK choose: openjdk18 or oraclejdk18
 jdk: openjdk18
@@ -13,7 +13,7 @@ jdk_folder: /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.121-0.b13.el7_3.x86_64
 oracle_jdk_url: http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.tar.gz
 
 hadoop_version: 2.7.0
-cluster_name: validation.mapr.com
+cluster_name: demo.mapr.com
 # required when aborted in wrong stage or changing security type
 force_zookeeper_restart: false
 force_warden_restart: false
@@ -22,7 +22,7 @@ force_reconfigure_sh: false
 ####### Enable security features ##########
 # Default value for all components: mapr core and ecosystem
 # Options: none, maprsasl, kerberos
-security_all: none
+security_all: maprsasl
 
 # MapR-Core security
 # Options: none, maprsasl, kerberos
@@ -120,9 +120,9 @@ disks: /dev/xvdb,/dev/xvdc,/dev/xvdd
 disk_storage_pool_size: 3
 
 # Third party components
-zeppelin_version: 0.7.0
+zeppelin_version: 0.7.3
 zeppelin_git_repo: https://github.com/apache/incubator-zeppelin.git
-zeppelin_git_hash: v0.7.0
+zeppelin_git_hash: v0.7.3
 
 # Get url from https://www.rstudio.com/products/rstudio/download-commercial/
 rstudio_server_pro_deb: http://download2.rstudio.org/rstudio-server-pro-0.99.903-amd64.deb

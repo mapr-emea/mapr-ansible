@@ -142,6 +142,11 @@ common
 [mapr-opentsdb:children]
 #common
 
+# Custom OpenTSDB, do NOT install on same node as mapr-opentsdb
+[mapr-opentsdb-custom:children]
+#common
+
+
 # Grafana
 [mapr-grafana:children]
 #common

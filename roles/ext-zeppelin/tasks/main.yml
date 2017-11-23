@@ -42,7 +42,7 @@
 - name: Clone Zeppelin Git Repo
   git: repo={{ zeppelin_git_repo }} dest=/tmp/zeppelin.git version={{ zeppelin_git_hash }}
 - name: Build Zeppelin with Maven
-  shell: /usr/local/bin/mvn clean package -Pmapr51 -Pyarn -Pbuild-distr -Pspark-2.0  -Pscala-2.11 -Phadoop-2.7 -Ppyspark -DskipTests -B -f /tmp/zeppelin.git/pom.xml
+  shell: /usr/local/bin/mvn clean package -Pmapr51 -Pyarn -Pbuild-distr -Pspark-2.1  -Pscala-2.11 -Phadoop-2.7 -Ppyspark -DskipTests -B -f /tmp/zeppelin.git/pom.xml
 #  shell: export JAVA_HOME={{ jdk_folder }} && /usr/local/bin/mvn clean package -Pmapr51 -Pyarn -Pbuild-distr -Pspark-2.0  -Pscala-2.11 -Phadoop-2.7 -Ppyspark -DskipTests -B -f /tmp/zeppelin.git/pom.xml
 - name: Create /opt/mapr/zeppelin dir
   file: path=/opt/mapr/zeppelin state=directory

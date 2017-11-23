@@ -146,6 +146,10 @@ mapr-core
 [mapr-opentsdb]
 10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
 
+# Custom OpenTSDB, do NOT install on same node as mapr-opentsdb
+[mapr-opentsdb-custom]
+10.0.0.132 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
 # Grafana
 [mapr-grafana]
 10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
