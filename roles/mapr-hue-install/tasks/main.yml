@@ -4,8 +4,8 @@
   package: name=mapr-hue state=present
   register: hue_result
 
-- name: Install mapr-hue-livy
-  package: name=mapr-hue-livy state=present
+- name: Install mapr-livy
+  package: name=mapr-livy state=present
   register: livy_result
 
 
