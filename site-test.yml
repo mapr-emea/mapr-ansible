@@ -1,21 +1,15 @@
-- name: Setup global vars
+- name: Installing MapR DRILL
   hosts: all
-  roles:
-    - mapr-global-vars
-    - mapr-configure-vars
-    - mapr-configure-vars-hs
-- name: Setup Hue Vars
-  hosts: all
-  vars:
-      num_mysql_hosts: "{{ groups['ext-mysql']|length }}"
-  roles:
-    - mapr-hue-vars
-    - {role: mapr-hue-mysql, when: hue_db_type == 'mysql' and hue_db_mysql_create_schema_and_user == true and num_mysql_hosts != '0' }
-- name: Install Hue
-  hosts: mapr-hue
-  roles:
-    - mapr-hue-install
-- name: Uninstall Hue
-  hosts: all:!mapr-hue
-  roles:
-    - mapr-hue-uninstall
+  serial: "{{ serial|default(10) }}"
+  tasks:
+    - name: Create MapR volume
+      mapr_volume:
+        name: my.new.volume
+        state: present
+        path: /test
+        read_ace: p
+        write_ace: p
+        min_replication: 2
+        replication: 3
+        soft_quota: 1T
+        hard_quota: 2T
