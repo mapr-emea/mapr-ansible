@@ -1,15 +1,16 @@
 - name: Installing MapR DRILL
-  hosts: all
-  serial: "{{ serial|default(10) }}"
+  hosts: volumes
   tasks:
     - name: Create MapR volume
       mapr_volume:
-        name: my.new.volume
+        name: ansibletest
         state: present
-        path: /test
+        path: /aaab11
         read_ace: p
         write_ace: p
-        min_replication: 2
-        replication: 3
-        soft_quota: 1T
-        hard_quota: 2T
+        min_replication: 1
+        replication: 1
+        soft_quota_in_mb: 2097152
+        hard_quota_in_mb: 2097152
+        accountable_entity_type: group
+        accountable_entity_name: mapr
