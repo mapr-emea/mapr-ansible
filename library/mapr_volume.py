@@ -10,24 +10,66 @@ DOCUMENTATION = '''
 ---
 module: mapr_volumes
 
-short_description: This module manages the state of MapR volumes
+short_description: This module manages MapR volumes
 
 version_added: "2.4"
 
 description:
-    - "This is my longer description explaining my sample module"
+    - "This module manages MapR volumes"
 
 options:
     name:
         description:
-            - This is the message to send to the sample module
+            - Volume name
         required: true
-    new:
+    state:
         description:
-            - Control to demo if the result of this module is changed or not
+            - state can be present/absent - default: present
         required: false
-
-
+    topology:
+        description:
+            - Volume topology - default: /data
+        required: false
+    path:
+        description:
+            - Mount path of volume, if not set the volume will be unmounted.
+        required: false
+    read_ace:
+        description:
+            - Read ACE of the volume - default: p
+        required: false
+    write_ace:
+        description:
+            - Write ACE of the volume - default: p
+        required: false
+    min_replication:
+        description:
+            - Minimum replication of the volume - default: 2
+        required: false
+    replication:
+        description:
+            - Replication of the volume - default: 3
+        required: false
+    soft_quota_in_mb:
+        description:
+            - Advisory quota in MB. Zero value means no quota. - default: 0
+        required: false
+    hard_quota_in_mb:
+        description:
+            - Hard quota in MB. Zero value means no quota. - default: 0
+        required: false
+    read_only:
+        description:
+            - If the volume is read only - default: False
+        required: false                
+    accountable_entity_type:
+        description:
+            - Accountable entity type (user/group) - default: user
+        required: false 
+    accountable_entity_name:
+        description:
+            - Name of accountable entity - default: User which executes the script
+        required: false 
 author:
     - Carsten Hufe chufe@mapr.com
 '''
@@ -46,7 +88,6 @@ EXAMPLES = '''
     replication: 3
     soft_quota_in_mb: 1024
     hard_quota_in_mb: 1024
-    read_only: False
     accountable_entity_type: user
     accountable_entity_name: mapr
     read_only: False
@@ -152,12 +193,11 @@ def run_module():
             for key in set(old_values.keys() + new_values.keys()):
                 if old_values[key] != new_values[key]:
                     result['changed'] = True
-                    result['original_message'] = "Volume exists - values updated"
+                    result['original_message'] = "Volume " + module.params['name'] + " exists - values updated"
                     break;
         else:
             result['changed'] = True
-            result['original_message'] = "New volume created"
-
+            result['original_message'] = "New volume " + module.params['name'] + " created"
 
         result['diff'] = dict()
         result['diff']['before'] = str(old_values)
@@ -168,8 +208,12 @@ def run_module():
             execute_volume_changes(volume_exists, old_values, new_values)
 
     elif module.params['state'] == "absent":
-        # TODO
-        print("not yet implemented")
+        if volume_exists:
+            result['changed'] = True
+            result['original_message'] = "Volume " + module.params['name'] + " exists - volume removed"
+            result['message'] = result['original_message']
+            if not module.check_mode:
+                remove_volume(module.params['name'])
     else:
         module.fail_json(msg='State ' + module.params['state'] + ' is not supported.', **result)
 
@@ -184,8 +228,10 @@ def get_volume_info(volume_name):
     else:
         return None
 
+def remove_volume(volume_name):
+    subprocess.check_call("maprcli volume remove -name " + volume_name + " -force true", shell=True)
+
 def execute_volume_changes(volume_exists, old_values, new_values):
-    # TODO add -ae -aetype
     if not volume_exists:
         # create new volume
         volume_command = "maprcli volume create -name " + new_values['name']
@@ -229,5 +275,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-    # https://rogerwelin.github.io/ansible/2016/04/25/creating-custom-ansible-modules.html
