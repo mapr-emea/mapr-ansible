@@ -20,35 +20,15 @@ description:
 options:
     name:
         description:
-            - Volume name
+            - Entity name
         required: true
-    state:
+    type:
         description:
-            - state can be present/absent - default: present
-        required: false
-    topology:
+            - entity type: user or group
+        required: true
+    email:
         description:
-            - Volume topology - default: /data
-        required: false
-    path:
-        description:
-            - Mount path of volume, if not set the volume will be unmounted.
-        required: false
-    read_ace:
-        description:
-            - Read ACE of the volume - default: p
-        required: false
-    write_ace:
-        description:
-            - Write ACE of the volume - default: p
-        required: false
-    min_replication:
-        description:
-            - Minimum replication of the volume - default: 2
-        required: false
-    replication:
-        description:
-            - Replication of the volume - default: 3
+            - Contact email for entity
         required: false
     soft_quota_in_mb:
         description:
@@ -58,18 +38,6 @@ options:
         description:
             - Hard quota in MB. Zero value means no quota. - default: 0
         required: false
-    read_only:
-        description:
-            - If the volume is read only - default: False
-        required: false                
-    accountable_entity_type:
-        description:
-            - Accountable entity type (user/group) - default: user
-        required: false 
-    accountable_entity_name:
-        description:
-            - Name of accountable entity - default: User which executes the script
-        required: false 
 author:
     - Carsten Hufe chufe@mapr.com
 '''
