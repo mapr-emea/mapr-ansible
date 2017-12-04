@@ -8,7 +8,7 @@ ANSIBLE_METADATA = {
 
 DOCUMENTATION = '''
 ---
-module: mapr_volumes
+module: mapr_volume
 
 short_description: This module manages MapR volumes
 
@@ -203,7 +203,7 @@ def run_module():
         result['diff']['before'] = str(old_values)
         result['diff']['after'] = str(new_values)
         result['message'] = result['original_message']
-        if not module.check_mode:
+        if not module.check_mode and result['changed']:
             # execute changes
             execute_volume_changes(volume_exists, old_values, new_values)
 
