@@ -51,7 +51,7 @@
 # WORKAROUND END
 
 - name: Find Hue Livy Path
-  find: paths="/opt/mapr/hue-livy/" patterns="hue-livy*" file_type=directory
+  find: paths="/opt/mapr/livy/" patterns="livy*" file_type=directory
   register: hue_livy_path_result
   failed_when: hue_livy_path_result.matched != 1
 - name: Configure livy.conf
