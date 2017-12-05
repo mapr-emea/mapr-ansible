@@ -1,4 +1,0 @@
----
-# Uninstall Mahout
-- name: Uninstall mapr-mahout
-  package: name=mapr-mahout state=absent

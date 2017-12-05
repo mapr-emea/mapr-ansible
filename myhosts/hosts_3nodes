@@ -123,9 +123,6 @@
 [mapr-hue]
 10.0.0.129 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
-# Mahout
-[mapr-mahout]
-
 # Sqoop1
 [mapr-sqoop1]
 10.0.0.45 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo

@@ -111,9 +111,6 @@ common
 [mapr-hue:children]
 #common
 
-# Mahout
-[mapr-mahout]
-
 # Sqoop1
 [mapr-sqoop1:children]
 #common

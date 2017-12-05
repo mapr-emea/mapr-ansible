@@ -1,4 +1,0 @@
----
-# Install Mahout
-- name: Install mapr-mahout
-  package: name=mapr-mahout state=present

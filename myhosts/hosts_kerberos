@@ -135,9 +135,6 @@
 10.0.0.153 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 10.0.0.194 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
-# Mahout
-[mapr-mahout]
-
 # Sqoop2 Server
 [mapr-sqoop2-server]
 #10.0.0.153 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo

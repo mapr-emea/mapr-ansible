@@ -253,14 +253,6 @@
   hosts: all:!mapr-hive-cli
   roles:
     - mapr-hive-cli-uninstall
-- name: Install Mahout
-  hosts: mapr-mahout
-  roles:
-    - mapr-mahout-install
-- name: Uninstall Mahout
-  hosts: all:!mapr-mahout
-  roles:
-    - mapr-mahout-uninstall
 - name: Install Pig
   hosts: mapr-pig
   roles:
