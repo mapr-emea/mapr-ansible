@@ -115,8 +115,8 @@ def run_module():
             result['message'] = result['original_message']
             break
     result['diff'] = dict()
-    result['diff']['before'] = str(old_values)
-    result['diff']['after'] = str(new_values)
+    result['diff']['before'] = build_compare_str(old_values)
+    result['diff']['after'] = build_compare_str(new_values)
 
 
     if not module.check_mode and result['changed']:
@@ -124,6 +124,12 @@ def run_module():
         execute_entity_changes(new_values['type'], new_values['name'], new_values)
 
     module.exit_json(**result)
+
+def build_compare_str(values):
+    result = ""
+    for key in values:
+        result += (key + "=" + str(values[key]) + "\n")
+    return result
 
 def get_entity_info(type, name):
     converted_type = "0" if type == "user" else "1"

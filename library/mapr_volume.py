@@ -200,8 +200,8 @@ def run_module():
             result['original_message'] = "New volume " + module.params['name'] + " created"
 
         result['diff'] = dict()
-        result['diff']['before'] = str(old_values)
-        result['diff']['after'] = str(new_values)
+        result['diff']['before'] = build_compare_str(old_values)
+        result['diff']['after'] = build_compare_str(new_values)
         result['message'] = result['original_message']
         if not module.check_mode and result['changed']:
             # execute changes
@@ -218,6 +218,12 @@ def run_module():
         module.fail_json(msg='State ' + module.params['state'] + ' is not supported.', **result)
 
     module.exit_json(**result)
+
+def build_compare_str(values):
+    result = ""
+    for key in values:
+        result += (key + "=" + str(values[key]) + "\n")
+    return result
 
 def get_volume_info(volume_name):
     process = subprocess.Popen("maprcli volume info -name " + volume_name + " -json", shell=True, stdout=subprocess.PIPE)

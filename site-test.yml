@@ -5,12 +5,12 @@
       mapr_volume:
         name: ansibletest
         state: present
-        path: /aaab11
+        path: /aaa
         read_ace: p
         write_ace: p
         min_replication: 2
         replication: 3
         soft_quota_in_mb: 2097152
         hard_quota_in_mb: 2097152
-        accountable_entity_type: group
+        accountable_entity_type: user
         accountable_entity_name: mapr
