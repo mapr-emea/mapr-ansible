@@ -30,5 +30,9 @@
         <name>hue.kerberos.principal.shortname</name>
         <value>mapr</value>
     </property>
+    <property>
+        <name>hbase.table.namespace.mappings</name>
+        <value>*:/</value>
+    </property>
 </configuration>
 
