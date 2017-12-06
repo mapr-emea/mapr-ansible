@@ -5,13 +5,12 @@ fix start of second cldb with license
 add mapr-filemigrate
 add mapr-spark-thriftserver-2.1.0.201711121518-1.noarch.rpm
 add mapr-tez
-remove mapr-mahout
 
 webhcat broken?
 HBase Rest Server broken?
 HBase Thrift Server	broken?
 Spark History Server Down bei unsecure deployment?
-Kibana zeug?
+Elastic search broken?
 
 FAILED - RETRYING: Restart Drill (10 retries left).
 changed: [10.0.0.54]
