@@ -98,7 +98,10 @@
         <name>hive.metastore.execute.setugi</name>
         <value>true</value>
     </property>
-
+    <property>
+        <name>hive.metastore.sasl.enabled</name>
+        <value>true</value>
+    </property>
     <property>
         <name>hive.server2.authentication</name>
         <value>KERBEROS</value>
