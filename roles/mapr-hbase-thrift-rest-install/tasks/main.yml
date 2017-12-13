@@ -34,10 +34,6 @@
     regexp="^export MAPR_HBASE_SERVER_OPTS"
   when: hbase_thrift_rest_security == 'kerberos'
 
-#- name: Copy to /opt/mapr/conf/conf.d/warden.hbaserest.conf
-#  copy: remote_src=true src={{ hbase_path_result.files[0].path }}/conf/warden.hbaserest.conf dest=/opt/mapr/conf/conf.d/warden.hbaserest.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
-#- name: Copy to /opt/mapr/conf/conf.d/warden.hbasethrift.conf
-#  copy: remote_src=true src={{ hbase_path_result.files[0].path }}/conf/warden.hbasethrift.conf dest=/opt/mapr/conf/conf.d/warden.hbasethrift.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
 - name: Start all hbasethrift instances
   lineinfile: dest={{ hbase_path_result.files[0].path }}/conf/warden.hbasethrift.conf regexp="^services=" line="services=hbasethrift:all"
 - name: Copy to /opt/mapr/conf/conf.d/warden.hbasethrift.conf
@@ -46,37 +42,29 @@
 - name: Replace ${VERSION} with Hbase version
   shell: 'sed -i s/\${VERSION}/`cat /opt/mapr/hbase/hbaseversion`/g /opt/mapr/conf/conf.d/warden.hbasethrift.conf'
   changed_when: false
-#- name: Get HBase version
-#  shell: cat /opt/mapr/hbase/hbaseversion
-#  register: hbase_version_result
-#- name: Replace version in warden.hbasethrift.conf
-#  replace:
-#    path: /opt/mapr/conf/conf.d/warden.hbasethrift.conf
-#    regexp: '(\s+)VERSION(\s+.*)'
-#    replace: "\\1{{ hbase_version_result.stdout }}\\2"
 
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
   when: hbaserest_result.changed or hbasethrift_result.changed
-- pause: seconds=10
-  when: hbaserest_result.changed or hbasethrift_result.changed
-- name: Restart HBase Rest Server
-  shell: maprcli node services -name hbaserest -action restart -nodes {{ ansible_fqdn }}
-  register: task_result
-  until: task_result.rc == 0
-  retries: 10
-  delay: 10
-  ignore_errors: yes
-  environment:
-    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
-  when: hbaserest_result.changed
-- name: Restart HBase Thrift Server
-  shell: maprcli node services -name hbasethrift -action restart -nodes {{ ansible_fqdn }}
-  register: task_result
-  until: task_result.rc == 0
-  retries: 10
-  delay: 10
-  ignore_errors: yes
-  environment:
-    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
-  when: hbasethrift_result.changed
+#- pause: seconds=10
+#  when: hbaserest_result.changed or hbasethrift_result.changed
+#- name: Restart HBase Rest Server
+#  shell: maprcli node services -name hbaserest -action restart -nodes {{ ansible_fqdn }}
+#  register: task_result
+#  until: task_result.rc == 0
+#  retries: 10
+#  delay: 10
+#  ignore_errors: yes
+#  environment:
+#    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+#  when: hbaserest_result.changed
+#- name: Restart HBase Thrift Server
+#  shell: maprcli node services -name hbasethrift -action restart -nodes {{ ansible_fqdn }}
+#  register: task_result
+#  until: task_result.rc == 0
+#  retries: 10
+#  delay: 10
+#  ignore_errors: yes
+#  environment:
+#    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+#  when: hbasethrift_result.changed

@@ -8,9 +8,7 @@ add mapr-filemigrate
 add mapr-spark-thriftserver-2.1.0.201711121518-1.noarch.rpm
 add mapr-tez
 
--> in MCS fehlt CPU stats
-Elastic search broken?
-
+webhcat does not start
 
 https://maprdocs.mapr.com/home/AdvancedInstallation/InstallMonitoring.html
 for secure cluster monitoring:

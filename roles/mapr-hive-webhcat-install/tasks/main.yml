@@ -10,15 +10,16 @@
   register: hive_path_result
   failed_when: hive_path_result.matched != 1
 
-- name: Start all hcat instances
-  lineinfile: dest={{ hive_path_result.files[0].path }}/conf/warden.hcat.conf regexp="^services=" line="services=hcat:all:cldb"
-- name: Copy to /opt/mapr/conf/conf.d/warden.hcat.conf
-  copy: remote_src=true src={{ hive_path_result.files[0].path }}/conf/warden.hcat.conf dest=/opt/mapr/conf/conf.d/warden.hcat.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
+#- name: Start all hcat instances
+#  lineinfile: dest={{ hive_path_result.files[0].path }}/conf/warden.hcat.conf regexp="^services=" line="services=hcat:all:cldb"
+#- name: Copy to /opt/mapr/conf/conf.d/warden.hcat.conf
+#  copy: remote_src=true src={{ hive_path_result.files[0].path }}/conf/warden.hcat.conf dest=/opt/mapr/conf/conf.d/warden.hcat.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
 
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
   when: webhcat_result.changed
 - pause: seconds=10
+  when: webhcat_result.changed
 - name: Restart Hive WebHCat
   shell: maprcli node services -name hcat -action restart -nodes {{ ansible_fqdn }}
   register: task_result

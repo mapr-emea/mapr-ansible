@@ -1,5 +1,4 @@
 ---
-
 # Configure secure client
 - name: Delete existing keys
   file: state=absent path=/opt/mapr/conf/{{ item }}

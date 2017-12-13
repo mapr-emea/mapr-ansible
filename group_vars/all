@@ -2,9 +2,6 @@ mapr_release_url: http://package.mapr.com/releases/v6.0.0
 mapr_ecosystem_url: http://package.mapr.com/releases/MEP/MEP-4.0.0/
 mapr_gpg_url: http://package.mapr.com/releases/pub/maprgpg.key
 
-# Patches are only installed when variable mapr_patch_url is set
-#mapr_patch_url: http://package.mapr.com/patches/releases/v5.2.2/
-
 # JDK choose: openjdk18 or oraclejdk18
 jdk: openjdk18
 #jdk_folder: /opt/java/jdk1.8.0_111
@@ -22,7 +19,7 @@ force_reconfigure_sh: true
 ####### Enable security features ##########
 # Default value for all components: mapr core and ecosystem
 # Options: none, maprsasl, kerberos
-security_all: none
+security_all: maprsasl
 
 # MapR-Core security
 # Options: none, maprsasl, kerberos
