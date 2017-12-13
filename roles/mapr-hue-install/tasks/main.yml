@@ -27,7 +27,7 @@
   register: hue_path_result
   failed_when: hue_path_result.matched != 1
 - name: Hue SSL key generation
-  command: openssl req -new -nodes -x509 -subj "/C=US/CN=${ansible_fqdn}" -days 3650 -keyout {{ hue_path_result.files[0].path }}/desktop/conf/server.key -out {{ hue_path_result.files[0].path }}/desktop/conf/server.crt -extensions v3_ca creates={{ hue_path_result.files[0].path }}/desktop/conf/server.crt
+  command: openssl req -new -nodes -x509 -subj "/C=US/CN={{ ansible_fqdn }}" -days 3650 -keyout {{ hue_path_result.files[0].path }}/desktop/conf/server.key -out {{ hue_path_result.files[0].path }}/desktop/conf/server.crt -extensions v3_ca creates={{ hue_path_result.files[0].path }}/desktop/conf/server.crt
   when: hue_ssl == true
 - name: Configure hue.ini
   template: src=hue.ini dest={{ hue_path_result.files[0].path }}/desktop/conf/hue.ini
