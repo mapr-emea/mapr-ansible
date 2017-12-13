@@ -18,7 +18,7 @@
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
   when: webhcat_result.changed
-
+- pause: seconds=10
 - name: Restart Hive WebHCat
   shell: maprcli node services -name hcat -action restart -nodes {{ ansible_fqdn }}
   register: task_result

@@ -16,11 +16,6 @@
   failed_when: drill_path_result.matched != 1
 - debug: msg="Drill Path {{ drill_path_result.files[0].path }}"
 
-- name: Fix the Java version detection bug in drill-config.sh
-  lineinfile: path={{ drill_path_result.files[0].path }}/bin//drill-config.sh
-              regexp='^"$JAVA" -version 2>&1 | grep "version" | egrep -e "1.4|1.5|1.6" > /dev/null'
-              line='"$JAVA" -version 2>&1 | grep "version" | egrep -e "1\.4|1\.5|1\.6" > /dev/null'
-              state=present
 - name: Configure drill-override.conf - unsecure
   template: src=drill-override.unsecure.conf dest={{ drill_path_result.files[0].path }}/conf/drill-override.conf
   when: drill_security == 'none'
@@ -64,16 +59,13 @@
     dest={{ drill_path_result.files[0].path }}/conf/drill-env.sh
     line="export DRILL_JAVA_OPTS=\"$DRILL_JAVA_OPTS -Djava.security.auth.login.config=/opt/mapr/conf/mapr.login.conf -Dzookeeper.sasl.client=false\""
   when: mapr_security == 'none'
-# MAPR-ISSUE no number
-- name: Fix Drill logs dir
-  lineinfile: >
-    dest={{ drill_path_result.files[0].path }}/bin/drill-config.sh
-    regexp="\s*DRILL_LOG_DIR=(.*)"
-    line="    DRILL_LOG_DIR=$DRILL_HOME/logs"
-- name: Copy to /opt/mapr/conf/conf.d/warden.drill-bits.conf
-  copy: remote_src=true src={{ drill_path_result.files[0].path }}/conf/warden.drill-bits.conf dest=/opt/mapr/conf/conf.d/warden.drill-bits.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
+#- name: Copy to /opt/mapr/conf/conf.d/warden.drill-bits.conf
+#  copy: remote_src=true src={{ drill_path_result.files[0].path }}/conf/warden.drill-bits.conf dest=/opt/mapr/conf/conf.d/warden.drill-bits.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
+# Seems that registering roles fail when doing it on all nodes at the same time.
 - name: Configure.sh -R
-  shell: /opt/mapr/server/configure.sh -R
+  shell: /opt/mapr/server/configure.sh -R -QS
+  when: drill_result.changed
+- pause: seconds=10
   when: drill_result.changed
 - name: Restart Drill
   shell: maprcli node services -name drill-bits -action restart -nodes {{ ansible_fqdn }}

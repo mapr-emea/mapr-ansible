@@ -30,6 +30,8 @@
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
   when: httpfs_result.changed
+- pause: seconds=10
+  when: httpfs_result.changed
 - name: Restart HttpFS
   shell: maprcli node services -name httpfs -action restart -nodes {{ ansible_fqdn }}
   register: task_result

@@ -39,6 +39,8 @@
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
   when: oozie_result.changed
+- pause: seconds=10
+  when: oozie_result.changed
 - name: Restart Oozie
   shell: maprcli node services -name oozie -action restart -nodes {{ ansible_fqdn }}
   register: task_result

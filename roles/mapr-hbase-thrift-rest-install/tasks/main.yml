@@ -58,6 +58,8 @@
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
   when: hbaserest_result.changed or hbasethrift_result.changed
+- pause: seconds=10
+  when: hbaserest_result.changed or hbasethrift_result.changed
 - name: Restart HBase Rest Server
   shell: maprcli node services -name hbaserest -action restart -nodes {{ ansible_fqdn }}
   register: task_result

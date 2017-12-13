@@ -1,16 +1,15 @@
-- name: Installing MapR DRILL
-  hosts: volumes
-  tasks:
-    - name: Create MapR volume
-      mapr_volume:
-        name: ansibletest
-        state: present
-        path: /aaa
-        read_ace: p
-        write_ace: p
-        min_replication: 2
-        replication: 3
-        soft_quota_in_mb: 2097152
-        hard_quota_in_mb: 2097152
-        accountable_entity_type: user
-        accountable_entity_name: mapr
+# used by configure.sh and drill
+- name: Setup global vars
+  hosts: all
+  roles:
+    - mapr-global-vars
+    - mapr-configure-vars
+    - mapr-configure-vars-hs
+- name: Install Hive WebHCat
+  hosts: mapr-hive-webhcat
+  roles:
+    - mapr-hive-webhcat-install
+- name: Uninstall Hive WebHCat
+  hosts: all:!mapr-hive-webhcat
+  roles:
+    - mapr-hive-webhcat-uninstall
