@@ -1,4 +1,4 @@
-# This a collection of Ansible scripts
+# MapR Ansible Scripts
 
 This is a collection of Ansible scripts which help you to setup a MapR-cluster.
 The scripts support:
