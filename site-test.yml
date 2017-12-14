@@ -1,4 +1,0 @@
-- name: Install Spark on YARN
-  hosts: mapr-spark-yarn
-  roles:
-    - mapr-spark-yarn-install
