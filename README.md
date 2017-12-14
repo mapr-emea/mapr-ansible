@@ -1,5 +1,22 @@
 # This a collection of Ansible scripts
 
+This is a collection of Ansible scripts which help you to setup a MapR-cluster.
+The scripts support:
+
+* Install MapR-Cluster including Ecosystem Components (only one playbook to execute)
+* Modify an existing installation
+    * Adding and removing components
+    * Adding and decomissioning nodes
+* The script also support dry-run on an installed cluster
+* Aborted scripts can always re-run.
+* Building Zeppeling
+* Install MapR-Client
+* Setting up Kerberos and generate Keytabs (only Redhat)
+* Ansible modules to manage state of:
+    * MapR volumes
+    * MapR schedules
+    * MapR Accountable Entities
+
 ## Supported MapR Versions
 
 * MapR 6.0.x with MEP 4.0.x (branch master)
@@ -24,7 +41,7 @@
 * MySQL (Hive, Hue and Oozie)
 * Embedded databases
 
-## Ansible 
+## Ansible
 
 Ansible 2.4 or higher required!
 
