@@ -418,21 +418,6 @@
   hosts: mapr-fluentd
   roles:
     - mapr-log-monitoring-configure
-
-- name: Install MapR Patches
-  hosts: mapr-core:!mapr-cldb
-  roles:
-    - {role: mapr-patch-install, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
-  serial: 1
-- name: Install MapR Patches on CLDB nodes
-  hosts: mapr-cldb
-  roles:
-    - {role: mapr-patch-install, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
-  serial: 1
-- name: Uninstall MapR Patches
-  hosts: all:!mapr-core
-  roles:
-    - mapr-patch-uninstall
   serial: 1
 - name: Uninstall MapR Core
   hosts: all:!mapr-core

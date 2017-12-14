@@ -14,7 +14,7 @@
   register: hive_path_result
   when: hive_first_path_result.matched == 1
 - name: Link hive-site.xml to Spark (otherwise Spark startup throws errors)
-  file: src={{ hive_path_result.files[0].path }}/conf/hive-site.xml dest={{ spark_path_result.files[0].path }}/conf/hive-site.xml state=link
+  copy: src={{ hive_path_result.files[0].path }}/conf/hive-site.xml dest={{ spark_path_result.files[0].path }}/conf/hive-site.xml remote_src=yes
   when: hive_first_path_result.matched == 1
 # Other actions
 - name: Create maprfs:///apps/spark/logs
