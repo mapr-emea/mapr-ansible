@@ -49,6 +49,7 @@ spark_ssl_encryption: false
 spark_sasl_encryption: false
 # Hue will use PAM auth and depending what was configured for other components use these settings
 hue_ssl: false
+spyglass_elasticsearch_secure: true
 ###########################################
 
 mapr_subnets: 10.0.0.0/24

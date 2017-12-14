@@ -1,0 +1,27 @@
+---
+# Install MapR log monitoring configure
+- name: Find ElasticSearch Path
+  find: paths="/opt/mapr/elasticsearch/" patterns="elasticsearch*" file_type=directory
+  register: es_path_result
+  failed_when: es_path_result.matched != 1
+- name: Check if generated files exist
+  stat: path={{ es_path_result.files[0].path }}/etc/elasticsearch/sg/ca/es-root-ca.pem
+  register: es_root_ca
+- name: Configure.sh
+  shell: /opt/mapr/server/configure.sh -R -ES {{ elasticsearch_string }} -EPelasticsearch -genESKeys
+  when: not es_root_ca.stat.exists
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+- name: Find ElasticSearch SG files
+  find: path={{ es_path_result.files[0].path }}/etc/elasticsearch/sg recurse=no
+  register: files_to_copy
+- name: Fetch ES files SG
+  fetch: src={{ item.path }} dest=/tmp/mapr/spyglass/es/sg/ flat=yes
+  with_items: "{{ files_to_copy.files }}"
+- name: Fetch ES files
+  fetch: src={{ es_path_result.files[0].path }}{{ item.src_file }} dest={{ item.dst_file }} flat=yes
+  with_items:
+    - src_file: /etc/elasticsearch/.keystore_password
+      dst_file: /tmp/mapr/spyglass/es/.keystore_password
+    - src_file: /etc/elasticsearch/sg/ca/es-root-ca.pem
+      dst_file: /tmp/mapr/spyglass/es/sg/ca/es-root-ca.pem

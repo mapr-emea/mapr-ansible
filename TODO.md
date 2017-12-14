@@ -1,14 +1,11 @@
 
-test security
-use spark security from other project -> change to full template
+test kerberos
 test dry run
 
 --> Create custom secure: https://maprdocs.mapr.com/home/SecurityGuide/Custom-security-in-mapr.html
 add mapr-filemigrate
 add mapr-spark-thriftserver-2.1.0.201711121518-1.noarch.rpm
 add mapr-tez
-
-webhcat does not start
 
 https://maprdocs.mapr.com/home/AdvancedInstallation/InstallMonitoring.html
 for secure cluster monitoring:

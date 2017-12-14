@@ -1,0 +1,11 @@
+- name: Apply common configuration to all nodes
+  hosts: all
+  roles:
+    - ../roles/common-oracle-jdk
+    - ../roles/common-mapruser
+    - ../roles/common-rpcbind
+    - ../roles/common-ntp
+- name: Start setup
+  hosts: master
+  roles:
+    - ../roles/ui-setup-init

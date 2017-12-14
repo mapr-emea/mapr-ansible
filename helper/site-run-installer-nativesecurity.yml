@@ -1,8 +1,8 @@
 - name: apply common configuration to all nodes
   hosts: master
   roles:
-    - ui-setup-nativesecurity-genkeys
+    - ../roles/ui-setup-nativesecurity-genkeys
 - name: apply security
   hosts: all
   roles:
-    - ui-setup-nativesecurity-secure
+    - ../roles/ui-setup-nativesecurity-secure
