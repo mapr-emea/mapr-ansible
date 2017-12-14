@@ -1,5 +1,5 @@
 ---
-- include: kerberos-sssd-setup.yml
-- include: kerberos-createadusers.yml
-- include: kerberos-keytabs-ad-generate.yml
-- include: kerberos-keytabs-verify.yml
+- import_playbook: kerberos-sssd-setup.yml
+- import_playbook: kerberos-createadusers.yml
+- import_playbook: kerberos-keytabs-ad-generate.yml
+- import_playbook: kerberos-keytabs-verify.yml

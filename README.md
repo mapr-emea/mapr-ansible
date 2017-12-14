@@ -20,6 +20,18 @@ ansible -i myhosts/hosts_3nodes  -m raw -a "ln -s /usr/bin/python3 /usr/bin/pyth
 * Ubuntu 14.x (not 16.x)
 * Suse SLES 12 or higher
 
+## Supported Security
+
+* Unsecure mode
+* MapR Native Security incl. Ecosystem Components
+* Kerberos incl. Ecosystem Components
+
+## Supported Databases
+
+* Oracle (Hive, Hue and Oozie)
+* MySQL (Hive, Hue and Oozie)
+* Embedded databases
+
 ## Verify inventory file
 
 Execute:
@@ -34,7 +46,10 @@ Can be found `host_templates`
 
 ## Install cluster
 
-Use `host_templates/hosts_cluster` as template and copy it and the hostnames to the components you want to get installed. If components are not required, just leave the block empty. Then run:
+Use `host_templates/hosts_cluster` as template and copy it and the hostnames to the components you want to get installed. If components are not required, just leave the block empty.
+The configuration can be found in `group_vars/all`.
+
+Then run:
 
 ```
 ansible-playbook -i hosts_template site-cluster.yml
