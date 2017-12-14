@@ -1,13 +1,5 @@
 # This a collection of Ansible scripts
 
-Ansible 2.4 or higher required!
-
-If /usr/bin/python is not available link it (e.g. in Ubuntu 16.xx)
-
-```
-ansible -i myhosts/hosts_3nodes  -m raw -a "ln -s /usr/bin/python3 /usr/bin/python" all -v
-```
-
 ## Supported MapR Versions
 
 * MapR 6.0.x with MEP 4.0.x (branch master)
@@ -31,6 +23,16 @@ ansible -i myhosts/hosts_3nodes  -m raw -a "ln -s /usr/bin/python3 /usr/bin/pyth
 * Oracle (Hive, Hue and Oozie)
 * MySQL (Hive, Hue and Oozie)
 * Embedded databases
+
+## Ansible 
+
+Ansible 2.4 or higher required!
+
+If /usr/bin/python is not available link it (e.g. in Ubuntu 16.xx)
+
+```
+ansible -i myhosts/hosts_3nodes  -m raw -a "ln -s /usr/bin/python3 /usr/bin/python" all -v
+```
 
 ## Verify inventory file
 
