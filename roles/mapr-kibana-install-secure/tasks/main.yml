@@ -4,4 +4,4 @@
   register: kibana_path_result
   failed_when: kibana_path_result.matched != 1
 - name: Copy PEM file to Kibana for secure ElasticSearch
-  copy: src=/tmp/mapr/spyglass/es/sg/ca/es-root-ca.pem dest={{ kibana_path_result.files[0].path }}/config/ca/ owner={{ mapr_user }} owner={{ mapr_group }} mode=0600
+  copy: src=/tmp/mapr/spyglass/es/sg/ca/es-root-ca.pem dest={{ kibana_path_result.files[0].path }}/config/ca/ owner={{ mapr_user }} group={{ mapr_group }} mode=0600

@@ -1,12 +1,17 @@
 # This a collection of Ansible scripts
 
-Ansible 2.1 or higher required!
+Ansible 2.4 or higher required!
 
 If /usr/bin/python is not available link it (e.g. in Ubuntu 16.xx)
 
 ```
 ansible -i myhosts/hosts_3nodes  -m raw -a "ln -s /usr/bin/python3 /usr/bin/python" all -v
 ```
+
+## Supported MapR Versions
+
+* MapR 6.0.x with MEP 4.0.x (branch master)
+* MapR 5.2.x (branch mapr-5.2-MEP-3.0.x)
 
 ## Supported OS
 
@@ -22,21 +27,6 @@ Execute:
 ```
 ansible -i myhosts/<yourfile>  -m command -a "hostname -f" all
 ```
-
-## Use the UI installer
-
-This script sets up the Java, mapr user with password `mapr123`, install ntp and rpcbind. Last step is that it launches the MapR-UI installer on the master-node.
-Use `hosts_run-installer-template` as template and copy it.
-
-
-Execute:
-
-```
-ansible-playbook -i hosts_run-installer-template site-run-installer.yml
-```
-
-Goto `https://<masternode>:9443` and login with mapr and password mapr123.
-Click wizard and install.
 
 ## Inventory file templates
 
@@ -95,7 +85,7 @@ Run:
 ansible-playbook -i hosts_template helper/create-user-ace.yml
 ```
 
-### Setup Kerberos, SSSD and PAM with ActiveDirectory (Only tested on Redhat 7.3!!!)
+### Setup Kerberos, SSSD and PAM with ActiveDirectory (Only tested on Redhat 7.3 and 7.4!!!)
 
 Update values in `helper/group/vars`
 Use `myhosts/hosts_kerberos as template
@@ -130,4 +120,68 @@ When the customer delivers keytabs this can be also used to validate.
 
 ```
 ansible-playbook -i myhosts/hosts_kerberos helper/kerberos-keytabs-verify.yml      
+```
+
+## Use Ansible modules for administrative tasks
+
+### Volume management
+
+The module always ensures the state. If a volume exists with these settings nothing will be changed.
+The module also supports check mode!
+
+```
+- name: Create MapR volume
+  mapr_volume:
+    name: my.new.volume
+    state: present
+    topology: /data
+    path: /test
+    read_ace: p
+    write_ace: p
+    min_replication: 2
+    replication: 3
+    soft_quota_in_mb: 1024
+    hard_quota_in_mb: 1024
+    accountable_entity_type: user
+    accountable_entity_name: mapr
+    read_only: no
+```
+
+### Manage Schedules
+
+The module always ensures the state. If a volume exists with these settings nothing will be changed.
+The module also supports check mode!
+
+```
+- name: Modify MapR schedule
+  mapr_schedule:
+    name: testrule
+    state: present
+    rules:
+      - frequency: daily
+        time: 0
+        retain: 7d
+      - frequency: weekly
+        date: sun
+        time: 0
+        retain: 4w
+      - frequency: monthly
+        date: "1"
+        time: 0
+        retain: 2m
+```
+
+### Manage Accountable Entities
+
+The module always ensures the state. If a volume exists with these settings nothing will be changed.
+The module also supports check mode!
+
+```
+- name: Modify MapR entity
+  mapr_entity:
+    name: mapr
+    type: user
+    email: abc@email.com
+    soft_quota_in_mb: 1024
+    hard_quota_in_mb: 1024
 ```

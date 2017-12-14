@@ -90,7 +90,7 @@ EXAMPLES = '''
     hard_quota_in_mb: 1024
     accountable_entity_type: user
     accountable_entity_name: mapr
-    read_only: False
+    read_only: no
     
 # hard_quota and soft_quota = 0 means unlimited
 '''
