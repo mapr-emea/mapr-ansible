@@ -15,14 +15,14 @@ oracle_jdk_url: http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda
 hadoop_version: 2.7.0
 cluster_name: demo.mapr.com
 # required when aborted in wrong stage or changing security type
-force_zookeeper_restart: false
-force_warden_restart: false
-force_reconfigure_sh: false
+force_zookeeper_restart: true
+force_warden_restart: true
+force_reconfigure_sh: true
 
 ####### Enable security features ##########
 # Default value for all components: mapr core and ecosystem
 # Options: none, maprsasl, kerberos
-security_all: none
+security_all: maprsasl
 
 # MapR-Core security
 # Options: none, maprsasl, kerberos
@@ -51,7 +51,7 @@ spark_authenticate: true
 spark_ssl_encryption: true
 spark_sasl_encryption: true
 # Hue will use PAM auth and depending what was configured for other components use these settings
-hue_ssl: false
+hue_ssl: true
 ###########################################
 
 mapr_subnets: 10.0.0.0/24
@@ -116,7 +116,7 @@ oozie_smtp_password:
 # passwd is mapr
 mapr_passwd: $6$GzlcP5ei$E6P9QM40O6KJFLZ3wMcg3jzQBNxGXrf8yc77CbCmf0KtFSxK0mpCParhc3WVNEAm4fHKPAqyRV9rsiF6DAFlW0
 
-disks: /dev/xvdb,/dev/xvdc,/dev/xvdd
+disks: /dev/nvme1n1,/dev/nvme2n1,/dev/nvme3n1
 disk_storage_pool_size: 3
 
 # Third party components
