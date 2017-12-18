@@ -1,5 +1,5 @@
-mapr_release_url: http://package.mapr.com/releases/v5.2.2
-mapr_ecosystem_url: http://package.mapr.com/releases/MEP/MEP-3.0.2/
+mapr_release_url: http://package.mapr.com/releases/v5.2.1
+mapr_ecosystem_url: http://package.mapr.com/releases/MEP/MEP-3.0.0/
 mapr_gpg_url: http://package.mapr.com/releases/pub/maprgpg.key
 
 # Patches are only installed when variable mapr_patch_url is set

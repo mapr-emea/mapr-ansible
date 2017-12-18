@@ -1,16 +1,10 @@
 - name: Installing MapR DRILL
-  hosts: volumes
+  hosts: mapr-core
   tasks:
     - name: Create MapR volume
-      mapr_volume:
-        name: ansibletest
-        state: present
-        path: /aaa
-        read_ace: p
-        write_ace: p
-        min_replication: 2
-        replication: 3
-        soft_quota_in_mb: 2097152
-        hard_quota_in_mb: 2097152
-        accountable_entity_type: user
-        accountable_entity_name: mapr
+      debug: msg="Hello World"
+- name: Installing MapR DRILL
+  hosts: mapr-cldb
+  tasks:
+    - name: Create MapR volume
+      debug: msg="Hello die ZWeite"
