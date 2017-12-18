@@ -2,7 +2,7 @@
 
 set -e
 
-# TODO fetch cldb config files. is not executed
+ansible-playbook -i myhosts/hosts_5nodes helper/fetch-mapr-keys.yml
 
 input="myhosts/rollingnodes"
 while IFS= read -r var

@@ -1,0 +1,13 @@
+- hosts: mapr-cldb[0]
+  tasks:
+    - name: Check if Service Exists
+      stat: path=/opt/mapr/conf/cldb.key
+      register: cldb_key
+    - name: Copy keys to local
+      fetch: src=/opt/mapr/conf/{{ item }} dest=/tmp/{{ item }} flat=yes
+      when: cldb_key.stat.exists
+      with_items:
+      - maprserverticket
+      - cldb.key
+      - ssl_keystore
+      - ssl_truststore
