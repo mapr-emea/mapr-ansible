@@ -52,10 +52,6 @@
 #  unarchive: src=/tmp/zeppelin.git/zeppelin-distribution/target/zeppelin-{{ zeppelin_version }}.tar.gz dest=/opt/mapr/zeppelin/ copy=no
 - name: Copy Zeppelin to /opt/mapr/zeppelin
   shell: cp -R /tmp/zeppelin.git/zeppelin-distribution/target/zeppelin-{{ zeppelin_version }}/zeppelin-{{ zeppelin_version }}/ /opt/mapr/zeppelin/
-- name: Find Spark Path
-  find: paths="/opt/mapr/spark" patterns="spark*" file_type=directory
-  register: spark_path_result
-  failed_when: spark_path_result.matched != 1
 - name: Configure zeppelin-env.sh
   template: src=zeppelin-env.unsecure.sh dest=/opt/mapr/zeppelin/zeppelin-{{ zeppelin_version }}/conf/zeppelin-env.sh
 - name: Configure zeppelin-site.xml

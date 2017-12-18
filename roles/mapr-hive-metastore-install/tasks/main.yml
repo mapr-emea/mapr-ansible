@@ -3,14 +3,19 @@
 - name: Install mapr-hivemetastore
   package: name=mapr-hivemetastore state=present
   register: hivemeta_result
-- name: Find Hive Path
-  find: paths="/opt/mapr/hive/" patterns="hive*" file_type=directory
-  register: hive_path_result
-  failed_when: hive_path_result.matched != 1
+#- name: Find Hive Path
+#  find: paths="/opt/mapr/hive/" patterns="hive*" file_type=directory
+#  register: hive_path_result
+#  failed_when: hive_path_result.matched != 1
+- name: Get Hive version
+  shell: cat /opt/mapr/hive/hiveversion
+  register: version_output
+  check_mode: no
+  changed_when: no
 - name: Start all hive meta instances
-  lineinfile: dest={{ hive_path_result.files[0].path }}/conf/warden.hivemeta.conf regexp="^services=" line="services=hivemeta:all"
+  lineinfile: dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/warden.hivemeta.conf regexp="^services=" line="services=hivemeta:all"
 - name: Copy to /opt/mapr/conf/conf.d/warden.hivemeta.conf
-  copy: remote_src=true src={{ hive_path_result.files[0].path }}/conf/warden.hivemeta.conf dest=/opt/mapr/conf/conf.d/warden.hivemeta.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
+  copy: remote_src=true src=/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/warden.hivemeta.conf dest=/opt/mapr/conf/conf.d/warden.hivemeta.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
   when: hivemeta_result.changed

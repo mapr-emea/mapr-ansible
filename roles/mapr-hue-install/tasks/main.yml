@@ -8,29 +8,38 @@
   package: name=mapr-livy state=present
   register: livy_result
 
-
 # Drill
-- name: Find Drill Path
-  find: paths="/opt/mapr/drill/" patterns="drill*" file_type=directory
-  register: hue_drill_path
-# Pig
-- name: Find Pig Path
-  find: paths="/opt/mapr/pig/" patterns="pig*" file_type=directory
-  register: hue_pig_path
+#- name: Find Drill Path
+#  find: paths="/opt/mapr/drill/" patterns="drill*" file_type=directory
+#  register: hue_drill_path
+- name: Check if Drill exists
+  stat: path=/opt/mapr/drill/drillversion
+  register: drill_version_file
+- name: Get Hue version
+  shell: cat /opt/mapr/drill/drillversion
+  register: drill_version_output
+  check_mode: no
+  changed_when: no
+  when: drill_version_file.stat.exists
 - name: Find Drill JDBC Jar
-  find: paths="{{ hue_drill_path.files[0].path }}/jars/jdbc-driver/" patterns="drill-jdbc-all-*.jar" file_type=file
+  find: paths="/opt/mapr/drill/drill-{{ drill_version_output.stdout }}/jars/jdbc-driver/" patterns="drill-jdbc-all-*.jar" file_type=file
   register: hue_drill_jdbc_jar
-  when: hue_drill_path.matched == 1
+  when: drill_version_file.stat.exists
 
-- name: Find Hue Path
-  find: paths="/opt/mapr/hue/" patterns="hue*" file_type=directory
-  register: hue_path_result
-  failed_when: hue_path_result.matched != 1
+#- name: Find Hue Path
+#  find: paths="/opt/mapr/hue/" patterns="hue*" file_type=directory
+#  register: hue_path_result
+#  failed_when: hue_path_result.matched != 1
+- name: Get Hue version
+  shell: cat /opt/mapr/hue/hueversion
+  register: version_output
+  check_mode: no
+  changed_when: no
 - name: Hue SSL key generation
   command: openssl req -new -nodes -x509 -subj "/C=US/CN={{ ansible_fqdn }}" -days 3650 -keyout {{ hue_path_result.files[0].path }}/desktop/conf/server.key -out {{ hue_path_result.files[0].path }}/desktop/conf/server.crt -extensions v3_ca creates={{ hue_path_result.files[0].path }}/desktop/conf/server.crt
   when: hue_ssl == true
 - name: Configure hue.ini
-  template: src=hue.ini dest={{ hue_path_result.files[0].path }}/desktop/conf/hue.ini
+  template: src=hue.ini dest=/opt/mapr/hue/hue-{{ version_output.stdout }}/desktop/conf/hue.ini
 
 # WORKAROUND START Create crontab to create Kerberos Cache for HUE
 # TODO add bug number
@@ -50,12 +59,12 @@
 
 # WORKAROUND END
 
-- name: Find Hue Livy Path
-  find: paths="/opt/mapr/livy/" patterns="livy*" file_type=directory
-  register: hue_livy_path_result
-  failed_when: hue_livy_path_result.matched != 1
+#- name: Find Hue Livy Path
+#  find: paths="/opt/mapr/livy/" patterns="livy*" file_type=directory
+#  register: hue_livy_path_result
+#  failed_when: hue_livy_path_result.matched != 1
 - name: Configure livy.conf
-  template: src=livy.conf dest={{ hue_livy_path_result.files[0].path }}/conf/livy.conf
+  template: src=livy.conf dest=/opt/mapr/hue/hue-livy-{{ version_output.stdout }}/conf/livy.conf
 
 - name: General packages for Hue with Database
   vars:
@@ -117,13 +126,13 @@
   when: hue_db_type == 'oracle' and inventory_hostname == groups["mapr-hue"][0]
 
 - name: Start all hue instances
-  lineinfile: dest={{ hue_path_result.files[0].path }}/desktop/conf/warden.hue.conf regexp="^services=" line="services=hue:all"
+  lineinfile: dest=/opt/mapr/hue/hue-{{ version_output.stdout }}/desktop/conf/warden.hue.conf regexp="^services=" line="services=hue:all"
 - name: Start all livy instances
-  lineinfile: dest={{ hue_livy_path_result.files[0].path }}/conf.new/warden.livy.conf regexp="^services=" line="services=livy:all"
+  lineinfile: dest=/opt/mapr/hue/hue-livy-{{ version_output.stdout }}/conf.new/warden.livy.conf regexp="^services=" line="services=livy:all"
 - name: Copy to /opt/mapr/conf/conf.d/warden.hue.conf
-  copy: remote_src=true src={{ hue_path_result.files[0].path }}/desktop/conf/warden.hue.conf dest=/opt/mapr/conf/conf.d/warden.hue.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
+  copy: remote_src=true src=/opt/mapr/hue/hue-{{ version_output.stdout }}/desktop/conf/warden.hue.conf dest=/opt/mapr/conf/conf.d/warden.hue.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
 - name: Copy to /opt/mapr/conf/conf.d/warden.livy.conf
-  copy: remote_src=true src={{ hue_livy_path_result.files[0].path }}/conf.new/warden.livy.conf dest=/opt/mapr/conf/conf.d/warden.livy.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
+  copy: remote_src=true src=/opt/mapr/hue/hue-livy-{{ version_output.stdout }}/conf.new/warden.livy.conf dest=/opt/mapr/conf/conf.d/warden.livy.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
 
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R

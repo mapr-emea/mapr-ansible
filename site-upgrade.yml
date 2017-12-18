@@ -1,0 +1,51 @@
+#
+# goto group_vars/all file and following properties:
+# New repositories:
+#  mapr_release_url: http://package.mapr.com/releases/v5.2.1
+#  mapr_ecosystem_url: http://package.mapr.com/releases/MEP/MEP-3.0.0/
+#
+#
+# Force restarts and reconfigure:
+#  force_zookeeper_restart: true
+#  force_warden_restart: true
+#  force_reconfigure_sh: true
+#
+---
+- name: Stop Warden
+  hosts: mapr-core
+  tasks:
+  - name: Stop MapR Warden
+    service: name=mapr-warden state=stopped
+- name: Stop Zookeeper
+  hosts: mapr-zookeeper
+  tasks:
+  - name: Stop Zookeeper
+    service: name=mapr-zookeeper state=stopped
+- name: Setup MapR repositories
+  hosts: mapr-core
+  roles:
+    - mapr-configure-repository
+- name: Setup MapR repositories
+  hosts: mapr-core
+  tasks:
+    - name: Retrieve installed packages
+      shell: 'rpm -qa --qf "%{NAME}\n" | grep mapr | grep -v mapr-mapreduce1'
+      register: rpm_mapr_packages
+      warn: false
+    - name: Split list
+      set_fact: installed_packages={{ rpm_mapr_packages.stdout.split('\n') }}
+- name: Upgrade MapR packages
+  hosts: mapr-core
+  tasks:
+  - package: name=mapr-mapreduce1 state=absent
+  - name: Upgrade MapR packages
+    package: name="{{ item | trim }}" state=latest
+    with_items: "{{ installed_packages }}"
+- import_playbook: site-cluster.yml
+- name: Update version in MapR config
+  hosts: mapr-core
+  tasks:
+  - name: Upgrade version in configs
+    shell: 'maprcli config save -values {"mapr.targetversion":"`cat /opt/mapr/MapRBuildVersion`"}'
+    environment:
+      MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket

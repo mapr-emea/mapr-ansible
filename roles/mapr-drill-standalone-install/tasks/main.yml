@@ -10,34 +10,38 @@
 - name: Set owner mapr-system user
   file: path=/opt/mapr/drill owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
 
-- name: Find Drill Path
-  find: paths="/opt/mapr/drill/" patterns="drill*" file_type=directory
-  register: drill_path_result
-  failed_when: drill_path_result.matched != 1
-- debug: msg="Drill Path {{ drill_path_result.files[0].path }}"
+#- name: Find Drill Path
+#  find: paths="/opt/mapr/drill/" patterns="drill*" file_type=directory
+#  register: drill_path_result
+#  failed_when: drill_path_result.matched != 1
+- name: Get Drill version
+  shell: cat /opt/mapr/drill/drillversion
+  register: version_output
+  check_mode: no
+  changed_when: no
 
 - name: Configure drill-override.conf - unsecure
-  template: src=drill-override.unsecure.conf dest={{ drill_path_result.files[0].path }}/conf/drill-override.conf
+  template: src=drill-override.unsecure.conf dest=/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/drill-override.conf
   when: drill_security == 'none'
 
 - name: Configure drill-override.conf - pam
-  template: src=drill-override.pam.conf dest={{ drill_path_result.files[0].path }}/conf/drill-override.conf
+  template: src=drill-override.pam.conf dest=/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/drill-override.conf
   when: drill_security == 'pam'
 - name: Set MAPR_IMPERSONATION_ENABLED=true in drill-env.sh
   lineinfile: >
-    dest={{ drill_path_result.files[0].path }}/conf/drill-env.sh
+    dest=/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/drill-env.sh
     regexp="^export MAPR_IMPERSONATION_ENABLED"
     line="export MAPR_IMPERSONATION_ENABLED=true"
   when: drill_security == 'pam'
 - name: Set MAPR_TICKETFILE_LOCATION=/opt/mapr/conf/mapruserticket in drill-env.sh
   lineinfile: >
-    dest={{ drill_path_result.files[0].path }}/conf/drill-env.sh
+    dest=/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/drill-env.sh
     regexp="^export MAPR_TICKETFILE_LOCATION"
     line="export MAPR_TICKETFILE_LOCATION=/opt/mapr/conf/mapruserticket"
   when: drill_security == 'pam'
 - name: Set DRILL_JAVA_LIB_PATH using JPAM in drill-env.sh
   lineinfile: >
-    dest={{ drill_path_result.files[0].path }}/conf/drill-env.sh
+    dest=/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/drill-env.sh
     line="export DRILLBIT_JAVA_OPTS=\"-Djava.library.path=/opt/JPam-1.1/\""
     regexp="^export DRILLBIT_JAVA_OPTS"
     insertafter="^\# export DRILLBIT_JAVA_OPTS"
@@ -46,21 +50,21 @@
 # http://maprdocs.mapr.com/home/Drill/hive_impersonation_step_1.html
 - name: Set DRILL_JAVA_OPTS for MapR-SASL 1
   lineinfile: >
-    dest={{ drill_path_result.files[0].path }}/conf/drill-env.sh
+    dest=/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/drill-env.sh
     line="export DRILL_JAVA_OPTS=\"$DRILL_JAVA_OPTS -Djava.security.auth.login.config=/opt/mapr/conf/mapr.login.conf -Dzookeeper.sasl.client=true\""
   when: mapr_security != 'none'
 - name: Set DRILL_JAVA_OPTS for MapR-SASL 2
   lineinfile: >
-    dest={{ drill_path_result.files[0].path }}/conf/drill-env.sh
+    dest=/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/drill-env.sh
     line="export DRILL_JAVA_OPTS=\"$DRILL_JAVA_OPTS -Dmapr_sec_enabled=true -Dhadoop.login=maprsasl_keytab -Dzookeeper.saslprovider=com.mapr.security.maprsasl.MaprSaslProvider -Dmapr.library.flatclass\""
   when: mapr_security != 'none'
 - name: Set DRILL_JAVA_OPTS for unsecure
   lineinfile: >
-    dest={{ drill_path_result.files[0].path }}/conf/drill-env.sh
+    dest=/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/drill-env.sh
     line="export DRILL_JAVA_OPTS=\"$DRILL_JAVA_OPTS -Djava.security.auth.login.config=/opt/mapr/conf/mapr.login.conf -Dzookeeper.sasl.client=false\""
   when: mapr_security == 'none'
 #- name: Copy to /opt/mapr/conf/conf.d/warden.drill-bits.conf
-#  copy: remote_src=true src={{ drill_path_result.files[0].path }}/conf/warden.drill-bits.conf dest=/opt/mapr/conf/conf.d/warden.drill-bits.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
+#  copy: remote_src=true src=/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/warden.drill-bits.conf dest=/opt/mapr/conf/conf.d/warden.drill-bits.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
 # Seems that registering roles fail when doing it on all nodes at the same time.
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R -QS

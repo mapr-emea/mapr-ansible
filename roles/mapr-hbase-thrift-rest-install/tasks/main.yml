@@ -10,22 +10,27 @@
   register: hbasethrift_result
 
 # Other actions
-- name: Find HBase Path
-  find: paths="/opt/mapr/hbase/" patterns="hbase*" file_type=directory
-  register: hbase_path_result
-  failed_when: hbase_path_result.matched != 1
-- debug: msg="HBase Path {{ hbase_path_result.files[0].path }}"
+#- name: Find HBase Path
+#  find: paths="/opt/mapr/hbase/" patterns="hbase*" file_type=directory
+#  register: hbase_path_result
+#  failed_when: hbase_path_result.matched != 1
+#- debug: msg="HBase Path {{ hbase_path_result.files[0].path }}"
+- name: Get Hbase version
+  shell: cat /opt/mapr/hbase/hbaseversion
+  register: version_output
+  check_mode: no
+  changed_when: no
 - name: Configure hbase-site.xml - unsecure
-  template: src=hbase-site.unsecure.xml dest={{ hbase_path_result.files[0].path }}/conf/hbase-site.xml
+  template: src=hbase-site.unsecure.xml dest=/opt/mapr/hbase/hbase-{{ version_output.stdout }}/conf/hbase-site.xml
   when: hbase_thrift_rest_security == 'none'
 - name: Configure hbase-site.xml - maprsasl_and_ssl
-  template: src=hbase-site.maprsasl_and_ssl.xml dest={{ hbase_path_result.files[0].path }}/conf/hbase-site.xml
+  template: src=hbase-site.maprsasl_and_ssl.xml dest=/opt/mapr/hbase/hbase-{{ version_output.stdout }}/conf/hbase-site.xml
   when: hbase_thrift_rest_security == 'maprsasl_and_ssl'
 - name: Configure hbase-site.xml - maprsasl
-  template: src=hbase-site.maprsasl.xml dest={{ hbase_path_result.files[0].path }}/conf/hbase-site.xml
+  template: src=hbase-site.maprsasl.xml dest=/opt/mapr/hbase/hbase-{{ version_output.stdout }}/conf/hbase-site.xml
   when: hbase_thrift_rest_security == 'maprsasl'
 - name: Configure hbase-site.xml - kerberos
-  template: src=hbase-site.kerberos.xml dest={{ hbase_path_result.files[0].path }}/conf/hbase-site.xml
+  template: src=hbase-site.kerberos.xml dest=/opt/mapr/hbase/hbase-{{ version_output.stdout }}/conf/hbase-site.xml
   when: hbase_thrift_rest_security == 'kerberos'
 - name: Set MAPR_HBASE_SERVER_OPTS using HYBRID_LOGIN_OPTS
   lineinfile: >
@@ -35,9 +40,9 @@
   when: hbase_thrift_rest_security == 'kerberos'
 
 - name: Start all hbasethrift instances
-  lineinfile: dest={{ hbase_path_result.files[0].path }}/conf/warden.hbasethrift.conf regexp="^services=" line="services=hbasethrift:all"
+  lineinfile: dest=/opt/mapr/hbase/hbase-{{ version_output.stdout }}/conf/warden.hbasethrift.conf regexp="^services=" line="services=hbasethrift:all"
 - name: Copy to /opt/mapr/conf/conf.d/warden.hbasethrift.conf
-  copy: remote_src=true src={{ hbase_path_result.files[0].path }}/conf/warden.hbasethrift.conf dest=/opt/mapr/conf/conf.d/warden.hbasethrift.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
+  copy: remote_src=true src=/opt/mapr/hbase/hbase-{{ version_output.stdout }}/conf/warden.hbasethrift.conf dest=/opt/mapr/conf/conf.d/warden.hbasethrift.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
   changed_when: false
 - name: Replace ${VERSION} with Hbase version
   shell: 'sed -i s/\${VERSION}/`cat /opt/mapr/hbase/hbaseversion`/g /opt/mapr/conf/conf.d/warden.hbasethrift.conf'

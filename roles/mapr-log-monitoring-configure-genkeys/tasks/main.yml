@@ -1,11 +1,16 @@
 ---
 # Install MapR log monitoring configure
-- name: Find ElasticSearch Path
-  find: paths="/opt/mapr/elasticsearch/" patterns="elasticsearch*" file_type=directory
-  register: es_path_result
-  failed_when: es_path_result.matched != 1
+#- name: Find ElasticSearch Path
+#  find: paths="/opt/mapr/elasticsearch/" patterns="elasticsearch*" file_type=directory
+#  register: es_path_result
+#  failed_when: es_path_result.matched != 1
+- name: Get Elasticsearch version
+  shell: cat /opt/mapr/elasticsearch/elasticsearchversion
+  register: version_output
+  check_mode: no
+  changed_when: no
 - name: Check if generated files exist
-  stat: path={{ es_path_result.files[0].path }}/etc/elasticsearch/sg/ca/es-root-ca.pem
+  stat: path=/opt/mapr/elasticsearch/elasticsearch-{{ version_output.stdout }}/etc/elasticsearch/sg/ca/es-root-ca.pem
   register: es_root_ca
 - name: Configure.sh
   shell: /opt/mapr/server/configure.sh -R -ES {{ elasticsearch_string }} -EPelasticsearch -genESKeys
@@ -13,13 +18,13 @@
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
 - name: Find ElasticSearch SG files
-  find: path={{ es_path_result.files[0].path }}/etc/elasticsearch/sg recurse=no
+  find: path=/opt/mapr/elasticsearch/elasticsearch-{{ version_output.stdout }}/etc/elasticsearch/sg recurse=no
   register: files_to_copy
 - name: Fetch ES files SG
   fetch: src={{ item.path }} dest=/tmp/mapr/spyglass/es/sg/ flat=yes
   with_items: "{{ files_to_copy.files }}"
 - name: Fetch ES files
-  fetch: src={{ es_path_result.files[0].path }}{{ item.src_file }} dest={{ item.dst_file }} flat=yes
+  fetch: src=/opt/mapr/elasticsearch/elasticsearch-{{ version_output.stdout }}{{ item.src_file }} dest={{ item.dst_file }} flat=yes
   with_items:
     - src_file: /etc/elasticsearch/.keystore_password
       dst_file: /tmp/mapr/spyglass/es/.keystore_password

@@ -15,10 +15,6 @@
 
 - name: Create lib folder in MapR-FS
   file: path="/mapr/{{ cluster_name }}/R-Shared/shared-libs" state=directory mode=0777
-- name: Find Spark Path
-  find: paths="/opt/mapr/spark" patterns="spark*" file_type=directory
-  register: spark_path_result
-  failed_when: spark_path_result.matched != 1
 - name: Find Hadoop Streaming Jar Path
   find: paths="/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/share/hadoop/tools/lib/" patterns="hadoop-streaming-*" file_type=file
   register: streaming_jar_path_result

@@ -1,11 +1,16 @@
 ---
 # Install MapR elasticsearch
-- name: Find ElasticSearch Path
-  find: paths="/opt/mapr/elasticsearch/" patterns="elasticsearch*" file_type=directory
-  register: es_path_result
-  failed_when: es_path_result.matched != 1
+#- name: Find ElasticSearch Path
+#  find: paths="/opt/mapr/elasticsearch/" patterns="elasticsearch*" file_type=directory
+#  register: es_path_result
+#  failed_when: es_path_result.matched != 1
+- name: Get Elasticsearch version
+  shell: cat /opt/mapr/elasticsearch/elasticsearchversion
+  register: version_output
+  check_mode: no
+  changed_when: no
 - name: Copy ElasticSearch files for Security
-  copy: src=/tmp/mapr/spyglass/es/{{ item.src }} dest={{ es_path_result.files[0].path }}/{{ item.dst }} owner={{ mapr_user }} group={{ mapr_group }} mode={{ item.mode }}
+  copy: src=/tmp/mapr/spyglass/es/{{ item.src }} dest=/opt/mapr/elasticsearch/elasticsearch-{{ version_output.stdout }}/{{ item.dst }} owner={{ mapr_user }} group={{ mapr_group }} mode={{ item.mode }}
   with_items:
     - src: sg/ca/es-root-ca.pem
       dst: etc/elasticsearch/ca/

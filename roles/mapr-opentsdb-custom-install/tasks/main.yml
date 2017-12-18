@@ -5,42 +5,51 @@
   package: name=mapr-opentsdb state=present
   register: opentsdb_result
 
-- name: Find OpenTSDB Path
-  find: paths="/opt/mapr/opentsdb/" patterns="opentsdb*" file_type=directory
-  register: opentsdb_path_result
-  failed_when: opentsdb_path_result.matched != 1
-
+#- name: Find OpenTSDB Path
+#  find: paths="/opt/mapr/opentsdb/" patterns="opentsdb*" file_type=directory
+#  register: opentsdb_path_result
+#  failed_when: opentsdb_path_result.matched != 1
+- name: Get OpenTSDB version
+  shell: cat /opt/mapr/opentsdb/opentsdbversion
+  register: version_output
+  check_mode: no
+  changed_when: no
 - name: Set tsd.storage.hbase.data_table in opentsdb.conf
-  lineinfile: dest={{ opentsdb_path_result.files[0].path }}/etc/opentsdb/opentsdb.conf regexp="^tsd\.storage\.hbase\.data_table" line="tsd.storage.hbase.data_table = /var/mapr/custom.tsdb/tsdb"
+  lineinfile: dest=/opt/mapr/opentsdb/opentsdb-{{ version_output.stdout }}/etc/opentsdb/opentsdb.conf regexp="^tsd\.storage\.hbase\.data_table" line="tsd.storage.hbase.data_table = /var/mapr/custom.tsdb/tsdb"
 - name: Set tsd.storage.hbase.uid_table in opentsdb.conf
-  lineinfile: dest={{ opentsdb_path_result.files[0].path }}/etc/opentsdb/opentsdb.conf regexp="^tsd\.storage\.hbase\.uid_table" line="tsd.storage.hbase.uid_table = /var/mapr/custom.tsdb/tsdb-uid"
+  lineinfile: dest=/opt/mapr/opentsdb/opentsdb-{{ version_output.stdout }}/etc/opentsdb/opentsdb.conf regexp="^tsd\.storage\.hbase\.uid_table" line="tsd.storage.hbase.uid_table = /var/mapr/custom.tsdb/tsdb-uid"
 - name: Set tsd.storage.hbase.meta_table in opentsdb.conf
-  lineinfile: dest={{ opentsdb_path_result.files[0].path }}/etc/opentsdb/opentsdb.conf regexp="^tsd\.storage\.hbase\.meta_table" line="tsd.storage.hbase.meta_table = /var/mapr/custom.tsdb/tsdb-meta"
+  lineinfile: dest=/opt/mapr/opentsdb/opentsdb-{{ version_output.stdout }}/etc/opentsdb/opentsdb.conf regexp="^tsd\.storage\.hbase\.meta_table" line="tsd.storage.hbase.meta_table = /var/mapr/custom.tsdb/tsdb-meta"
 
-- name: Find Asyncbase Path
-  find: paths="/opt/mapr/asynchbase/" patterns="asynchbase*" file_type=directory
-  register: asynchbase_path_result
-  failed_when: asynchbase_path_result.matched != 1
+#- name: Find Asyncbase Path
+#  find: paths="/opt/mapr/asynchbase/" patterns="asynchbase*" file_type=directory
+#  register: asynchbase_path_result
+#  failed_when: asynchbase_path_result.matched != 1
+- name: Get Async HBase version
+  shell: cat /opt/mapr/asynchbase/asynchbaseversion
+  register: asynchbase_version_output
+  check_mode: no
+  changed_when: no
 - name: Find Asynchbase Path JAR
-  find: paths="{{ asynchbase_path_result.files[0].path }}" patterns="asynchbase*.jar" file_type=file
+  find: paths="/opt/mapr/asynchbase/asynchbase-{{ asynchbase_version_output.stdout }}" patterns="asynchbase*.jar" file_type=file
   register: asynchbase_jar_path_result
   failed_when: asynchbase_jar_path_result.matched == 0
 - name: Link Asynchbase.jar to OpenTSDB
 #  debug: msg="{{ item.path }}"
-  file: src={{ item.path }} dest={{ opentsdb_path_result.files[0].path }}/share/opentsdb/lib/{{ item.path | basename }} state=link
+  file: src={{ item.path }} dest=/opt/mapr/opentsdb/opentsdb-{{ version_output.stdout }}/share/opentsdb/lib/{{ item.path | basename }} state=link
   with_items: "{{ asynchbase_jar_path_result.files }}"
 - name: Create custom OpenTSDB table structure
-  shell: "{{ opentsdb_path_result.files[0].path }}/share/opentsdb/tools/create_table.sh"
+  shell: "/opt/mapr/opentsdb/opentsdb-{{ version_output.stdout }}/share/opentsdb/tools/create_table.sh"
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
     MONITORING_VOLUME_NAME: custom.tsdb
   when: inventory_hostname == groups["mapr-opentsdb-custom"][0]
 - name: Change OpenTSDB Display Name
-  lineinfile: dest={{ opentsdb_path_result.files[0].path }}/etc/conf/warden.opentsdb.conf regexp='^service\.displayname=' line="service.displayname=Custom OpenTSDB"
+  lineinfile: dest=/opt/mapr/opentsdb/opentsdb-{{ version_output.stdout }}/etc/conf/warden.opentsdb.conf regexp='^service\.displayname=' line="service.displayname=Custom OpenTSDB"
 - name: Change OpenTSDB ID
-  lineinfile: dest={{ opentsdb_path_result.files[0].path }}/etc/conf/warden.opentsdb.conf regexp='^services=' line="services=customopentsdb:all:cldb"
+  lineinfile: dest=/opt/mapr/opentsdb/opentsdb-{{ version_output.stdout }}/etc/conf/warden.opentsdb.conf regexp='^services=' line="services=customopentsdb:all:cldb"
 - name: Copy to /opt/mapr/conf/conf.d/warden.customopentsdb.conf
-  copy: remote_src=true src={{ opentsdb_path_result.files[0].path }}/etc/conf/warden.opentsdb.conf  dest=/opt/mapr/conf/conf.d/warden.customopentsdb.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
+  copy: remote_src=true src=/opt/mapr/opentsdb/opentsdb-{{ version_output.stdout }}/etc/conf/warden.opentsdb.conf  dest=/opt/mapr/conf/conf.d/warden.customopentsdb.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
 - name: Delete to /opt/mapr/conf/conf.d/warden.opentsdb.conf
   file: dest=/opt/mapr/conf/conf.d/warden.opentsdb.conf state=absent
 - name: Create OpenTSDB Role
