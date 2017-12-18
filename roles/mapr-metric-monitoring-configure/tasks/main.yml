@@ -2,7 +2,7 @@
 # Install MapR OpenTSDB configure
 
 - name: Get OpenTSDB FQDNs
-  set_fact: opentsdb_item={{ item }}
+  set_fact: opentsdb_item={{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item }}
   with_items:
     - "{{ groups['mapr-opentsdb'] }}"
   register: opentsdb_hosts

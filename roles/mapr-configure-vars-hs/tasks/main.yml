@@ -2,7 +2,7 @@
 # Configure unsecure cluster
 
 - name: Get Job History Server
-  set_fact: historyserver_item={{ item }}
+  set_fact: historyserver_item={{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item }}
   with_items:
     - "{{ groups['mapr-historyserver'] }}"
   register: historyserver_hosts
