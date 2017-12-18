@@ -21,6 +21,10 @@
   check_mode: no
   changed_when: no
   when: drill_version_file.stat.exists
+# Pig
+- name: Find Pig Path
+  find: paths="/opt/mapr/pig/" patterns="pig*" file_type=directory
+  register: hue_pig_path
 - name: Find Drill JDBC Jar
   find: paths="/opt/mapr/drill/drill-{{ drill_version_output.stdout }}/jars/jdbc-driver/" patterns="drill-jdbc-all-*.jar" file_type=file
   register: hue_drill_jdbc_jar
@@ -35,8 +39,13 @@
   register: version_output
   check_mode: no
   changed_when: no
+- name: Get Livy version
+  shell: cat /opt/mapr/livy/livyversion
+  register: livy_version_output
+  check_mode: no
+  changed_when: no
 - name: Hue SSL key generation
-  command: openssl req -new -nodes -x509 -subj "/C=US/CN={{ ansible_fqdn }}" -days 3650 -keyout {{ hue_path_result.files[0].path }}/desktop/conf/server.key -out {{ hue_path_result.files[0].path }}/desktop/conf/server.crt -extensions v3_ca creates={{ hue_path_result.files[0].path }}/desktop/conf/server.crt
+  command: openssl req -new -nodes -x509 -subj "/C=US/CN={{ ansible_fqdn }}" -days 3650 -keyout /opt/mapr/hue/hue-{{ version_output.stdout }}/desktop/conf/server.key -out /opt/mapr/hue/hue-{{ version_output.stdout }}/desktop/conf/server.crt -extensions v3_ca creates=/opt/mapr/hue/hue-{{ version_output.stdout }}/desktop/conf/server.crt
   when: hue_ssl == true
 - name: Configure hue.ini
   template: src=hue.ini dest=/opt/mapr/hue/hue-{{ version_output.stdout }}/desktop/conf/hue.ini
@@ -64,7 +73,7 @@
 #  register: hue_livy_path_result
 #  failed_when: hue_livy_path_result.matched != 1
 - name: Configure livy.conf
-  template: src=livy.conf dest=/opt/mapr/hue/hue-livy-{{ version_output.stdout }}/conf/livy.conf
+  template: src=livy.conf dest=/opt/mapr/livy/livy-{{ livy_version_output.stdout }}/conf/livy.conf
 
 - name: General packages for Hue with Database
   vars:
@@ -128,11 +137,11 @@
 - name: Start all hue instances
   lineinfile: dest=/opt/mapr/hue/hue-{{ version_output.stdout }}/desktop/conf/warden.hue.conf regexp="^services=" line="services=hue:all"
 - name: Start all livy instances
-  lineinfile: dest=/opt/mapr/hue/hue-livy-{{ version_output.stdout }}/conf.new/warden.livy.conf regexp="^services=" line="services=livy:all"
+  lineinfile: dest=/opt/mapr/livy/livy-{{ livy_version_output.stdout }}/conf.new/warden.livy.conf regexp="^services=" line="services=livy:all"
 - name: Copy to /opt/mapr/conf/conf.d/warden.hue.conf
   copy: remote_src=true src=/opt/mapr/hue/hue-{{ version_output.stdout }}/desktop/conf/warden.hue.conf dest=/opt/mapr/conf/conf.d/warden.hue.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
 - name: Copy to /opt/mapr/conf/conf.d/warden.livy.conf
-  copy: remote_src=true src=/opt/mapr/hue/hue-livy-{{ version_output.stdout }}/conf.new/warden.livy.conf dest=/opt/mapr/conf/conf.d/warden.livy.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
+  copy: remote_src=true src=/opt/mapr/livy/livy-{{ livy_version_output.stdout }}/conf.new/warden.livy.conf dest=/opt/mapr/conf/conf.d/warden.livy.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
 
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R

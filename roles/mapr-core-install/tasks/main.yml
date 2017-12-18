@@ -2,9 +2,9 @@
 # Install MapR Core components for all machines
 - name: Install mapr-core
   vars:
-    packages_Suse: ['mapr-compat-suse', 'mapr-core', 'mapr-core-internal', 'mapr-kafka']
-    packages_RedHat: ['mapr-core', 'mapr-core-internal', 'mapr-kafka']
-    packages_Debian: ['mapr-core', 'mapr-core-internal', 'mapr-kafka']
+    packages_Suse: ['mapr-compat-suse', 'mapr-core', 'mapr-core-internal']
+    packages_RedHat: ['mapr-core', 'mapr-core-internal']
+    packages_Debian: ['mapr-core', 'mapr-core-internal']
   package: name={{ item }} state=present
   with_items: "{{ vars['packages_' + ansible_os_family] }}"
   register: core_result

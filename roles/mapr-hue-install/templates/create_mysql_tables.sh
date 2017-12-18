@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd {{ hue_path_result.files[0].path }}
+cd /opt/mapr/hue/hue-{{ version_output.stdout }}
 source ./build/env/bin/activate
 # somehow broken link on Redhat 7.3
 pip uninstall -y MySQL-python
