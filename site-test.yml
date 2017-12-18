@@ -1,10 +1,11 @@
 - name: Installing MapR DRILL
-  hosts: mapr-core
+  hosts: mapr-zookeeper
   tasks:
-    - name: Create MapR volume
-      debug: msg="Hello World"
-- name: Installing MapR DRILL
-  hosts: mapr-cldb
-  tasks:
-    - name: Create MapR volume
-      debug: msg="Hello die ZWeite"
+    - name: Get Zookeeper FQDNs
+      set_fact: zoo_item={{ item }}
+      with_items:
+        - "{{ groups['mapr-zookeeper'] }}"
+      register: zookeeper_hosts
+    - name: Make Zookeeper String
+      set_fact: zookeeper_string={{ zookeeper_hosts.results | map(attribute='ansible_facts.zoo_item') | list | join(',')}}
+    - debug: msg="{{ zookeeper_string }}"

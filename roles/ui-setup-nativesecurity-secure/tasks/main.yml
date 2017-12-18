@@ -1,6 +1,6 @@
 ---
 - name: Get Zookeeper FQDNs
-  set_fact: zoo_item={{ hostvars[item]['ansible_fqdn'] }}
+  set_fact: zoo_item={{ item }}
   with_items:
     - "{{ groups['all'] }}" # TODO make new group for zookeeper
   register: zookeeper_hosts
@@ -8,7 +8,7 @@
   set_fact: zookeeper_string={{ zookeeper_hosts.results | map(attribute='ansible_facts.zoo_item') | list | join(',')}}
 
 - name: Get CLDB FQDNs
-  set_fact: cldb_item={{ hostvars[item]['ansible_fqdn'] }}
+  set_fact: cldb_item={{ item }}
   with_items:
     - "{{ groups['all'] }}" # TODO make new group for CLDB
   register: cldb_hosts

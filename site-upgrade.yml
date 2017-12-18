@@ -21,17 +21,30 @@
   tasks:
   - name: Stop Zookeeper
     service: name=mapr-zookeeper state=stopped
-# Upgrade did not work. Hadoop packages got corrupted
-- name: Uninstall old MapR packages
+- name: Setup MapR repositories
+  hosts: mapr-core
+  roles:
+    - mapr-configure-repository
+- name: Setup MapR repositories
   hosts: mapr-core
   tasks:
-  - name: Uninstall MapR packages
-    package: name='mapr-*' state=absent
+    - name: Retrieve installed packages
+      shell: 'rpm -qa --qf "%{NAME}\n" | grep mapr | grep -v mapr-mapreduce1'
+      register: rpm_mapr_packages
+    - name: Split list
+      set_fact: installed_packages={{ rpm_mapr_packages.stdout.split('\n') }}
+- name: Upgrade MapR packages
+  hosts: mapr-core
+  tasks:
+  - package: name=mapr-mapreduce1 state=absent
+  - name: Upgrade MapR packages
+    package: name="{{ item | trim }}" state=latest
+    with_items: "{{ installed_packages }}"
 - import_playbook: site-cluster.yml
 - name: Update version in MapR config
   hosts: mapr-core
   tasks:
-  - name: Upgrade
+  - name: Upgrade version in configs
     shell: 'maprcli config save -values {"mapr.targetversion":"`cat /opt/mapr/MapRBuildVersion`"}'
     environment:
       MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket

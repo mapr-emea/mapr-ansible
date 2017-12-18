@@ -1,6 +1,6 @@
 ---
 - name: Get Thrift server
-  set_fact: metastore_item=thrift://{{ hostvars[item]['ansible_fqdn'] }}:9083
+  set_fact: metastore_item=thrift://{{ item }}:9083
   with_items:
     - "{{ groups['mapr-hive-metastore'] }}"
   register: metastore_hosts

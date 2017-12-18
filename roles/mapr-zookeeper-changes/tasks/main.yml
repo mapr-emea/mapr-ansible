@@ -1,5 +1,5 @@
 - name: Retrieve all Zookeeper changes
-  set_fact: zookeeper_changes_item={{ hostvars[item]['zookeeper_haschanged'] }}
+  set_fact: zookeeper_changes_item={{ hostvars[item]['zookeeper_haschanged'] if 'zookeeper_haschanged' in hostvars[item] else 0 }}
   with_items:
     - "{{ groups['all'] }}"
   register: zookeeper_changes_hosts

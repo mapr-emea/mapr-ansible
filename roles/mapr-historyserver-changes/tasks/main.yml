@@ -1,5 +1,5 @@
 - name: Retrieve all HistoryServer changes
-  set_fact: historyserver_changes_item={{ hostvars[item]['historyserver_haschanged'] }}
+  set_fact: historyserver_changes_item={{ hostvars[item]['historyserver_haschanged'] if 'historyserver_haschanged' in hostvars[item] else 0 }}
   with_items:
     - "{{ groups['all'] }}"
   register: historyserver_changes_hosts
