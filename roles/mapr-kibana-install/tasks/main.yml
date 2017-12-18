@@ -14,7 +14,7 @@
 # Bugfix for Kibana custom secure
 - name: Fix for Kibana custom secure
   lineinfile:
-    dest: "/opt/mapr/kibana/kibana-{{ version_output }}/bin/configure.sh"
+    dest: "/opt/mapr/kibana/kibana-{{ version_output.stdout }}/bin/configure.sh"
     regexp: '\s*OPTS=\$\(getopt (.*)'
     line: '    OPTS=$(getopt -a -o chk:ln:suvC:E:P:R -l help -l nodeCount: -l nodePort: -l ES: -l kibanaPort: -l secure -l customSecure -l unsecure -l EC: -l R -l verifySsl -- "$@")'
 # fix for KIB-1

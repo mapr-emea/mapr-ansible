@@ -25,6 +25,10 @@ common
 [mapr-cldb:children]
 common
 
+# Kafka API for MapR-Streams
+[mapr-kafka:children]
+common
+
 # Gateway for Streams and MapR-DB
 [mapr-gateway:children]
 #common

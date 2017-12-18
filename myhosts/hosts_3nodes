@@ -29,6 +29,12 @@
 [mapr-cldb]
 10.0.0.14 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
+# Kafka API for MapR-Streams
+[mapr-kafka]
+10.0.0.14 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.35 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.49 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
 # Gateway for Streams and MapR-DB
 [mapr-gateway]
 10.0.0.14 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo

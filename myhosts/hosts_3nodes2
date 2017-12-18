@@ -24,6 +24,12 @@
 [mapr-cldb]
 10.0.0.29 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
+# Kafka API for MapR-Streams
+[mapr-kafka]
+10.0.0.29 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.141 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.189 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
 # Gateway for Streams and MapR-DB
 [mapr-gateway]
 10.0.0.29 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
@@ -122,9 +128,6 @@
 
 [mapr-hue]
 10.0.0.189 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-
-# Mahout
-[mapr-mahout]
 
 # Sqoop1
 [mapr-sqoop1]
