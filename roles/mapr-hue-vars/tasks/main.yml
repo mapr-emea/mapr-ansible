@@ -1,6 +1,6 @@
 ---
 - name: Get HttpFS server
-  set_fact: httpfs_item=http://{{ hostvars[item]['ansible_fqdn'] }}:14000/webhdfs/v1
+  set_fact: httpfs_item=http://{{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item }}:14000/webhdfs/v1
   with_items:
     - "{{ groups['mapr-httpfs'] }}"
   register: httpfs_hosts
@@ -8,7 +8,7 @@
   set_fact: hue_httpfs_string={{ httpfs_hosts.results | map(attribute='ansible_facts.httpfs_item') | list | join(',')}}
 
 #- name: Get Resource Manager
-#  set_fact: resourcemanager_item={{ hostvars[item]['ansible_fqdn'] }}
+#  set_fact: resourcemanager_item={{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item  }}
 #  with_items:
 #    - "{{ groups['mapr-resourcemanager'] }}"
 #  register: hue_resourcemanager_hosts
@@ -20,7 +20,7 @@
 #- debug: var=hue_resourcemanager_string
 
 - name: Get HistoryServer server
-  set_fact: historyserver_item={{ hostvars[item]['ansible_fqdn'] }}
+  set_fact: historyserver_item={{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item  }}
   with_items:
     - "{{ groups['mapr-historyserver'] }}"
   register: historyserver_hosts
@@ -28,7 +28,7 @@
   set_fact: hue_historyserver_string={{ historyserver_hosts.results | map(attribute='ansible_facts.historyserver_item') | list | join(',')}}
 
 - name: Get Spark HistoryServer server
-  set_fact: sparkhistoryserver_item={{ hostvars[item]['ansible_fqdn'] }}
+  set_fact: sparkhistoryserver_item={{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item  }}
   with_items:
     - "{{ groups['mapr-spark-historyserver'] }}"
   register: sparkhistoryserver_hosts
@@ -36,7 +36,7 @@
   set_fact: hue_sparkhistoryserver_string={{ sparkhistoryserver_hosts.results | map(attribute='ansible_facts.sparkhistoryserver_item') | list | join(',')}}
 
 - name: Get Oozie server
-  set_fact: oozie_item=http://{{ hostvars[item]['ansible_fqdn'] }}:11000/oozie/
+  set_fact: oozie_item=http://{{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item  }}:11000/oozie/
   with_items:
     - "{{ groups['mapr-oozie'] }}"
   register: oozie_hosts
@@ -50,7 +50,7 @@
   find: paths="/opt/mapr/hbase/" patterns="hbase*" file_type=directory
   register: hue_hbase_path_result
 - name: Get HiveServer 2
-  set_fact: hiveserver2_item={{ hostvars[item]['ansible_fqdn'] }}
+  set_fact: hiveserver2_item={{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item  }}
   with_items:
     - "{{ groups['mapr-hive-server2'] }}"
   register: hiveserver2_hosts
@@ -58,7 +58,7 @@
   set_fact: hue_hiveserver2_string={{ hiveserver2_hosts.results | map(attribute='ansible_facts.hiveserver2_item') | list | join(',')}}
 
 - name: Get Sqoop Server 2
-  set_fact: sqoopserver2_item={{ hostvars[item]['ansible_fqdn'] }}
+  set_fact: sqoopserver2_item={{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item  }}
   with_items:
     - "{{ groups['mapr-sqoop2-server'] }}"
   register: sqoopserver2_hosts
@@ -66,13 +66,12 @@
   set_fact: hue_sqoopserver2_string={{ sqoopserver2_hosts.results | map(attribute='ansible_facts.sqoopserver2_item') | list | join(',')}}
 
 - name: Get HBase Thrift Server
-  set_fact: hbasethriftserver_item=({{ hostvars[item]['ansible_fqdn']}}|{{hostvars[item]['ansible_fqdn'] }}:9090)
+  set_fact: hbasethriftserver_item=({{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item }}|{{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item }}:9090)
   with_items:
     - "{{ groups['mapr-hbase-thrift-rest'] }}"
   register: hbasethriftserver_hosts
 - name: Make Get Hbase Hive Thrift Server
   set_fact: hue_hbasethriftserver_string={{ hbasethriftserver_hosts.results | map(attribute='ansible_facts.hbasethriftserver_item') | list | join(',')}}
-
 
 - name: Find Spark Path
   find: paths="/opt/mapr/spark/" patterns="spark*" file_type=directory

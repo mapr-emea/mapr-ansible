@@ -1,5 +1,5 @@
 - name: Retrieve all CLDB changes
-  set_fact: cldb_changes_item={{ hostvars[item]['cldb_haschanged'] }}
+  set_fact: cldb_changes_item={{ hostvars[item]['cldb_haschanged'] if 'cldb_haschanged' in hostvars[item] else 0 }}
   with_items:
     - "{{ groups['all'] }}"
   register: cldb_changes_hosts

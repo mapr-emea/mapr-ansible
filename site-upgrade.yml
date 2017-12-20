@@ -11,6 +11,34 @@
 #  force_reconfigure_sh: true
 #
 ---
+- name: Preparation for node for rolling upgrade
+  hosts: mapr-core
+  tasks:
+  - name: Backup MapR configuration files
+    archive: path=/opt/mapr/conf dest="/opt/maprconf-{{ ansible_date_time.iso8601_basic_short }}.tar.gz"
+  - name: Failover master containers to other nodes
+    shell: "maprcli node failover -nodes {{ ansible_fqdn }}"
+    when: rolling_upgrade is defined and rolling_upgrade
+    environment:
+      MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+- name: Stop CLDB
+  hosts: mapr-cldb
+  tasks:
+  - name: Stop CLDB
+    shell: "maprcli node services -cldb stop -nodes {{ ansible_fqdn }}"
+    when: rolling_upgrade is defined and rolling_upgrade
+    environment:
+      MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+- sleep: seconds=10
+  when: rolling_upgrade is defined and rolling_upgrade
+- name: Set node to maintenance mode
+  hosts: mapr-core
+  tasks:
+  - name: Set node to maintenance mode
+    shell: "node maintenance -nodes {{ ansible_fqdn }} -timeoutminutes 60"
+    when: rolling_upgrade is defined and rolling_upgrade
+    environment:
+      MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
 - name: Stop Warden
   hosts: mapr-core
   tasks:
@@ -36,15 +64,23 @@
 - name: Upgrade MapR packages
   hosts: mapr-core
   tasks:
-  - package: name=mapr-mapreduce1 state=absent
   - name: Upgrade MapR packages
     package: name="{{ item | trim }}" state=latest
     with_items: "{{ installed_packages }}"
+#  - package: name=mapr-mapreduce1 state=absent
 - import_playbook: site-cluster.yml
 - name: Update version in MapR config
   hosts: mapr-core
   tasks:
   - name: Upgrade version in configs
     shell: 'maprcli config save -values {"mapr.targetversion":"`cat /opt/mapr/MapRBuildVersion`"}'
+    environment:
+      MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+- name: Disable maintenance mode
+  hosts: mapr-core
+  tasks:
+  - name: Disable maintenance mode
+    shell: "node maintenance -nodes {{ ansible_fqdn }} -timeoutminutes 0"
+    when: rolling_upgrade is defined and rolling_upgrade
     environment:
       MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket

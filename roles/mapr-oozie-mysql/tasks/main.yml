@@ -1,6 +1,6 @@
 ---
 - name: Get MySQL Host
-  set_fact: mysql_item={{ hostvars[item]['ansible_fqdn'] }}
+  set_fact: mysql_item={{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item }}
   with_items:
     - "{{ groups['ext-mysql'] }}"
   register: mysql_hosts
