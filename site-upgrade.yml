@@ -16,11 +16,11 @@
   tasks:
   - name: Backup MapR configuration files
     archive: path=/opt/mapr/conf dest="/opt/maprconf-{{ ansible_date_time.iso8601_basic_short }}.tar.gz"
-  - name: Failover master containers to other nodes
-    shell: "maprcli node failover -nodes {{ ansible_fqdn }}"
-    when: rolling_upgrade is defined and rolling_upgrade
-    environment:
-      MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+#  - name: Failover master containers to other nodes
+#    shell: "maprcli node failover -nodes {{ ansible_fqdn }}"
+#    when: rolling_upgrade is defined and rolling_upgrade
+#    environment:
+#      MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
 - name: Stop CLDB
   hosts: mapr-cldb
   tasks:
