@@ -70,6 +70,10 @@ options:
         description:
             - Name of accountable entity - default: User which executes the script
         required: false 
+    snapshot_schedule_name:
+        description:
+            - Name of snapshot schedule. - default: Empty string which is no schedule
+        required: false 
 author:
     - Carsten Hufe chufe@mapr.com
 '''
@@ -90,7 +94,8 @@ EXAMPLES = '''
     hard_quota_in_mb: 1024
     accountable_entity_type: user
     accountable_entity_name: mapr
-    read_only: no
+    read_only: False
+    snapshot_schedule_name: Normal Data
     
 # hard_quota and soft_quota = 0 means unlimited
 '''
@@ -113,7 +118,7 @@ def run_module():
     # the module
     module_args = dict(
         name=dict(type='str', required=True),
-        path=dict(type='str', required=False, default=''),
+        path=dict(type='str', required=False, default='none'),
         state=dict(type='str', required=False, default='present'),
         topology=dict(type='str', required=False, default='/data'),
         read_ace=dict(type='str', required=False, default='p'),
@@ -124,7 +129,8 @@ def run_module():
         replication=dict(type='int', required=False, default=3),
         soft_quota_in_mb=dict(type='int', required=False, default='0'),
         hard_quota_in_mb=dict(type='int', required=False, default='0'),
-        read_only=dict(type='bool', required=False, default=False)
+        read_only=dict(type='bool', required=False, default=False),
+        snapshot_schedule_name=dict(type='str', required=False, default='none')
     )
 
 
@@ -164,6 +170,7 @@ def run_module():
         replication = module.params['replication'],
         soft_quota_in_mb = module.params['soft_quota_in_mb'],
         hard_quota_in_mb = module.params['hard_quota_in_mb'],
+        snapshot_schedule_name = module.params['snapshot_schedule_name'],
         read_only = module.params['read_only']
     )
 
@@ -175,7 +182,7 @@ def run_module():
         volume_exists = True
         old_values = dict(
             name = volume_info['volumename'].encode('ascii','ignore'),
-            path = volume_info['mountdir'].encode('ascii','ignore') if int(volume_info['mounted']) != 0 else '',
+            path = volume_info['mountdir'].encode('ascii','ignore') if int(volume_info['mounted']) != 0 else 'none',
             topology = volume_info['rackpath'].encode('ascii','ignore'),
             read_ace = volume_info['volumeAces']['readAce'].encode('ascii','ignore'),
             write_ace = volume_info['volumeAces']['writeAce'].encode('ascii','ignore'),
@@ -185,6 +192,7 @@ def run_module():
             replication = int(volume_info['numreplicas']),
             soft_quota_in_mb = int(volume_info['advisoryquota']),
             hard_quota_in_mb = int(volume_info['quota']),
+            snapshot_schedule_name = get_schedule_name_by_id(volume_info['scheduleid']),
             read_only = (int(volume_info['readonly']) != 0)
         )
         # existing volume
@@ -203,9 +211,12 @@ def run_module():
         result['diff']['before'] = build_compare_str(old_values)
         result['diff']['after'] = build_compare_str(new_values)
         result['message'] = result['original_message']
+        schedule_id = get_schedule_id_by_name(new_values['snapshot_schedule_name'])
+        if schedule_id == "undefined":
+            module.fail_json(msg='Schedule ' + module.params['snapshot_schedule_name'] + ' does not exist.', **result)
         if not module.check_mode and result['changed']:
             # execute changes
-            execute_volume_changes(volume_exists, old_values, new_values)
+            execute_volume_changes(volume_exists, old_values, new_values, schedule_id)
 
     elif module.params['state'] == "absent":
         if volume_exists:
@@ -225,6 +236,7 @@ def build_compare_str(values):
         result += (key + "=" + str(values[key]) + "\n")
     return result
 
+
 def get_volume_info(volume_name):
     process = subprocess.Popen("maprcli volume info -name " + volume_name + " -json", shell=True, stdout=subprocess.PIPE)
     volume_info = process.communicate()
@@ -237,16 +249,17 @@ def get_volume_info(volume_name):
 def remove_volume(volume_name):
     subprocess.check_call("maprcli volume remove -name " + volume_name + " -force true", shell=True)
 
-def execute_volume_changes(volume_exists, old_values, new_values):
+def execute_volume_changes(volume_exists, old_values, new_values, schedule_id):
     if not volume_exists:
         # create new volume
         volume_command = "maprcli volume create -name " + new_values['name']
         if new_values['path']:
             volume_command += " -mount true"
             volume_command += " -path " + new_values['path']
+        volume_command += " -createparent true"
         volume_command += " -topology " + new_values['topology']
-        volume_command += " -readAce " + new_values['read_ace']
-        volume_command += " -writeAce " + new_values['write_ace']
+        volume_command += " -readAce '" + new_values['read_ace'] + "'"
+        volume_command += " -writeAce '" + new_values['write_ace'] + "'"
         volume_command += " -minreplication " + str(new_values['min_replication'])
         volume_command += " -replication " + str(new_values['replication'])
         volume_command += " -advisoryquota " + str(new_values['soft_quota_in_mb'])
@@ -254,12 +267,14 @@ def execute_volume_changes(volume_exists, old_values, new_values):
         volume_command += " -readonly " + ("1" if new_values['read_only'] else "0")
         volume_command += " -aetype " + ("0" if new_values['accountable_entity_type'] == "user" else "1")
         volume_command += " -ae " + new_values['accountable_entity_name']
+        if schedule_id != "0":
+            volume_command += " -schedule " + schedule_id
         subprocess.check_call(volume_command, shell=True)
     else:
         # update volume
         volume_command = "maprcli volume modify -name " + new_values['name']
-        volume_command += " -readAce " + new_values['read_ace']
-        volume_command += " -writeAce " + new_values['write_ace']
+        volume_command += " -readAce '" + new_values['read_ace'] + "'"
+        volume_command += " -writeAce '" + new_values['write_ace'] + "'"
         volume_command += " -minreplication " + str(new_values['min_replication'])
         volume_command += " -replication " + str(new_values['replication'])
         volume_command += " -advisoryquota " + str(new_values['soft_quota_in_mb'])
@@ -270,11 +285,36 @@ def execute_volume_changes(volume_exists, old_values, new_values):
         subprocess.check_call(volume_command, shell=True)
         if new_values['topology'] != old_values['topology']:
             subprocess.check_call("maprcli volume move -name " + new_values['name'] + " -topology " + new_values['topology'], shell=True)
+        # when no schedule is set and you set 0 again an error occurs
+        if new_values['snapshot_schedule_name'] != old_values['snapshot_schedule_name']:
+            subprocess.check_call("maprcli volume modify -name " + new_values['name'] + " -schedule " + schedule_id, shell=True)
         if new_values['path'] != old_values['path']:
             if old_values['path']:
                 subprocess.check_call("maprcli volume unmount -name " + new_values['name'] + " -force true", shell=True)
             if new_values['path']:
-                subprocess.check_call("maprcli volume mount -name " + new_values['name'] + " -path " + new_values['path'], shell=True)
+                subprocess.check_call("maprcli volume mount -createparent true -name " + new_values['name'] + " -path " + new_values['path'], shell=True)
+
+def get_schedule_name_by_id(schedule_id):
+    if schedule_id == 0:
+        return "none"
+    process = subprocess.Popen("maprcli schedule list -json", shell=True, stdout=subprocess.PIPE)
+    schedule_info = process.communicate()
+    maprclijson = json.loads(schedule_info[0])
+    for item in maprclijson['data']:
+        if item['id'] == schedule_id:
+            return item['name'].encode('ascii','ignore')
+    return 'undefined'
+
+def get_schedule_id_by_name(schedule_name):
+    if schedule_name == "none":
+        return "0"
+    process = subprocess.Popen("maprcli schedule list -json", shell=True, stdout=subprocess.PIPE)
+    schedule_info = process.communicate()
+    maprclijson = json.loads(schedule_info[0])
+    for item in maprclijson['data']:
+        if item['name'] == schedule_name:
+            return str(item['id'])
+    return "undefined"
 
 def main():
     run_module()

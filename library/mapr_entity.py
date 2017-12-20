@@ -147,7 +147,7 @@ def execute_entity_changes(type, name, new_values):
     update_cmd += " -name " + name
     update_cmd += " -email '" + new_values['email'] + "'"
     update_cmd += " -advisoryquota " + str(new_values['soft_quota_in_mb'])
-    update_cmd += " -quota " + str(new_values['soft_quota_in_mb'])
+    update_cmd += " -quota " + str(new_values['hard_quota_in_mb'])
     subprocess.check_call(update_cmd, shell=True)
 
 def main():
