@@ -29,13 +29,13 @@
     when: rolling_upgrade is defined and rolling_upgrade
     environment:
       MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
-- sleep: seconds=10
-  when: rolling_upgrade is defined and rolling_upgrade
+  - pause: seconds=10
+    when: rolling_upgrade is defined and rolling_upgrade
 - name: Set node to maintenance mode
   hosts: mapr-core
   tasks:
   - name: Set node to maintenance mode
-    shell: "node maintenance -nodes {{ ansible_fqdn }} -timeoutminutes 60"
+    shell: "maprcli node maintenance -nodes {{ ansible_fqdn }} -timeoutminutes 60"
     when: rolling_upgrade is defined and rolling_upgrade
     environment:
       MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
@@ -80,7 +80,7 @@
   hosts: mapr-core
   tasks:
   - name: Disable maintenance mode
-    shell: "node maintenance -nodes {{ ansible_fqdn }} -timeoutminutes 0"
+    shell: "maprcli node maintenance -nodes {{ ansible_fqdn }} -timeoutminutes 0"
     when: rolling_upgrade is defined and rolling_upgrade
     environment:
       MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
