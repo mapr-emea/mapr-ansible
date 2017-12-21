@@ -1,0 +1,8 @@
+- name: Update version in MapR config
+  hosts: mapr-cldb[0]
+  tasks:
+  - name: Upgrade version in configs
+    shell: 'maprcli config save -values {"mapr.targetversion":"`cat /opt/mapr/MapRBuildVersion`"}'
+    environment:
+      MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+    when: rolling_upgrade is undefined or not rolling_upgrade

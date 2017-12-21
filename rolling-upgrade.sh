@@ -9,4 +9,4 @@ while IFS= read -r var
 do
   ansible-playbook -i myhosts/hosts_4nodes site-upgrade.yml --limit $var -e rolling_upgrade=true
 done < "$input"
-ansible-playbook -i myhosts/hosts_kerberos2 helper/set-latest-version.yml
+ansible-playbook -i myhosts/hosts_4nodes helper/set-latest-version.yml
