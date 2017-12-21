@@ -136,7 +136,7 @@ def get_entity_info(type, name):
     process = subprocess.Popen("maprcli entity info -name " + name + " -type " + converted_type + " -json", shell=True, stdout=subprocess.PIPE)
     entity_info = process.communicate()
     maprclijson = json.loads(entity_info[0])
-    if 'data' in maprclijson:
+    if 'data' in maprclijson and len(maprclijson['data']) > 0:
         return maprclijson['data'][0]
     else:
         return None
