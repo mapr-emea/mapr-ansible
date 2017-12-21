@@ -90,7 +90,18 @@ def run_module():
 
     entity_info = get_entity_info(module.params['type'], module.params['name'])
     if entity_info == None:
-        module.fail_json(msg="Accountable entity " + module.params['name'] + " does not exist.", **result)
+        entity_exists = False
+        old_values = dict()
+        # module.fail_json(msg="Accountable entity " + module.params['name'] + " does not exist.", **result)
+    else:
+        entity_exists = True
+        old_values = dict(
+            name = entity_info['EntityName'].encode('ascii','ignore'),
+            type = "user" if int(entity_info['EntityType']) == 0 else 'group',
+            email = (entity_info['EntityEmail'].encode('ascii','ignore') if 'EntityEmail' in entity_info else ''),
+            soft_quota_in_mb = int(entity_info['EntityAdvisoryquota']),
+            hard_quota_in_mb = int(entity_info['EntityQuota'])
+        )
 
     new_values = dict(
         name = module.params['name'],
@@ -100,20 +111,19 @@ def run_module():
         hard_quota_in_mb = module.params['hard_quota_in_mb']
     )
 
-    old_values = dict(
-        name = entity_info['EntityName'].encode('ascii','ignore'),
-        type = "user" if int(entity_info['EntityType']) == 0 else 'group',
-        email = (entity_info['EntityEmail'].encode('ascii','ignore') if 'EntityEmail' in entity_info else ''),
-        soft_quota_in_mb = int(entity_info['EntityAdvisoryquota']),
-        hard_quota_in_mb = int(entity_info['EntityQuota'])
-    )
 
-    for key in set(old_values.keys() + new_values.keys()):
-        if old_values[key] != new_values[key]:
-            result['changed'] = True
-            result['original_message'] = "Entity " + module.params['name'] + " exists - values updated"
-            result['message'] = result['original_message']
-            break
+    if entity_exists:
+        for key in set(old_values.keys() + new_values.keys()):
+            if old_values[key] != new_values[key]:
+                result['changed'] = True
+                result['original_message'] = "Entity " + module.params['name'] + " exists - values updated"
+                result['message'] = result['original_message']
+                break
+    else:
+        result['changed'] = True
+        result['original_message'] = "New entity " + module.params['name'] + " created"
+        result['message'] = result['original_message']
+
     result['diff'] = dict()
     result['diff']['before'] = build_compare_str(old_values)
     result['diff']['after'] = build_compare_str(new_values)
