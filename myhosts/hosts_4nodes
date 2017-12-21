@@ -27,6 +27,13 @@ ip-10-0-0-148.ps.mapr.com ansible_user=ec2-user ansible_become=yes ansible_becom
 ip-10-0-0-148.ps.mapr.com ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 ip-10-0-0-203.ps.mapr.com ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
+# Kafka API for MapR-Streams
+[mapr-kafka]
+ip-10-0-0-83.ps.mapr.com ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+ip-10-0-0-113.ps.mapr.com ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+ip-10-0-0-148.ps.mapr.com ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+ip-10-0-0-203.ps.mapr.com ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
 # Gateway for Streams and MapR-DB
 [mapr-gateway]
 ip-10-0-0-83.ps.mapr.com ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo

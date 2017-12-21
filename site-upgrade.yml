@@ -9,6 +9,7 @@
 #  force_zookeeper_restart: true
 #  force_warden_restart: true
 #  force_reconfigure_sh: true
+#  spyglass_elasticsearch_secure: false # does not work with true during upgrade.
 #
 ---
 - name: Preparation for node for rolling upgrade
