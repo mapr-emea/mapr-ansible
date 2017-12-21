@@ -1,6 +1,0 @@
-- name: Installing MapR DRILL
-  hosts: mapr-zookeeper
-  tasks:
-    - name: Copy MapR configuration files
-      archive: path=/opt/mapr/conf dest="/opt/maprconf-{{ ansible_date_time.iso8601_basic_short }}.tar.gz"
-    - debug: msg="{{ ansible_date_time.iso8601_basic_short }}"
