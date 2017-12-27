@@ -2,5 +2,5 @@
 
 # Zeppelin
 [ext-zeppelin]
-10.0.0.197 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.197
 
