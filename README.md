@@ -9,7 +9,7 @@ The scripts support:
     * Adding and decomissioning nodes
 * The script also support dry-run on an installed cluster
 * Aborted scripts can always re-run.
-* Building Zeppeling
+* Building Zeppelin
 * Install MapR-Client
 * Setting up Kerberos and generate Keytabs (only Redhat)
 * Ansible modules to manage state of:
