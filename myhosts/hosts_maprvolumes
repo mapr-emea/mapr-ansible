@@ -4,4 +4,4 @@
 
 # Zookeeper
 [volumes]
-10.0.0.94
+10.0.0.94 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
