@@ -150,10 +150,7 @@
         <name>hbase.thrift.dns.nameserver</name>
         <value>default</value>
     </property>
-    <property>
-        <name>hbase.security.authentication</name>
-        <value>kerberos</value>
-    </property>
+
     <property>
         <name>hbase.thrift.authentication.kerberos.principal</name>
         <value>HTTP/_HOST@{{ mapr_kerberos_realm }}</value>

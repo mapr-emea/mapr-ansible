@@ -65,6 +65,7 @@ from ansible.module_utils.basic import AnsibleModule
 import subprocess
 import json
 import getpass
+import tempfile
 
 def run_module():
     # define the available arguments/parameters that a user can pass to
@@ -130,6 +131,8 @@ def run_module():
 
 
     if not module.check_mode and result['changed']:
+        if not entity_exists:
+            execute_entity_creation(new_values['type'], new_values['name'])
         # execute changes
         execute_entity_changes(new_values['type'], new_values['name'], new_values)
 
@@ -150,6 +153,68 @@ def get_entity_info(type, name):
         return maprclijson['data'][0]
     else:
         return None
+
+def load_volume_names():
+    volume_names = []
+
+    maprcli_proc = subprocess.Popen('maprcli volume list -columns n -json', shell=True, stdout=subprocess.PIPE)
+    proc_stdout = maprcli_proc.communicate()
+    proc_json = json.loads(proc_stdout[0])
+    for volume in proc_json['data']:
+        volume_names.append(str(volume['volumename']))
+
+    return volume_names
+
+def suggest_temp_volume_name():
+    volume_names = load_volume_names()
+    while True:
+        tmp_volume_name = 'taec.' + next(tempfile._get_candidate_names())
+        volume_name_already_taken = False
+        for volume_name in volume_names:
+            if str(volume_name) == tmp_volume_name:
+                volume_name_already_taken = True
+                break
+        if volume_name_already_taken == False:
+            break
+
+    return tmp_volume_name
+
+def create_temp_volume(type, name):
+    failed_counter = 0
+    while failed_counter < 5:
+        tmp_volume_name = suggest_temp_volume_name()
+        maprcli_cmd =  'maprcli volume create'
+        maprcli_cmd += ' -name ' + tmp_volume_name
+        maprcli_cmd += ' -ae ' + name
+        maprcli_cmd += ' -aetype ' + ('0' if type == 'user' else '1')
+        maprcli_vol_create = subprocess.Popen(maprcli_cmd, shell=True)
+        exitcode = maprcli_vol_create.wait()
+        if exitcode != 0:
+            failed_counter += 1
+        else:
+            return tmp_volume_name;
+
+    raise RuntimeError('Could not create temporary volume!')
+
+def remove_temp_volume(volume_name):
+    failed_counter = 0
+    while failed_counter < 5:
+        maprcli_vol_remove = subprocess.Popen('maprcli volume remove -name ' + volume_name, shell=True)
+        exitcode = maprcli_vol_remove.wait()
+        if exitcode != 0:
+            failed_counter += 1
+        else:
+            return
+
+    raise RuntimeError('Could not remove temporary volume ' + volume_name + '!')
+
+def execute_entity_creation(type, name):
+    '''
+        Create a temporary volume and assign the user/group defined by type, name as accountable entity
+    '''
+    temp_volume_name = create_temp_volume(type, name)
+    remove_temp_volume(temp_volume_name)
+
 
 def execute_entity_changes(type, name, new_values):
     update_cmd = "maprcli entity modify"
