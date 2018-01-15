@@ -4,21 +4,29 @@
 
 - name: Verify mapr/<hostname> keytab
   command: kinit -k -t /tmp/mapr.keytab mapr/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}
+  when: inventory_hostname in groups["mapr-datanode"]
 - name: Display current ticket mapr
   command: klist
   register: klist_out
+  when: inventory_hostname in groups["mapr-datanode"]
 - debug: msg="{{ klist_out }}"
+  when: inventory_hostname in groups["mapr-datanode"]
 - name: Destroy current ticket
   command: kdestroy
+  when: inventory_hostname in groups["mapr-datanode"]
 
 - name: Verify HTTP/<hostname> keytab
   command: kinit -k -t /tmp/mapr.keytab HTTP/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}
+  when: inventory_hostname in groups["mapr-datanode"]
 - name: Display current ticket mapr
   command: klist
   register: klist_out
+  when: inventory_hostname in groups["mapr-datanode"]
 - debug: msg="{{ klist_out }}"
+  when: inventory_hostname in groups["mapr-datanode"]
 - name: Destroy current ticket
   command: kdestroy
+  when: inventory_hostname in groups["mapr-datanode"]
 
 - name: Verify Cluster keytab
   command: kinit -k -t /tmp/mapr.keytab mapr/{{ cluster_name }}
