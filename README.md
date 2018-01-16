@@ -9,7 +9,7 @@ The scripts support:
     * Adding and decomissioning nodes
 * The script also support dry-run on an installed cluster
 * Aborted scripts can always re-run.
-* Building Zeppeling
+* Building Zeppelin
 * Install MapR-Client
 * Setting up Kerberos and generate Keytabs (only Redhat)
 * Ansible modules to manage state of:
@@ -96,7 +96,8 @@ Use `hosts_template` as template and copy it and the hostnames to the components
 ansible-playbook -i hosts_template rstudio-server.yml
 ```
 
-## Install Zeppelin
+## Install 
+n
 
 Use `hosts_template` as template and copy it and the hostnames to the components you want to get installed. If components are not required, just leave the block empty. Then run:
 
