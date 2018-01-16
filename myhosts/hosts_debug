@@ -1,5 +1,0 @@
-[common]
-10.0.0.28 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-10.0.0.33 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-10.0.0.166 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-

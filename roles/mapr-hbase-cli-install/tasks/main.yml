@@ -5,6 +5,6 @@
 - name: Set MAPR_HBASE_SERVER_OPTS using HYBRID_LOGIN_OPTS
   lineinfile: >
     dest=/opt/mapr/conf/env.sh
-    line="export MAPR_HBASE_CLIENT_OPTS=\"${HYBRID_LOGIN_OPTS} -Dzookeeper.sasl.client=false\""
+    line="export MAPR_HBASE_CLIENT_OPTS=\"${HYBRID_LOGIN_OPTS}\""
     regexp="^export MAPR_HBASE_CLIENT_OPTS"
   when: hbase_thrift_rest_security == 'kerberos'
