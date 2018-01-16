@@ -1,7 +1,0 @@
-# If you do not want to install a component leave the block empty
-
-###### These ones are not installed, just required for config generation ############
-
-# Zookeeper
-[volumes]
-10.0.0.94 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo

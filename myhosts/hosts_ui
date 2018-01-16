@@ -1,7 +1,0 @@
-[hosts]
-10.0.0.121 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-10.0.0.122 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-10.0.0.123 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-
-[master]
-10.0.0.121 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
