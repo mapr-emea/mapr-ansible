@@ -9,7 +9,7 @@
 # Check on license is required, because when doing first installation, no license was applied
 - name: Wait for CLDB
   wait_for: path=/opt/mapr/logs/cldb.log state=present search_regex="CLDB State change \\:\ RUNNING|CLDBShutdown\\:\ license not found for CLDB HA|Becoming Slave Thread" timeout=1800
-- pause: seconds=30
+- pause: seconds="{{ warden_restart_wait_time }}"
   when: ansible_check_mode is undefined or not ansible_check_mode
 - name: Check for CLDB not started, because of license
   shell: "cat /opt/mapr/logs/cldb.log | grep 'license not found for CLDB HA'"

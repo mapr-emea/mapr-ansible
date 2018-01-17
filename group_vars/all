@@ -5,6 +5,8 @@ mapr_gpg_url: http://package.mapr.com/releases/pub/maprgpg.key
 # Patches are only installed when variable mapr_patch_url is set
 #mapr_patch_url: http://package.mapr.com/patches/releases/v5.2.2/
 
+warden_restart_wait_time: 120
+
 # JDK choose: openjdk18 or oraclejdk18
 jdk: openjdk18
 #jdk_folder: /opt/java/jdk1.8.0_111
