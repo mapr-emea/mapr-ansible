@@ -82,13 +82,11 @@
   hosts: mapr-datanode
   roles:
     - mapr-fileserver-install
-    - mapr-mapreduce2-install
     - mapr-nodemanager-install
 - name: Uninstall Filesystem, MapReduce2, YARN Node Manager
   hosts: all:!mapr-datanode
   roles:
     - mapr-fileserver-uninstall
-    - mapr-mapreduce2-uninstall
     - mapr-nodemanager-uninstall
 - name: Install YARN Resource Manager
   hosts: mapr-resourcemanager
@@ -145,7 +143,7 @@
    - { role: mapr-configure-zookeeper-restart, when: force_zookeeper_restart or (zookeeper_changes|int) > 0 }
   serial: 1
 - name: Restarting mapr-warden
-  hosts: mapr-core:!mapr-cldb
+  hosts: mapr-datanode:!mapr-cldb
   roles:
    - { role: mapr-configure-warden-restart, when: force_warden_restart or (zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0 or (historyserver_changes|int) > 0}
   serial: 1

@@ -2,7 +2,7 @@
 # Restart  Warden
 - name: Restart MapR Warden
   service: name=mapr-warden state=restarted enabled=yes
-- pause: seconds=30
+- pause: seconds="{{ warden_restart_wait_time }}"
   when: ansible_check_mode is undefined or not ansible_check_mode
 #- name: Check if MapR Fileserver is running
 #  shell: "/opt/mapr/initscripts/mapr-mfs status"
