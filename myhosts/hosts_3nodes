@@ -2,11 +2,11 @@
 # Write unprovisioned instances here, so that Ansible is aware of host and can uninstall
 # This stays empty unless you want to remove a node
 
-# THIS approach does not work with ROLLING upgrades!
+# ALIASES does NOT work with ROLLING upgrades!
 [all]
-node1 ansible_host=10.0.0.147 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-node2 ansible_host=10.0.0.198 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-node3 ansible_host=10.0.0.254 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+node1 ansible_host=10.0.0.34 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+node2 ansible_host=10.0.0.41 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+node3 ansible_host=10.0.0.106 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
 [unprovision]
 
@@ -125,6 +125,7 @@ node3
 # Hive Meta Store
 [mapr-hive-metastore]
 node1
+node2
 
 # Hive Server2
 [mapr-hive-server2]

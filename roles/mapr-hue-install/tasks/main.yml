@@ -101,7 +101,7 @@
     packages_Suse: ['mariadb-client', 'python-mysql']
   package: name={{ item }} state=present
   with_items: "{{ vars['packages_' + ansible_os_family] }}"
-  when: hue_db_type == 'mysql'
+  when: hue_db_type == 'mysql' and inventory_hostname == groups["mapr-hue"][0]
 
 # Oracle Database
 - name: Find Oracle Path

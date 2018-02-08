@@ -1,0 +1,29 @@
+- name: Install MapR Kibana
+  hosts: mapr-kibana
+  roles:
+    - mapr-kibana-install
+- name: Uninstall MapR Kibana
+  hosts: all:!mapr-kibana
+  roles:
+    - mapr-kibana-uninstall
+- name: Setup Spyglass ElasticSearch vars
+  hosts: all
+  roles:
+    - mapr-log-monitoring-configure-vars
+- name: Generate keys for Spyglass ElasticSearch
+  hosts: mapr-elasticsearch[0]
+  roles:
+    - {role: mapr-log-monitoring-configure-genkeys, when: spyglass_elasticsearch_secure}
+- name: Copy keys to Spyglass ElasticSearch nodes
+  hosts: mapr-elasticsearch
+  roles:
+    - {role: mapr-elasticsearch-install-secure, when: spyglass_elasticsearch_secure}
+- name: Copy keys to Kibana ElasticSearch nodes
+  hosts: mapr-kibana
+  roles:
+    - {role: mapr-kibana-install-secure, when: spyglass_elasticsearch_secure}
+- name: MapR Configure Log Monitoring
+  hosts: mapr-fluentd
+  roles:
+    - mapr-log-monitoring-configure
+  serial: 1
