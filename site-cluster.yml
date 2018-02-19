@@ -13,7 +13,7 @@
     - common-selinux
     - {role: common-oraclejdk18, when: jdk == 'oraclejdk18'}
     - {role: common-openjdk18, when: jdk == 'openjdk18'}
-    - {role: common-mapruser, when: mapr_create_user == true}
+    - {role: common-mapruser, when: mapr_create_user}
     - common-rpcbind
     - common-ntp
     - common-misc
@@ -121,6 +121,10 @@
   roles:
     - mapr-nfs-install
 # uninstall NFS on top
+- name: Fetch keys, when no CLDB change happened
+  hosts: mapr-cldb[0]
+  roles:
+   - {role: mapr-configure-security-fetch-keys, when: mapr_security != 'none' and (cldb_changes|int) == 0}
 - name: Configure and start (unsecure)
   hosts: mapr-core
   roles:
@@ -226,7 +230,7 @@
       num_mysql_hosts: "{{ groups['ext-mysql']|length }}"
   roles:
     - mapr-hive-vars
-    - {role: mapr-hive-mysql, when: hive_db_type == 'mysql' and hive_db_mysql_create_schema_and_user == true and num_mysql_hosts != '0'  }
+    - {role: mapr-hive-mysql, when: hive_db_type == 'mysql' and hive_db_mysql_create_schema_and_user and num_mysql_hosts != '0'  }
 - name: Install Hive CLI
   hosts: mapr-hive-cli
   roles:
@@ -324,7 +328,7 @@
   vars:
      num_mysql_hosts: "{{ groups['ext-mysql']|length }}"
   roles:
-    - {role: mapr-oozie-mysql, when: oozie_db_type == 'mysql' and oozie_db_mysql_create_schema_and_user == true and num_mysql_hosts != '0' }
+    - {role: mapr-oozie-mysql, when: oozie_db_type == 'mysql' and oozie_db_mysql_create_schema_and_user and num_mysql_hosts != '0' }
 - name: Install Oozie
   hosts: mapr-oozie
   roles:
@@ -339,7 +343,7 @@
       num_mysql_hosts: "{{ groups['ext-mysql']|length }}"
   roles:
     - mapr-hue-vars
-    - {role: mapr-hue-mysql, when: hue_db_type == 'mysql' and hue_db_mysql_create_schema_and_user == true and num_mysql_hosts != '0' }
+    - {role: mapr-hue-mysql, when: hue_db_type == 'mysql' and hue_db_mysql_create_schema_and_user and num_mysql_hosts != '0' }
 - name: Install Hue
   hosts: mapr-hue
   roles:

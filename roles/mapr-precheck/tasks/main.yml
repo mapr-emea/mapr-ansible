@@ -15,7 +15,7 @@
   check_mode: no
 - name: MapR user exists?
   fail: msg="{{ mapr_user }} user does not exist on target system and mapr_create_user is set to false"
-  when: mapr_create_user == false and result_id_mapruser.rc == 1
+  when: (not mapr_create_user) and result_id_mapruser.rc == 1
 
 - name: Hive MySQL required
   fail: msg="Hive - Install MySQL or set hive_db_jdbc_url in all configuration when setting hive_db_type = 'mysql'"

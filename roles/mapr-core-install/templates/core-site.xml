@@ -1,21 +1,19 @@
 <?xml version="1.0"?>
 <configuration>
     <!-- :::CAUTION::: DO NOT EDIT ANYTHING ON OR ABOVE THIS LINE -->
-    {% if aws_access_key_id is defined and aws_secret_access_key is defined %}
-    <property>
+    <!-- property>
         <name>fs.s3n.awsAccessKeyId</name>
-        <value>{{ aws_access_key_id }}</value>
+        <value>key</value>
         <description>AWS access key ID.
             Omit for IAM role-based or provider-based authentication.</description>
     </property>
 
     <property>
         <name>fs.s3n.awsSecretAccessKey</name>
-        <value>{{ aws_secret_access_key }}</value>
+        <value>key</value>
         <description>AWS secret key.
             Omit for IAM role-based or provider-based authentication.</description>
-    </property>
-    {% endif %}
+    </property -->
     <property>
         <name>hadoop.proxyuser.{{ mapr_user }}.groups</name>
         <value>*</value>

@@ -19,7 +19,8 @@ The scripts support:
 
 ## Supported MapR Versions
 
-* MapR 6.0.x with MEP 4.0.x (branch master)
+* MapR 6.0.x with MEP 4.1.x (branch master)
+* MapR 6.0.x with MEP 4.0.x (branch master, change endpoint in group_vars/all)
 * MapR 5.2.x (branch mapr-5.2-MEP-3.0.x)
 
 ## Supported OS
@@ -222,7 +223,6 @@ The module also supports check mode!
 
 ## Known issues
 
-* Hue DB setup for MySQL, somehow works manually but never when run from ansible.
 * mapr-filemigrate not implemented
 * mapr-spark-thriftserver not implemented
 * mapr-tez not implemented

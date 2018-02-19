@@ -46,7 +46,7 @@
   changed_when: no
 - name: Hue SSL key generation
   command: openssl req -new -nodes -x509 -subj "/C=US/CN={{ ansible_fqdn }}" -days 3650 -keyout /opt/mapr/hue/hue-{{ version_output.stdout }}/desktop/conf/server.key -out /opt/mapr/hue/hue-{{ version_output.stdout }}/desktop/conf/server.crt -extensions v3_ca creates=/opt/mapr/hue/hue-{{ version_output.stdout }}/desktop/conf/server.crt
-  when: hue_ssl == true
+  when: hue_ssl
 - name: Configure hue.ini
   template: src=hue.ini dest=/opt/mapr/hue/hue-{{ version_output.stdout }}/desktop/conf/hue.ini
 

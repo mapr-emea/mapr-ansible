@@ -1,5 +1,5 @@
 mapr_release_url: http://package.mapr.com/releases/v6.0.0
-mapr_ecosystem_url: http://package.mapr.com/releases/MEP/MEP-4.0.0/
+mapr_ecosystem_url: http://package.mapr.com/releases/MEP/MEP-4.1.0/
 mapr_gpg_url: http://package.mapr.com/releases/pub/maprgpg.key
 
 # JDK choose: openjdk18 or oraclejdk18
@@ -12,9 +12,9 @@ oracle_jdk_url: http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda
 hadoop_version: 2.7.0
 cluster_name: demo.mapr.com
 # required when aborted in wrong stage or changing security type
-force_zookeeper_restart: true
-force_warden_restart: true
-force_reconfigure_sh: true
+force_zookeeper_restart: False
+force_warden_restart: False
+force_reconfigure_sh: False
 warden_restart_wait_time: 30
 
 ####### Enable security features ##########
@@ -34,8 +34,8 @@ mapr_kerberos_local_keytabs_dir: /Users/chufe/Documents/mykeytabs
 
 # Hive security: none, maprsasl, pam or kerberos
 hive_server_security: "{{ security_all }}"
-# Drill security (only standalone): none, pam (pam only in secured cluster)
-drill_security: pam
+# Drill security (only standalone): none, maprsasl
+drill_security: "{{ security_all }}"
 # HBase REST/Thrift: none, kerberos, maprsasl
 hbase_thrift_rest_security: "{{ security_all }}"
 # HttpFS: none, maprsasl, kerberos
@@ -45,16 +45,16 @@ oozie_security: "{{ security_all }}"
 # Sqoop2: none, maprsasl, kerberos
 sqoop_security: "{{ security_all }}"
 # Spark settings, enable only on secure cluster, otherwise installation fails
-spark_authenticate: true
-spark_ssl_encryption: true
-spark_sasl_encryption: true
+spark_authenticate: True
+spark_ssl_encryption: True
+spark_sasl_encryption: True
 # Hue will use PAM auth and depending what was configured for other components use these settings
-hue_ssl: true
-spyglass_elasticsearch_secure: true
+hue_ssl: True
+spyglass_elasticsearch_secure: True
 ###########################################
 
 mapr_subnets: 10.0.0.0/24
-mapr_create_user: true
+mapr_create_user: True
 mapr_user: mapr
 mapr_group: mapr
 # UID only for creation required.
@@ -67,7 +67,7 @@ oracle_jdbc_driver_path: /Users/chufe/Downloads/ojdbc6.jar
 # Packages: instant-client-basic and instant-client-sdk-linux
 # Types are: embedded, oracle, mysql
 hue_db_type: mysql
-hue_db_mysql_create_schema_and_user: true
+hue_db_mysql_create_schema_and_user: True
 # set only for Oracle or when MySQL is external, comment out it should take host from installed DB (ext-mysql)
 #hue_db_host: oracle.db
 hue_db_user: hue
@@ -80,7 +80,7 @@ hue_db_port: 3306
 
 # Types are: embedded, oracle, mysql
 hive_db_type: mysql
-hive_db_mysql_create_schema_and_user: true
+hive_db_mysql_create_schema_and_user: True
 hive_db_user: hive
 hive_db_password: hive
 hive_db_schema: hive
@@ -91,7 +91,7 @@ hive_db_schema: hive
 
 # Types are: embedded, oracle, mysql
 oozie_db_type: mysql
-oozie_db_mysql_create_schema_and_user: true
+oozie_db_mysql_create_schema_and_user: True
 oozie_db_user: oozie
 oozie_db_password: oozie
 oozie_db_schema: oozie
@@ -104,7 +104,7 @@ oozie_db_schema: oozie
 # Oozie Email
 oozie_smtp_host: localhost
 oozie_smtp_port: 25
-oozie_smtp_auth: false
+oozie_smtp_auth: "false"
 oozie_smtp_username:
 oozie_smtp_password:
 
