@@ -286,6 +286,8 @@ def execute_volume_changes(volume_exists, old_values, new_values, schedule_id):
         if new_values['topology'] != old_values['topology']:
             subprocess.check_call("maprcli volume move -name " + new_values['name'] + " -topology " + new_values['topology'], shell=True)
         # when no schedule is set and you set 0 again an error occurs
+        print("aaa" + new_values['snapshot_schedule_name'])
+        print("bbb" + old_values['snapshot_schedule_name'])
         if new_values['snapshot_schedule_name'] != old_values['snapshot_schedule_name']:
             subprocess.check_call("maprcli volume modify -name " + new_values['name'] + " -schedule " + schedule_id, shell=True)
         if new_values['path'] != old_values['path']:
@@ -301,9 +303,9 @@ def get_schedule_name_by_id(schedule_id):
     schedule_info = process.communicate()
     maprclijson = json.loads(schedule_info[0])
     for item in maprclijson['data']:
-        if item['id'] == schedule_id:
+        if str(item['id']) == str(schedule_id):
             return item['name'].encode('ascii','ignore')
-    return 'undefined'
+    return 'none'
 
 def get_schedule_id_by_name(schedule_name):
     if schedule_name == "none":
@@ -314,7 +316,7 @@ def get_schedule_id_by_name(schedule_name):
     for item in maprclijson['data']:
         if item['name'] == schedule_name:
             return str(item['id'])
-    return "undefined"
+    return "none"
 
 def main():
     run_module()
