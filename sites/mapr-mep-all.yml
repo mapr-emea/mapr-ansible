@@ -9,6 +9,7 @@
 - import_playbook: mapr-mep-httpfs.yml
 - import_playbook: mapr-mep-spark.yml
 - import_playbook: mapr-mep-oozie.yml
+- import_playbook: mapr-mep-filemigrate.yml
 - import_playbook: mapr-mep-hue.yml
 - import_playbook: mapr-mep-spyglass-metric.yml
 - import_playbook: mapr-mep-spyglass-log.yml

@@ -7,6 +7,14 @@
   hosts: all:!mapr-spark-yarn
   roles:
     - ../roles/mapr-spark-yarn-uninstall
+- name: Install Spark Thrift Server
+  hosts: mapr-spark-thriftserver
+  roles:
+    - ../roles/mapr-spark-thriftserver-install
+- name: Uninstall Spark Thrift Server
+  hosts: all:!mapr-spark-thriftserver
+  roles:
+    - ../roles/mapr-spark-thriftserver-uninstall
 - name: Install Spark History Server
   hosts: mapr-spark-historyserver
   roles:

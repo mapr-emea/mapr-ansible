@@ -1,0 +1,20 @@
+---
+# Install File Migrate Service
+- name: Install mapr-filemigrate
+  package: name=mapr-filemigrate state=present
+  register: filemigrate_result
+- name: Configure.sh -R
+  shell: /opt/mapr/server/configure.sh -R
+  when: filemigrate_result.changed
+- pause: seconds=10
+  when: filemigrate_result.changed
+- name: Restart File Migrate Service
+  shell: maprcli node services -name filemigrate -action restart -nodes {{ ansible_fqdn }}
+  register: task_result
+  until: task_result.rc == 0
+  retries: 10
+  delay: 10
+  ignore_errors: yes
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: filemigrate_result.changed

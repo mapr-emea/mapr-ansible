@@ -57,6 +57,10 @@ security_all=maprsasl
 [mapr-spark-yarn]
 10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
 
+# Spark ThriftServer
+[mapr-spark-thriftserver]
+10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
+
 # Spark HistoryServer
 [mapr-spark-historyserver]
 10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
@@ -136,6 +140,10 @@ security_all=maprsasl
 
 # Oozie
 [mapr-oozie]
+10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
+
+# File Migrate Service
+[mapr-filemigrate]
 10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
 
 # CollectD
