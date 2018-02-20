@@ -1,0 +1,40 @@
+- import_playbook: mapr-include-vars.yml
+- name: Setup Hive Variables
+  hosts: all
+  vars:
+      num_mysql_hosts: "{{ groups['ext-mysql']|length }}"
+  roles:
+    - ../roles/mapr-hive-vars
+    - {role: ../roles/mapr-hive-mysql, when: hive_db_type == 'mysql' and hive_db_mysql_create_schema_and_user and num_mysql_hosts != '0'  }
+- name: Install Hive CLI
+  hosts: mapr-hive-cli
+  roles:
+    - ../roles/mapr-hive-cli-install
+- name: Install Hive MetaStore
+  hosts: mapr-hive-metastore
+  roles:
+    - ../roles/mapr-hive-metastore-install
+- name: Install Hive Server 2
+  hosts: mapr-hive-server2
+  roles:
+    - ../roles/mapr-hive-server2-install
+- name: Install Hive WebHCat
+  hosts: mapr-hive-webhcat
+  roles:
+    - ../roles/mapr-hive-webhcat-install
+- name: Uninstall Hive WebHCat
+  hosts: all:!mapr-hive-webhcat
+  roles:
+    - ../roles/mapr-hive-webhcat-uninstall
+- name: Uninstall Hive Server 2
+  hosts: all:!mapr-hive-server2
+  roles:
+    - ../roles/mapr-hive-server2-uninstall
+- name: Uninstall Hive MetaStore
+  hosts: all:!mapr-hive-metastore
+  roles:
+    - ../roles/mapr-hive-metastore-uninstall
+- name: Uninstall Hive CLI
+  hosts: all:!mapr-hive-cli
+  roles:
+    - ../roles/mapr-hive-cli-uninstall

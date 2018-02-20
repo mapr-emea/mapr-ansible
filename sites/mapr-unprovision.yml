@@ -1,0 +1,15 @@
+- import_playbook: mapr-include-vars.yml
+- name: Uninstall MapR Core
+  hosts: all:!mapr-core
+  roles:
+    - ../roles/mapr-core-uninstall
+- name: Unregister node vars
+  hosts: all
+  roles:
+     - ../roles/mapr-unregister-node-vars
+- name: Unregister node vars
+  hosts: mapr-cldb[0]
+  vars:
+     num_unprovision: "{{ groups['unprovision']|length }}"
+  roles:
+     - {role: ../roles/mapr-unregister-node, when: num_unprovision != '0'}

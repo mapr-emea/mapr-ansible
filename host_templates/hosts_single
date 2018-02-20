@@ -21,6 +21,10 @@ common
 [mapr-zookeeper:children]
 common
 
+# Contains MapR FileServer (MFS)
+[mapr-fileserver:children]
+common
+
 # Container Location DataBase
 [mapr-cldb:children]
 common
@@ -41,12 +45,12 @@ common
 [mapr-resourcemanager:children]
 common
 
-# Job History Server, IMPORTANT: only one
-[mapr-historyserver:children]
+# Contains YARN Node Manager
+[mapr-nodemanager:children]
 common
 
-# Contains YARN Node Manager, MapReduce2 and MapR FileServer (MFS)
-[mapr-datanode:children]
+# Job History Server, IMPORTANT: only one
+[mapr-historyserver:children]
 common
 
 # MySQL, required for Hive MetaStore and Oozie, IMPORTANT: only one

@@ -15,8 +15,8 @@
 [mapr-zookeeper]
 10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
 
-# Container Location DataBase
-[mapr-cldb]
+# Contains MapR FileServer (MFS)
+[mapr-fileserver]
 10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
 
 # Container Location DataBase
@@ -35,13 +35,15 @@
 [mapr-resourcemanager]
 10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
 
+# Contains YARN Node Manager
+[mapr-nodemanager]
+10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
+
+
 # Job History Server, IMPORTANT: only one
 [mapr-historyserver]
 10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
 
-# Contains YARN Node Manager, MapReduce2 and MapR FileServer (MFS)
-[mapr-datanode]
-10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
 
 # MySQL, required for Hive MetaStore and Oozie, IMPORTANT: only one
 [ext-mysql]

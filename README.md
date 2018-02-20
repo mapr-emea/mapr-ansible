@@ -91,10 +91,12 @@ ansible-playbook -i hosts_template site-client.yml
 
 ## Install RStudio Server (m5 license requried for NFS)
 
+Ubuntu ONLY
+
 Use `hosts_template` as template and copy it and the hostnames to the components you want to get installed. If components are not required, just leave the block empty. Then run:
 
 ```
-ansible-playbook -i hosts_template rstudio-server.yml
+ansible-playbook -i hosts_template sites/ext-rstudio-server.yml
 ```
 
 ## Install Zeppelin
@@ -102,7 +104,7 @@ ansible-playbook -i hosts_template rstudio-server.yml
 Use `hosts_template` as template and copy it and the hostnames to the components you want to get installed. If components are not required, just leave the block empty. Then run:
 
 ```
-ansible-playbook -i hosts_template site-zeppelin.yml
+ansible-playbook -i hosts_template sites/ext-zeppelin.yml
 ```
 
 ## Helpers
@@ -122,11 +124,10 @@ ansible-playbook -i hosts_template helper/create-user-ace.yml
 
 ### Setup Kerberos, SSSD and PAM with ActiveDirectory (Only tested on Redhat 7.3 and 7.4!!!)
 
-Update values in `helper/group/vars`
-Use `myhosts/hosts_kerberos as template
+Use `host_templates/hosts_kerberos` as template
 
 ```
-ansible-playbook -i myhosts/hosts_kerberos helper/kerberos-sssd-setup.yml
+ansible-playbook -i host_templates/hosts_kerberos sites/ext-kerberos-sssd-setup.yml
 ```
 
 Afterwards authenticate with users from AD.
@@ -136,7 +137,7 @@ Afterwards authenticate with users from AD.
 Based on number of hosts users are created in AD.
 
 ```
-ansible-playbook -i myhosts/hosts_kerberos helper/kerberos-createadusers.yml
+ansible-playbook -i host_templates/hosts_kerberos sites/ext-kerberos-createadusers.yml
 ```
 
 ### Generate keytabs based on created users in command above.
@@ -144,7 +145,7 @@ ansible-playbook -i myhosts/hosts_kerberos helper/kerberos-createadusers.yml
 Keytabs are stored in folder defined in mapr_kerberos_local_keytabs_dir on ansible client machine
 
 ```
-ansible-playbook -i myhosts/hosts_kerberos helper/kerberos-keytabs-ad-generate.yml 
+ansible-playbook -i host_templates/hosts_kerberos sites/ext-kerberos-keytabs-ad-generate.yml
 ```
 
 
@@ -154,7 +155,7 @@ Keytabs are stored in folder defined in mapr_kerberos_local_keytabs_dir on ansib
 When the customer delivers keytabs this can be also used to validate.
 
 ```
-ansible-playbook -i myhosts/hosts_kerberos helper/kerberos-keytabs-verify.yml      
+ansible-playbook -i host_templates/hosts_kerberos sites/ext-kerberos-keytabs-verify.yml
 ```
 
 ## Use Ansible modules for administrative tasks

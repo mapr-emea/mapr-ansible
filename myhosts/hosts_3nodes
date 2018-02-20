@@ -4,9 +4,9 @@
 
 # ALIASES does NOT work with ROLLING upgrades!
 [all]
-node1 ansible_host=10.0.0.46 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-node2 ansible_host=10.0.0.127 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-node3 ansible_host=10.0.0.142 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+node1 ansible_host=10.0.0.10 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+node2 ansible_host=10.0.0.25 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+node3 ansible_host=10.0.0.76 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
 [unprovision]
 
@@ -22,6 +22,12 @@ node3
 
 # Zookeeper
 [mapr-zookeeper]
+node1
+node2
+node3
+
+# Contains MapR FileServer (MFS)
+[mapr-fileserver]
 node1
 node2
 node3
@@ -51,14 +57,14 @@ node1
 node2
 node3
 
-# Job History Server, IMPORTANT: only one
-[mapr-historyserver]
-node3
-
-# Contains YARN Node Manager, MapReduce2 and MapR FileServer (MFS)
-[mapr-datanode]
+# Contains YARN Node Manager
+[mapr-nodemanager]
 node1
 node2
+node3
+
+# Job History Server, IMPORTANT: only one
+[mapr-historyserver]
 node3
 
 # MySQL, required for Hive MetaStore and Oozie, IMPORTANT: only one

@@ -1,0 +1,5 @@
+- import_playbook: mapr-include-vars.yml
+- name: Install Zeppelin
+  hosts: ext-zeppelin
+  roles:
+    - ../roles/ext-zeppelin

@@ -1,0 +1,16 @@
+- import_playbook: mapr-include-vars.yml
+- name: Setup Hue Vars
+  hosts: all
+  vars:
+      num_mysql_hosts: "{{ groups['ext-mysql']|length }}"
+  roles:
+    - ../roles/mapr-hue-vars
+    - {role: ../roles/mapr-hue-mysql, when: hue_db_type == 'mysql' and hue_db_mysql_create_schema_and_user and num_mysql_hosts != '0' }
+- name: Install Hue
+  hosts: mapr-hue
+  roles:
+    - ../roles/mapr-hue-install
+- name: Uninstall Hue
+  hosts: all:!mapr-hue
+  roles:
+    - ../roles/mapr-hue-uninstall

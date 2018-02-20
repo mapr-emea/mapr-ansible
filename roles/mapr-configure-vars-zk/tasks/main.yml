@@ -1,0 +1,23 @@
+---
+# Configure unsecure cluster
+
+- name: Get Zookeeper FQDNs
+  set_fact: zoo_item={{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item  }}
+  with_items:
+    - "{{ groups['mapr-zookeeper'] }}"
+  register: zookeeper_hosts
+- name: Make Zookeeper String
+  set_fact: zookeeper_string={{ zookeeper_hosts.results | map(attribute='ansible_facts.zoo_item') | list | join(',')}}
+
+- name: Get Zookeeper FQDNs
+  set_fact: zoo_item_withport={{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item }}:5181
+  with_items:
+    - "{{ groups['mapr-zookeeper'] }}"
+  register: zookeeper_hosts_withport
+- name: Make Zookeeper String
+  set_fact: zookeeper_withport_string={{ zookeeper_hosts_withport.results | map(attribute='ansible_facts.zoo_item_withport') | list | join(',')}}
+
+- name: Debug Zookeeper
+  debug: msg="{{ zookeeper_string }}"
+
+

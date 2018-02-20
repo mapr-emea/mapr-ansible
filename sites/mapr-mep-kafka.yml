@@ -1,0 +1,9 @@
+- import_playbook: mapr-include-vars.yml
+- name: Install Kafka
+  hosts: mapr-kafka
+  roles:
+    - ../roles/mapr-kafka-install
+- name: Uninstall Kafka
+  hosts: all:!mapr-kafka
+  roles:
+    - ../roles/mapr-kafka-uninstall

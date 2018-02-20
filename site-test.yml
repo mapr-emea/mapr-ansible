@@ -1,21 +1,4 @@
-- name: Install Spark on YARN
-  hosts: mapr-cldb[0]
-  tasks:
-    - name: Create MapR volume
-      mapr_volume:
-        name: my.new.volume
-        state: present
-        topology: /data
-        path: /test
-        read_ace: p
-        write_ace: p
-        min_replication: 2
-        replication: 3
-        soft_quota_in_mb: 1024
-        hard_quota_in_mb: 1024
-        accountable_entity_type: user
-        accountable_entity_name: mapr
-#        snapshot_schedule_name: testrule
-        read_only: no
-      environment:
-        MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+- name: Copy keys to FluentD  nodes
+  hosts: mapr-fluentd
+  roles:
+    - {role: mapr-fluentd-install-secure, when: spyglass_elasticsearch_secure}

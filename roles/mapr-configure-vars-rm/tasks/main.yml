@@ -1,0 +1,13 @@
+---
+# Configure unsecure cluster
+
+- name: Get Resource Manager
+  set_fact: resourcemanager_item={{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item  }}
+  with_items:
+    - "{{ groups['mapr-resourcemanager'] }}"
+  register: resourcemanager_hosts
+  when: groups['mapr-resourcemanager'] is defined
+- name: Make Resource Manager String
+  set_fact: resourcemanager_string={{ resourcemanager_hosts.results | map(attribute='ansible_facts.resourcemanager_item') | list | join(',')}}
+  when: groups['mapr-resourcemanager'] is defined
+

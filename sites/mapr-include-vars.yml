@@ -1,0 +1,4 @@
+- name: Group vars
+  hosts: all
+  tasks:
+    - include_vars: file="../group_vars/all"

@@ -1,0 +1,21 @@
+- import_playbook: mapr-include-vars.yml
+- name: Setup Zookeeper String
+  hosts: all
+  roles:
+    - ../roles/mapr-configure-vars-zk
+- name: Install Drill Standalone
+  hosts: mapr-drill-standalone
+  roles:
+    - ../roles/mapr-drill-standalone-install
+- name: Uninstall Drill Standalone
+  hosts: all:!mapr-drill-standalone
+  roles:
+    - ../roles/mapr-drill-standalone-uninstall
+- name: Install Drill on YARN
+  hosts: mapr-drill-yarn
+  roles:
+    - ../roles/mapr-drill-yarn-install
+- name: Uninstall Drill on YARN
+  hosts: all:!mapr-drill-yarn
+  roles:
+    - ../roles/mapr-drill-yarn-uninstall

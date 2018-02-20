@@ -1,0 +1,9 @@
+- import_playbook: mapr-include-vars.yml
+- name: Install HttpFS
+  hosts: mapr-httpfs
+  roles:
+    - ../roles/mapr-httpfs-install
+- name: Uninstall HttpFS
+  hosts: all:!mapr-httpfs
+  roles:
+    - ../roles/mapr-httpfs-uninstall

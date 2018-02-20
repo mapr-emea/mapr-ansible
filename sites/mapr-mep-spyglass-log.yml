@@ -1,0 +1,50 @@
+- import_playbook: mapr-include-vars.yml
+- name: Install MapR fluentd
+  hosts: mapr-fluentd
+  roles:
+    - ../roles/mapr-fluentd-install
+- name: Uninstall MapR fluentd
+  hosts: all:!mapr-fluentd
+  roles:
+    - ../roles/mapr-fluentd-uninstall
+- name: Install MapR ElasticSearch
+  hosts: mapr-elasticsearch
+  roles:
+    - ../roles/mapr-elasticsearch-install
+- name: Uninstall MapR ElasticSearch
+  hosts: all:!mapr-elasticsearch
+  roles:
+    - ../roles/mapr-elasticsearch-uninstall
+- name: Install MapR Kibana
+  hosts: mapr-kibana
+  roles:
+    - ../roles/mapr-kibana-install
+- name: Uninstall MapR Kibana
+  hosts: all:!mapr-kibana
+  roles:
+    - ../roles/mapr-kibana-uninstall
+- name: Setup Spyglass ElasticSearch vars
+  hosts: all
+  roles:
+    - ../roles/mapr-log-monitoring-configure-vars
+- name: Generate keys for Spyglass ElasticSearch
+  hosts: mapr-elasticsearch[0]
+  roles:
+    - {role: ../roles/mapr-log-monitoring-configure-genkeys, when: spyglass_elasticsearch_secure}
+- name: Copy keys to Spyglass ElasticSearch nodes
+  hosts: mapr-elasticsearch
+  roles:
+    - {role: ../roles/mapr-elasticsearch-install-secure, when: spyglass_elasticsearch_secure}
+- name: Copy keys to Kibana ElasticSearch nodes
+  hosts: mapr-kibana
+  roles:
+    - {role: ../roles/mapr-kibana-install-secure, when: spyglass_elasticsearch_secure}
+- name: MapR Configure Log Monitoring
+  hosts: mapr-fluentd
+  roles:
+    - ../roles/mapr-log-monitoring-configure
+  serial: 1
+- name: Copy keys to FluentD  nodes
+  hosts: mapr-fluentd
+  roles:
+    - {role: ../roles/mapr-fluentd-install-secure, when: spyglass_elasticsearch_secure}

@@ -1,0 +1,19 @@
+- import_playbook: mapr-include-vars.yml
+- name: Setup Zookeeper String
+  hosts: all
+  roles:
+    - ../roles/mapr-configure-vars-zk
+- name: Set Oozie Vars
+  hosts: all
+  vars:
+     num_mysql_hosts: "{{ groups['ext-mysql']|length }}"
+  roles:
+    - {role: ../roles/mapr-oozie-mysql, when: oozie_db_type == 'mysql' and oozie_db_mysql_create_schema_and_user and num_mysql_hosts != '0' }
+- name: Install Oozie
+  hosts: mapr-oozie
+  roles:
+    - ../roles/mapr-oozie-install
+- name: Uninstall Oozie
+  hosts: all:!mapr-oozie
+  roles:
+    - ../roles/mapr-oozie-uninstall

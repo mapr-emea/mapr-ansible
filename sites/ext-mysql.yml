@@ -1,0 +1,8 @@
+- name: Install MySQL
+  hosts: ext-mysql
+  roles:
+    - ../roles/ext-mysql-install
+- name: Uninstall MySQL
+  hosts: all:!ext-mysql
+  roles:
+    - ../roles/ext-mysql-uninstall

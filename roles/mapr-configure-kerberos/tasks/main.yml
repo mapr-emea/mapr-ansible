@@ -7,7 +7,7 @@
 - name: Check if /opt/mapr/conf/cldb.key exists
   stat: path=/opt/mapr/conf/cldb.key
   register: cldb_key_status
-- name: Configure.sh to generate keys just run on frist mapr-core node
+- name: Configure.sh to generate keys just run on first mapr-core node
   shell: /opt/mapr/server/configure.sh -N {{ cluster_name }} -Z {{ zookeeper_string }} -C {{ cldb_string }} -u {{ mapr_user }} -g {{ mapr_group }} -genkeys -secure -K -P "mapr/{{ cluster_name }}@{{ mapr_kerberos_realm }}"  -HS {{ historyserver_string }}
   when: inventory_hostname == groups["mapr-cldb"][0] and not cldb_key_status.stat.exists
 - name: Copy keys to local

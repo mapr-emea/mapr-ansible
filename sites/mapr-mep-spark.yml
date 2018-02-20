@@ -1,0 +1,17 @@
+- import_playbook: mapr-include-vars.yml
+- name: Install Spark on YARN
+  hosts: mapr-spark-yarn
+  roles:
+    - ../roles/mapr-spark-yarn-install
+- name: Uninstall Spark on YARN
+  hosts: all:!mapr-spark-yarn
+  roles:
+    - ../roles/mapr-spark-yarn-uninstall
+- name: Install Spark History Server
+  hosts: mapr-spark-historyserver
+  roles:
+    - ../roles/mapr-spark-historyserver-install
+- name: Uninstall Spark History Server
+  hosts: all:!mapr-spark-historyserver
+  roles:
+    - ../roles/mapr-spark-historyserver-uninstall

@@ -1,4 +1,0 @@
-- name: Install Zeppelin
-  hosts: ext-zeppelin
-  roles:
-    - ext-zeppelin

@@ -1,0 +1,21 @@
+- import_playbook: mapr-include-vars.yml
+- name: Setup Zookeeper String
+  hosts: all
+  roles:
+    - ../roles/mapr-configure-vars-zk
+- name: Install HBase CLI
+  hosts: mapr-hbase-cli
+  roles:
+    - ../roles/mapr-hbase-cli-install
+- name: Install HBase REST and Thrift Server
+  hosts: mapr-hbase-thrift-rest
+  roles:
+    - ../roles/mapr-hbase-thrift-rest-install
+- name: Uninstall HBase REST and Thrift Server
+  hosts: all:!mapr-hbase-thrift-rest
+  roles:
+    - ../roles/mapr-hbase-thrift-rest-uninstall
+- name: Uninstall HBase CLI
+  hosts: all:!mapr-hbase-cli
+  roles:
+    - ../roles/mapr-hbase-cli-uninstall

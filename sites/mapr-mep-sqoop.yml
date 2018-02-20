@@ -1,0 +1,29 @@
+- import_playbook: mapr-include-vars.yml
+- name: Install Sqoop
+  hosts: mapr-sqoop1
+  roles:
+    - ../roles/mapr-sqoop1-install
+- name: Uninstall Sqoop
+  hosts: all:!mapr-sqoop1
+  roles:
+    - ../roles/mapr-sqoop1-uninstall
+- name: Set Sqoop 2 Server Vars
+  hosts: all
+  roles:
+    - ../roles/mapr-sqoop2-server-vars
+- name: Install Sqoop 2 Server
+  hosts: mapr-sqoop2-server
+  roles:
+    - ../roles/mapr-sqoop2-server-install
+- name: Uninstall Sqoop 2 Server
+  hosts: all:!mapr-sqoop2-server
+  roles:
+    - ../roles/mapr-sqoop2-server-uninstall
+- name: Install Sqoop 2 Client
+  hosts: mapr-sqoop2-client
+  roles:
+    - ../roles/mapr-sqoop2-client-install
+- name: Uninstall Sqoop 2 Client
+  hosts: all:!mapr-sqoop2-client
+  roles:
+    - ../roles/mapr-sqoop2-client-uninstall

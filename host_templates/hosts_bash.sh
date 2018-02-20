@@ -73,6 +73,16 @@ cat << EOF
             "ansible_become_method" :  "sudo"
         }
      },
+     "mapr-nodemanager" : {
+         "hosts"   : [ "$NODE1",
+                       "$NODE2"
+                     ],
+        "vars" : {
+            "ansible_user" :  "centos",
+            "ansible_become" :  "yes",
+            "ansible_become_method" :  "sudo"
+        }
+     },
      "mapr-historyserver" : {
          "hosts"   : ["$NODE1"],
         "vars" : {
@@ -81,7 +91,7 @@ cat << EOF
             "ansible_become_method" :  "sudo"
         }
      },
-    "mapr-datanode" : {
+    "mapr-fileserver" : {
         "hosts"   : [ "$NODE1",
                       "$NODE2",
                       "$NODE3"

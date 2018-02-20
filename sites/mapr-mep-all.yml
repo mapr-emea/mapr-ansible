@@ -1,0 +1,14 @@
+- import_playbook: ext-mysql.yml
+- import_playbook: mapr-mep-kafka.yml
+- import_playbook: mapr-mep-drill.yml
+- import_playbook: mapr-mep-flume.yml
+- import_playbook: mapr-mep-hbase.yml
+- import_playbook: mapr-mep-hive.yml
+- import_playbook: mapr-mep-pig.yml
+- import_playbook: mapr-mep-sqoop.yml
+- import_playbook: mapr-mep-httpfs.yml
+- import_playbook: mapr-mep-spark.yml
+- import_playbook: mapr-mep-oozie.yml
+- import_playbook: mapr-mep-hue.yml
+- import_playbook: mapr-mep-spyglass-metric.yml
+- import_playbook: mapr-mep-spyglass-log.yml
