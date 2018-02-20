@@ -80,6 +80,7 @@ hue_db_port: 3306
 
 # Types are: embedded, oracle, mysql
 hive_db_type: mysql
+hive_with_tez: True
 hive_db_mysql_create_schema_and_user: True
 hive_db_user: hive
 hive_db_password: hive

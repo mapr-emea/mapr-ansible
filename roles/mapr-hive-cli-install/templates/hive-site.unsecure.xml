@@ -18,6 +18,13 @@
 -->
 <configuration>
 
+    {% if hive_with_tez %}
+    <property>
+        <name>hive.execution.engine</name>
+        <value>tez</value>
+    </property>
+    {% endif %}
+
     {% if hive_db_type == 'mysql' %}
     {% if hive_db_jdbc_url is defined %}
     <property>

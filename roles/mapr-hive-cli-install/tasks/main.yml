@@ -44,6 +44,39 @@
 - name: Set MAPR_HIVE_LOGIN_OPTS= in env.sh to hybrid for Kerberos
   lineinfile: dest=/opt/mapr/conf/env.sh insertbefore="^export\ MAPR_HIVE_LOGIN_OPTS=" regexp="^MAPR_HIVE_LOGIN_OPTS=" line="MAPR_HIVE_LOGIN_OPTS=\"-Dhadoop.login=hybrid\""
   when: mapr_security == 'kerberos'
+
+- name: Setup Tez for Hive
+  block:
+    - name: Install mapr-tez
+      package: name=mapr-tez state=present
+    - name: Create maprfs:///apps
+      shell: hadoop fs -mkdir -p /apps
+      when: inventory_hostname == groups["mapr-hive-cli"][0]
+      environment:
+        MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+    - name: Create maprfs:///apps/tez
+      shell: hadoop fs -mkdir -p /apps/tez
+      when: inventory_hostname == groups["mapr-hive-cli"][0]
+      environment:
+        MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+    - name: Find Tez Path
+      find: paths="/opt/mapr/tez/" patterns="tez*" file_type=directory
+      register: tez_path_result
+    - name: Upload libraries to maprfs:///apps/tez
+      shell: hadoop fs -put -f {{ tez_path_result.files[0].path }} /apps/tez
+      when: inventory_hostname == groups["mapr-hive-cli"][0]
+      environment:
+        MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+    - name: Chmod 755 maprfs:///apps/tez
+      shell: hadoop fs -chmod -R 755 /apps/tez
+      when: inventory_hostname == groups["mapr-hive-cli"][0]
+      environment:
+        MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: hive_with_tez
+- name: Uninstall mapr-tez
+  package: name=mapr-tez state=absent
+  when: not hive_with_tez
+
 - name: Configure hive-env.sh
   template: src=hive-env.sh dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/hive-env.sh
 - name: Add HIVE_HOME to /etc/profile
@@ -65,3 +98,5 @@
   when: inventory_hostname == groups["mapr-hive-cli"][0]
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+
+
