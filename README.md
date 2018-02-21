@@ -1,6 +1,12 @@
 # MapR Ansible Scripts
 
 This is a collection of Ansible scripts which help you to setup a MapR-cluster.
+
+Maintainer: Carsten Hufe - Lead Data Engineer @ MapR
+
+Changes, bugs and feature requests can be requested by using the Github issue tracker.
+If you want to contribute to the project, open pull requests via Github.
+
 The scripts support:
 
 * Install MapR-Cluster including Ecosystem Components (only one playbook to execute)
