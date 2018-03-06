@@ -38,7 +38,7 @@
   when: ansible_os_family == 'Debian'
 - name: Create MapR Releases Repository for Ubuntu
   apt_repository:
-    repo: "deb {{ mapr_release_url }}/ubuntu/ mapr optional"
+    repo: "deb {{ mapr_release_url }}/ubuntu/ binary trusty"
     state: present
     update_cache: yes
     validate_certs: yes
