@@ -27,6 +27,6 @@
     <!-- :::CAUTION::: DO NOT EDIT ANYTHING ON OR ABOVE THIS LINE -->
     <property>
         <name>yarn.log-aggregation-enable</name>
-        <value>true</value>
+        <value>false</value>
     </property>
 </configuration>

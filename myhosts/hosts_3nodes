@@ -4,9 +4,9 @@
 
 # ALIASES does NOT work with ROLLING upgrades!
 [all]
-node1 ansible_host=10.0.0.133 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-node2 ansible_host=10.0.0.228 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-node3 ansible_host=10.0.0.246 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+node1 ansible_host=10.0.0.31 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+node2 ansible_host=10.0.0.39 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+node3 ansible_host=10.0.0.201 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
 [unprovision]
 
@@ -69,7 +69,7 @@ node3
 
 # MySQL, required for Hive MetaStore and Oozie, IMPORTANT: only one
 [ext-mysql]
-node3
+node1
 
 # Spark on YARN
 [mapr-spark-yarn]
@@ -144,7 +144,7 @@ node2
 
 # Hive WebHCat
 [mapr-hive-webhcat]
-node1
+#node1
 
 # HttpFS
 [mapr-httpfs]
@@ -182,7 +182,7 @@ node2
 
 # File Migrate Service
 [mapr-filemigrate]
-node3
+#node3
 
 # CollectD
 [mapr-collectd:children]
@@ -202,16 +202,16 @@ node1
 
 # FluentD
 [mapr-fluentd:children]
-mapr-core
+#mapr-core
 
 # ElasticSearch
 [mapr-elasticsearch]
-node2
-node3
+#node2
+#node3
 
 # Kibana
 [mapr-kibana]
-node3
+#node3
 
 
 

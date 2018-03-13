@@ -70,7 +70,7 @@
     </property>
     <property>
         <name>yarn.log-aggregation-enable</name>
-        <value>true</value>
+        <value>false</value>
     </property>
     <property>
         <name>yarn.mapr.ticket.expiration</name>

@@ -12,9 +12,9 @@ oracle_jdk_url: http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda
 hadoop_version: 2.7.0
 cluster_name: demo.mapr.com
 # required when aborted in wrong stage or changing security type
-force_zookeeper_restart: False
-force_warden_restart: False
-force_reconfigure_sh: False
+force_zookeeper_restart: True
+force_warden_restart: True
+force_reconfigure_sh: True
 warden_restart_wait_time: 30
 
 ####### Enable security features ##########
@@ -53,7 +53,8 @@ hue_ssl: True
 spyglass_elasticsearch_secure: True
 ###########################################
 
-mapr_subnets: 10.0.0.0/24
+# mapr_subnets is optional, if required just remove #
+#mapr_subnets: 10.0.0.0/24
 mapr_create_user: True
 mapr_user: mapr
 mapr_group: mapr
