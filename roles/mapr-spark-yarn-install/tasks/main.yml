@@ -5,11 +5,8 @@
 - name: Find Spark Path
   find: paths="/opt/mapr/spark" patterns="spark*" file_type=directory
   register: spark_path_result
-  failed_when: spark_path_result.matched == 0
-- stat: path="{{ item.path }}/bin/spark-submit"
-  with_items: "{{ spark_path_result.files }}"
-  register: spark_paths
-- set_fact: spark_path="{{ spark_paths.results | selectattr('stat.exists', 'equalto', true) | map(attribute='item.path') | join('') }}"
+  failed_when: spark_path_result.matched != 1
+- set_fact: spark_path="{{ spark_path_result.files[0].path }}"
 - name: Find Hive Path
   find: paths="/opt/mapr/" patterns="hive*" file_type=directory
   register: hive_first_path_result
