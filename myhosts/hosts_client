@@ -37,9 +37,6 @@
 # NFS loopback, ATTENTION: install only on edge node (mapr-client)!!!
 [mapr-nfsloopback]
 
-# Apache Drill
-[mapr-drill-yarn]
-
 # Flume
 [mapr-flume]
 
@@ -47,35 +44,12 @@
 [mapr-hbase-cli]
 10.0.0.97 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
-# HBase REST and Thrift
-[mapr-hbase-thrift-rest]
-
 # Hive CLI
 [mapr-hive-cli]
 10.0.0.97 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
-# Hive Server2
-[mapr-hive-server2]
-
-# HttpFS
-[mapr-httpfs]
-
-[mapr-hue]
-
-# Mahout
-[mapr-mahout]
-
-# Sqoop2 Server
-[mapr-sqoop2-server]
-
-# Sqoop2 Client
-[mapr-sqoop2-client]
-
 # Pig
 [mapr-pig]
-
-# Oozie
-[mapr-oozie]
 
 # MapR NFS loopback (only for MapR client!)
 [mapr-nfsloopback]
