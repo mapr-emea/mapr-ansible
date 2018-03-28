@@ -18,10 +18,10 @@
 - name: Setup global vars
   hosts: all
   roles:
-    - ../roles/mapr-global-vars
-    - ../roles/mapr-configure-vars-zk
-    - ../roles/mapr-configure-vars-cldb
-    - ../roles/mapr-configure-vars-hs
+    - mapr-global-vars
+    - mapr-configure-vars-zk
+    - mapr-configure-vars-cldb
+    - mapr-configure-vars-hs
 - name: Install MapR client
   hosts: mapr-client
   roles:
@@ -30,14 +30,14 @@
     - mapr-configure-subnets
     - {role: mapr-client-configure-unsecure, when: mapr_security == 'none'}
     - {role: mapr-client-configure-nativesecurity-secure, when: mapr_security == 'maprsasl'}
-- import_playbook: mapr-include-vars.yml
+- import_playbook: sites/mapr-include-vars.yml
 - name: Setup Hive Variables
   hosts: all
   vars:
       num_mysql_hosts: "{{ groups['ext-mysql']|length }}"
   roles:
-    - ../roles/mapr-hive-vars
-    - {role: ../roles/mapr-hive-mysql, when: hive_db_type == 'mysql' and hive_db_mysql_create_schema_and_user and num_mysql_hosts != '0'  }
+    - mapr-hive-vars
+    - {role: mapr-hive-mysql, when: hive_db_type == 'mysql' and hive_db_mysql_create_schema_and_user and num_mysql_hosts != '0'  }
 - name: Install Hive CLI
   hosts: mapr-hive-cli
   roles:
