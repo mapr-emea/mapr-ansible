@@ -36,31 +36,31 @@
 - name: Setup Hive Variables
   hosts: all
   roles:
-    - ../roles/mapr-hive-vars
+    - mapr-hive-vars
 - name: Install Hive CLI
   hosts: mapr-hive-cli
   roles:
-    - ../roles/mapr-hive-cli-install
+    - mapr-hive-cli-install
 - name: Install Kafka
   hosts: mapr-kafka
   roles:
-    - ../roles/mapr-kafka-install
+    - mapr-kafka-install
 - name: Install Spark on YARN
   hosts: mapr-spark-yarn
   roles:
-    - ../roles/mapr-spark-yarn-install
+    - mapr-spark-yarn-install
 - name: Install Flume
   hosts: mapr-flume
   roles:
-    - ../roles/mapr-flume-install
+    - mapr-flume-install
 - name: Install HBase CLI
   hosts: mapr-hbase-cli
   roles:
-    - ../roles/mapr-hbase-cli-install
+    - mapr-hbase-cli-install
 - name: Install Pig
   hosts: mapr-pig
   roles:
-    - ../roles/mapr-pig-install
+    - mapr-pig-install
 - name: Install NFS loopback
   hosts: mapr-nfsloopback
   roles:
