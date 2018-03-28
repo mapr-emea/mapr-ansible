@@ -32,13 +32,10 @@
 - import_playbook: sites/mapr-include-vars.yml
 - import_playbook: sites/mapr-mep-hive-client.yml
 - import_playbook: sites/mapr-mep-kafka.yml
-- import_playbook: sites/mapr-mep-spark.yml
-- import_playbook: sites/mapr-mep-drill.yml
+- import_playbook: sites/mapr-mep-spark-client.yml
 - import_playbook: sites/mapr-mep-flume.yml
 - import_playbook: sites/mapr-mep-hbase.yml
 - import_playbook: sites/mapr-mep-pig.yml
-- import_playbook: sites/mapr-mep-sqoop.yml
-- import_playbook: sites/mapr-mep-httpfs.yml
 
 - name: Install NFS loopback
   hosts: mapr-nfsloopback

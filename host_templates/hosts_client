@@ -35,10 +35,6 @@
 [mapr-nfsloopback]
 #10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
 
-# Apache Drill
-[mapr-drill-yarn]
-10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
-
 # Flume
 [mapr-flume]
 10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
@@ -47,43 +43,12 @@
 [mapr-hbase-cli]
 10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
 
-# HBase REST and Thrift
-[mapr-hbase-thrift-rest]
-10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
-
 # Hive CLI
 [mapr-hive-cli]
 10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
 
-# Hive Server2
-[mapr-hive-server2]
-10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
-
-# HttpFS
-[mapr-httpfs]
-10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
-
-[mapr-hue]
-# 10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
-
-# Mahout
-[mapr-mahout]
-10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
-
-# Sqoop2 Server
-[mapr-sqoop2-server]
-10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
-
-# Sqoop2 Client
-[mapr-sqoop2-client]
-10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
-
 # Pig
 [mapr-pig]
-10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
-
-# Oozie
-[mapr-oozie]
 10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
 
 # MapR NFS loopback (only for MapR client!)

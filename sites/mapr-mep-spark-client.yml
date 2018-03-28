@@ -1,0 +1,9 @@
+- import_playbook: mapr-include-vars.yml
+- name: Install Spark on YARN
+  hosts: mapr-spark-yarn
+  roles:
+    - ../roles/mapr-spark-yarn-install
+- name: Uninstall Spark on YARN
+  hosts: all:!mapr-spark-yarn
+  roles:
+    - ../roles/mapr-spark-yarn-uninstall
