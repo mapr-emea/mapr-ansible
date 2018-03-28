@@ -1,4 +1,8 @@
 - name: Apply common configuration to all nodes
+  hosts: all
+  tasks:
+    - set_fact: client_install="true"
+- name: Apply common configuration to all nodes
   hosts: common
   roles:
     - {role: common-oraclejdk18, when: jdk == 'oraclejdk'}
@@ -34,7 +38,7 @@
 - import_playbook: sites/mapr-mep-kafka.yml
 - import_playbook: sites/mapr-mep-spark-client.yml
 - import_playbook: sites/mapr-mep-flume.yml
-- import_playbook: sites/mapr-mep-hbase.yml
+- import_playbook: sites/mapr-mep-hbase-client.yml
 - import_playbook: sites/mapr-mep-pig.yml
 
 - name: Install NFS loopback

@@ -85,17 +85,17 @@
   file: path=/opt/mapr/hive owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
 - name: Create MySQL tables for hive
   shell: "/opt/mapr/hive/hive-{{ version_output.stdout }}/bin/schematool -dbType mysql -initSchema"
-  when: inventory_hostname == groups["mapr-hive-cli"][0] and hive_db_type == 'mysql'
+  when: client_install is not defined and inventory_hostname == groups["mapr-hive-cli"][0] and hive_db_type == 'mysql'
   ignore_errors: True # TODO error result should be handeled
 - name: Create Oracle tables for hive
   shell: "/opt/mapr/hive/hive-{{ version_output.stdout }}/bin/schematool -dbType oracle -initSchema"
-  when: inventory_hostname == groups["mapr-hive-cli"][0] and hive_db_type == 'oracle'
+  when: client_install is not defined and inventory_hostname == groups["mapr-hive-cli"][0] and hive_db_type == 'oracle'
   ignore_errors: True # TODO error result should be handeled
 
 # required for Hue
 - name: Create maprfs:///user/hive/warehouse
   shell: hadoop fs -mkdir -p /user/hive/warehouse
-  when: inventory_hostname == groups["mapr-hive-cli"][0]
+  when: client_install is not defined and inventory_hostname == groups["mapr-hive-cli"][0]
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
 
