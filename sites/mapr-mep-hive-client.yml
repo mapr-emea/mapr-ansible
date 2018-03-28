@@ -1,0 +1,12 @@
+- name: Setup Hive Variables
+  hosts: all
+  roles:
+    - mapr-hive-vars
+- name: Install Hive CLI
+  hosts: mapr-hive-cli
+  roles:
+    - mapr-hive-cli-install
+- name: Uninstall Hive CLI
+  hosts: all:!mapr-hive-cli
+  roles:
+    - mapr-hive-cli-uninstall
