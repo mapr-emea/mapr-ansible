@@ -46,13 +46,13 @@
   roles:
     - mapr-nfsloopback-install
 - name: Install mapr-posix-client-basic (FUSE)
-  hosts: mapr-posix-client-basic-install
+  hosts: mapr-posix-client-basic
   roles:
     - mapr-posix-client-basic-install
     - {role: mapr-patch-posix-client-basic-install, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
 
 - name: Install mapr-posix-client-platinum (FUSE)
-  hosts: mapr-posix-client-platinum
+  hosts: mapr-posix-client
   roles:
     - mapr-posix-client-platinum-install
     - {role: mapr-patch-posix-client-platinum-install, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
