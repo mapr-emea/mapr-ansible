@@ -15,10 +15,10 @@
   changed_when: no
 - name: Copy MySQL driver
   copy: src=mysql-connector-java-5.1.40-bin.jar dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/lib/
-  when: hive_db_type == 'mysql'
+  when: client_install is not defined and hive_db_type == 'mysql'
 - name: Copy Oracle driver
   copy: src={{ oracle_jdbc_driver_path }} dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/lib/
-  when: hive_db_type == 'oracle'
+  when: client_install is not defined and hive_db_type == 'oracle'
 - name: Configure hive-site.xml - unsecure
   template: src=hive-site.unsecure.xml dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/hive-site.xml
   when: hive_server_security == 'none'
