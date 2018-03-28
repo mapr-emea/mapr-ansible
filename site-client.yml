@@ -21,7 +21,6 @@
     - mapr-global-vars
     - mapr-configure-vars-zk
     - mapr-configure-vars-cldb
-    - mapr-configure-vars-hs
 - name: Install MapR client
   hosts: mapr-client
   roles:
