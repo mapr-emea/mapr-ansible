@@ -24,7 +24,7 @@
     </property>
     {% endif %}
 
-    {% if hive_db_type == 'mysql' %}
+    {% if mysql_hosts is defined and hive_db_type == 'mysql' %}
     {% if hive_db_jdbc_url is defined %}
     <property>
         <name>javax.jdo.option.ConnectionURL</name>
