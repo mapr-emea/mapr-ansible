@@ -6,7 +6,6 @@
   - mapruserticket
   when: inventory_hostname == groups["mapr-cldb"][0]
 
-
 - name: Find Hadoop YARN server JARs
   find: paths="/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/share/hadoop/yarn/" patterns="hadoop-yarn-server-*" file_type=file
   register: yarnserver_jar_path_result

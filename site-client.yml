@@ -15,7 +15,13 @@
 - name: Setup global vars
   hosts: all
   roles:
-    - mapr-configure-vars
+- name: Setup global vars
+  hosts: all
+  roles:
+    - ../roles/mapr-global-vars
+    - ../roles/mapr-configure-vars-zk
+    - ../roles/mapr-configure-vars-cldb
+    - ../roles/mapr-configure-vars-hs
 - name: Install MapR client
   hosts: mapr-client
   roles:
@@ -24,62 +30,33 @@
     - mapr-configure-subnets
     - {role: mapr-client-configure-unsecure, when: mapr_security == 'none'}
     - {role: mapr-client-configure-nativesecurity-secure, when: mapr_security == 'maprsasl'}
-- name: Install Drill on YARN
-  hosts: mapr-drill-yarn
-  roles:
-    - mapr-drill-yarn-install
-- name: Install Flume
-  hosts: mapr-flume
-  roles:
-    - mapr-flume-install
-- name: Install HBase CLI
-  hosts: mapr-hbase-cli
-  roles:
-    - mapr-hbase-cli-install
-- name: Install HBase REST and Thrift Server
-  hosts: mapr-hbase-thrift-rest
-  roles:
-    - mapr-hbase-thrift-rest-install
+- import_playbook: mapr-include-vars.yml
 - name: Setup Hive Variables
   hosts: all
+  vars:
+      num_mysql_hosts: "{{ groups['ext-mysql']|length }}"
   roles:
-    - mapr-hive-vars
+    - ../roles/mapr-hive-vars
+    - {role: ../roles/mapr-hive-mysql, when: hive_db_type == 'mysql' and hive_db_mysql_create_schema_and_user and num_mysql_hosts != '0'  }
 - name: Install Hive CLI
   hosts: mapr-hive-cli
   roles:
     - mapr-hive-cli-install
-- name: Install Hive Server 2
-  hosts: mapr-hive-server2
+- name: Uninstall Hive CLI
+  hosts: all:!mapr-hive-cli
   roles:
-    - mapr-hive-server2-install
-- name: Install Pig
-  hosts: mapr-pig
-  roles:
-    - mapr-pig-install
-- name: Install Sqoop 2 Server
-  hosts: mapr-sqoop2-server
-  roles:
-    - mapr-sqoop2-server-install
-- name: Install Sqoop 2 Client
-  hosts: mapr-sqoop2-client
-  roles:
-    - mapr-sqoop2-client-install
-- name: Install Hue
-  hosts: mapr-hue
-  roles:
-    - mapr-hue-install
-- name: Install Oozie
-  hosts: mapr-oozie
-  roles:
-    - mapr-oozie-install
-- name: Install HttpFS
-  hosts: mapr-httpfs
-  roles:
-    - mapr-httpfs-install
-- name: Install Spark on YARN
-  hosts: mapr-spark-yarn
-  roles:
-    - mapr-spark-yarn-install
+    - mapr-hive-cli-uninstall
+- import_playbook: sites/mapr-mep-kafka.yml
+- import_playbook: sites/mapr-mep-spark.yml
+- import_playbook: sites/mapr-mep-drill.yml
+- import_playbook: sites/mapr-mep-flume.yml
+- import_playbook: sites/mapr-mep-hbase.yml
+- import_playbook: sites/mapr-mep-pig.yml
+- import_playbook: sites/mapr-mep-sqoop.yml
+- import_playbook: sites/mapr-mep-httpfs.yml
+- import_playbook: sites/mapr-mep-oozie.yml
+- import_playbook: sites/mapr-mep-hue.yml
+
 - name: Install NFS loopback
   hosts: mapr-nfsloopback
   roles:
