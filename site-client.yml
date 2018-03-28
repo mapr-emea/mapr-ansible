@@ -39,8 +39,6 @@
 - import_playbook: sites/mapr-mep-pig.yml
 - import_playbook: sites/mapr-mep-sqoop.yml
 - import_playbook: sites/mapr-mep-httpfs.yml
-- import_playbook: sites/mapr-mep-oozie.yml
-- import_playbook: sites/mapr-mep-hue.yml
 
 - name: Install NFS loopback
   hosts: mapr-nfsloopback
