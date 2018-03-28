@@ -21,7 +21,6 @@
   roles:
     - mapr-configure-repository
     - mapr-client-install
-    - mapr-patch-client-install
     - mapr-configure-subnets
     - {role: mapr-client-configure-unsecure, when: mapr_security == 'none'}
     - {role: mapr-client-configure-nativesecurity-secure, when: mapr_security == 'maprsasl'}
@@ -53,10 +52,6 @@
   hosts: mapr-hive-server2
   roles:
     - mapr-hive-server2-install
-- name: Install Mahout
-  hosts: mapr-mahout
-  roles:
-    - mapr-mahout-install
 - name: Install Pig
   hosts: mapr-pig
   roles:
