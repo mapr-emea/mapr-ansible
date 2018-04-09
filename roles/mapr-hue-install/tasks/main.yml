@@ -137,11 +137,11 @@
 - name: Start all hue instances
   lineinfile: dest=/opt/mapr/hue/hue-{{ version_output.stdout }}/desktop/conf/warden.hue.conf regexp="^services=" line="services=hue:all"
 - name: Start all livy instances
-  lineinfile: dest=/opt/mapr/livy/livy-{{ livy_version_output.stdout }}/conf.new/warden.livy.conf regexp="^services=" line="services=livy:all"
+  lineinfile: dest=/opt/mapr/livy/livy-{{ livy_version_output.stdout }}/conf/warden.livy.conf regexp="^services=" line="services=livy:all"
 - name: Copy to /opt/mapr/conf/conf.d/warden.hue.conf
   copy: remote_src=true src=/opt/mapr/hue/hue-{{ version_output.stdout }}/desktop/conf/warden.hue.conf dest=/opt/mapr/conf/conf.d/warden.hue.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
 - name: Copy to /opt/mapr/conf/conf.d/warden.livy.conf
-  copy: remote_src=true src=/opt/mapr/livy/livy-{{ livy_version_output.stdout }}/conf.new/warden.livy.conf dest=/opt/mapr/conf/conf.d/warden.livy.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
+  copy: remote_src=true src=/opt/mapr/livy/livy-{{ livy_version_output.stdout }}/conf/warden.livy.conf dest=/opt/mapr/conf/conf.d/warden.livy.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
 
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
