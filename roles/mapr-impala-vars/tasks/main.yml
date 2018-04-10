@@ -1,0 +1,23 @@
+---
+- name: Get Impala Catalog
+  set_fact: impala_catalog_item={{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item }}
+  with_items:
+    - "{{ groups['mapr-impala-catalog'] }}"
+  register: impala_catalog_hosts
+- name: Make Impala Catalog String
+  set_fact: impala_catalog_string={{ impala_catalog_hosts.results | map(attribute='ansible_facts.impala_catalog_item') | list | join(',')}}
+
+- name: Get Impala StateStore
+  set_fact: impala_statestore_item={{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item }}
+  with_items:
+    - "{{ groups['mapr-impala-statestore'] }}"
+  register: impala_statestore_hosts
+- name: Make Impala StateStore String
+  set_fact: impala_statestore_string={{ impala_statestore_hosts.results | map(attribute='ansible_facts.impala_statestore_item') | list | join(',')}}
+- name: Get Hive MetaStore server
+  set_fact: metastore_item=thrift://{{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item }}:9083
+  with_items:
+    - "{{ groups['mapr-hive-metastore'] }}"
+  register: impala_hive_metastore_hosts
+- name: Make Hive MetaStore String
+  set_fact: impala_hive_metastore_string={{ impala_hive_metastore_hosts.results | map(attribute='ansible_facts.metastore_item') | list | join(',')}}

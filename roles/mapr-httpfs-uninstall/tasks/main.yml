@@ -1,5 +1,5 @@
 ---
-# Install HttpFS
+# Uninstall HttpFS
 - name: Stop HttpFS
   shell: maprcli node services -name httpfs -action stop -nodes {{ ansible_fqdn }}
   register: maprcli_result

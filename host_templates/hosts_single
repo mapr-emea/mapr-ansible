@@ -112,9 +112,11 @@ common
 
 # Hive HCatalog
 [mapr-hive-hcatalog]
+#common
 
 # Hive WebHCat
 [mapr-hive-webhcat]
+#common
 
 # HttpFS
 [mapr-httpfs:children]
@@ -145,6 +147,15 @@ common
 
 # File Migrate Service
 [mapr-filemigrate:children]
+#common
+
+[mapr-impala-server]
+#common
+
+[mapr-impala-catalog]
+#common
+
+[mapr-impala-statestore]
 #common
 
 # CollectD

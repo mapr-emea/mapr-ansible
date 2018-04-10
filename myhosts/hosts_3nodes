@@ -185,6 +185,17 @@ node2
 [mapr-filemigrate]
 #node3
 
+[mapr-impala-server]
+node1
+node2
+node3
+
+[mapr-impala-catalog]
+node1
+
+[mapr-impala-statestore]
+node2
+
 # CollectD
 [mapr-collectd:children]
 mapr-core
