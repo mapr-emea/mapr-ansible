@@ -1,0 +1,28 @@
+---
+# Install mapr-impala
+- name: Install mapr-impala
+  package: name=mapr-impala state=present
+
+- find: paths="/opt/mapr/impala/" patterns="impala*" file_type=directory
+  register: impala_path_result
+  failed_when: impala_path_result.matched != 1
+
+- name: Copy mapr.keytab to host
+  copy: src={{ mapr_kerberos_local_keytabs_dir }}/{{ ansible_fqdn }}.keytab dest=/opt/mapr/conf/mapr.keytab group={{ mapr_group }} owner={{ mapr_user }} mode=0600
+  when: impala_security == 'kerberos'
+
+- name: Configure env.sh
+  template: src=env.sh dest={{ impala_path_result.files[0].path }}/conf/env.sh
+  when: impala_security == 'kerberos'
+
+- name: Copy core-site.xml to Impala
+  copy: remote_src=true src=/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/etc/hadoop/core-site.xml dest={{ impala_path_result.files[0].path }}/conf/ mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
+
+- name: Get Hive version
+  shell: cat /opt/mapr/hive/hiveversion
+  register: version_output
+  check_mode: no
+  changed_when: no
+
+- name: Copy hive-site.xml to Impala
+  copy: remote_src=true src=/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/hive-site.xml dest={{ impala_path_result.files[0].path }}/conf/ mode=0644 owner={{ mapr_user }} group={{ mapr_group }}

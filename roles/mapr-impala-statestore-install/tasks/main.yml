@@ -7,12 +7,6 @@
 - find: paths="/opt/mapr/impala/" patterns="impala*" file_type=directory
   register: impala_path_result
   failed_when: impala_path_result.matched != 1
-- name: Set IMPALA_STATE_STORE_HOST in env.sh
-  lineinfile: dest={{ impala_path_result.files[0].path }}/conf/env.sh regexp="^IMPALA_STATE_STORE_HOST=" line="IMPALA_STATE_STORE_HOST={{ impala_statestore_string }}"
-- name: Set CATALOG_SERVICE_HOST in env.sh
-  lineinfile: dest={{ impala_path_result.files[0].path }}/conf/env.sh regexp="^CATALOG_SERVICE_HOST=" line="CATALOG_SERVICE_HOST={{ impala_catalog_string }}"
-- name: Set HIVE_METASTORE_URI in env.sh
-  lineinfile: dest={{ impala_path_result.files[0].path }}/conf/env.sh regexp="^HIVE_METASTORE_URI=" line="HIVE_METASTORE_URI={{ impala_hive_metastore_string }}"
 
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R

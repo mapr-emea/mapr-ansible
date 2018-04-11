@@ -3,6 +3,10 @@
   hosts: all
   roles:
     - ../roles/mapr-impala-vars
+- name: Install Impala
+  hosts: mapr-impala-catalog:mapr-impala-statestore:mapr-impala-server
+  roles:
+    - ../roles/mapr-impala-core-install
 - name: Install Impala Catalog
   hosts: mapr-impala-catalog
   roles:
@@ -27,3 +31,7 @@
   hosts: all:!mapr-impala-server
   roles:
     - ../roles/mapr-impala-server-uninstall
+- name: Uninstall Impala
+  hosts: all:!(mapr-impala-catalog:&mapr-impala-statestore:&mapr-impala-server)
+  roles:
+    - ../roles/mapr-impala-core-uninstall

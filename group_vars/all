@@ -32,6 +32,9 @@ mapr_kerberos_local_keytabs_dir: /Users/chufe/Documents/mykeytabs
 
 # Will delete existing keys (cldb.key, maprserverticket, ssl_truststore, ssl_keystore) and generate new one: true /false
 
+# Impala security: none, kerberos
+impala_security: kerberos
+
 # Hive security: none, maprsasl, pam or kerberos
 hive_metastore_security: "{{ security_all }}"
 hive_server_security: "{{ security_all }}"
