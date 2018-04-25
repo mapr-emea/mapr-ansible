@@ -5,11 +5,13 @@
 - import_playbook: mapr-mep-hbase.yml
 - import_playbook: mapr-mep-hive.yml
 - import_playbook: mapr-mep-pig.yml
+- import_playbook: mapr-mep-impala.yml
 - import_playbook: mapr-mep-sqoop.yml
 - import_playbook: mapr-mep-httpfs.yml
 - import_playbook: mapr-mep-spark.yml
 - import_playbook: mapr-mep-oozie.yml
 - import_playbook: mapr-mep-filemigrate.yml
+- import_playbook: mapr-mep-data-access-gateway.yml
 - import_playbook: mapr-mep-hue.yml
 - import_playbook: mapr-mep-spyglass-metric.yml
 - import_playbook: mapr-mep-spyglass-log.yml

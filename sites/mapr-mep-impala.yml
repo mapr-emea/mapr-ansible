@@ -1,0 +1,37 @@
+- import_playbook: mapr-include-vars.yml
+- name: Install Impala Vars
+  hosts: all
+  roles:
+    - ../roles/mapr-impala-vars
+- name: Install Impala
+  hosts: mapr-impala-catalog:mapr-impala-statestore:mapr-impala-server
+  roles:
+    - ../roles/mapr-impala-core-install
+- name: Install Impala Catalog
+  hosts: mapr-impala-catalog
+  roles:
+    - ../roles/mapr-impala-catalog-install
+- name: Uninstall Impala Catalog
+  hosts: all:!mapr-impala-catalog
+  roles:
+    - ../roles/mapr-impala-catalog-uninstall
+- name: Install Impala StateStore
+  hosts: mapr-impala-statestore
+  roles:
+    - ../roles/mapr-impala-statestore-install
+- name: Uninstall Impala StateStore
+  hosts: all:!mapr-impala-statestore
+  roles:
+    - ../roles/mapr-impala-statestore-uninstall
+- name: Install Impala Server
+  hosts: mapr-impala-server
+  roles:
+    - ../roles/mapr-impala-server-install
+- name: Uninstall Impala Server
+  hosts: all:!mapr-impala-server
+  roles:
+    - ../roles/mapr-impala-server-uninstall
+- name: Uninstall Impala
+  hosts: all:!(mapr-impala-catalog:&mapr-impala-statestore:&mapr-impala-server)
+  roles:
+    - ../roles/mapr-impala-core-uninstall

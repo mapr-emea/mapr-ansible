@@ -1,0 +1,8 @@
+---
+# Install MapR mapr-data-access-gateway
+- name: Install mapr-data-access-gateway
+  package: name=mapr-data-access-gateway
+  register: gateway_result
+- name: Configure.sh -R
+  shell: /opt/mapr/server/configure.sh -R
+  when: gateway_result.changed

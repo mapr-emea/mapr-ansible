@@ -32,5 +32,11 @@
         <name>hbase.table.namespace.mappings</name>
         <value>*:/</value>
     </property>
+    {% if mapr_security != "none" %}
+    <property>
+        <name>hadoop.rpc.protection</name>
+        <value>privacy</value>
+    </property>
+    {% endif %}
 </configuration>
 

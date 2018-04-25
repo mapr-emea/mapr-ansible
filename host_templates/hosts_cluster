@@ -142,6 +142,16 @@
 [mapr-filemigrate]
 10.0.0.132 ansible_user=centos ansible_become=yes ansible_become_method=sudo
 
+[mapr-impala-server]
+
+[mapr-impala-catalog]
+
+[mapr-impala-statestore]
+
+[mapr-kafka-connect-jdbc]
+
+[mapr-data-access-gateway]
+
 
 # CollectD
 [mapr-collectd:children]

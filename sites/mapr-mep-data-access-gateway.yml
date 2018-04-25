@@ -1,0 +1,9 @@
+- import_playbook: mapr-include-vars.yml
+- name: Install Data Access Gateway
+  hosts: mapr-data-access-gateway
+  roles:
+    - ../roles/mapr-data-access-gateway-install
+- name: Uninstall Data Access Gateway
+  hosts: all:!mapr-data-access-gateway
+  roles:
+    - ../roles/mapr-data-access-gateway-uninstall

@@ -7,3 +7,11 @@
   hosts: all:!mapr-kafka
   roles:
     - ../roles/mapr-kafka-uninstall
+- name: Install Kafka Connect JDBC
+  hosts: mapr-kafka-connect-jdbc
+  roles:
+    - ../roles/mapr-kafka-connect-jdbc-install
+- name: Uninstall Kafka Connect JDBC
+  hosts: all:!mapr-kafka-connect-jdbc
+  roles:
+    - ../roles/mapr-kafka-connect-jdbc-uninstall

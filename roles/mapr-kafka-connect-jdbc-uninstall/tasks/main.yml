@@ -1,0 +1,15 @@
+---
+# Uninstall MapR mapr-kafka-connect-jdbc
+- name: Stop Kafka Connect JDBC
+  shell: maprcli node services -name kafka-connect -action stop -nodes {{ ansible_fqdn }}
+  register: maprcli_result
+  failed_when: maprcli_result.rc > 1
+  changed_when: maprcli_result.rc == 0
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+- name: Uninstall mapr-kafka-connect-jdbc
+  package: name=mapr-kafka-connect-jdbc state=absent
+  register: connect_result
+- name: Configure.sh -R
+  shell: /opt/mapr/server/configure.sh -R
+  when: connect_result.changed

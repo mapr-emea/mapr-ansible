@@ -1,0 +1,24 @@
+---
+# Install mapr-impala-catalog
+- name: Install mapr-impala-catalog
+  package: name=mapr-impala-catalog state=present
+  register: impala_result
+
+- find: paths="/opt/mapr/impala/" patterns="impala*" file_type=directory
+  register: impala_path_result
+  failed_when: impala_path_result.matched != 1
+- name: Configure.sh -R
+  shell: /opt/mapr/server/configure.sh -R
+  when: impala_result.changed
+- pause: seconds=10
+  when: impala_result.changed
+- name: Restart Impala Catalog
+  shell: maprcli node services -name impalacatalog -action restart -nodes {{ ansible_fqdn }}
+  register: task_result
+  until: task_result.rc == 0
+  retries: 10
+  delay: 10
+  ignore_errors: yes
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: impala_result.changed

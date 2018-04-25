@@ -1,0 +1,4 @@
+---
+# Uninstall Impala
+- name: Uninstall mapr-impala
+  package: name=mapr-impala state=absent
