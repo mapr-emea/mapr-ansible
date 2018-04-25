@@ -105,12 +105,3 @@
   when: client_install is not defined and inventory_hostname == groups["mapr-hive-cli"][0]
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
-
-CREATE TABLE IF NOT EXISTS employee ( eid int, name String,
- salary String, destination String)
- COMMENT 'Employee details'
- ROW FORMAT DELIMITED
- FIELDS TERMINATED BY '\t'
- LINES TERMINATED BY '\n'
- STORED AS TEXTFILE;
-
