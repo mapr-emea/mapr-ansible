@@ -148,6 +148,11 @@
 
 [mapr-impala-statestore]
 
+[mapr-kafka-connect-jdbc]
+
+[mapr-data-access-gateway]
+
+
 # CollectD
 [mapr-collectd:children]
 mapr-core

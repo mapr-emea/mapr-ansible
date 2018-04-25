@@ -196,6 +196,10 @@ node1
 [mapr-impala-statestore]
 node2
 
+[mapr-kafka-connect-jdbc]
+
+[mapr-data-access-gateway]
+
 # CollectD
 [mapr-collectd:children]
 mapr-core

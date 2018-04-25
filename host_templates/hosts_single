@@ -158,6 +158,12 @@ common
 [mapr-impala-statestore]
 #common
 
+[mapr-kafka-connect-jdbc]
+#common
+
+[mapr-data-access-gateway]
+#common
+
 # CollectD
 [mapr-collectd:children]
 #common

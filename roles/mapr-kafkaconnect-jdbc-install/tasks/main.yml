@@ -1,0 +1,8 @@
+---
+# Install MapR mapr-kafka-connect-jdbc
+- name: Install mapr-kafka-connect-jdbc
+  package: name=mapr-kafka-connect-jdbc state=present
+  register: kafka_connect_jdbc_result
+- name: Configure.sh -R
+  shell: /opt/mapr/server/configure.sh -R
+  when: kafka_connect_jdbc_result.changed
