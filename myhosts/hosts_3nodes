@@ -197,8 +197,10 @@ node1
 node2
 
 [mapr-kafka-connect-jdbc]
+#node2
 
 [mapr-data-access-gateway]
+#node3
 
 # CollectD
 [mapr-collectd:children]
