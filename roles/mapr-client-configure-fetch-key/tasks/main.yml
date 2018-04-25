@@ -1,0 +1,6 @@
+- name: Copy keys to local
+  fetch: src=/opt/mapr/conf/{{ item }} dest=/tmp/{{ item }} flat=yes
+  with_items:
+  - ssl_truststore
+  - mapruserticket
+  when: inventory_hostname == groups["mapr-cldb"][0]

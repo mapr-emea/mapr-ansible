@@ -15,6 +15,7 @@
 - name: Fetch files from cluster required for client
   hosts: mapr-cldb[0]
   roles:
+    - {role: mapr-client-configure-fetch-key, when: mapr_security != 'none'}
     - mapr-client-configure-nativesecurity-fetch
 - name: Setup global vars
   hosts: all
