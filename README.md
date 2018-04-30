@@ -33,7 +33,7 @@ The scripts support:
 
 * Redhat 7 or higher
 * CentOS 7 or higher
-* Ubuntu 14.x (not 16.x)
+* Ubuntu 16.x
 * Suse SLES 12 or higher
 
 ## Supported Security

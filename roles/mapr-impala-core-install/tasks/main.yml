@@ -13,7 +13,6 @@
 
 - name: Configure env.sh
   template: src=env.sh dest={{ impala_path_result.files[0].path }}/conf/env.sh
-  when: impala_security == 'kerberos'
 
 - name: Copy core-site.xml to Impala
   copy: remote_src=true src=/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/etc/hadoop/core-site.xml dest={{ impala_path_result.files[0].path }}/conf/ mode=0644 owner={{ mapr_user }} group={{ mapr_group }}

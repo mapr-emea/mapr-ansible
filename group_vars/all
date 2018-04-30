@@ -15,6 +15,8 @@ cluster_name: demo.mapr.com
 force_zookeeper_restart: True
 force_warden_restart: True
 force_reconfigure_sh: True
+# if true only one node at once will be restarted, if false all nodes will be restarted at the same time.
+rolling_restart: False
 warden_restart_wait_time: 30
 
 ####### Enable security features ##########
