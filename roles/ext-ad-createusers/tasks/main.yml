@@ -22,8 +22,8 @@
       sAMAccountName: "{{ mapr_user }}-{{ cluster_name }}"
       instanceType: 4
       objectCategory: "{{ mapr_kerberos_ad_object_category }}"
-      servicePrincipalName: "mapr/{{ cluster_name }}"
-      userPrincipalName: "mapr/{{ cluster_name }}@{{ mapr_kerberos_domain }}"
+      servicePrincipalName: "{{ mapr_user }}/{{ cluster_name }}"
+      userPrincipalName: "{{ mapr_user }}/{{ cluster_name }}@{{ mapr_kerberos_domain }}"
       userAccountControl: 66080
     server_uri: "ldap://{{ mapr_kerberos_kdc }}/"
     bind_dn: "{{ mapr_kerberos_admin_bind_dn }}"
@@ -34,7 +34,7 @@
   when: inventory_hostname == groups["ext-kerberos"][0]
 - name: Create kerberos users
   vars:
-    kerbusers: ["mapr", "HTTP"]
+    kerbusers: ["{{ mapr_user }}", "HTTP"]
   ldap_entry:
     dn: "CN={{ item }}-{{ ansible_hostname }},{{ mapr_kerberos_ad_user_cn }}"
     state: present
@@ -60,7 +60,7 @@
   with_items: "{{ kerbusers }}"
 - name: Set password for cluster user
   vars:
-    kerbusers: ["mapr", "HTTP"]
+    kerbusers: ["{{ mapr_user }}", "HTTP"]
   command: "java -jar /tmp/ad-change-pwd-0.1.jar {{ mapr_kerberos_kdc }} 636 '{{ mapr_kerberos_admin_bind_dn }}' '{{ mapr_kerberos_admin_bind_pw }}' 'CN={{ item }}-{{ ansible_hostname }},{{ mapr_kerberos_ad_user_cn }}' '{{ mapr_kerberos_keytab_passwd }}'"
   with_items: "{{ kerbusers }}"
 

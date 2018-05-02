@@ -1,6 +1,5 @@
 - import_playbook: mapr-include-vars.yml
 - name: Install MapR Core
   hosts: mapr-core
-  roles:
-    - ../roles/mapr-core-install
-    - ../roles/mapr-configure-subnets
+  tasks:
+    - debug: msg="Hello {{ cluster_name }}"
