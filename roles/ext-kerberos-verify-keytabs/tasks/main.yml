@@ -2,8 +2,8 @@
 - name: Copy mapr.keytab
   copy: src={{ mapr_kerberos_local_keytabs_dir }}/{{ ansible_fqdn }}.keytab dest=/tmp/mapr.keytab
 
-- name: Verify mapr/<hostname> keytab
-  command: kinit -k -t /tmp/mapr.keytab mapr/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}
+- name: Verify {{ mapr_user }}/<hostname> keytab
+  command: kinit -k -t /tmp/mapr.keytab {{ mapr_user }}/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}
 #  when: inventory_hostname in groups["mapr-core"]
 - name: Display current ticket mapr
   command: klist
@@ -29,7 +29,7 @@
 #  when: inventory_hostname in groups["mapr-core"]
 
 - name: Verify Cluster keytab
-  command: kinit -k -t /tmp/mapr.keytab mapr/{{ cluster_name }}
+  command: kinit -k -t /tmp/mapr.keytab {{ mapr_user }}/{{ cluster_name }}
 - name: Display current ticket mapr
   command: klist
   register: klist_out
