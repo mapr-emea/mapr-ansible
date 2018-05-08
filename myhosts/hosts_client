@@ -1,38 +1,41 @@
 # If you do not want to install a component leave the block empty
 
+[all:vars]
+ansible_user=ec2-user
+ansible_become=yes
 
 ###### These ones are not installed, just required for config generation ############
 
 # Zookeeper
 [mapr-zookeeper]
-10.0.0.63 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-10.0.0.83 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-10.0.0.131 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.63
+10.0.0.83
+10.0.0.131
 
 # Container Location DataBase
 [mapr-cldb]
-10.0.0.63 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-10.0.0.83 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-10.0.0.131 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.63
+10.0.0.83
+10.0.0.131
 
 
 # Hive Meta Store
 [mapr-hive-metastore]
-10.0.0.83 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.83
 
 ######################################################################################
 
 # sets up ntp, rpcbind, Java and mapr default user with standard password mapr123
 [common]
-10.0.0.97 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.97
 
 # MapR-Client
 [mapr-client]
-10.0.0.97 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.97
 
 # Spark on YARN, requires Hive!
 [mapr-spark-yarn]
-10.0.0.97 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.97
 
 # NFS loopback, ATTENTION: install only on edge node (mapr-client)!!!
 [mapr-nfsloopback]
@@ -42,11 +45,11 @@
 
 # HBase CLI
 [mapr-hbase-cli]
-10.0.0.97 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.97
 
 # Hive CLI
 [mapr-hive-cli]
-10.0.0.97 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.97
 
 # Pig
 [mapr-pig]
@@ -59,7 +62,7 @@
 
 # MapR Fuse Posix Client Basic
 [mapr-posix-client-basic]
-10.0.0.97 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.97
 
 # MapR Fuse Posix Client Platinum
 [mapr-posix-client-platinum]
