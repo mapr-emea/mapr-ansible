@@ -13,11 +13,13 @@ mapr_kerberos_admin_bind_pw="XLd$B65G%ib"
 mapr_kerberos_ad_object_category="CN=Person,CN=Schema,CN=Configuration,DC=ps,DC=mapr,DC=com"
 mapr_kerberos_ad_user_cn="CN=Users,DC=ps,DC=mapr,DC=com"
 mapr_kerberos_keytab_passwd=mapr
+ansible_user=ec2-user
+ansible_become=yes
 
 [ext-kerberos]
-node1 ansible_host=10.0.0.178 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-node2 ansible_host=10.0.0.201 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-node3 ansible_host=10.0.0.207 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+node1 ansible_host=10.0.0.178
+node2 ansible_host=10.0.0.201
+node3 ansible_host=10.0.0.207
 
 
 

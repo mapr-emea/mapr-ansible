@@ -1,4 +1,6 @@
 [all:vars]
+ansible_user=ec2-user
+ansible_become=yes
 anaconda_install_binary=/mapr/demo.mapr.com/tools/anaconda/anaconda_installer/Anaconda3-5.0.1-Linux-x86_64.sh
 anaconda_install_path=/mapr/demo.mapr.com/tools/anaconda/anaconda
 anaconda_repo_path=file://mapr/demo.mapr.com/tools/anaconda/anaconda_repos/repo.continuum.io
@@ -9,10 +11,10 @@ anaconda_python_version=3.5
 anaconda_packages=fbprophet colorama cycler dill fastparquet libxgboost numpy numba matplotlib mkl pandas patsy py pyodbc pytest pyparsing psutil scikit-learn scipy statsmodels thrift wheel jupyter
 
 [ext-anaconda-python]
-10.0.0.70 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.70
 
 # Spark on YARN
 [mapr-spark-yarn]
-10.0.0.70 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-10.0.0.229 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-10.0.0.246 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.70
+10.0.0.229
+10.0.0.246
