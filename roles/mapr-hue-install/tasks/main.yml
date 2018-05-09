@@ -86,7 +86,7 @@
 # MySQL Database
 - name: Copy create_mysql_tables.sh
   template: src=create_mysql_tables.sh dest=/opt/mapr/hue/create_mysql_tables.sh mode=0755
-  when: hue_db_type == 'mysql' and inventory_hostname == groups["mapr-hue"][0]
+  when: hue_db_type == 'mysql'
 # http://maprdocs.mapr.com/home/EcosystemRN/HueRN-3.12.0-1703.html?hl=hue%2Cmysql
 #- name: Link Sasl lib
 #  file: src=/lib64/libsasl2.so.3.0.0 dest=/lib64/libsasl2.so.2 state=link
@@ -94,6 +94,7 @@
 - name: Create tables
   shell: /opt/mapr/hue/create_mysql_tables.sh
   when: hue_db_type == 'mysql'
+  serial: 1
 - name: Required packages for Hue MySQL
   vars:
     packages_RedHat: ['mariadb', 'mariadb-devel']
