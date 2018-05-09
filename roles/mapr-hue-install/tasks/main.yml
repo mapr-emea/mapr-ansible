@@ -94,7 +94,6 @@
 - name: Create tables
   shell: /opt/mapr/hue/create_mysql_tables.sh
   when: hue_db_type == 'mysql'
-  serial: 1
 - name: Required packages for Hue MySQL
   vars:
     packages_RedHat: ['mariadb', 'mariadb-devel']
