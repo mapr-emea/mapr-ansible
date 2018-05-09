@@ -86,9 +86,13 @@
 - name: Create MySQL tables for hive
   shell: "/opt/mapr/hive/hive-{{ version_output.stdout }}/bin/schematool -dbType mysql -initSchema"
   when: client_install is not defined and inventory_hostname == groups["mapr-hive-cli"][0] and hive_db_type == 'mysql'
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
   ignore_errors: True # TODO error result should be handeled
 - name: Create Oracle tables for hive
   shell: "/opt/mapr/hive/hive-{{ version_output.stdout }}/bin/schematool -dbType oracle -initSchema"
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
   when: client_install is not defined and inventory_hostname == groups["mapr-hive-cli"][0] and hive_db_type == 'oracle'
   ignore_errors: True # TODO error result should be handeled
 
