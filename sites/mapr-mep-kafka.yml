@@ -15,3 +15,11 @@
   hosts: all:!mapr-kafka-connect-jdbc
   roles:
     - ../roles/mapr-kafka-connect-jdbc-uninstall
+- name: Install Kafka REST
+  hosts: mapr-kafka-rest
+  roles:
+    - ../roles/mapr-kafka-rest-install
+- name: Uninstall Kafka REST
+  hosts: all:!mapr-kafka-rest
+  roles:
+    - ../roles/mapr-kafka-rest-uninstall

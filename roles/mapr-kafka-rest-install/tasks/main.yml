@@ -1,0 +1,8 @@
+---
+# Install MapR mapr-kafka-rest
+- name: Install mapr-kafka-rest
+  package: name=mapr-kafka-rest state=present
+  register: kafka_rest_result
+- name: Configure.sh -R
+  shell: /opt/mapr/server/configure.sh -R
+  when: kafka_rest_result.changed
