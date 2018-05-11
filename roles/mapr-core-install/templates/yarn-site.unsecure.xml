@@ -26,7 +26,36 @@
 
     <!-- :::CAUTION::: DO NOT EDIT ANYTHING ON OR ABOVE THIS LINE -->
     <property>
-        <name>yarn.log-aggregation-enable</name>
-        <value>false</value>
+        <name>yarn.admin.acl</name>
+        <value>{{ mapr_user }}</value>
     </property>
+    <property>
+        <name>yarn.nodemanager.container-executor.class</name>
+        <value>org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.linux-container-executor.group</name>
+        <value>{{ mapr_group }}</value>
+    </property>
+    <property>
+        <name>yarn.log-aggregation-enable</name>
+        <value>{{ "true" if yarn_log_aggregation else "false" }}</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.maximum-allocation-mb</name>
+        <value>{{ yarn_max_container_allocation_in_mb }}</value>
+        <description>The maximum allocation for every container request at the RM, in MBs. Memory requests higher than this will throw a InvalidResourceRequestException.</description>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.am.max-attempts</name>
+        <value>4</value>
+        <description>The maximum number of application attempts</description>
+    </property>
+    {% if yarn_local_dir_to_maprfs %}
+    <property>
+        <name>yarn.nodemanager.local-dirs</name>
+        <value>/mapr/{{ cluster_name }}/var/mapr/local/{{ ansible_fqdn }}/nm-local-dir</value>
+    </property>
+    {% endif %}
+
 </configuration>

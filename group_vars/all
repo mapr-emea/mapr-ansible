@@ -19,6 +19,14 @@ force_reconfigure_sh: True
 rolling_restart: False
 warden_restart_wait_time: 30
 
+# YARN settings
+# Enables YARn log aggregation
+yarn_log_aggregation: True
+# Maximum size for one YARN container
+yarn_max_container_allocation_in_mb: 131072
+# Create local dir for NodeManager temporary data like shuffle and sort.
+yarn_local_dir_to_maprfs: True
+
 ####### Enable security features ##########
 # Default value for all components: mapr core and ecosystem
 # Options: none, maprsasl, kerberos
