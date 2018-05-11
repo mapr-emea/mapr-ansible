@@ -161,6 +161,9 @@ common
 [mapr-kafka-connect-jdbc]
 #common
 
+[mapr-kafka-rest]
+#common
+
 [mapr-data-access-gateway]
 #common
 

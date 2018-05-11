@@ -156,6 +156,8 @@ ansible_become=yes
 
 [mapr-kafka-connect-jdbc]
 
+[mapr-kafka-rest]
+
 [mapr-data-access-gateway]
 
 
