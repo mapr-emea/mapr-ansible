@@ -24,7 +24,7 @@ warden_restart_wait_time: 30
 yarn_log_aggregation: False
 # Maximum size for one YARN container
 yarn_max_container_allocation_in_mb: 131072
-# Create local dir for NodeManager temporary data like shuffle and sort.
+# Create local dir for NodeManager temporary data like shuffle and sort. This requires mapr-nfs on the same node!
 yarn_local_dir_to_maprfs: False
 
 ####### Enable security features ##########
