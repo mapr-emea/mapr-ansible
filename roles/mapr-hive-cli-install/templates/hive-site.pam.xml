@@ -120,4 +120,25 @@
         <name>hive.metastore.sasl.enabled</name>
         <value>true</value>
     </property>
+    <property>
+        <name>hive.server2.thrift.sasl.qop</name>
+        <value>auth-conf</value>
+    </property>
+    <property>
+        <name>hive.server2.webui.use.pam</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>hive.server2.webui.use.ssl</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>hive.server2.webui.keystore.path</name>
+        <value>/opt/mapr/conf/ssl_keystore</value>
+    </property>
+    <property>
+        <name>hive.server2.webui.keystore.password</name>
+        <value>mapr123</value>
+    </property>
+
 </configuration>
