@@ -124,7 +124,7 @@
         <name>hive.server2.thrift.sasl.qop</name>
         <value>auth-conf</value>
     </property>
-    <property>
+    <!-- property>
         <name>hive.server2.webui.use.pam</name>
         <value>true</value>
     </property>
@@ -139,6 +139,6 @@
     <property>
         <name>hive.server2.webui.keystore.password</name>
         <value>mapr123</value>
-    </property>
+    </property -->
 
 </configuration>
