@@ -7,6 +7,7 @@
   - cldb.key
   - ssl_keystore
   - ssl_truststore
+  - ssl_truststore.pem
 
 
 

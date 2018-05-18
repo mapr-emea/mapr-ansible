@@ -10,3 +10,5 @@
   changed_when: no
 - name: Copy PEM file to Kibana for secure ElasticSearch
   copy: src=/tmp/mapr_spyglass/es/sg/ca/es-root-ca.pem dest=/opt/mapr/kibana/kibana-{{ version_output.stdout }}/config/ca/ owner={{ mapr_user }} group={{ mapr_group }} mode=0600
+- name: Copy Keystore Password
+  copy: src=/tmp/mapr_spyglass/es/.keystore_password dest=/opt/mapr/kibana/kibana-{{ version_output.stdout }}/config/ owner={{ mapr_user }} group={{ mapr_group }} mode=0600
