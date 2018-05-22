@@ -149,11 +149,11 @@ node2
 
 # HttpFS
 [mapr-httpfs]
-#node1
-#node2
+node1
+node2
 
 [mapr-hue]
-#node3
+node3
 
 # Sqoop1
 [mapr-sqoop1]
