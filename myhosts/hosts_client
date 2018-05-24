@@ -28,15 +28,15 @@ ansible_become=yes
 
 # sets up ntp, rpcbind, Java and mapr default user with standard password mapr123
 [common]
-10.0.0.131
+10.0.0.146
 
 # MapR-Client
 [mapr-client]
-10.0.0.131
+10.0.0.146
 
 # Spark on YARN, requires Hive!
 [mapr-spark-yarn]
-10.0.0.131
+#10.0.0.146
 
 # NFS loopback, ATTENTION: install only on edge node (mapr-client)!!!
 [mapr-nfsloopback]
@@ -46,11 +46,11 @@ ansible_become=yes
 
 # HBase CLI
 [mapr-hbase-cli]
-10.0.0.131
+#10.0.0.146
 
 # Hive CLI
 [mapr-hive-cli]
-10.0.0.131
+#10.0.0.146
 
 # Pig
 [mapr-pig]
@@ -63,7 +63,7 @@ ansible_become=yes
 
 # MapR Fuse Posix Client Basic
 [mapr-posix-client-basic]
-10.0.0.131
+#10.0.0.146
 
 # MapR Fuse Posix Client Platinum
 [mapr-posix-client-platinum]
