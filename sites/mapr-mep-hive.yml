@@ -5,6 +5,7 @@
       num_mysql_hosts: "{{ groups['ext-mysql']|length }}"
   roles:
     - ../roles/mapr-hive-vars
+    - ../roles/mapr-configure-vars-zk
     - {role: ../roles/mapr-hive-mysql, when: hive_db_type == 'mysql' and hive_db_mysql_create_schema_and_user and num_mysql_hosts != '0'  }
 - name: Install Hive CLI
   hosts: mapr-hive-cli

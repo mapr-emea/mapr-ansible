@@ -2,21 +2,15 @@
 # Install Spark on YARN
 - name: Install mapr-spark
   package: name=mapr-spark state=present
+- name: Configure.sh -R (force first generation, to avoid that file will be overridden later)
+  shell: /opt/mapr/server/configure.sh -R
 - name: Find Spark Path
   find: paths="/opt/mapr/spark" patterns="spark*" file_type=directory
   register: spark_path_result
   failed_when: spark_path_result.matched != 1
 - set_fact: spark_path="{{ spark_path_result.files[0].path }}"
-- name: Find Hive Path
-  find: paths="/opt/mapr/" patterns="hive*" file_type=directory
-  register: hive_first_path_result
-- name: Find Hive Path 2
-  find: paths="/opt/mapr/hive/" patterns="hive*" file_type=directory
-  register: hive_path_result
-  when: hive_first_path_result.matched == 1
-- name: Link hive-site.xml to Spark (otherwise Spark startup throws errors)
-  copy: src={{ hive_path_result.files[0].path }}/conf/hive-site.xml dest={{ spark_path }}/conf/hive-site.xml remote_src=yes
-  when: hive_first_path_result.matched == 1
+- name: Copy hive-site.xml to Spark (otherwise Spark startup throws errors)
+  template: src=hive-site.xml dest={{ spark_path }}/conf/hive-site.xml  mode=0644
 # Other actions
 - name: Create maprfs:///apps/spark/logs
   shell: hadoop fs -mkdir -p /apps/spark/logs

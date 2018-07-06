@@ -124,7 +124,43 @@
         <name>hive.server2.thrift.sasl.qop</name>
         <value>auth-conf</value>
     </property>
-    <!-- property>
+    <property>
+        <name>hive.cluster.delegation.token.store.class</name>
+        <value>org.apache.hadoop.hive.thrift.DBTokenStore</value>
+    </property>
+    <property>
+        <name>hive.compactor.initiator.on</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>hive.compactor.worker.threads</name>
+        <value>1</value>
+    </property>
+    <property>
+        <name>hive.exec.dynamic.partition</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>hive.exec.dynamic.partition.mode</name>
+        <value>nonstrict</value>
+    </property>
+    <property>
+        <name>hive.support.concurrency</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>hive.zookeeper.quorum</name>
+        <value>{{ zookeeper_string }}</value>
+    </property>
+    <property>
+        <name>hive.zookeeper.client.port</name>
+        <value>5181</value>
+    </property>
+    <property>
+        <name>hive.txn.manager</name>
+        <value>org.apache.hadoop.hive.ql.lockmgr.DbTxnManager</value>
+    </property>
+    <property>
         <name>hive.server2.webui.use.pam</name>
         <value>true</value>
     </property>
@@ -139,6 +175,6 @@
     <property>
         <name>hive.server2.webui.keystore.password</name>
         <value>mapr123</value>
-    </property -->
+    </property>
 
 </configuration>

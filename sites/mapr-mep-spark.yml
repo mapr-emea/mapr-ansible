@@ -1,4 +1,10 @@
 - import_playbook: mapr-include-vars.yml
+- name: Setup Hive Variables
+  hosts: all
+  vars:
+      num_mysql_hosts: "{{ groups['ext-mysql']|length }}"
+  roles:
+    - ../roles/mapr-hive-vars
 - name: Install Spark on YARN
   hosts: mapr-spark-yarn
   roles:
@@ -23,3 +29,11 @@
   hosts: all:!mapr-spark-historyserver
   roles:
     - ../roles/mapr-spark-historyserver-uninstall
+- name: Get Spark Shuffle Sort JAR from first Spark node
+  hosts: mapr-spark-yarn[0]
+  roles:
+    - {role: ../roles/mapr-spark-yarn-shuffle-retrieve, when: yarn_spark_shuffle }
+- name: Upload Spark Shuffle Sort JAR to all YARN node managers
+  hosts: mapr-nodemanager
+  roles:
+    - {role: ../roles/mapr-spark-yarn-shuffle-distribute, when: yarn_spark_shuffle }

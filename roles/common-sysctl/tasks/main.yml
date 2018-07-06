@@ -5,6 +5,8 @@
   lineinfile: dest=/etc/sysctl.conf regexp="^net\.ipv4\.tcp_retries2" line="net.ipv4.tcp_retries2 = 5"
 - name: Set vm.overcommit_memory in /etc/sysctl.conf
   lineinfile: dest=/etc/sysctl.conf regexp="^vm\.overcommit_memory" line="vm.overcommit_memory = 0"
+- name: Set net.ipv4.tcp_fin_timeout in /etc/sysctl.conf
+  lineinfile: dest=/etc/sysctl.conf regexp="^net\.ipv4\.tcp_fin_timeout" line="net.ipv4.tcp_fin_timeout = 30"
 - name: Reload Sysctl
   command: sysctl -p
   ignore_errors: True

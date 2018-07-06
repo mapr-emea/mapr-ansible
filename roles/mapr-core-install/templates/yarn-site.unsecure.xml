@@ -57,5 +57,34 @@
         <value>/mapr/{{ cluster_name }}/var/mapr/local/{{ ansible_fqdn }}/nm-local-dir</value>
     </property>
     {% endif %}
-
+    {% if yarn_spark_shuffle %}
+    <property>
+        <name>yarn.nodemanager.aux-services</name>
+        <value>mapreduce_shuffle,mapr_direct_shuffle,spark_shuffle</value>
+        <description>shuffle service that needs to be set for Map Reduce to run</description>
+    </property>
+    <property>
+        <name>yarn.nodemanager.aux-services.spark_shuffle.class</name>
+        <value>org.apache.spark.network.yarn.YarnShuffleService</value>
+    </property>
+    <property>
+        <name>spark.shuffle.service.port</name>
+        <value>7337</value>
+        <description>Port on which the external shuffle service will run.</description>
+    </property>
+    {% if spark_sasl_encryption %}
+    <property>
+        <name>spark.authenticate</name>
+        <value>true</value>
+        <description>Whether Spark authenticates its internal connections.</description>
+    </property>
+    {% endif %}
+    <property>
+        <name>spark.yarn.shuffle.stopOnFailure</name>
+        <value>false</value>
+        <description>Whether to stop the NodeManager when there's a failure in the Spark Shuffle Service's initialization.
+            This prevents application failures caused by running containers on NodeManagers where the Spark Shuffle Service is not running.
+        </description>
+    </property>
+    {% endif %}
 </configuration>
