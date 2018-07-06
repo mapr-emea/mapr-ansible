@@ -4,6 +4,7 @@
   package: name=mapr-spark state=present
 - name: Configure.sh -R (force first generation, to avoid that file will be overridden later)
   shell: /opt/mapr/server/configure.sh -R
+  when: client_install is not defined
 - name: Find Spark Path
   find: paths="/opt/mapr/spark" patterns="spark*" file_type=directory
   register: spark_path_result
