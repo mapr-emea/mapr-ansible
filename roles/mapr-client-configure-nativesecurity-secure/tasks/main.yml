@@ -1,14 +1,17 @@
 ---
 # Configure secure client
+# key store is required for Spark UI
 - name: Delete existing keys
   file: state=absent path=/opt/mapr/conf/{{ item }}
   with_items:
   - ssl_truststore
+  - ssl_keystore
   - mapruserticket
 - name: Copy keys to all nodes
   copy: src=/tmp/{{ item }} dest=/opt/mapr/conf/{{ item }}
   with_items:
   - ssl_truststore
+  - ssl_keystore
   - mapruserticket
  # copy to other nodes
  # run configure on other nodes
