@@ -4,9 +4,9 @@
 
 # ALIASES does NOT work with ROLLING upgrades!
 [all]
-node1 ansible_host=10.0.0.21 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-node2 ansible_host=10.0.0.100 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-node3 ansible_host=10.0.0.243 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+node1 ansible_host=10.250.51.141 ansible_user=root
+node2 ansible_host=10.250.51.142 ansible_user=root
+node3 ansible_host=10.250.51.143 ansible_user=root
 
 [unprovision]
 
@@ -80,7 +80,7 @@ node3
 
 # Spark ThriftServer
 [mapr-spark-thriftserver]
-#node3
+node3
 
 # Spark HistoryServer
 [mapr-spark-historyserver]
@@ -197,13 +197,13 @@ node3
 #node2
 
 [mapr-kafka-connect-jdbc]
-#node2
+node2
 
 [mapr-kafka-rest]
 node1
 
 [mapr-data-access-gateway]
-#node3
+node3
 
 # CollectD
 [mapr-collectd:children]
