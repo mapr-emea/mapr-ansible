@@ -6,7 +6,7 @@
     "artifact_version": "7.5.1804",
     "redhat_release": "7.5",
     "disk_size": "10240",
-    "maprfs_disk_size": "10240",
+    "maprfs_disk_size": "20480",
     "iso_checksum_type": "sha256",
     "redhat_platform": "x86_64",
     "ssh_username": "vagrant",

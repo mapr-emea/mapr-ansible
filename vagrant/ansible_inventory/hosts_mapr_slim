@@ -5,7 +5,7 @@
 [unprovision]
 
 [common]
-maprdemo ansible_connection=local disks=/dev/sdb
+maprdemo ansible_connection=local
 
 [mapr-core:children]
 common
