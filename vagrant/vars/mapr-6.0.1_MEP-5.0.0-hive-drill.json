@@ -3,7 +3,6 @@
   "artifact_version": "v1",
   "image_name": "mapr-6.0.1_MEP-5.0.0-hive-drill",
   "ansible_inventory_file": "ansible_inventory/hosts_mapr_hive_drill",
-  "ansible_extra_vars": "disks=/dev/sdb disk_storage_pool_size=1",
   "disk_size": "10240",
   "maprfs_disk_size": "20480",
   "vm_memory": "12288",
