@@ -1,6 +1,6 @@
 ---
 # Configure secure cluster
-- name: Enable customer security by creating /opt/mapr/conf/.customSecure
+- name: Enable custom security by creating /opt/mapr/conf/.customSecure
   file: path=/opt/mapr/conf/.customSecure state=touch mode=0644
 - name: Check if /opt/mapr/conf/cldb.key exists
   stat: path=/opt/mapr/conf/cldb.key

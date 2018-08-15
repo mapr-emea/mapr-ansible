@@ -18,6 +18,7 @@
 -->
 <configuration>
     <!-- For hive server2 and meta store -->
+    {% if (groups['mapr-hive-metastore']|length) > 0 %}
     <property>
         <name>hive.metastore.uris</name>
         <value>{{ metastore_string }}</value>
@@ -31,6 +32,7 @@
         <name>hive.metastore.sasl.enabled</name>
         <value>true</value>
     </property>
+    {% endif %}
     {% endif %}
 
 </configuration>

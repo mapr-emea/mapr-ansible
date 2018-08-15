@@ -20,7 +20,7 @@ rolling_restart: False
 warden_restart_wait_time: 30
 
 # YARN settings
-# Enables YARn log aggregation
+# Enables YARN log aggregation
 yarn_log_aggregation: False
 # Maximum size for one YARN container
 yarn_max_container_allocation_in_mb: 131072
