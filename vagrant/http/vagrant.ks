@@ -21,8 +21,10 @@ skipx
 
 logging --level=info
 zerombr
-clearpart --all --initlabel
+clearpart --all
+ignoredisk --only-use=sda
 autopart
+#autopart --nolvm
 services --enabled=ntpd,ntpdate,NetworkManager,sshd
 
 reboot

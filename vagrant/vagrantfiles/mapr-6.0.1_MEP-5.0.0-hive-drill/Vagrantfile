@@ -1,0 +1,23 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "devproof/mapr-6.0.1_MEP-5.0.0-hive-drill"
+#  config.vm.network :private_network, ip: "192.168.56.15"
+  config.vm.network "forwarded_port", guest: 8443, host: 8443, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 7222, host: 7222, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 7221, host: 7221, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 5660, host: 5660, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 5692, host: 5692, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 5724, host: 5724, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 5756, host: 5756, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 1111, host: 1111, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 2049, host: 2049, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 8099, host: 8099, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 8042, host: 8042, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 8044, host: 8044, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 8033, host: 8033, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 8090, host: 8090, host_ip: "127.0.0.1"
+# hive
+  config.vm.network "forwarded_port", guest: 9083, host: 9083, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 10000, host: 10000, host_ip: "127.0.0.1"
+# Drill
+  config.vm.network "forwarded_port", guest: 31010, host: 31010, host_ip: "127.0.0.1"
+end

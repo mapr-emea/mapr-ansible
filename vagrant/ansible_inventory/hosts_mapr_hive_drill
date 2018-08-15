@@ -75,6 +75,7 @@ maprdemo
 
 # Apache Drill
 [mapr-drill-standalone]
+maprdemo
 
 # Apache Drill
 [mapr-drill-yarn]
@@ -92,14 +93,15 @@ maprdemo
 
 # Hive CLI
 [mapr-hive-cli]
-#maprdemo
+maprdemo
 
 # Hive Meta Store
 [mapr-hive-metastore]
-#maprdemo
+maprdemo
 
 # Hive Server2
 [mapr-hive-server2]
+maprdemo
 
 # Hive WebHCat
 [mapr-hive-webhcat]

@@ -1,0 +1,124 @@
+{
+  "variables": {
+    "iso_url": "http://ftp.byfly.by/pub/CentOS/7/isos/x86_64/CentOS-7-x86_64-Minimal-1804.iso",
+    "iso_checksum": "714acc0aefb32b7d51b515e25546835e55a90da9fb00417fbee2d03a62801efd",
+    "artifact_description": "MapR 6.0.1 MEP 5.0.0 Slim",
+    "artifact_version": "v1",
+    "image_name": "mapr-6.0.1_MEP-5.0.0-slim",
+    "ansible_inventory_file": "ansible_inventory/hosts_mapr_slim",
+    "ansible_extra_vars": "disks=/dev/sdb disk_storage_pool_size=1",
+    "redhat_release": "7.5",
+    "disk_size": "10240",
+    "maprfs_disk_size": "20480",
+    "iso_checksum_type": "sha256",
+    "redhat_platform": "x86_64",
+    "ssh_username": "vagrant",
+    "ssh_password": "vagrant",
+    "vm_memory": "12288",
+    "vm_cpus": "4"
+  },
+  "builders": [
+    {
+      "name": "{{user `image_name`}}",
+      "type": "virtualbox-iso",
+      "vm_name": "{{user `image_name`}}",
+      "boot_wait": "10s",
+      "disk_size": "{{user `disk_size`}}",
+      "guest_os_type": "RedHat_64",
+      "http_directory": "http",
+      "iso_url": "{{user `iso_url`}}",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "guest_additions_path": "VBoxGuestAdditions.iso",
+      "boot_command": [
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/vagrant.ks<enter><wait>"
+      ],
+      "shutdown_command": "sudo -S /sbin/halt -h -p",
+      "shutdown_timeout": "5m",
+      "post_shutdown_delay": "1m",
+      "ssh_wait_timeout": "15m",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_password": "{{user `ssh_password`}}",
+      "ssh_port": 22,
+      "ssh_pty": true,
+      "output_directory": "builds",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "{{user `vm_memory`}}"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "{{user `vm_cpus`}}"
+        ],
+        [
+          "createhd",
+          "--format",
+          "VMDK",
+          "--filename",
+          "maprfs_disk.vmdk",
+          "--variant",
+          "Standard",
+          "--size",
+          "{{user `maprfs_disk_size`}}"
+        ],
+        [
+          "storageattach",
+          "{{.Name}}",
+          "--storagectl",
+          "SATA Controller",
+          "--port",
+          "1",
+          "--type",
+          "hdd",
+          "--medium",
+          "maprfs_disk.vmdk"
+        ]
+      ],
+      "hard_drive_interface": "sata",
+      "virtualbox_version_file": ".vbox_version",
+      "export_opts": [
+        "--manifest",
+        "--vsys",
+        "0",
+        "--description",
+        "{{user `artifact_description`}}",
+        "--version",
+        "{{user `artifact_version`}}"
+      ]
+    }
+  ],
+  "post-processors": [
+    {
+      "output": "{{user `image_name`}}.box",
+      "compression_level": "6",
+      "vagrantfile_template": "vagrantfiles/{{user `image_name`}}/Vagrantfile",
+      "type": "vagrant"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "start_retry_timeout": "1m",
+      "expect_disconnect": true,
+      "pause_before": "5s",
+      "environment_vars": [
+        "MAPR_ANSIBLE_INVENTORY={{user `ansible_inventory_file`}}",
+        "MAPR_ANSIBLE_EXTRA_VARS={{user `ansible_extra_vars`}}",
+        "MAPR_TICKETFILE_LOCATION=/opt/mapr/conf/mapruserticket"
+      ],
+      "scripts": [
+        "scripts/base.sh",
+        "scripts/vagrant.sh",
+        "scripts/virtualbox.sh",
+        "scripts/mapr.sh",
+        "scripts/cleanup.sh"
+      ]
+    }
+  ]
+}
