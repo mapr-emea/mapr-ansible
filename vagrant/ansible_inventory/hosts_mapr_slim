@@ -4,15 +4,8 @@
 # This stays empty unless you want to remove a node
 [unprovision]
 
-#[all:vars]
-#cluster_name=demo.mapr.com
-#security_all=kerberos
-
 [common]
-10.0.0.168 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-
-[ext-kerberos:children]
-#common
+maprdemo ansible_connection=local disks=/dev/sdb
 
 [mapr-core:children]
 common
@@ -35,7 +28,6 @@ common
 
 # Gateway for Streams and MapR-DB
 [mapr-gateway:children]
-#common
 
 # MapR Control System
 [mapr-mcs:children]
@@ -63,11 +55,9 @@ common
 
 # Spark ThriftServer
 [mapr-spark-thriftserver:children]
-#common
 
 # Spark HistoryServer
 [mapr-spark-historyserver:children]
-#common
 
 # MapR Fuse Posix Client Basic
 [mapr-posix-client-basic:children]
@@ -78,17 +68,16 @@ common
 
 # NFS
 [mapr-nfs:children]
-#common
 
 # Apache Drill
 [mapr-drill-standalone:children]
-#common
 
 # Apache Drill
 [mapr-drill-yarn]
 
 # Flume
 [mapr-flume]
+#common
 
 # HBase CLI
 [mapr-hbase-cli:children]
@@ -96,7 +85,6 @@ common
 
 # HBase REST and Thrift
 [mapr-hbase-thrift-rest:children]
-##common
 
 # Hive CLI
 [mapr-hive-cli:children]
@@ -108,22 +96,14 @@ common
 
 # Hive Server2
 [mapr-hive-server2:children]
-#common
-
-# Hive HCatalog
-[mapr-hive-hcatalog]
-#common
 
 # Hive WebHCat
 [mapr-hive-webhcat]
-#common
 
 # HttpFS
 [mapr-httpfs:children]
-#common
 
 [mapr-hue:children]
-#common
 
 # Sqoop1
 [mapr-sqoop1:children]
@@ -131,11 +111,9 @@ common
 
 # Sqoop2 Server
 [mapr-sqoop2-server:children]
-#common
 
 # Sqoop2 Client
 [mapr-sqoop2-client:children]
-#common
 
 # Pig
 [mapr-pig:children]
@@ -143,55 +121,39 @@ common
 
 # Oozie
 [mapr-oozie:children]
-#common
 
 # File Migrate Service
 [mapr-filemigrate:children]
-#common
 
 [mapr-impala-server]
-#common
 
 [mapr-impala-catalog]
-#common
 
 [mapr-impala-statestore]
-#common
 
 [mapr-kafka-connect-jdbc]
-#common
 
 [mapr-kafka-rest]
-#common
 
 [mapr-data-access-gateway]
-#common
 
 # CollectD
 [mapr-collectd:children]
-#common
 
 # OpenTSDB
 [mapr-opentsdb:children]
-#common
 
 # Custom OpenTSDB, do NOT install on same node as mapr-opentsdb
 [mapr-opentsdb-custom:children]
-#common
-
 
 # Grafana
 [mapr-grafana:children]
-#common
 
 # FluentD
 [mapr-fluentd:children]
-#common
 
 # ElasticSearch
 [mapr-elasticsearch:children]
-#common
 
 # Kibana
 [mapr-kibana:children]
-#common
