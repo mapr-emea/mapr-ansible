@@ -7,3 +7,4 @@ tmp/
 *.vbox
 *.box
 *.vmdk
+.vagrant

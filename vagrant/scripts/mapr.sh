@@ -1,5 +1,12 @@
 #!/bin/bash
 
+echo "echo ''" >> /home/vagrant/.bashrc
+echo "echo 'Welcome to MapR Vagrant Sandbox'" >> /home/vagrant/.bashrc
+echo "echo 'Switch to mapr-user: sudo su - mapr'" >> /home/vagrant/.bashrc
+echo "echo 'Create a mapr-user ticket: maprlogin password'" >> /home/vagrant/.bashrc
+echo "echo '... enter password mapr'" >> /home/vagrant/.bashrc
+echo "echo ''" >> /home/vagrant/.bashrc
+
 cd ~
 git clone https://github.com/mapr-emea/mapr-ansible.git
 cd mapr-ansible
