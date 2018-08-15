@@ -61,6 +61,38 @@
 #- name: Copy to /opt/mapr/conf/conf.d/warden.drill-bits.conf
 #  copy: remote_src=true src=/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/warden.drill-bits.conf dest=/opt/mapr/conf/conf.d/warden.drill-bits.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
 # Seems that registering roles fail when doing it on all nodes at the same time.
+
+# JE - distributed PStore
+- name: Create maprfs:///apps/drill
+  shell: hadoop fs -mkdir -p /apps/drill
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: drill_pstore
+- name: Owner maprfs:///apps/drill
+  shell: hadoop fs -chown -R {{ mapr_user }}:{{ mapr_group }} /apps/drill
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: drill_pstore
+# JE MapR-FS Spill
+# maprcli volume create -name mapr.$(hostname).local.drill -path /var/mapr/local/{{ ansible_fqdn }}/drill -localvolumehost {{ ansible_fqdn }}
+- name: Check local dir for Drill Spill
+  shell: "maprcli volume info -name mapr.{{ ansible_fqdn }}.local.drill -json"
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  register: maprcli_result
+  failed_when: false
+  changed_when: false
+  check_mode: no
+- name: Create volume mapr.hostname.local.drill
+  shell: maprcli volume create -name mapr.{{ ansible_fqdn }}.local.drill -path /var/mapr/local/{{ ansible_fqdn }}/drill -localvolumehost {{ ansible_fqdn }}
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: drill_maprspill and maprcli_result.stdout is search("No such volume")
+- name: Set DRILL_HOSTNAME for mapr spill
+  lineinfile: >
+    dest=/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/drill-env.sh
+    line="export DRILL_HOSTNAME={{ ansible_fqdn }}"
+  when: drill_maprspill
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R -QS
   when: drill_result.changed
