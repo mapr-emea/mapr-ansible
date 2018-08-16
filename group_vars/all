@@ -18,6 +18,7 @@ force_reconfigure_sh: True
 # if true only one node at once will be restarted, if false all nodes will be restarted at the same time.
 rolling_restart: False
 warden_restart_wait_time: 30
+virtual_machine: False
 
 # YARN settings
 # Enables YARN log aggregation
