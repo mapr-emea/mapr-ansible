@@ -53,11 +53,7 @@
 # WORKAROUND START Create crontab to create Kerberos Cache for HUE
 # TODO add bug number
 - name: Initial Hue Kerberos Cache Creation
-  shell: kinit -k -t /opt/mapr/conf/mapr.keytab -c /tmp/hue_krb5_ccache {{ mapr_user }}/{{ ansible_fqdn }}@{{
-
-
-
-    }}
+  shell: kinit -k -t /opt/mapr/conf/mapr.keytab -c /tmp/hue_krb5_ccache {{ mapr_user }}/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}
   become: true
   become_user: "{{ mapr_user }}"
   when: mapr_security == 'kerberos'
