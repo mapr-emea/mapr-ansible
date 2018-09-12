@@ -30,7 +30,7 @@ IMPALA_SERVER_ARGS=" \
     -mem_limit=20% \
 {% if impala_security == "kerberos" %}
     -kerberos_reinit_interval=60 \
-    -principal=mapr/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }} \
+    -principal={{ mapr_user }}/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }} \
     -keytab_file=/opt/mapr/conf/mapr.keytab \
 {% endif %}
 "
@@ -42,7 +42,7 @@ IMPALA_STATE_STORE_ARGS=" \
     -catalog_service_host=${CATALOG_SERVICE_HOST} \
 {% if impala_security == "kerberos" %}
     -kerberos_reinit_interval=60 \
-    -principal=mapr/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }} \
+    -principal={{ mapr_user }}/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }} \
     -keytab_file=/opt/mapr/conf/mapr.keytab \
 {% endif %}
 "
@@ -54,7 +54,7 @@ IMPALA_CATALOG_ARGS=" \
     -state_store_host=${IMPALA_STATE_STORE_HOST} \
 {% if impala_security == "kerberos" %}
     -kerberos_reinit_interval=60 \
-    -principal=mapr/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }} \
+    -principal={{ mapr_user }}/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }} \
     -keytab_file=/opt/mapr/conf/mapr.keytab \
 {% endif %}
 "

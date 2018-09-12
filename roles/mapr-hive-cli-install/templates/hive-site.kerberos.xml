@@ -114,7 +114,7 @@
     </property>
     <property>
         <name>hive.server2.authentication.kerberos.principal</name>
-        <value>mapr/_HOST@{{ mapr_kerberos_realm }}</value>
+        <value>{{ mapr_user }}/_HOST@{{ mapr_kerberos_realm }}</value>
         <description>HiveServer2 principal. If _HOST is used as the FQDN portion, it will be replaced with the actual hostname of the running instance.</description>
     </property>
     <property>
@@ -129,7 +129,7 @@
     </property>
     <property>
         <name>hive.metastore.kerberos.principal</name>
-        <value>mapr/_HOST@{{ mapr_kerberos_realm }}</value>
+        <value>{{ mapr_user }}/_HOST@{{ mapr_kerberos_realm }}</value>
         <description>The service principal for the metastore thrift server. The special string _HOST will be replaced automatically with the correct hostname.</description>
     </property>
     <property>
@@ -187,6 +187,34 @@
     <property>
         <name>hive.server2.webui.keystore.password</name>
         <value>mapr123</value>
+    </property>
+
+    <property>
+        <name>hive.security.metastore.authorization.manager</name>
+        <value>org.apache.hadoop.hive.ql.security.authorization.StorageBasedAuthorizationProvider</value>
+        <description>authorization manager class name to be used in the metastore for authorization.
+            The user defined authorization class should implement interface
+            org.apache.hadoop.hive.ql.security.authorization.HiveMetastoreAuthorizationProvider.
+        </description>
+    </property>
+
+    <property>
+        <name>hive.security.metastore.authenticator.manager</name>
+        <value>org.apache.hadoop.hive.ql.security.HadoopDefaultMetastoreAuthenticator</value>
+        <description>authenticator manager class name to be used in the metastore for authentication.
+            The user defined authenticator should implement interface
+            org.apache.hadoop.hive.ql.security.HiveAuthenticationProvider.
+        </description>
+    </property>
+
+    <property>
+        <name>hive.metastore.pre.event.listeners</name>
+        <value>org.apache.hadoop.hive.ql.security.authorization.AuthorizationPreEventListener</value>
+        <description>pre-event listener classes to be loaded on the metastore side to run code
+            whenever databases, tables, and partitions are created, altered, or dropped.
+            Set to org.apache.hadoop.hive.ql.security.authorization.AuthorizationPreEventListener
+            if metastore-side authorization is desired.
+        </description>
     </property>
 
 </configuration>

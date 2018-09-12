@@ -177,4 +177,31 @@
         <value>mapr123</value>
     </property>
 
+    <property>
+        <name>hive.security.metastore.authorization.manager</name>
+        <value>org.apache.hadoop.hive.ql.security.authorization.StorageBasedAuthorizationProvider</value>
+        <description>authorization manager class name to be used in the metastore for authorization.
+            The user defined authorization class should implement interface
+            org.apache.hadoop.hive.ql.security.authorization.HiveMetastoreAuthorizationProvider.
+        </description>
+    </property>
+
+    <property>
+        <name>hive.security.metastore.authenticator.manager</name>
+        <value>org.apache.hadoop.hive.ql.security.HadoopDefaultMetastoreAuthenticator</value>
+        <description>authenticator manager class name to be used in the metastore for authentication.
+            The user defined authenticator should implement interface
+            org.apache.hadoop.hive.ql.security.HiveAuthenticationProvider.
+        </description>
+    </property>
+
+    <property>
+        <name>hive.metastore.pre.event.listeners</name>
+        <value>org.apache.hadoop.hive.ql.security.authorization.AuthorizationPreEventListener</value>
+        <description>pre-event listener classes to be loaded on the metastore side to run code
+            whenever databases, tables, and partitions are created, altered, or dropped.
+            Set to org.apache.hadoop.hive.ql.security.authorization.AuthorizationPreEventListener
+            if metastore-side authorization is desired.
+        </description>
+    </property>
 </configuration>
