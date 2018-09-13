@@ -1,9 +1,16 @@
 ---
-- name: Get HttpFS server
+- name: Get HttpFS server for HTTP
   set_fact: httpfs_item=http://{{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item }}:14000/webhdfs/v1
   with_items:
     - "{{ groups['mapr-httpfs'] }}"
   register: httpfs_hosts
+  when: httpfs_security == 'none'
+- name: Get HttpFS server for HTTPS
+  set_fact: httpfs_item=https://{{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item }}:14000/webhdfs/v1
+  with_items:
+  - "{{ groups['mapr-httpfs'] }}"
+  register: httpfs_hosts
+  when: httpfs_security != 'none'
 - name: Make HttpFS String
   set_fact: hue_httpfs_string={{ httpfs_hosts.results[0].ansible_facts.httpfs_item }}
   when: httpfs_hosts.results|length > 0
