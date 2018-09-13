@@ -32,13 +32,13 @@
   with_items:
     - "{{ groups['mapr-oozie'] }}"
   register: oozie_hosts
-  when: mapr_security == 'none'
+  when: oozie_security == 'none'
 - name: Get Oozie server HTTPS
   set_fact: oozie_item=https://{{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item  }}:11443/oozie/
   with_items:
   - "{{ groups['mapr-oozie'] }}"
   register: oozie_hosts
-  when: mapr_security != 'none'
+  when: oozie_security != 'none'
 - name: Make Oozie String
   set_fact: hue_oozie_string={{ oozie_hosts.results[0].ansible_facts.oozie_item }}
   when: oozie_hosts.results|length > 0
