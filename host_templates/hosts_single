@@ -9,7 +9,7 @@
 #security_all=kerberos
 
 [common]
-10.0.0.127 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.8 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
 [ext-kerberos:children]
 #common
@@ -59,7 +59,7 @@ common
 
 # Spark on YARN
 [mapr-spark-yarn:children]
-#common
+common
 
 # Spark ThriftServer
 [mapr-spark-thriftserver:children]

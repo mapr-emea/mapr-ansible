@@ -53,7 +53,7 @@
     </property>
     <property>
         <name>httpfs.hadoop.authentication.kerberos.principal</name>
-        <value>mapr/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}</value>
+        <value>{{ mapr_user }}/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}</value>
     </property>
 
     <property>

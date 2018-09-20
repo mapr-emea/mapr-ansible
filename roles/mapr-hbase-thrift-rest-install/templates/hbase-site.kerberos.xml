@@ -110,7 +110,7 @@
     </property>
     <property>
         <name>hbase.rest.kerberos.principal</name>
-        <value>mapr/_HOST@{{ mapr_kerberos_realm }}</value>
+        <value>{{ mapr_user }}/_HOST@{{ mapr_kerberos_realm }}</value>
     </property>
     <property>
         <name>hbase.rest.authentication.type</name>
@@ -139,7 +139,7 @@
     </property>
     <property>
         <name>hbase.thrift.kerberos.principal</name>
-        <value>mapr/_HOST@{{ mapr_kerberos_realm }}</value>
+        <value>{{ mapr_user }}/_HOST@{{ mapr_kerberos_realm }}</value>
     </property>
     <!-- Add these if you need to configure a different DNS interface from the default -->
     <property>
