@@ -98,6 +98,11 @@ hue_db_schema: hue
 #hue_db_port: 1521
 hue_db_port: 3306
 
+# move the spill from the local file system (/tmp) to a mapr fs local volume
+drill_maprspill: False
+# drill pstore options are none, db or zk
+drill_pstore: db
+
 # Types are: embedded, oracle, mysql
 hive_db_type: mysql
 hive_with_tez: True
