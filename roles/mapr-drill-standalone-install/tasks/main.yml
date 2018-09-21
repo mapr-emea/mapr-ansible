@@ -67,12 +67,12 @@
   shell: hadoop fs -mkdir -p /apps/drill
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
-  when: drill_pstore
+  when: drill_pstore != 'none'
 - name: Owner maprfs:///apps/drill
   shell: hadoop fs -chown -R {{ mapr_user }}:{{ mapr_group }} /apps/drill
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
-  when: drill_pstore
+  when: drill_pstore != 'none'
 # JE MapR-FS Spill
 # maprcli volume create -name mapr.$(hostname).local.drill -path /var/mapr/local/{{ ansible_fqdn }}/drill -localvolumehost {{ ansible_fqdn }}
 - name: Check local dir for Drill Spill
