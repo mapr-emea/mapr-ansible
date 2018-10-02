@@ -19,7 +19,7 @@
     description: MapR Technologies
     file: external_repos
     baseurl: "{{ mapr_ecosystem_url }}/redhat/"
-    gpgcheck: yes
+    gpgcheck: no
     gpgkey: "{{ mapr_gpg_url }}"
   when: ansible_os_family == 'RedHat'
 - name: Create MapR Patch Repository for RedHat

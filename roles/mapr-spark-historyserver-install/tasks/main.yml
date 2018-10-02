@@ -13,7 +13,7 @@
   failed_when: spark_path_result.matched != 1
 - set_fact: spark_path="{{ spark_path_result.files[0].path }}"
 - name: Security opts for Spark History Server
-  lineinfile: regexp='^export SPARK_HISTORY_OPTS=' dest={{ spark_path }}/conf/spark-env.sh line='export SPARK_HISTORY_OPTS=" -Dspark.history.fs.logDirectory=maprfs:///apps/spark/logs -Dspark.ui.acls.enable=true"'
+  lineinfile: regexp='^export SPARK_HISTORY_OPTS=' dest={{ spark_path }}/conf/spark-env.sh line='export SPARK_HISTORY_OPTS=" -Dspark.history.fs.logDirectory=maprfs:///apps/spark -Dspark.ui.acls.enable=true"'
 - name: Change Spark History Server port for SSL in Warden configuration
   lineinfile: regexp='^service.ui.port=' dest=/opt/mapr/conf/conf.d/warden.spark-historyserver.conf line='service.ui.port=18480'
   when: spark_ssl_encryption

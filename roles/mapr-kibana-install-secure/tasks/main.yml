@@ -17,10 +17,10 @@
   - src: sg/ca/es-root-ca.pem
     dst: config/ca/
     mode: "0600"
-  - src: sg/kibana-server-usr-clientCombo.pem
+  - src: sg/kibanaserver-usr-clientCombo.pem
     dst: config/certs/
     mode: "0600"
-  - src: sg/kibana-server-usr-signed.pem
+  - src: sg/kibanaserver-usr-signed.pem
     dst: config/certs/
     mode: "0600"
   - src: .keystore_password
