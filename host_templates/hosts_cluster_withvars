@@ -74,7 +74,7 @@ ansible_become=yes
 [mapr-posix-client-platinum]
 
 # NFS
-[mapr-nfs]
+[mapr-nfs-v3]
 10.0.0.132
 
 # Apache Drill

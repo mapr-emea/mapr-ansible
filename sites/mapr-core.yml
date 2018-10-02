@@ -1,9 +1,9 @@
 # Uninstall POSIX clients first, otherwise if user changes from NFS to Fuse it will conflict.
 - import_playbook: mapr-include-vars.yml
-- name: Uninstall NFS
-  hosts: all:!mapr-nfs
+- name: Uninstall NFS v3
+  hosts: all:!mapr-nfs-v3
   roles:
-    - ../roles/mapr-nfs-uninstall
+    - ../roles/mapr-nfs-v3-uninstall
 - name: Uninstall mapr-posix-client-basic (FUSE)
   hosts: all:!mapr-posix-client-basic
   roles:
@@ -105,10 +105,10 @@
   hosts: all:!mapr-mcs
   roles:
     - ../roles/mapr-mcs-uninstall
-- name: Install NFS
-  hosts: mapr-nfs
+- name: Install NFS v3
+  hosts: mapr-nfs-v3
   roles:
-    - ../roles/mapr-nfs-install
+    - ../roles/mapr-nfs-v3-install
 # uninstall NFS on top
 - name: Fetch keys, when no CLDB change happened
   hosts: mapr-cldb[0]

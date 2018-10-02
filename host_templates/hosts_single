@@ -77,7 +77,7 @@ common
 [mapr-posix-client-platinum]
 
 # NFS
-[mapr-nfs:children]
+[mapr-nfs-v3:children]
 #common
 
 # Apache Drill
