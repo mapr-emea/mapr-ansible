@@ -66,5 +66,9 @@
   fail: msg="Custom OpenTSDB [mapr-opentsdb-custom] must NOT be installed on OpenTSDB node [mapr-opentsdb]"
   when: inventory_hostname in groups["mapr-opentsdb-custom"] and inventory_hostname in groups["mapr-opentsdb"]
   any_errors_fatal: true
+- name: When enabling encryption at rest, mapr_security must not be 'none'
+  fail: msg="When enabling encryption at rest, mapr_security must not be 'none'"
+  when: mapr_security == 'none' and security_encryption_rest
+  any_errors_fatal: true
 
 # CHUFE check posix basic,posix plat, nfs -> only one

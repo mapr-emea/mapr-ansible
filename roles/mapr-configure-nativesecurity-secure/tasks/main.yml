@@ -6,7 +6,7 @@
   stat: path=/opt/mapr/conf/cldb.key
   register: cldb_key_status
 - name: Configure.sh to generate keys only run on first mapr-cldb node
-  shell: /opt/mapr/server/configure.sh -N {{ cluster_name }} -Z {{ zookeeper_string }} -C {{ cldb_string }} -u {{ mapr_user }} -g {{ mapr_group }} -genkeys -secure -HS {{ historyserver_string }} {{ "--isvm" if virtual_machine else "" }}
+  shell: /opt/mapr/server/configure.sh -N {{ cluster_name }} -Z {{ zookeeper_string }} -C {{ cldb_string }} -u {{ mapr_user }} -g {{ mapr_group }} -genkeys -secure {{ "-dare" if security_encryption_rest else "" }} -HS {{ historyserver_string }} {{ "--isvm" if virtual_machine else "" }}
   when: inventory_hostname == groups["mapr-cldb"][0] and not cldb_key_status.stat.exists
 - name: Copy keys to local
   fetch: src=/opt/mapr/conf/{{ item }} dest=/tmp/{{ item }} flat=yes
@@ -16,7 +16,12 @@
   - ssl_keystore
   - ssl_truststore
   - ssl_truststore.pem
+  - ssl_truststore.p12
   when: inventory_hostname == groups["mapr-cldb"][0]
+- name: Copy DARE master key to local
+  fetch: src=/opt/mapr/conf/dare.master.key dest=/tmp/dare.master.key flat=yes
+  when: inventory_hostname == groups["mapr-cldb"][0] and security_encryption_rest
+
 - name: Copy keys to all nodes
   copy: src=/tmp/{{ item }} dest=/opt/mapr/conf/{{ item }}
   with_items:
@@ -25,10 +30,14 @@
   - ssl_keystore
   - ssl_truststore
   - ssl_truststore.pem
+  - ssl_truststore.p12
+- name: Copy DARE master key to CLDB nodes
+  copy: src=/tmp/dare.master.key dest=/opt/mapr/conf/dare.master.key
+  when: inventory_hostname in groups["mapr-cldb"] and security_encryption_rest
  # copy to other nodes
  # run configure on other nodes
 - name: Configure.sh secure
-  shell: /opt/mapr/server/configure.sh -N {{ cluster_name }} -Z {{ zookeeper_string }} -C {{ cldb_string }} -u {{ mapr_user }} -g {{mapr_group}} -secure -HS {{ historyserver_string }} {{ "--isvm" if virtual_machine else "" }}
+  shell: /opt/mapr/server/configure.sh -N {{ cluster_name }} -Z {{ zookeeper_string }} -C {{ cldb_string }} -u {{ mapr_user }} -g {{mapr_group}} -secure {{ "-dare" if security_encryption_rest else "" }} -HS {{ historyserver_string }} {{ "--isvm" if virtual_machine else "" }}
 
 
 
