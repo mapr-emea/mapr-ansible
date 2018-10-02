@@ -8,7 +8,21 @@
   register: version_output
   check_mode: no
   changed_when: no
-- name: Copy PEM file to Kibana for secure ElasticSearch
-  copy: src=/tmp/mapr_spyglass/es/sg/ca/es-root-ca.pem dest=/opt/mapr/kibana/kibana-{{ version_output.stdout }}/config/ca/ owner={{ mapr_user }} group={{ mapr_group }} mode=0600
-- name: Copy Keystore Password
-  copy: src=/tmp/mapr_spyglass/es/.keystore_password dest=/opt/mapr/kibana/kibana-{{ version_output.stdout }}/config/ owner={{ mapr_user }} group={{ mapr_group }} mode=0600
+- name: Copy Kibana files for Security
+  copy: src=/tmp/mapr_spyglass/es/{{ item.src }} dest=/opt/mapr/kibana/kibana-{{ version_output.stdout }}/{{ item.dst }} owner={{ mapr_user }} group={{ mapr_group }} mode={{ item.mode }}
+  with_items:
+  - src: sg/ca/es-root-ca.pem
+    dst: config/ca/
+    mode: "0600"
+  - src: sg/ca/es-root-ca.pem
+    dst: config/ca/
+    mode: "0600"
+  - src: sg/kibana-server-usr-clientCombo.pem
+    dst: config/certs/
+    mode: "0600"
+  - src: sg/kibana-server-usr-signed.pem
+    dst: config/certs/
+    mode: "0600"
+  - src: .keystore_password
+    dst: config/.keystore_password
+    mode: "0600"

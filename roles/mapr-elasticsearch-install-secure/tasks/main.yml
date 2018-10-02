@@ -15,6 +15,12 @@
     - src: sg/ca/es-root-ca.pem
       dst: etc/elasticsearch/ca/
       mode: "0600"
+    - src: sg/admin-usr-private-key.pem
+      dst: etc/elasticsearch/certs
+      mode: "0600"
+    - src: sg/admin-usr-signed.pem
+      dst: etc/elasticsearch/certs
+      mode: "0600"
     - src: sg/truststore.jks
       dst: etc/elasticsearch/keystores/
       mode: "0640"
