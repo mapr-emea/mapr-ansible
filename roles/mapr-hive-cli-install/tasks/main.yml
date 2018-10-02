@@ -19,9 +19,6 @@
 - name: Copy Oracle driver
   copy: src={{ oracle_jdbc_driver_path }} dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/lib/
   when: client_install is not defined and hive_db_type == 'oracle'
-- name: Configure.sh -R (force first generation, to avoid that file will be overridden later)
-  shell: /opt/mapr/server/configure.sh -R
-  when: client_install is not defined
 - name: Configure hive-site.xml - unsecure
   template: src=hive-site.unsecure.xml dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/hive-site.xml
   when: hive_server_security == 'none'
