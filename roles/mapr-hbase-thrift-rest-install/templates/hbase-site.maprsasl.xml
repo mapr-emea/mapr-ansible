@@ -109,7 +109,7 @@
         <value>true</value>
     </property>
     <property>
-        <name>hbase.thrift.support.proxyuser</name>
+        <name>hbase.rest.support.proxyuser</name>
         <value>true</value>
     </property>
     <!-- uncomment this to enable fileclient logging
@@ -118,4 +118,31 @@
     <value>debug</value>
     </property>
     -->
+    {% if hbase_thrift_rest_ssl %}
+    <property>
+        <name>hbase.rest.ssl.enabled</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>hbase.rest.ssl.keystore.store</name>
+        <value>/opt/mapr/conf/ssl_keystore</value>
+    </property>
+    <property>
+        <name>hbase.rest.ssl.keystore.password</name>
+        <value>mapr123</value>
+    </property>
+
+    <property>
+        <name>hbase.thrift.ssl.enabled</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>hbase.thrift.ssl.keystore.store</name>
+        <value>/opt/mapr/conf/ssl_keystore</value>
+    </property>
+    <property>
+        <name>hbase.thrift.ssl.keystore.password</name>
+        <value>mapr123</value>
+    </property>
+    {% endif %}
 </configuration>
