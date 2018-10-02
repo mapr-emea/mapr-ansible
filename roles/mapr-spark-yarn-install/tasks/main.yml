@@ -13,8 +13,8 @@
 - name: Copy hive-site.xml to Spark (otherwise Spark startup throws errors)
   template: src=hive-site.xml dest={{ spark_path }}/conf/hive-site.xml  mode=0644
 # Other actions
-- name: Create maprfs:///apps/spark/logs
-  shell: hadoop fs -mkdir -p /apps/spark/logs
+- name: Create maprfs:///apps/spark
+  shell: hadoop fs -mkdir -p /apps/spark
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
   when: inventory_hostname == groups["mapr-spark-yarn"][0]

@@ -61,6 +61,10 @@
         <value>HTTP/_HOST@{{ mapr_kerberos_realm }}</value>
     </property>
     <property>
+        <name>yarn.acl.enable</name>
+        <value>true</value>
+    </property>
+    <property>
         <name>yarn.admin.acl</name>
         <value>{{ mapr_user }}</value>
     </property>

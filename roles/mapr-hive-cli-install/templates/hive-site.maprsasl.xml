@@ -154,7 +154,7 @@
         <name>hive.txn.manager</name>
         <value>org.apache.hadoop.hive.ql.lockmgr.DbTxnManager</value>
     </property>
-    <property>
+    <!-- property>
         <name>hive.server2.webui.use.pam</name>
         <value>true</value>
     </property>
@@ -169,7 +169,7 @@
     <property>
         <name>hive.server2.webui.keystore.password</name>
         <value>mapr123</value>
-    </property>
+    </property -->
 
     <property>
         <name>hive.security.metastore.authorization.manager</name>
