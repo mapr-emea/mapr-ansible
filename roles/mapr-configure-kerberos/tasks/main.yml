@@ -35,7 +35,7 @@
  # run configure on other nodes
 - name: Copy DARE master key to CLDB nodes
   copy: src=/tmp/dare.master.key dest=/opt/mapr/conf/dare.master.key
-  when: inventory_hostname in groups["mapr-cldb"] and security_encryption_rest
+  when: security_encryption_rest
 
 - name: Configure.sh kerberos
   shell: /opt/mapr/server/configure.sh -N {{ cluster_name }} -Z {{ zookeeper_string }} -C {{ cldb_string }} -u {{ mapr_user }} -g {{mapr_group}} -secure {{ "-dare" if security_encryption_rest else "" }} -K -P "{{ mapr_user }}/{{ cluster_name }}@{{ mapr_kerberos_realm }}" -HS {{ historyserver_string }} {{ "--isvm" if virtual_machine else "" }}

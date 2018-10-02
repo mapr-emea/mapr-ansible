@@ -33,7 +33,7 @@
   - ssl_truststore.p12
 - name: Copy DARE master key to CLDB nodes
   copy: src=/tmp/dare.master.key dest=/opt/mapr/conf/dare.master.key
-  when: inventory_hostname in groups["mapr-cldb"] and security_encryption_rest
+  when: security_encryption_rest
  # copy to other nodes
  # run configure on other nodes
 - name: Configure.sh secure
