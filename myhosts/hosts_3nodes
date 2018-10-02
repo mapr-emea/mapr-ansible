@@ -4,9 +4,9 @@
 
 # ALIASES does NOT work with ROLLING upgrades!
 [all]
-node1 ansible_host=10.0.0.21 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-node2 ansible_host=10.0.0.100 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-node3 ansible_host=10.0.0.243 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+node1 ansible_host=10.0.0.111 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+node2 ansible_host=10.0.0.156 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+node3 ansible_host=10.0.0.239 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
 [unprovision]
 
