@@ -12,16 +12,8 @@
   check_mode: no
   changed_when: no
 # Bugfix for Kibana custom secure
-- name: Fix for Kibana custom secure
-  lineinfile:
-    dest: "/opt/mapr/kibana/kibana-{{ version_output.stdout }}/bin/configure.sh"
-    regexp: '\s*OPTS=\$\(getopt (.*)'
-#    line: '    OPTS=$(getopt -a -o chk:ln:suvC:E:P:R -l help -l nodeCount: -l nodePort: -l ES: -l kibanaPort: -l secure -l customSecure -l unsecure -l EC: -l R -l verifySsl -- "$@")'
-    line: '    OPTS=$(getopt -a -o chk:ln:p:suvC:E:P:R -l help -l nodeCount: -l nodePort: -l ES: -l kibanaPort: -l secure -l customSecure -l unsecure -l password: -l EC: -l R -l verifySsl -- "$@")'
-
-# fix for KIB-1
-#- name: Fix KIB-1
-#  lineinfile: dest={{ kibana_path_result.files[0].path }}/bin/export_cert.sh regexp="^CLUSTERNAME" line="CLUSTERNAME={{ cluster_name }}"
-# Fix for OTSDB-4
-#- name: Set owner mapr-system user / OTSDB-4
-#  file: path=/opt/mapr/kibana owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
+#- name: Fix for Kibana custom secure
+#  lineinfile:
+#    dest: "/opt/mapr/kibana/kibana-{{ version_output.stdout }}/bin/configure.sh"
+#    regexp: '\s*OPTS=\$\(getopt (.*)'
+#    line: '    OPTS=$(getopt -a -o chk:ln:p:suvC:E:P:R -l help -l nodeCount: -l nodePort: -l ES: -l kibanaPort: -l secure -l customSecure -l unsecure -l password: -l EC: -l R -l verifySsl -- "$@")'
