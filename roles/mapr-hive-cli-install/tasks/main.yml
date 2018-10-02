@@ -29,10 +29,10 @@
   template: src=hive-site.maprsasl.xml dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/hive-site.xml
   when: hive_server_security == 'maprsasl'
 #- name: Set MAPR_HIVE_SERVER_LOGIN_OPTS in env.sh to maprsasl
-#  lineinfile: dest=/opt/mapr/conf/env.sh insertbefore="^export\ MAPR_HIVE_SERVER_LOGIN_OPTS" regexp="^MAPR_HIVE_SERVER_LOGIN_OPTS" line="MAPR_HIVE_SERVER_LOGIN_OPTS=\"-Dhadoop.login=maprsasl\""
+#  lineinfile: dest=/opt/mapr/conf/env_override.sh regexp="^export MAPR_HIVE_SERVER_LOGIN_OPTS" line="export MAPR_HIVE_SERVER_LOGIN_OPTS=\"-Dhadoop.login=maprsasl\"" mode=0755 create=yes owner={{ mapr_user }} group={{ mapr_group }}
 #  when: mapr_security == 'maprsasl'
 #- name: Set MAPR_HIVE_LOGIN_OPTS= in env.sh to maprsasl
-#  lineinfile: dest=/opt/mapr/conf/env.sh insertbefore="^export\ MAPR_HIVE_LOGIN_OPTS=" regexp="^MAPR_HIVE_LOGIN_OPTS=" line="MAPR_HIVE_LOGIN_OPTS=\"-Dhadoop.login=maprsasl\""
+#  lineinfile: dest=/opt/mapr/conf/env_override.sh regexp="^export MAPR_HIVE_LOGIN_OPTS=" line="export MAPR_HIVE_LOGIN_OPTS=\"-Dhadoop.login=maprsasl\"" mode=0755 create=yes owner={{ mapr_user }} group={{ mapr_group }}
 #  when: mapr_security == 'maprsasl'
 
 - name: Configure hive-site.xml - pam
@@ -42,10 +42,10 @@
   template: src=hive-site.kerberos.xml dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/hive-site.xml
   when: hive_server_security == 'kerberos'
 - name: Set MAPR_HIVE_SERVER_LOGIN_OPTS in env.sh to hybrid for Kerberos
-  lineinfile: dest=/opt/mapr/conf/env.sh insertbefore="^export\ MAPR_HIVE_SERVER_LOGIN_OPTS" regexp="^MAPR_HIVE_SERVER_LOGIN_OPTS" line="MAPR_HIVE_SERVER_LOGIN_OPTS=\"-Dhadoop.login=hybrid\""
+  lineinfile: dest=/opt/mapr/conf/env_override.sh regexp="^export MAPR_HIVE_SERVER_LOGIN_OPTS" line="export MAPR_HIVE_SERVER_LOGIN_OPTS=\"-Dhadoop.login=hybrid\"" mode=0755 create=yes owner={{ mapr_user }} group={{ mapr_group }}
   when: mapr_security == 'kerberos'
 - name: Set MAPR_HIVE_LOGIN_OPTS= in env.sh to hybrid for Kerberos
-  lineinfile: dest=/opt/mapr/conf/env.sh insertbefore="^export\ MAPR_HIVE_LOGIN_OPTS=" regexp="^MAPR_HIVE_LOGIN_OPTS=" line="MAPR_HIVE_LOGIN_OPTS=\"-Dhadoop.login=hybrid\""
+  lineinfile: dest=/opt/mapr/conf/env_override.sh regexp="^export MAPR_HIVE_LOGIN_OPTS=" line="export MAPR_HIVE_LOGIN_OPTS=\"-Dhadoop.login=hybrid\"" mode=0755 create=yes owner={{ mapr_user }} group={{ mapr_group }}
   when: mapr_security == 'kerberos'
 
 - name: Setup Tez for Hive
@@ -99,11 +99,11 @@
   when: client_install is not defined and inventory_hostname == groups["mapr-hive-cli"][0] and hive_db_type == 'oracle'
   ignore_errors: True # TODO error result should be handeled
 
-- name: Add MAPR_HIVE_LOGIN_OPTS to /opt/mapr/conf/env.sh
-  lineinfile: dest=/opt/mapr/conf/env.sh state=present regexp="^MAPR_HIVE_LOGIN_OPTS=" line='MAPR_HIVE_LOGIN_OPTS="-Dhadoop.login=maprsasl"'
+- name: Add MAPR_HIVE_LOGIN_OPTS to /opt/mapr/conf/env_override.sh
+  lineinfile: dest=/opt/mapr/conf/env_override.sh state=present regexp="^export MAPR_HIVE_LOGIN_OPTS=" line='export MAPR_HIVE_LOGIN_OPTS="-Dhadoop.login=maprsasl"' mode=0755 create=yes owner={{ mapr_user }} group={{ mapr_group }}
   when: hive_metastore_security == "maprsasl"
-- name: Add MAPR_HIVE_SERVER_LOGIN_OPTS to /opt/mapr/conf/env.sh
-  lineinfile: dest=/opt/mapr/conf/env.sh state=present regexp="^MAPR_HIVE_SERVER_LOGIN_OPTS=" line='MAPR_HIVE_SERVER_LOGIN_OPTS="-Dhadoop.login=maprsasl_keytab"'
+- name: Add MAPR_HIVE_SERVER_LOGIN_OPTS to /opt/mapr/conf/env_override.sh
+  lineinfile: dest=/opt/mapr/conf/env_override.sh state=present regexp="^export MAPR_HIVE_SERVER_LOGIN_OPTS=" line='export MAPR_HIVE_SERVER_LOGIN_OPTS="-Dhadoop.login=maprsasl_keytab"' mode=0755 create=yes owner={{ mapr_user }} group={{ mapr_group }}
   when: hive_metastore_security == "maprsasl"
 
 # required for Hue

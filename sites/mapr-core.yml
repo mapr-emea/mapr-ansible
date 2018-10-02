@@ -28,7 +28,7 @@
   hosts: mapr-core
   roles:
     - ../roles/mapr-core-install
-    - ../roles/mapr-configure-subnets
+    - ../roles/mapr-configure-env-override
 - name: Install Zookeeper
   hosts: mapr-zookeeper
   roles:

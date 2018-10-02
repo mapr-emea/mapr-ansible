@@ -34,9 +34,13 @@
   when: hbase_thrift_rest_security == 'kerberos'
 - name: Set MAPR_HBASE_SERVER_OPTS using HYBRID_LOGIN_OPTS
   lineinfile: >
-    dest=/opt/mapr/conf/env.sh
+    dest=/opt/mapr/conf/env_override.sh
     line="export MAPR_HBASE_SERVER_OPTS=\"${HYBRID_LOGIN_OPTS} ${MAPR_SSL_OPTS} -Dmapr.library.flatclass\""
     regexp="^export MAPR_HBASE_SERVER_OPTS"
+    mode=0755
+    create=yes
+    owner={{ mapr_user }}
+    group={{ mapr_group }}
   when: hbase_thrift_rest_security == 'kerberos'
 
 - name: Start all hbasethrift instances

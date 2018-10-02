@@ -23,5 +23,5 @@
   when: mapr_security == 'kerberos'
 
 - name: Set MAPR_LOGIN_OPTS in env.sh to hybrid
-  lineinfile: dest=/opt/mapr/conf/env.sh regexp="^MAPR_LOGIN_OPTS" line="MAPR_LOGIN_OPTS=\"-Dhadoop.login=hybrid ${MAPR_JAAS_CONFIG_OPTS} ${MAPR_ZOOKEEPER_OPTS}\""
+  lineinfile: dest=/opt/mapr/conf/env_override.sh regexp="^export MAPR_LOGIN_OPTS" line="export MAPR_LOGIN_OPTS=\"-Dhadoop.login=hybrid ${MAPR_JAAS_CONFIG_OPTS} ${MAPR_ZOOKEEPER_OPTS}\""
   when: mapr_security == 'kerberos'
