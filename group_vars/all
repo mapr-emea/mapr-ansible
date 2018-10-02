@@ -68,6 +68,10 @@ spark_ssl_encryption: True
 spark_sasl_encryption: True
 # Hue will use PAM auth and depending what was configured for other components use these settings
 hue_ssl: True
+
+# Spyglass metrics collect
+# Options: minimal or all
+spyglass_metrics_collect: all
 spyglass_elasticsearch_secure: True
 spyglass_log_password: mapr
 # Grafana Password is only required in unsecure mode.

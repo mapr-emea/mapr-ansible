@@ -17,7 +17,7 @@
     GRAFANA_ADMIN_PASSWORD: mapr
   when: mapr_security != 'none'
 - name: Configure.sh
-  shell: /opt/mapr/server/configure.sh -R -OT {{ opentsdb_string }} -EPgrafana '-password {{ spyglass_grafana_password }}'
+  shell: /opt/mapr/server/configure.sh -R -OT {{ opentsdb_string }} -EPgrafana ‑EPcollectd {{ "-minimal" if spyglass_metrics_collect == "minimal" else "-all" }} '-password {{ spyglass_grafana_password }}'
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
   when: mapr_security == 'none'
