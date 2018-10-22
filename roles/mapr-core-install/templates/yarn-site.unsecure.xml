@@ -35,6 +35,11 @@
     {% endif %}
 
     <!-- :::CAUTION::: DO NOT EDIT ANYTHING ON OR ABOVE THIS LINE -->
+    <!-- fix for Oozie when user different than mapr -->
+    <property>
+        <name>yarn.resourcemanager.principal</name>
+        <value>{{ mapr_user }}</value>
+    </property>
     <property>
         <name>yarn.nodemanager.container-executor.class</name>
         <value>org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor</value>
