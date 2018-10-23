@@ -23,8 +23,6 @@
         <name>yarn.resourcemanager.ha.custom-ha-rmaddressfinder</name>
         <value>org.apache.hadoop.yarn.client.MapRZKBasedRMAddressFinder</value>
     </property>
-
-    <!-- :::CAUTION::: DO NOT EDIT ANYTHING ON OR ABOVE THIS LINE -->
     {% if mapr_security != 'none' %}
     <property>
         <name>yarn.acl.enable</name>
@@ -35,6 +33,13 @@
         <value>{{ mapr_user }}</value>
     </property>
     {% endif %}
+
+    <!-- :::CAUTION::: DO NOT EDIT ANYTHING ON OR ABOVE THIS LINE -->
+    <!-- fix for Oozie when user different than mapr -->
+    <property>
+        <name>yarn.resourcemanager.principal</name>
+        <value>{{ mapr_user }}</value>
+    </property>
     <property>
         <name>yarn.nodemanager.container-executor.class</name>
         <value>org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor</value>

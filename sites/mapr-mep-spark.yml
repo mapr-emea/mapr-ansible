@@ -1,4 +1,8 @@
 - import_playbook: mapr-include-vars.yml
+- name: Setup Zookeeper String
+  hosts: all
+  roles:
+    - ../roles/mapr-configure-vars-zk
 - name: Setup Hive Variables
   hosts: all
   vars:
