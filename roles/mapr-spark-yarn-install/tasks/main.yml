@@ -24,7 +24,10 @@
   when: inventory_hostname == groups["mapr-spark-yarn"][0]
 - name: Set owner mapr-system user
   file: path=/opt/mapr/spark owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
-
+- name: Get rid of Kerberos warning in Spark
+  lineinfile: dest={{ spark_path }}/conf/log4j.properties regexp="^log4j\.logger\.org\.apache\.hadoop\.security\.authentication\.server" line="log4j.logger.org.apache.hadoop.security.authentication.server=ERROR"
+- name: Get rid of "Unable to load native-hadoop library for your platform..." warning
+  lineinfile: dest={{ spark_path }}/conf/spark-env.sh line="$SPARK_SUBMIT_OPTS -Djava.library.path=/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/lib/native"
 - name: Write Spark spark-defaults.conf
   template: src=spark-defaults.conf dest={{ spark_path }}/conf/spark-defaults.conf mode=0644
 - name: Making Zip of Spark Jars | for Spark
