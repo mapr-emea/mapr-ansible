@@ -1,5 +1,3 @@
-<?xml version="1.0"?>
-<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 <configuration>
 
     <property>
@@ -38,15 +36,8 @@
         <!-- default is 25 -->
     </property>
 
-    <!-- uncomment this to enable fileclient logging
-    <property>
-      <name>fs.mapr.trace</name>
-      <value>debug</value>
-    </property>
-    -->
 
     <!-- Allows file/db client to use 64 threads -->
-
     <property>
         <name>fs.mapr.threads</name>
         <value>64</value>
@@ -56,6 +47,21 @@
         <name>mapr.hbase.default.db</name>
         <value>maprdb</value>
     </property>
+    <property>
+        <name>hbase.regionserver.thrift.http</name>
+        <value>true</value>
+    </property>
+
+    {% if hbase_thrift_rest_security == 'none' %}
+    <property>
+        <name>hbase.thrift.ssl.enabled</name>
+        <value>false</value>
+    </property>
+    <property>
+        <name>hbase.rest.ssl.enabled</name>
+        <value>false</value>
+    </property>
+    {% elif hbase_thrift_rest_security == 'maprsasl' %}
     <property>
         <name>hbase.security.authorization</name>
         <value>true</value>
@@ -70,12 +76,6 @@
         <name>hbase.thrift.security.authentication</name>
         <value>maprsasl</value>
     </property>
-
-    <property>
-        <name>hbase.regionserver.thrift.http</name>
-        <value>true</value>
-    </property>
-
     <property>
         <name>hbase.rest.authentication.type</name>
         <value>org.apache.hadoop.security.authentication.server.MultiMechsAuthenticationHandler</value>
@@ -98,12 +98,79 @@
         <name>hbase.rest.support.proxyuser</name>
         <value>true</value>
     </property>
-    <!-- uncomment this to enable fileclient logging
+    {% elif hbase_thrift_rest_security == 'kerberos' %}
     <property>
-    <name>fs.mapr.trace</name>
-    <value>debug</value>
+        <name>hbase.superuser</name>
+        <value>{{ mapr_user }}</value>
     </property>
-    -->
+    <property>
+        <name>hbase.thrift.support.proxyuser</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>hbase.thrift.authentication.type</name>
+        <value>kerberos</value>
+    </property>
+    <property>
+        <name>hbase.rest.authentication.type</name>
+        <value>kerberos</value>
+    </property>
+    <property>
+        <name>hbase.rest.keytab.file</name>
+        <value>/opt/mapr/conf/mapr.keytab</value>
+    </property>
+    <property>
+        <name>hbase.rest.kerberos.principal</name>
+        <value>{{ mapr_user }}/_HOST@{{ mapr_kerberos_realm }}</value>
+    </property>
+    <property>
+        <name>hbase.rest.authentication.type</name>
+        <value>kerberos</value>
+    </property>
+    <property>
+        <name>hbase.rest.authentication.kerberos.principal</name>
+        <value>HTTP/_HOST@{{ mapr_kerberos_realm }}</value>
+    </property>
+    <property>
+        <name>hbase.rest.authentication.kerberos.keytab</name>
+        <value>/opt/mapr/conf/mapr.keytab</value>
+    </property>
+    <!-- Add these if you need to configure a different DNS interface from the default -->
+    <property>
+        <name>hbase.rest.dns.interface</name>
+        <value>default</value>
+    </property>
+    <property>
+        <name>hbase.rest.dns.nameserver</name>
+        <value>default</value>
+    </property>
+    <property>
+        <name>hbase.thrift.keytab.file</name>
+        <value>/opt/mapr/conf/mapr.keytab</value>
+    </property>
+    <property>
+        <name>hbase.thrift.kerberos.principal</name>
+        <value>{{ mapr_user }}/_HOST@{{ mapr_kerberos_realm }}</value>
+    </property>
+    <!-- Add these if you need to configure a different DNS interface from the default -->
+    <property>
+        <name>hbase.thrift.dns.interface</name>
+        <value>default</value>
+    </property>
+    <property>
+        <name>hbase.thrift.dns.nameserver</name>
+        <value>default</value>
+    </property>
+
+    <property>
+        <name>hbase.thrift.authentication.kerberos.principal</name>
+        <value>HTTP/_HOST@{{ mapr_kerberos_realm }}</value>
+    </property>
+    <property>
+        <name>hbase.thrift.authentication.kerberos.keytab</name>
+        <value>/opt/mapr/conf/mapr.keytab</value>
+    </property>
+    {% endif %}
     {% if hbase_thrift_rest_ssl %}
     <property>
         <name>hbase.rest.ssl.enabled</name>
@@ -131,4 +198,10 @@
         <value>mapr123</value>
     </property>
     {% endif %}
+    <!-- uncomment this to enable fileclient logging
+    <property>
+      <name>fs.mapr.trace</name>
+      <value>debug</value>
+    </property>
+    -->
 </configuration>

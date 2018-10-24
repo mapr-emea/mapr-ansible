@@ -20,15 +20,8 @@
   register: version_output
   check_mode: no
   changed_when: no
-- name: Configure hbase-site.xml - unsecure
-  template: src=hbase-site.unsecure.xml dest=/opt/mapr/hbase/hbase-{{ version_output.stdout }}/conf/hbase-site.xml
-  when: hbase_thrift_rest_security == 'none'
-- name: Configure hbase-site.xml - maprsasl
-  template: src=hbase-site.maprsasl.xml dest=/opt/mapr/hbase/hbase-{{ version_output.stdout }}/conf/hbase-site.xml
-  when: hbase_thrift_rest_security == 'maprsasl'
-- name: Configure hbase-site.xml - kerberos
-  template: src=hbase-site.kerberos.xml dest=/opt/mapr/hbase/hbase-{{ version_output.stdout }}/conf/hbase-site.xml
-  when: hbase_thrift_rest_security == 'kerberos'
+- name: Configure hbase-site.xml
+  template: src=hbase-site.xml dest=/opt/mapr/hbase/hbase-{{ version_output.stdout }}/conf/hbase-site.xml
 - name: Set MAPR_HBASE_SERVER_OPTS using HYBRID_LOGIN_OPTS
   lineinfile: >
     dest=/opt/mapr/conf/env_override.sh
