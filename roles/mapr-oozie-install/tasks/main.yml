@@ -25,12 +25,8 @@
 - name: Copy Oracle driver
   copy: src={{ oracle_jdbc_driver_path }} dest=/opt/mapr/oozie/oozie-{{ version_output.stdout }}/libext/
   when: oozie_db_type == 'oracle'
-- name: Configure oozie-site.xml - unsecure
+- name: Configure oozie-site.xml
   template: src=oozie-site.unsecure.xml dest=/opt/mapr/oozie/oozie-{{ version_output.stdout }}/conf/oozie-site.xml
-  when: oozie_security == 'none' or oozie_security == 'maprsasl' # automatically enabled when MapR security is enabled
-- name: Configure oozie-site.xml - Kerberos
-  template: src=oozie-site.kerberos.xml dest=/opt/mapr/oozie/oozie-{{ version_output.stdout }}/conf/oozie-site.xml
-  when: oozie_security == 'kerberos'
 - name: Run oozie-setup.sh
   command: "/opt/mapr/oozie/oozie-{{ version_output.stdout }}/bin/oozie-setup.sh -hadoop {{ hadoop_version }} /opt/mapr/hadoop/hadoop-{{ hadoop_version }} {{ '-secure' if oozie_security != 'none' else '' }}"
 
