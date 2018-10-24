@@ -1,5 +1,5 @@
 - import_playbook: mapr-include-vars.yml
-- name: Install MapR Core
-  hosts: mapr-kibana
+- name: Configure and start (native-security)
+  hosts: mapr-core
   roles:
-    - ../roles/mapr-kibana-install
+  - {role: ../roles/mapr-configure-nativesecurity-secure, when: mapr_security == 'maprsasl' and (force_reconfigure_sh or (zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0 or (historyserver_changes|int) > 0)}
