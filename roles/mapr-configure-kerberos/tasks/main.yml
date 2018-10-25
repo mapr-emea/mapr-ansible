@@ -26,7 +26,7 @@
   fetch: src=/opt/mapr/conf/dare.master.key dest=/tmp/dare.master.key flat=yes
   when: inventory_hostname == groups["mapr-cldb"][0] and security_encryption_rest
 - name: Copy keys to all nodes
-  copy: src=/tmp/{{ item }} dest=/opt/mapr/conf/{{ item }} mode="{{ item.mode }}" owner={{ mapr_user }} group={{ mapr_group }}
+  copy: src=/tmp/{{ item.filename }} dest=/opt/mapr/conf/{{ item.filename }} mode="{{ item.mode }}" owner={{ mapr_user }} group={{ mapr_group }}
   with_items:
   - filename: maprserverticket
     mode: "0600"
