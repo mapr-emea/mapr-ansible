@@ -52,16 +52,7 @@
         <value>true</value>
     </property>
 
-    {% if hbase_thrift_rest_security == 'none' %}
-    <property>
-        <name>hbase.thrift.ssl.enabled</name>
-        <value>false</value>
-    </property>
-    <property>
-        <name>hbase.rest.ssl.enabled</name>
-        <value>false</value>
-    </property>
-    {% elif hbase_thrift_rest_security == 'maprsasl' %}
+    {% if hbase_thrift_rest_security == 'maprsasl' %}
     <property>
         <name>hbase.security.authorization</name>
         <value>true</value>
