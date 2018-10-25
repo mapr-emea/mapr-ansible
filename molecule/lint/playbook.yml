@@ -125,9 +125,9 @@
     - role: ../../roles/mapr-mcs-install
     - role: ../../roles/mapr-mcs-uninstall
     - role: ../../roles/mapr-metric-monitoring-configure
-    - role: ../../roles/mapr-nfs-install
+    - role: ../../roles/mapr-nfs-v3-install
     - role: ../../roles/mapr-nfsloopback-install
-    - role: ../../roles/mapr-nfs-uninstall
+    - role: ../../roles/mapr-nfs-v3-uninstall
     - role: ../../roles/mapr-nodemanager-install
     - role: ../../roles/mapr-nodemanager-localdir
     - role: ../../roles/mapr-nodemanager-uninstall

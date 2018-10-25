@@ -2,6 +2,7 @@
 # Install Spark on YARN
 - name: Install mapr-spark
   package: name=mapr-spark state=present
+  register: spark_result
 - name: Find Spark Path
   find: paths="/opt/mapr/spark" patterns="spark*" file_type=directory
   register: spark_path_result
@@ -24,6 +25,9 @@
   when: inventory_hostname == groups["mapr-spark-yarn"][0]
 - name: Set owner mapr-system user
   file: path=/opt/mapr/spark owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
+- name: Configure.sh -R
+  shell: /opt/mapr/server/configure.sh -R
+  when: spark_result.changed
 - name: Get rid of Kerberos warning in Spark
   lineinfile: dest={{ spark_path }}/conf/log4j.properties regexp="^log4j\.logger\.org\.apache\.hadoop\.security\.authentication\.server" line="log4j.logger.org.apache.hadoop.security.authentication.server=ERROR"
 - name: Get rid of "Unable to load native-hadoop library for your platform..." warning
