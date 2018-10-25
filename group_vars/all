@@ -126,6 +126,9 @@ hive_db_mysql_create_schema_and_user: True
 hive_db_user: hive
 hive_db_password: hive
 hive_db_schema: hive
+# Uses hadoop credential to store the password
+hive_db_encrypt_password: True
+
 # MySQL JDBC Url, if you set it overrides the default which is taken from installed MySQL
 #hive_db_jdbc_url: jdbc:mysql://mysqlhost:3306/hive?createDatabaseIfNotExist=true
 # Oracle JDBC Url

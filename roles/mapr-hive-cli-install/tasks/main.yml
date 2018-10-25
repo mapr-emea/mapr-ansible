@@ -19,6 +19,17 @@
 - name: Copy Oracle driver
   copy: src={{ oracle_jdbc_driver_path }} dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/lib/
   when: client_install is not defined and hive_db_type == 'oracle'
+- name: Delete stored password for hive if existing
+  shell: hadoop fs -rm /user/mapr/hivemetastore.jceks
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  failed_when: false
+  when: hive_db_encrypt_password
+- name: Store encrypted database password
+  shell: "hadoop credential create javax.jdo.option.ConnectionPassword -value '{{ hive_db_password }}' -provider jceks://maprfs/user/mapr/hivemetastore.jceks"
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: hive_db_encrypt_password
 - name: Configure hive-site.xml
   template: src=hive-site.xml dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/hive-site.xml
 - name: Set HADOOP_OPTS= in beeline.sh

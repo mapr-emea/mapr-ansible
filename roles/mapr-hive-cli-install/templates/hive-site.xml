@@ -90,12 +90,19 @@
         <value>{{ hive_db_user }}</value>
         <description>username to use against metastore database</description>
     </property>
-
+    {% if hive_db_encrypt_password %}
+    <property>
+        <name>hadoop.security.credential.provider.path</name>
+        <value>jceks://maprfs/user/mapr/hivemetastore.jceks</value>
+        <description>password to use against metastore database</description>
+    </property>
+    {% else %}
     <property>
         <name>javax.jdo.option.ConnectionPassword</name>
         <value>{{ hive_db_password }}</value>
         <description>password to use against metastore database</description>
     </property>
+    {% endif %}
     {% elif hive_db_type == 'oracle' %}
     <property>
         <name>javax.jdo.option.ConnectionURL</name>
