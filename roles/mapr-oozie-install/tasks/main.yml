@@ -25,6 +25,17 @@
 - name: Copy Oracle driver
   copy: src={{ oracle_jdbc_driver_path }} dest=/opt/mapr/oozie/oozie-{{ version_output.stdout }}/libext/
   when: oozie_db_type == 'oracle'
+- name: Delete stored password for Oozie if exists
+  shell: hadoop fs -rm /user/mapr/oozie.jceks
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  failed_when: false
+  when: oozie_db_encrypt_password
+- name: Store encrypted database password
+  shell: "hadoop credential create oozie.service.jpaservice.jdbc.password -value '{{ oozie_db_password }}' -provider jceks://maprfs/user/mapr/oozie.jceks"
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: oozie_db_encrypt_password
 - name: Configure oozie-site.xml
   template: src=oozie-site.xml dest=/opt/mapr/oozie/oozie-{{ version_output.stdout }}/conf/oozie-site.xml
 - name: Run oozie-setup.sh

@@ -140,6 +140,8 @@ oozie_db_mysql_create_schema_and_user: True
 oozie_db_user: oozie
 oozie_db_password: oozie
 oozie_db_schema: oozie
+# Uses hadoop credential to store the password
+oozie_db_encrypt_password: True
 # MySQL JDBC Url, if you set it overrides the default which is taken from installed MySQL
 #oozie_db_jdbc_url: jdbc:mysql://mysqlhost:3306/oozie
 # Oracle JDBC Url

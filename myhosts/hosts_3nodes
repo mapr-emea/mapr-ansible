@@ -157,9 +157,9 @@ node3
 
 # Sqoop1
 [mapr-sqoop1]
-#node1
-#node2
-#node3
+node1
+node2
+node3
 
 # Sqoop2 Server
 [mapr-sqoop2-server]

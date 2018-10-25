@@ -45,7 +45,7 @@
   check_mode: no
   changed_when: no
 - name: Configure hue.ini
-  template: src=hue.ini dest=/opt/mapr/hue/hue-{{ version_output.stdout }}/desktop/conf/hue.ini
+  template: src=hue.ini dest=/opt/mapr/hue/hue-{{ version_output.stdout }}/desktop/conf/hue.ini mode="0600" owner="{{ mapr_user }}" group="{{ mapr_group }}"
 
 # WORKAROUND START Create crontab to create Kerberos Cache for HUE
 # TODO add bug number

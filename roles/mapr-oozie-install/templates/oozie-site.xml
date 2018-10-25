@@ -88,10 +88,22 @@
         <name>oozie.service.JPAService.jdbc.username</name>
         <value>{{ oozie_db_user }}</value>
     </property>
+
+    {% if oozie_db_encrypt_password %}
+    <property>
+        <name>hadoop.security.credential.provider.path</name>
+        <value>jceks://maprfs/user/mapr/oozie.jceks</value>
+    </property>
+    <property>
+        <name>oozie.service.JPAService.jdbc.password</name>
+        <value>*****</value>
+    </property>
+    {% else %}
     <property>
         <name>oozie.service.JPAService.jdbc.password</name>
         <value>{{ oozie_db_password }}</value>
     </property>
+    {% endif %}
     {% endif %}
     <property>
         <name>oozie.email.smtp.host</name>

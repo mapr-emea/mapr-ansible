@@ -19,7 +19,7 @@
 - name: Copy Oracle driver
   copy: src={{ oracle_jdbc_driver_path }} dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/lib/
   when: client_install is not defined and hive_db_type == 'oracle'
-- name: Delete stored password for hive if existing
+- name: Delete stored password for Hive if exists
   shell: hadoop fs -rm /user/mapr/hivemetastore.jceks
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
