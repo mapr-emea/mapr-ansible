@@ -35,7 +35,7 @@
   - ssl_truststore
   - ssl_truststore.pem
   - ssl_truststore.p12
-- name: Copy DARE master key to CLDB nodes
+- name: Copy DARE master key
   copy: src=/tmp/dare.master.key dest=/opt/mapr/conf/dare.master.key
   when: security_encryption_rest
  # copy to other nodes

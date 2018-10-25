@@ -1,0 +1,18 @@
+---
+# Configure secure cluster
+- name: Clean up of security files copied locally
+  file: path=/tmp/{{ item }} state=absent
+  with_items:
+  - maprserverticket
+  - cldb.key
+  - ssl_keystore
+  - ssl_keystore.pem
+  - ssl_keystore.p12
+  - ssl_truststore
+  - ssl_truststore.pem
+  - ssl_truststore.p12
+  - dare.master.key
+
+
+
+

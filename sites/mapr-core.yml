@@ -173,3 +173,8 @@
   roles:
     - ../roles/mapr-posix-client-platinum-install
     - {role: ../roles/mapr-patch-posix-client-platinum-install, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
+# Local cleanup of security relevant files
+- hosts: 127.0.0.1
+  connection: local
+  roles:
+    - ../roles/mapr-configure-cleanup
