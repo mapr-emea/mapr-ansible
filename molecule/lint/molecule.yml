@@ -1,0 +1,26 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint:
+  name: yamllint
+  options:
+    config-file: molecule/lint/yamllint.conf
+platforms:
+  - name: instance
+    image: centos:7
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+    options:
+      x: ["ANSIBLE0002,ANSIBLE0006,ANSIBLE0011,ANSIBLE0012,ANSIBLE0013,ANSIBLE0016"]
+scenario:
+  name: lint
+  test_sequence:
+    - lint
+verifier:
+  name: testinfra
+  lint:
+    name: flake8
