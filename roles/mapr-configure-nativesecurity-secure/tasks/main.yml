@@ -23,20 +23,27 @@
 - name: Copy DARE master key to local
   fetch: src=/opt/mapr/conf/dare.master.key dest=/tmp/dare.master.key flat=yes
   when: inventory_hostname == groups["mapr-cldb"][0] and security_encryption_rest
-
 - name: Copy keys to all nodes
-  copy: src=/tmp/{{ item }} dest=/opt/mapr/conf/{{ item }}
+  copy: src=/tmp/{{ item }} dest=/opt/mapr/conf/{{ item }} mode="{{ item.mode }}" owner={{ mapr_user }} group={{ mapr_group }}
   with_items:
-  - maprserverticket
-  - cldb.key
-  - ssl_keystore
-  - ssl_keystore.pem
-  - ssl_keystore.p12
-  - ssl_truststore
-  - ssl_truststore.pem
-  - ssl_truststore.p12
+  - filename: maprserverticket
+    mode: "0600"
+  - filename: cldb.key
+    mode: "0600"
+  - filename: ssl_keystore
+    mode: "0400"
+  - filename: ssl_keystore.pem
+    mode: "0400"
+  - filename: ssl_keystore.p12
+    mode: "0400"
+  - filename: ssl_truststore
+    mode: "0444"
+  - filename: ssl_truststore.pem
+    mode: "0444"
+  - filename: ssl_truststore.p12
+    mode: "0444"
 - name: Copy DARE master key
-  copy: src=/tmp/dare.master.key dest=/opt/mapr/conf/dare.master.key
+  copy: src=/tmp/dare.master.key dest=/opt/mapr/conf/dare.master.key owner={{ mapr_user }} group={{ mapr_group }} mode="0600"
   when: security_encryption_rest
  # copy to other nodes
  # run configure on other nodes
