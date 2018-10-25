@@ -256,6 +256,8 @@
         <name>hive.server2.use.SSL</name>
         <value>true</value>
     </property>
+    {% endif %}
+    <!-- always this config but not enabled -->
     <property>
         <name>hive.server2.keystore.path</name>
         <value>/opt/mapr/conf/ssl_keystore</value>
@@ -264,5 +266,4 @@
         <name>hive.server2.keystore.password</name>
         <value>mapr123</value>
     </property>
-    {% endif %}
 </configuration>

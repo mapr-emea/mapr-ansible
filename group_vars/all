@@ -51,8 +51,8 @@ mapr_kerberos_local_keytabs_dir: /Users/chufe/Documents/mykeytabs
 impala_security: none
 
 # Hive security: none, maprsasl, pam or kerberos
-hive_metastore_security: "{{ security_all }}"
 hive_server_security: "{{ security_all }}"
+hive_metastore_security: "{{ security_all }}"
 hive_server_ui_ssl: True
 hive_server_jdbc_ssl: False
 # Drill security (only standalone): none, maprsasl, kerberos
