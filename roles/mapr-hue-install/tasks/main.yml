@@ -44,9 +44,6 @@
   register: livy_version_output
   check_mode: no
   changed_when: no
-- name: Enable security for Hue (.isSecure file = true)
-  template: src=isSecure dest=/opt/mapr/hue/hue-{{ version_output.stdout }}/desktop/conf/.isSecure
-  when: hue_ssl
 - name: Configure hue.ini
   template: src=hue.ini dest=/opt/mapr/hue/hue-{{ version_output.stdout }}/desktop/conf/hue.ini
 

@@ -226,7 +226,7 @@
         </description>
     </property>
     {% endif %}
-    {% if hive_server_ssl %}
+    {% if hive_server_ui_ssl %}
     <property>
         <name>hive.server2.webui.use.pam</name>
         <value>true</value>
@@ -241,6 +241,20 @@
     </property>
     <property>
         <name>hive.server2.webui.keystore.password</name>
+        <value>mapr123</value>
+    </property>
+    {% endif %}
+    {% if hive_server_jdbc_ssl %}
+    <property>
+        <name>hive.server2.use.SSL</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>hive.server2.keystore.path</name>
+        <value>/opt/mapr/conf/ssl_keystore</value>
+    </property>
+    <property>
+        <name>hive.server2.keystore.password</name>
         <value>mapr123</value>
     </property>
     {% endif %}
