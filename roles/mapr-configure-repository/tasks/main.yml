@@ -10,7 +10,7 @@
     description: MapR Technologies
     file: external_repos
     baseurl: "{{ mapr_release_url }}/redhat/"
-    gpgcheck: yes
+    gpgcheck: "{{ mapr_gpg_check }}"
     gpgkey: "{{ mapr_gpg_url }}"
   when: ansible_os_family == 'RedHat'
 - name: Create MapR Ecosystem Repository for RedHat
@@ -19,18 +19,18 @@
     description: MapR Technologies
     file: external_repos
     baseurl: "{{ mapr_ecosystem_url }}/redhat/"
-    gpgcheck: no
+    gpgcheck: "{{ mapr_gpg_check }}"
     gpgkey: "{{ mapr_gpg_url }}"
   when: ansible_os_family == 'RedHat'
-- name: Create MapR Patch Repository for RedHat
-  yum_repository:
-    name: maprpatch
-    description: MapR Technologies
-    file: external_repos
-    baseurl: "{{ mapr_patch_url }}/redhat/"
-    gpgcheck: no
-    gpgkey: "{{ mapr_gpg_url }}"
-  when: ansible_os_family == 'RedHat' and mapr_patch_url is defined
+#- name: Create MapR Patch Repository for RedHat
+#  yum_repository:
+#    name: maprpatch
+#    description: MapR Technologies
+#    file: external_repos
+#    baseurl: "{{ mapr_patch_url }}/redhat/"
+#    gpgcheck: "{{ mapr_gpg_check }}"
+#    gpgkey: "{{ mapr_gpg_url }}"
+#  when: ansible_os_family == 'RedHat' and mapr_patch_url is defined
 
 # Ubuntu / Debian
 - name: Import RPM key for Ubuntu
@@ -41,14 +41,14 @@
     repo: "deb {{ mapr_release_url }}/ubuntu/ binary trusty"
     state: present
     update_cache: yes
-    validate_certs: yes
+    validate_certs: "{{ mapr_gpg_check }}"
   when: ansible_os_family == 'Debian'
 - name: Create MapR Ecosystem Repository for Ubuntu
   apt_repository:
     repo: "deb {{ mapr_ecosystem_url }}/ubuntu/ binary trusty"
     state: present
     update_cache: yes
-    validate_certs: yes
+    validate_certs: "{{ mapr_gpg_check }}"
   when: ansible_os_family == 'Debian'
 #- name: Create MapR Patch Repository for Ubuntu
 #  apt_repository:
@@ -69,20 +69,20 @@
   zypper_repository:
     name: maprtech
     repo: "{{ mapr_release_url }}/suse/"
-    disable_gpg_check: no
+    disable_gpg_check: "{{ 'no' if mapr_gpg_check == 'yes' else 'no' }}"
     state: present
   when: ansible_os_family == 'Suse'
 - name: Create MapR Ecosystem Repository for Suse
   zypper_repository:
     name: maprecosystem
     repo: "{{ mapr_ecosystem_url }}/suse/"
-    disable_gpg_check: no
+    disable_gpg_check: "{{ 'no' if mapr_gpg_check == 'yes' else 'no' }}"
     state: present
   when: ansible_os_family == 'Suse'
-- name: Create MapR Patch Repository for Suse
-  zypper_repository:
-    name: maprpatch
-    repo: "{{ mapr_patch_url }}/redhat/"
-    disable_gpg_check: yes
-    state: present
-  when: ansible_os_family == 'Suse' and mapr_patch_url is defined
+#- name: Create MapR Patch Repository for Suse
+#  zypper_repository:
+#    name: maprpatch
+#    repo: "{{ mapr_patch_url }}/redhat/"
+#    disable_gpg_check: "{{ 'no' if mapr_gpg_check == 'yes' else 'no' }}"
+#    state: present
+#  when: ansible_os_family == 'Suse' and mapr_patch_url is defined
