@@ -52,6 +52,7 @@
     - role: ../../roles/mapr-configure-zookeeper-restart
     - role: ../../roles/mapr-core-install
     - role: ../../roles/mapr-core-uninstall
+    - role: ../../roles/mapr-configure-cleanup
     - role: ../../roles/mapr-data-access-gateway-install
     - role: ../../roles/mapr-data-access-gateway-uninstall
     - role: ../../roles/mapr-drill-standalone-install
