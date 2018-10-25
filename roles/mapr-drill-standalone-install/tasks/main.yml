@@ -45,11 +45,36 @@
     dest=/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/drill-env.sh
     line="export DRILL_JAVA_OPTS=\"$DRILL_JAVA_OPTS -Dmapr_sec_enabled=true -Dhadoop.login=maprsasl_keytab -Dzookeeper.saslprovider=com.mapr.security.maprsasl.MaprSaslProvider -Dmapr.library.flatclass\""
   when: mapr_security != 'none'
+
 - name: Set DRILL_JAVA_OPTS for unsecure
   lineinfile: >
     dest=/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/drill-env.sh
     line="export DRILL_JAVA_OPTS=\"$DRILL_JAVA_OPTS -Djava.security.auth.login.config=/opt/mapr/conf/mapr.login.conf -Dzookeeper.sasl.client=false\""
   when: mapr_security == 'none'
+- name: Set Drill Heap memory
+  lineinfile: >
+    dest=/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/drill-env.sh
+    regexp="^export DRILL_HEAP="
+    line='export DRILL_HEAP=${DRILL_HEAP:-"{{ drill_heap_memory }}"}'
+  when: drill_heap_memory is defined
+- name: Unset Drill Heap memory
+  lineinfile: >
+    dest=/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/drill-env.sh
+    regexp="^export DRILL_HEAP="
+    state=absent
+  when: drill_heap_memory is undefined
+- name: Set Drill Max Direct meory
+  lineinfile: >
+    dest=/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/drill-env.sh
+    regexp="^export DRILL_MAX_DIRECT_MEMORY="
+    line='export DRILL_MAX_DIRECT_MEMORY=${DRILL_MAX_DIRECT_MEMORY:-"{{ drill_max_direct_memory }}"}'
+  when: drill_max_direct_memory is defined
+- name: Unset Drill Heap memory
+  lineinfile: >
+    dest=/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/drill-env.sh
+    regexp="^export DRILL_MAX_DIRECT_MEMORY="
+    state=absent
+  when: drill_max_direct_memory is undefined
 #- name: Copy to /opt/mapr/conf/conf.d/warden.drill-bits.conf
 #  copy: remote_src=true src=/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/warden.drill-bits.conf dest=/opt/mapr/conf/conf.d/warden.drill-bits.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
 # Seems that registering roles fail when doing it on all nodes at the same time.
@@ -90,6 +115,11 @@
   when: drill_result.changed
 - pause: seconds=10
   when: drill_result.changed
+- name: Set Drill memory in percent
+  lineinfile: >
+    dest=/opt/mapr/conf/conf.d/warden.drill-bits.conf
+    regexp="^service\.env=DRILLBIT_MAX_PROC_MEM"
+    line="service.env=DRILLBIT_MAX_PROC_MEM={{ drill_max_proc_mem_in_percent }}%"
 - name: Restart Drill
   shell: maprcli node services -name drill-bits -action restart -nodes {{ ansible_fqdn }}
   register: task_result

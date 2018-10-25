@@ -111,6 +111,11 @@ hue_db_port: 3306
 drill_maprspill: False
 # drill pstore options are none, db or zk
 drill_pstore: db
+drill_max_proc_mem_in_percent: 20
+# Drill Heap Mem - comment out for auto-calculation
+#drill_heap_memory=4G
+# Drill Max Direct Mem - comment out for auto-calculation
+#drill_max_direct_memory=8G
 
 # Types are: embedded, oracle, mysql
 hive_db_type: mysql
