@@ -20,16 +20,8 @@
   check_mode: no
   changed_when: no
 
-- name: Configure drill-override.conf - unsecure
-  template: src=drill-override.unsecure.conf dest=/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/drill-override.conf
-  when: drill_security == 'none'
-
-- name: Configure drill-override.conf - maprsasl
-  template: src=drill-override.maprsasl.conf dest=/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/drill-override.conf
-  when: drill_security == 'maprsasl'
-- name: Configure drill-override.conf - kerberos
-  template: src=drill-override.kerberos.conf dest=/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/drill-override.conf
-  when: drill_security == 'kerberos'
+- name: Configure drill-override.conf
+  template: src=drill-override.conf dest=/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/drill-override.conf
 - name: Set MAPR_IMPERSONATION_ENABLED=true in drill-env.sh
   lineinfile: >
     dest=/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/drill-env.sh

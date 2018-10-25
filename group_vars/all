@@ -52,7 +52,7 @@ impala_security: none
 # Hive security: none, maprsasl, pam or kerberos
 hive_metastore_security: "{{ security_all }}"
 hive_server_security: "{{ security_all }}"
-# Drill security (only standalone): none, maprsasl
+# Drill security (only standalone): none, maprsasl, kerberos
 drill_security: "{{ security_all }}"
 # HBase REST/Thrift: none, kerberos, maprsasl
 hbase_thrift_rest_security: "{{ security_all }}"

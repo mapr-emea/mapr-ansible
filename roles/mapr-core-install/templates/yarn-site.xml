@@ -123,7 +123,6 @@
         <name>yarn.resourcemanager.webapp.spnego-principal</name>
         <value>HTTP/_HOST@{{ mapr_kerberos_realm }}</value>
     </property>
-
     <property>
         <name>yarn.nodemanager.webapp.spnego-keytab-file</name>
         <value>/opt/mapr/conf/mapr.keytab</value>
