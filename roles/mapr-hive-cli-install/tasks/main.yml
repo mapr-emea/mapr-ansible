@@ -24,12 +24,12 @@
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
   failed_when: false
-  when: hive_db_encrypt_password and inventory_hostname == groups["mapr-hive"][0]
+  when: hive_db_encrypt_password and inventory_hostname == groups["mapr-hive-cli"][0]
 - name: Store encrypted database password
   shell: "hadoop credential create javax.jdo.option.ConnectionPassword -value '{{ hive_db_password }}' -provider jceks://maprfs/user/mapr/hivemetastore.jceks"
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
-  when: hive_db_encrypt_password and inventory_hostname == groups["mapr-hive"][0]
+  when: hive_db_encrypt_password and inventory_hostname == groups["mapr-hive-cli"][0]
 - name: Configure hive-site.xml
   template: src=hive-site.xml dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/hive-site.xml
 - name: Set HADOOP_OPTS= in beeline.sh
