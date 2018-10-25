@@ -19,12 +19,8 @@
 - name: Copy Oracle driver
   copy: src={{ oracle_jdbc_driver_path }} dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/lib/
   when: client_install is not defined and hive_db_type == 'oracle'
-- name: Configure hive-site.xml - unsecure
-  template: src=hive-site.unsecure.xml dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/hive-site.xml
-  when: hive_server_security == 'none'
-- name: Configure hive-site.xml - maprsasl
-  template: src=hive-site.maprsasl.xml dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/hive-site.xml
-  when: hive_server_security == 'maprsasl'
+- name: Configure hive-site.xml
+  template: src=hive-site.xml dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/hive-site.xml
 - name: Set HADOOP_OPTS= in beeline.sh
   lineinfile: dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/bin/ext/beeline.sh regexp="^HADOOP_OPTS=" line='HADOOP_OPTS="$HADOOP_OPTS${MAPR_HIVE_LOGIN_OPTS}"'
   when: mapr_security == 'maprsasl'
@@ -35,12 +31,6 @@
 #  lineinfile: dest=/opt/mapr/conf/env_override.sh regexp="^export MAPR_HIVE_LOGIN_OPTS=" line="export MAPR_HIVE_LOGIN_OPTS=\"-Dhadoop.login=maprsasl\"" mode=0755 create=yes owner={{ mapr_user }} group={{ mapr_group }}
 #  when: mapr_security == 'maprsasl'
 
-- name: Configure hive-site.xml - pam
-  template: src=hive-site.pam.xml dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/hive-site.xml
-  when: hive_server_security == 'pam'
-- name: Configure hive-site.xml - kerberos
-  template: src=hive-site.kerberos.xml dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/hive-site.xml
-  when: hive_server_security == 'kerberos'
 - name: Set MAPR_HIVE_SERVER_LOGIN_OPTS in env.sh to hybrid for Kerberos
   lineinfile: dest=/opt/mapr/conf/env_override.sh regexp="^export MAPR_HIVE_SERVER_LOGIN_OPTS" line="export MAPR_HIVE_SERVER_LOGIN_OPTS=\"-Dhadoop.login=hybrid\"" mode=0755 create=yes owner={{ mapr_user }} group={{ mapr_group }}
   when: mapr_security == 'kerberos'

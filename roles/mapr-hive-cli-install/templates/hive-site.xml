@@ -17,13 +17,54 @@
   limitations under the License.
 -->
 <configuration>
+
+    <property>
+        <name>hive.compactor.initiator.on</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>hive.compactor.worker.threads</name>
+        <value>1</value>
+    </property>
+    <property>
+        <name>hive.exec.dynamic.partition</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>hive.exec.dynamic.partition.mode</name>
+        <value>nonstrict</value>
+    </property>
+    <property>
+        <name>hive.support.concurrency</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>hive.zookeeper.quorum</name>
+        <value>{{ zookeeper_string }}</value>
+    </property>
+    <property>
+        <name>hive.zookeeper.client.port</name>
+        <value>5181</value>
+    </property>
+    <property>
+        <name>hive.txn.manager</name>
+        <value>org.apache.hadoop.hive.ql.lockmgr.DbTxnManager</value>
+    </property>
+    <property>
+        <name>hive.metastore.schema.verification</name>
+        <value>false</value>
+    </property>
+    <property>
+        <name>hive.metastore.uris</name>
+        <value>{{ metastore_string }}</value>
+    </property>
     {% if hive_with_tez %}
     <property>
         <name>hive.execution.engine</name>
         <value>tez</value>
     </property>
     {% endif %}
-
+    <!-- Database -->
     {% if mysql_hosts is defined and hive_db_type == 'mysql' %}
     {% if hive_db_jdbc_url is defined %}
     <property>
@@ -38,7 +79,6 @@
         <description>JDBC connect string for a JDBC metastore</description>
     </property>
     {% endif %}
-
     <property>
         <name>javax.jdo.option.ConnectionDriverName</name>
         <value>com.mysql.jdbc.Driver</value>
@@ -86,30 +126,66 @@
         <value>true</value>
     </property>
     {% endif %}
-    <property>
-        <name>hive.metastore.schema.verification</name>
-        <value>false</value>
-    </property>
-    <property>
-        <name>hive.metastore.uris</name>
-        <value>{{ metastore_string }}</value>
-    </property>
-    <!-- For hive server2 -->
+
+    <!-- security -->
+    {% if hive_server_security == 'none' %}
     <property>
         <name>hive.server2.enable.doAs</name>
-        <value>true</value>
+        <value>false</value>
     </property>
-    <!-- For hive server2 and meta store -->
     <property>
         <name>hive.metastore.execute.setugi</name>
         <value>true</value>
     </property>
+    {% elif hive_server_security == 'pam' %}
+    <!-- For hive server2 and meta store -->
+    <property>
+        <name>hive.server2.authentication</name>
+        <value>PAM</value>
+    </property>
 
+    <property>
+        <name>hive.server2.authentication.pam.services</name>
+        <value>login,sudo</value>
+        <description>comma separated list of pam modules to verify</description>
+    </property>
+    {% elif hive_server_security == 'maprsasl' %}
     <property>
         <name>hive.server2.authentication</name>
         <value>MAPRSASL</value>
     </property>
+    {% elif hive_server_security == 'kerberos' %}
+    <property>
+        <name>hive.server2.authentication</name>
+        <value>KERBEROS</value>
+    </property>
+    <property>
+        <name>hive.server2.authentication.kerberos.principal</name>
+        <value>{{ mapr_user }}/_HOST@{{ mapr_kerberos_realm }}</value>
+        <description>HiveServer2 principal. If _HOST is used as the FQDN portion, it will be replaced with the actual hostname of the running instance.</description>
+    </property>
+    <property>
+        <name>hive.server2.authentication.kerberos.keytab</name>
+        <value>/opt/mapr/conf/mapr.keytab</value>
+        <description>Keytab file for HiveServer2 principal</description>
+    </property>
+    <property>
+        <name>hive.metastore.kerberos.keytab.file</name>
+        <value>/opt/mapr/conf/mapr.keytab</value>
+        <description>The path to the Kerberos Keytab file containing the metastore thrift server's service principal.</description>
+    </property>
+    <property>
+        <name>hive.metastore.kerberos.principal</name>
+        <value>{{ mapr_user }}/_HOST@{{ mapr_kerberos_realm }}</value>
+        <description>The service principal for the metastore thrift server. The special string _HOST will be replaced automatically with the correct hostname.</description>
+    </property>
+    {% endif %}
 
+    {% if hive_server_security != 'none' %}
+    <property>
+        <name>hive.server2.enable.doAs</name>
+        <value>true</value>
+    </property>
     <property>
         <name>hive.metastore.sasl.enabled</name>
         <value>true</value>
@@ -122,55 +198,6 @@
         <name>hive.cluster.delegation.token.store.class</name>
         <value>org.apache.hadoop.hive.thrift.DBTokenStore</value>
     </property>
-    <property>
-        <name>hive.compactor.initiator.on</name>
-        <value>true</value>
-    </property>
-    <property>
-        <name>hive.compactor.worker.threads</name>
-        <value>1</value>
-    </property>
-    <property>
-        <name>hive.exec.dynamic.partition</name>
-        <value>true</value>
-    </property>
-    <property>
-        <name>hive.exec.dynamic.partition.mode</name>
-        <value>nonstrict</value>
-    </property>
-    <property>
-        <name>hive.support.concurrency</name>
-        <value>true</value>
-    </property>
-    <property>
-        <name>hive.zookeeper.quorum</name>
-        <value>{{ zookeeper_string }}</value>
-    </property>
-    <property>
-        <name>hive.zookeeper.client.port</name>
-        <value>5181</value>
-    </property>
-    <property>
-        <name>hive.txn.manager</name>
-        <value>org.apache.hadoop.hive.ql.lockmgr.DbTxnManager</value>
-    </property>
-    <property>
-        <name>hive.server2.webui.use.pam</name>
-        <value>true</value>
-    </property>
-    <property>
-        <name>hive.server2.webui.use.ssl</name>
-        <value>true</value>
-    </property>
-    <property>
-        <name>hive.server2.webui.keystore.path</name>
-        <value>/opt/mapr/conf/ssl_keystore</value>
-    </property>
-    <property>
-        <name>hive.server2.webui.keystore.password</name>
-        <value>mapr123</value>
-    </property>
-
     <property>
         <name>hive.security.metastore.authorization.manager</name>
         <value>org.apache.hadoop.hive.ql.security.authorization.StorageBasedAuthorizationProvider</value>
@@ -198,4 +225,23 @@
             if metastore-side authorization is desired.
         </description>
     </property>
+    {% endif %}
+    {% if hive_server_ssl %}
+    <property>
+        <name>hive.server2.webui.use.pam</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>hive.server2.webui.use.ssl</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>hive.server2.webui.keystore.path</name>
+        <value>/opt/mapr/conf/ssl_keystore</value>
+    </property>
+    <property>
+        <name>hive.server2.webui.keystore.password</name>
+        <value>mapr123</value>
+    </property>
+    {% endif %}
 </configuration>
