@@ -8,7 +8,10 @@
 - name: Install mapr-hbasethrift
   package: name=mapr-hbasethrift state=present
   register: hbasethrift_result
-
+# Must run before rolling out configs, otherwise it overwrites the configs
+- name: Configure.sh -R
+  shell: /opt/mapr/server/configure.sh -R
+  when: hbaserest_result.changed or hbasethrift_result.changed
 # Other actions
 #- name: Find HBase Path
 #  find: paths="/opt/mapr/hbase/" patterns="hbase*" file_type=directory
@@ -41,29 +44,25 @@
 - name: Replace ${VERSION} with Hbase version
   shell: 'sed -i s/\${VERSION}/`cat /opt/mapr/hbase/hbaseversion`/g /opt/mapr/conf/conf.d/warden.hbasethrift.conf'
   changed_when: false
-
-- name: Configure.sh -R
-  shell: /opt/mapr/server/configure.sh -R
+- pause: seconds=10
   when: hbaserest_result.changed or hbasethrift_result.changed
-#- pause: seconds=10
-#  when: hbaserest_result.changed or hbasethrift_result.changed
-#- name: Restart HBase Rest Server
-#  shell: maprcli node services -name hbaserest -action restart -nodes {{ ansible_fqdn }}
-#  register: task_result
-#  until: task_result.rc == 0
-#  retries: 10
-#  delay: 10
-#  ignore_errors: yes
-#  environment:
-#    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
-#  when: hbaserest_result.changed
-#- name: Restart HBase Thrift Server
-#  shell: maprcli node services -name hbasethrift -action restart -nodes {{ ansible_fqdn }}
-#  register: task_result
-#  until: task_result.rc == 0
-#  retries: 10
-#  delay: 10
-#  ignore_errors: yes
-#  environment:
-#    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
-#  when: hbasethrift_result.changed
+- name: Restart HBase Rest Server
+  shell: maprcli node services -name hbaserest -action restart -nodes {{ ansible_fqdn }}
+  register: task_result
+  until: task_result.rc == 0
+  retries: 10
+  delay: 10
+  ignore_errors: yes
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: hbaserest_result.changed
+- name: Restart HBase Thrift Server
+  shell: maprcli node services -name hbasethrift -action restart -nodes {{ ansible_fqdn }}
+  register: task_result
+  until: task_result.rc == 0
+  retries: 10
+  delay: 10
+  ignore_errors: yes
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: hbasethrift_result.changed
