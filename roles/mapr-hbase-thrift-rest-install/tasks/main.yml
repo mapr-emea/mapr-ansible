@@ -24,7 +24,7 @@
   check_mode: no
   changed_when: no
 - name: Configure hbase-site.xml
-  template: src=hbase-site.xml dest=/opt/mapr/hbase/hbase-{{ version_output.stdout }}/conf/hbase-site.xml
+  template: src=hbase-site.xml dest=/opt/mapr/hbase/hbase-{{ version_output.stdout }}/conf/hbase-site.xml mode="0444"
 - name: Set MAPR_HBASE_SERVER_OPTS using HYBRID_LOGIN_OPTS
   lineinfile: >
     dest=/opt/mapr/conf/env_override.sh

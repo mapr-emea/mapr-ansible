@@ -6,20 +6,18 @@ import socket
 
 
 class VolumeDataDistribution(object):
-    affectedRacks = set()
-    outOfTopologyContainerIdsContainers = []
-    outOfTopologyContainerIdsReplicas = []
-    topologyContainerIdsRacks1 = []
-    topologyContainerIdsRacks2 = []
-    topologyContainerIdsRacks3 = []
-    topologyContainerIdsRacks4 = []
-    topologyContainerIdsRacks5 = []
-    topologyContainerIdsRacks6 = []
-    topologyContainerIdsRacksHigher = []
-
     def __init__(self, volumename):
         self.volumename = volumename
-
+        self.affectedRacks = set()
+        self.outOfTopologyContainerIdsContainers = []
+        self.outOfTopologyContainerIdsReplicas = []
+        self.topologyContainerIdsRacks1 = []
+        self.topologyContainerIdsRacks2 = []
+        self.topologyContainerIdsRacks3 = []
+        self.topologyContainerIdsRacks4 = []
+        self.topologyContainerIdsRacks5 = []
+        self.topologyContainerIdsRacks6 = []
+        self.topologyContainerIdsRacksHigher = []
 
 def getHostTopology():
     res = subprocess.check_output(["maprcli", "node", "list", "-columns", "racktopo", "-json"])

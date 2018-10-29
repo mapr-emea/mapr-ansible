@@ -6,3 +6,13 @@
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
     ES_ADMIN_PASSWORD: "{{ spyglass_log_password }}"
+- pause: seconds=10
+- name: Restart FluentD
+  shell: maprcli node services -name fluentd -action restart -nodes {{ ansible_fqdn }}
+  register: task_result
+  until: task_result.rc == 0
+  retries: 10
+  delay: 10
+  ignore_errors: yes
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket

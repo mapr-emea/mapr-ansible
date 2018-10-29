@@ -43,7 +43,7 @@ mapr_security: "{{ security_all }}"
 
 # Additional information for Kerberos
 mapr_kerberos_realm: PS.MAPR.COM
-mapr_kerberos_local_keytabs_dir: /Users/chufe/Documents/mykeytabs
+mapr_kerberos_local_keytabs_dir: /mnt/c/Projects/keytabs
 
 # Will delete existing keys (cldb.key, maprserverticket, ssl_truststore, ssl_keystore) and generate new one: true /false
 
