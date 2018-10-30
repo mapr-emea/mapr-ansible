@@ -30,12 +30,22 @@ The scripts support:
 * MapR 6.0.0 with MEP 4.0.x (branch mapr-6.0.0-MEP-4.x)
 * MapR 5.2.x (branch mapr-5.2-MEP-3.0.x)
 
+## Known issues / not yet implemented for MapR 6.1 
+
+* HBase REST and Thrift Server are switched back to non-SSL for some reason
+* Hue HBase Thrift integration is not working
+* Kerberos was not yet tested
+* New ecosystem components delivered with MEP 6.0 are not yet implemented.
+
 ## Supported OS
 
 * Redhat 7 or higher
 * CentOS 7 or higher
 * Ubuntu 16.x
 * Suse SLES 12 or higher
+
+Please check MapR's OS compatibility matrix:
+https://mapr.com/docs/61/InteropMatrix/r_os_matrix_6.x.html
 
 ## Supported Security
 
