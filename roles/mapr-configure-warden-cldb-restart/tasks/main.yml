@@ -1,5 +1,7 @@
 ---
 # Restart  Warden
+- name: Ensure warden.conf is owned by mapr user
+  file: path=/opt/mapr/conf/warden.conf owner={{ mapr_user }} group={{ mapr_group }}
 - name: Stop Warden
   service: name=mapr-warden state=stopped enabled=yes
 - name: Delete /opt/mapr/logs/cldb.log
