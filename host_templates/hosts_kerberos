@@ -14,7 +14,7 @@ mapr_kerberos_ad_object_category="CN=Person,CN=Schema,CN=Configuration,DC=ps,DC=
 mapr_kerberos_ad_user_cn="CN=Users,DC=ps,DC=mapr,DC=com"
 mapr_kerberos_keytab_passwd=mapr
 mapr_user=maprd
-mapr_group=maprgrpd
+mapr_group=maprdgrp
 ansible_user=ec2-user
 ansible_become=yes
 
