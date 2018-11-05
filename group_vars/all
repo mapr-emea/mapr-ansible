@@ -9,6 +9,7 @@ jdk: openjdk18
 # redhat openjdk java path
 jdk_folder: /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.121-0.b13.el7_3.x86_64
 oracle_jdk_url: http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.tar.gz
+use_ntp: True
 
 hadoop_version: 2.7.0
 cluster_name: demo.mapr.com
