@@ -1,20 +1,20 @@
 ---
 - name: Get MySQL Host
-  set_fact: mysql_item={{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item }}
+  set_fact: mysql_item="{{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item }}"
   with_items:
     - "{{ groups['ext-mysql'] }}"
   register: mysql_hosts
 - name: Make MySQL Host String
-  set_fact: hive_db_host={{ mysql_hosts.results | map(attribute='ansible_facts.mysql_item') | list | join(',')}}
+  set_fact: hive_db_host="{{ mysql_hosts.results | map(attribute='ansible_facts.mysql_item') | list | join(',')}}"
 - name: Create hive user localhost
-  mysql_user: name={{ hive_db_user }} password={{ hive_db_password }} host=localhost priv=*.*:ALL,GRANT state=present
+  mysql_user: name="{{ hive_db_user }}" password="{{ hive_db_password }}" host=localhost priv="*.*:ALL,GRANT" state=present
   when: inventory_hostname == groups["ext-mysql"][0]
-- name: Create hive user {{ ansible_fqdn }}
-  mysql_user: name={{ hive_db_user }} password={{ hive_db_password }} host={{ ansible_fqdn }} priv=*.*:ALL,GRANT state=present
+- name: "Create hive user {{ ansible_fqdn }}"
+  mysql_user: name="{{ hive_db_user }}" password="{{ hive_db_password }}" host="{{ ansible_fqdn }}" priv="*.*:ALL,GRANT" state=present
   when: inventory_hostname == groups["ext-mysql"][0]
 - name: Create hive user %
-  mysql_user: name={{ hive_db_user }} password={{ hive_db_password }} host=% priv=*.*:ALL,GRANT state=present
+  mysql_user: name="{{ hive_db_user }}" password="{{ hive_db_password }}" host=% priv="*.*:ALL,GRANT" state=present
   when: inventory_hostname == groups["ext-mysql"][0]
 - name: Create hive mysql db
-  mysql_db: name={{ hive_db_schema }} state=present login_host={{ hive_db_host }} login_user={{ hive_db_user }} login_password={{ hive_db_password }}
+  mysql_db: name="{{ hive_db_schema }}" state=present login_host="{{ hive_db_host }}" login_user="{{ hive_db_user }}" login_password="{{ hive_db_password }}"
   when: inventory_hostname == groups["ext-mysql"][0]

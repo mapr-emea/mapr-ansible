@@ -45,12 +45,12 @@
   check_mode: no
   changed_when: no
 - name: Configure hue.ini
-  template: src=hue.ini dest=/opt/mapr/hue/hue-{{ version_output.stdout }}/desktop/conf/hue.ini mode="0600" owner="{{ mapr_user }}" group="{{ mapr_group }}"
+  template: src=hue.ini dest="/opt/mapr/hue/hue-{{ version_output.stdout }}/desktop/conf/hue.ini" mode="0600" owner="{{ mapr_user }}" group="{{ mapr_group }}"
 
 # WORKAROUND START Create crontab to create Kerberos Cache for HUE
 # TODO add bug number
 - name: Initial Hue Kerberos Cache Creation
-  shell: kinit -k -t /opt/mapr/conf/mapr.keytab -c /tmp/hue_krb5_ccache {{ mapr_user }}/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}
+  shell: "kinit -k -t /opt/mapr/conf/mapr.keytab -c /tmp/hue_krb5_ccache {{ mapr_user }}/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}"
   become: true
   become_user: "{{ mapr_user }}"
   when: mapr_security == 'kerberos'
@@ -70,7 +70,7 @@
 #  register: hue_livy_path_result
 #  failed_when: hue_livy_path_result.matched != 1
 - name: Configure livy.conf
-  template: src=livy.conf dest=/opt/mapr/livy/livy-{{ livy_version_output.stdout }}/conf/livy.conf
+  template: src=livy.conf dest="/opt/mapr/livy/livy-{{ livy_version_output.stdout }}/conf/livy.conf"
 
 - name: General packages for Hue with Database
   vars:
@@ -119,7 +119,7 @@
 - debug: msg="Lib {{ oracle_version_lib_path.files[0].path }}"
   when: hue_db_type == 'oracle'
 - name: Create links for Oracle Lib
-  file: src={{ oracle_version_lib_path.files[0].path }} dest={{ oracle_version_arch_path.files[0].path }}/lib/libclntsh.so state=link
+  file: src="{{ oracle_version_lib_path.files[0].path }}" dest="{{ oracle_version_arch_path.files[0].path }}/lib/libclntsh.so" state=link
   when: hue_db_type == 'oracle'
 - name: Copy Oracle PIP module for offline install
   copy: src=cx_Oracle-5.3.tar.gz dest=/tmp/cx_Oracle-5.3.tar.gz
@@ -132,13 +132,13 @@
   when: hue_db_type == 'oracle' and inventory_hostname == groups["mapr-hue"][0]
 
 - name: Start all hue instances
-  lineinfile: dest=/opt/mapr/hue/hue-{{ version_output.stdout }}/desktop/conf/warden.hue.conf regexp="^services=" line="services=hue:all"
+  lineinfile: dest="/opt/mapr/hue/hue-{{ version_output.stdout }}/desktop/conf/warden.hue.conf" regexp="^services=" line="services=hue:all"
 - name: Start all livy instances
-  lineinfile: dest=/opt/mapr/livy/livy-{{ livy_version_output.stdout }}/conf/warden.livy.conf regexp="^services=" line="services=livy:all"
+  lineinfile: dest="/opt/mapr/livy/livy-{{ livy_version_output.stdout }}/conf/warden.livy.conf" regexp="^services=" line="services=livy:all"
 - name: Copy to /opt/mapr/conf/conf.d/warden.hue.conf
-  copy: remote_src=true src=/opt/mapr/hue/hue-{{ version_output.stdout }}/desktop/conf/warden.hue.conf dest=/opt/mapr/conf/conf.d/warden.hue.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
+  copy: remote_src=true src="/opt/mapr/hue/hue-{{ version_output.stdout }}/desktop/conf/warden.hue.conf" dest=/opt/mapr/conf/conf.d/warden.hue.conf mode=0644 owner="{{ mapr_user }}" group="{{ mapr_group }}"
 - name: Copy to /opt/mapr/conf/conf.d/warden.livy.conf
-  copy: remote_src=true src=/opt/mapr/livy/livy-{{ livy_version_output.stdout }}/conf/warden.livy.conf dest=/opt/mapr/conf/conf.d/warden.livy.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
+  copy: remote_src=true src="/opt/mapr/livy/livy-{{ livy_version_output.stdout }}/conf/warden.livy.conf" dest=/opt/mapr/conf/conf.d/warden.livy.conf mode=0644 owner="{{ mapr_user }}" group="{{ mapr_group }}"
 
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
@@ -146,7 +146,7 @@
 - pause: seconds=10
   when: hue_result.changed or livy_result.changed
 - name: Restart Livy
-  shell: maprcli node services -name livy -action restart -nodes {{ ansible_fqdn }}
+  shell: "maprcli node services -name livy -action restart -nodes {{ ansible_fqdn }}"
   register: task_result
   until: task_result.rc == 0
   retries: 10
@@ -156,7 +156,7 @@
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
   when: livy_result.changed
 - name: Restart Hue
-  shell: maprcli node services -name hue -action restart -nodes {{ ansible_fqdn }}
+  shell: "maprcli node services -name hue -action restart -nodes {{ ansible_fqdn }}"
   register: task_result
   until: task_result.rc == 0
   retries: 10

@@ -6,9 +6,9 @@
   check_mode: no
   changed_when: no
 - name: Create CA dir
-  file: path=/opt/mapr/fluentd/fluentd-{{ version_output.stdout }}/etc/fluentd/ca/ state=directory
+  file: path="/opt/mapr/fluentd/fluentd-{{ version_output.stdout }}/etc/fluentd/ca/" state=directory
 - name: Copy Kibana files for Security
-  copy: src=/tmp/mapr_spyglass/es/{{ item.src }} dest=/opt/mapr/fluentd/fluentd-{{ version_output.stdout }}/{{ item.dst }} owner={{ mapr_user }} group={{ mapr_group }} mode={{ item.mode }}
+  copy: src="/tmp/mapr_spyglass/es/{{ item.src }}" dest="/opt/mapr/fluentd/fluentd-{{ version_output.stdout }}/{{ item.dst }}" owner="{{ mapr_user }}" group="{{ mapr_group }}" mode="{{ item.mode }}"
   with_items:
   - src: sg/ca/es-root-ca.pem
     dst: etc/fluentd/ca/
@@ -24,4 +24,4 @@
     mode: "0600"
 # Workaround: Disable SSL cert check. For some reason validation always fails because of hostname.
 - name: Workaround - Disable SSL cert check.
-  lineinfile:  dest=/opt/mapr/fluentd/fluentd-{{ version_output.stdout }}/etc/fluentd/es_config.conf regexp='(.*)ssl_verify(.*)' line=" ssl_verify false"
+  lineinfile: dest="/opt/mapr/fluentd/fluentd-{{ version_output.stdout }}/etc/fluentd/es_config.conf" regexp='(.*)ssl_verify(.*)' line=" ssl_verify false"

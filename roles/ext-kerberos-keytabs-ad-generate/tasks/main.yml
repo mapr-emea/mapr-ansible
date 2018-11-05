@@ -7,7 +7,7 @@
 
 - name: Create mapr.keytab
   shell: cat /tmp/ktutil.txt | ktutil
-- fetch: src=/tmp/mapr.keytab dest={{ mapr_kerberos_local_keytabs_dir }}/{{ ansible_fqdn }}.keytab flat=yes
+- fetch: src=/tmp/mapr.keytab dest="{{ mapr_kerberos_local_keytabs_dir }}/{{ ansible_fqdn }}.keytab" flat=yes
 
 - name: Clean up existing keytab
   file: path=/tmp/mapr.keytab state=absent

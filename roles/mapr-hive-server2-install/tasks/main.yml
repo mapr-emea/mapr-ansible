@@ -13,16 +13,16 @@
   check_mode: no
   changed_when: no
 - name: Start all hive server instances
-  lineinfile: dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/warden.hs2.conf regexp="^services=" line="services=hs2:all"
+  lineinfile: dest="/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/warden.hs2.conf" regexp="^services=" line="services=hs2:all"
 - name: Copy to /opt/mapr/conf/conf.d/warden.hs2.conf
-  copy: remote_src=true src=/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/warden.hs2.conf dest=/opt/mapr/conf/conf.d/warden.hs2.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
+  copy: remote_src=true src="/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/warden.hs2.conf" dest=/opt/mapr/conf/conf.d/warden.hs2.conf mode=0644 owner="{{ mapr_user }}" group="{{ mapr_group }}"
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
   when: hs2_result.changed
 - pause: seconds=10
   when: hs2_result.changed
 - name: Restart Hive Server2
-  shell: maprcli node services -name hs2 -action restart -nodes {{ ansible_fqdn }}
+  shell: "maprcli node services -name hs2 -action restart -nodes {{ ansible_fqdn }}"
   register: task_result
   until: task_result.rc == 0
   retries: 10

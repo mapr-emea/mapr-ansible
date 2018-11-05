@@ -16,12 +16,12 @@
   when: maprcli_result.stdout is search("No such volume")
   failed_when: false
 - name: Create local volume for NodeManager local Dir
-  shell: maprcli volume create -name mapr.{{ ansible_fqdn }}.local.nm-local-dir -path /var/mapr/local/{{ ansible_fqdn }}/nm-local-dir -replication 1 -localvolumehost {{ ansible_fqdn }} -createparent true
+  shell: "maprcli volume create -name mapr.{{ ansible_fqdn }}.local.nm-local-dir -path /var/mapr/local/{{ ansible_fqdn }}/nm-local-dir -replication 1 -localvolumehost {{ ansible_fqdn }} -createparent true"
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
   when: maprcli_result.stdout is search("No such volume")
 - name: Restart NodeManager
-  shell: maprcli node services -name nodemanager -action stop -nodes {{ ansible_fqdn }}
+  shell: "maprcli node services -name nodemanager -action stop -nodes {{ ansible_fqdn }}"
   register: maprcli_result
   failed_when: maprcli_result.rc > 1
   changed_when: maprcli_result.rc == 0

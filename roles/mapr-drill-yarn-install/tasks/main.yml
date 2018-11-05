@@ -6,4 +6,4 @@
 
 # Other actions
 - name: Set owner mapr-system user
-  file: path=/opt/mapr/drill owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
+  file: path=/opt/mapr/drill owner="{{ mapr_user }}" group="{{ mapr_group }}" state=directory recurse=yes

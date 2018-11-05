@@ -9,7 +9,7 @@
   fail: msg="mapr_security must be one of none, maprsasl or kerberos"
   when: mapr_security not in ('none', 'maprsasl', 'kerberos')
 - name: Check MapR system user
-  shell: id {{ mapr_user }}
+  shell: "id {{ mapr_user }}"
   failed_when: false
   register: result_id_mapruser
   check_mode: no

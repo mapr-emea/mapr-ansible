@@ -61,7 +61,7 @@
       shell: 'rpm -qa --qf "%{NAME}\n" | grep mapr | grep -v mapr-mapreduce1'
       register: rpm_mapr_packages
     - name: Split list
-      set_fact: installed_packages={{ rpm_mapr_packages.stdout.split('\n') }}
+      set_fact: installed_packages="{{ rpm_mapr_packages.stdout.split('\n') }}"
 - name: Upgrade MapR packages
   hosts: mapr-core
   tasks:

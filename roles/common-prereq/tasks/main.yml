@@ -10,5 +10,5 @@
 - stat: path=/opt/mapr/zkdata
   register: zkdataDir
 - name: Ensure owner mapr:mapr for /opt/mapr/zkdata if directory already exists
-  file: path=/opt/mapr/zkdata state=directory owner={{ mapr_user }} group={{ mapr_group }}
+  file: path=/opt/mapr/zkdata state=directory owner="{{ mapr_user }}" group="{{ mapr_group }}"
   when: zkdataDir.stat.isdir is defined and zkdataDir.stat.isdir

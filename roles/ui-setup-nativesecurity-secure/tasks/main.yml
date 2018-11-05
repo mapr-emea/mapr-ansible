@@ -1,19 +1,19 @@
 ---
 - name: Get Zookeeper FQDNs
-  set_fact: zoo_item={{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item }}
+  set_fact: zoo_item="{{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item }}"
   with_items:
     - "{{ groups['all'] }}" # TODO make new group for zookeeper
   register: zookeeper_hosts
 - name: Make Zookeeper String
-  set_fact: zookeeper_string={{ zookeeper_hosts.results | map(attribute='ansible_facts.zoo_item') | list | join(',')}}
+  set_fact: zookeeper_string="{{ zookeeper_hosts.results | map(attribute='ansible_facts.zoo_item') | list | join(',')}}"
 
 - name: Get CLDB FQDNs
-  set_fact: cldb_item={{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item }}
+  set_fact: cldb_item="{{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item }}"
   with_items:
     - "{{ groups['all'] }}" # TODO make new group for CLDB
   register: cldb_hosts
 - name: Make CLDB String
-  set_fact: cldb_string={{ cldb_hosts.results | map(attribute='ansible_facts.cldb_item') | list | join(',')}}
+  set_fact: cldb_string="{{ cldb_hosts.results | map(attribute='ansible_facts.cldb_item') | list | join(',')}}"
 
 #- name: Debug Zookeeper
 #  debug: msg="{{ zookeeper_string }}"
@@ -21,7 +21,7 @@
 #  debug: msg="{{ cldb_string }}"
 
 - name: Copy security files
-  copy: src=/tmp/{{ item }} dest=/opt/mapr/conf/{{ item }} owner={{ mapr_user }} group={{mapr_group}} mode=0600 backup=yes
+  copy: src="/tmp/{{ item }}" dest="/opt/mapr/conf/{{ item }}" owner="{{ mapr_user }}" group="{{mapr_group}}" mode=0600 backup=yes
   with_items:
      - cldb.key
      - maprserverticket
@@ -29,7 +29,7 @@
      - ssl_truststore
 
 - name: Configure.sh -secure
-  shell: /opt/mapr/server/configure.sh -N {{ cluster_name }} -secure -Z {{ zookeeper_string }} -C {{ cldb_string }} -u {{ mapr_user }} -g {{mapr_group}}
+  shell: "/opt/mapr/server/configure.sh -N {{ cluster_name }} -secure -Z {{ zookeeper_string }} -C {{ cldb_string }} -u {{ mapr_user }} -g {{mapr_group}}"
 
 - name: Restart Zookeeper
   service: name=mapr-zookeeper state=restarted enabled=yes

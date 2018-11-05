@@ -1,21 +1,21 @@
 ---
 # Uninstall Hue
 - name: Stop Hue
-  shell: maprcli node services -name hue -action stop -nodes {{ ansible_fqdn }}
+  shell: "maprcli node services -name hue -action stop -nodes {{ ansible_fqdn }}"
   register: maprcli_result
   failed_when: maprcli_result.rc > 1
   changed_when: maprcli_result.rc == 0
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
 - name: Stop Hue-Livy
-  shell: maprcli node services -name livy -action stop -nodes {{ ansible_fqdn }}
+  shell: "maprcli node services -name livy -action stop -nodes {{ ansible_fqdn }}"
   register: maprcli_result
   failed_when: maprcli_result.rc > 1
   changed_when: maprcli_result.rc == 0
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
 - name: Uninstall mapr-hue
-  package: name={{ item }} state=absent
+  package: name="{{ item }}" state=absent
   with_items:
   - mapr-hue
   - mapr-hue-livy

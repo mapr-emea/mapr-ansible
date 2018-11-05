@@ -9,6 +9,6 @@
     regexp="^export MAPR_HBASE_CLIENT_OPTS"
     mode=0755
     create=yes
-    owner={{ mapr_user }}
-    group={{ mapr_group }}
+    owner="{{ mapr_user }}"
+    group="{{ mapr_group }}"
   when: hbase_thrift_rest_security == 'kerberos'

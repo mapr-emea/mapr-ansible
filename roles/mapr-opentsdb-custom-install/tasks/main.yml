@@ -36,7 +36,7 @@
   failed_when: asynchbase_jar_path_result.matched == 0
 - name: Link Asynchbase.jar to OpenTSDB
 #  debug: msg="{{ item.path }}"
-  file: src={{ item.path }} dest=/opt/mapr/opentsdb/opentsdb-{{ version_output.stdout }}/share/opentsdb/lib/{{ item.path | basename }} state=link
+  file: src="{{ item.path }}" dest="/opt/mapr/opentsdb/opentsdb-{{ version_output.stdout }}/share/opentsdb/lib/{{ item.path | basename }}" state=link
   with_items: "{{ asynchbase_jar_path_result.files }}"
 - name: Create custom OpenTSDB table structure
   shell: "/opt/mapr/opentsdb/opentsdb-{{ version_output.stdout }}/share/opentsdb/tools/create_table.sh"
@@ -45,20 +45,20 @@
     MONITORING_VOLUME_NAME: custom.tsdb
   when: inventory_hostname == groups["mapr-opentsdb-custom"][0]
 - name: Change OpenTSDB Display Name
-  lineinfile: dest=/opt/mapr/opentsdb/opentsdb-{{ version_output.stdout }}/etc/conf/warden.opentsdb.conf regexp='^service\.displayname=' line="service.displayname=Custom OpenTSDB"
+  lineinfile: dest="/opt/mapr/opentsdb/opentsdb-{{ version_output.stdout }}/etc/conf/warden.opentsdb.conf" regexp='^service\.displayname=' line="service.displayname=Custom OpenTSDB"
 - name: Change OpenTSDB ID
-  lineinfile: dest=/opt/mapr/opentsdb/opentsdb-{{ version_output.stdout }}/etc/conf/warden.opentsdb.conf regexp='^services=' line="services=customopentsdb:all:cldb"
+  lineinfile: dest="/opt/mapr/opentsdb/opentsdb-{{ version_output.stdout }}/etc/conf/warden.opentsdb.conf" regexp='^services=' line="services=customopentsdb:all:cldb"
 - name: Copy to /opt/mapr/conf/conf.d/warden.customopentsdb.conf
-  copy: remote_src=true src=/opt/mapr/opentsdb/opentsdb-{{ version_output.stdout }}/etc/conf/warden.opentsdb.conf  dest=/opt/mapr/conf/conf.d/warden.customopentsdb.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
+  copy: remote_src=true src="/opt/mapr/opentsdb/opentsdb-{{ version_output.stdout }}/etc/conf/warden.opentsdb.conf"  dest=/opt/mapr/conf/conf.d/warden.customopentsdb.conf mode=0644 owner="{{ mapr_user }}" group="{{ mapr_group }}"
 - name: Delete to /opt/mapr/conf/conf.d/warden.opentsdb.conf
   file: dest=/opt/mapr/conf/conf.d/warden.opentsdb.conf state=absent
 - name: Create OpenTSDB Role
-  file: dest=/opt/mapr/roles/opentsdb mode=0644 owner={{ mapr_user }} group={{ mapr_group }} state=touch
+  file: dest=/opt/mapr/roles/opentsdb mode=0644 owner="{{ mapr_user }}" group="{{ mapr_group }}" state=touch
 - name: Configure.sh -R
-  shell: /opt/mapr/server/configure.sh -R
+  shell: "/opt/mapr/server/configure.sh -R"
   when: opentsdb_result.changed
 - name: Restart OpenTSDB
-  shell: maprcli node services -name customopentsdb -action restart -nodes {{ ansible_fqdn }}
+  shell: "maprcli node services -name customopentsdb -action restart -nodes {{ ansible_fqdn }}"
   register: task_result
   until: task_result.rc == 0
   retries: 10

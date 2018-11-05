@@ -1,7 +1,7 @@
 ---
 # Uninstall Impala Server
 - name: Stop Impala Server
-  shell: maprcli node services -name impalaserver -action stop -nodes {{ ansible_fqdn }}
+  shell: "maprcli node services -name impalaserver -action stop -nodes {{ ansible_fqdn }}"
   register: maprcli_result
   failed_when: maprcli_result.rc > 1
   changed_when: maprcli_result.rc == 0

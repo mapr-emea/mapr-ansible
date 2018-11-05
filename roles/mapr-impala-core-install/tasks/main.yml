@@ -8,14 +8,14 @@
   failed_when: impala_path_result.matched != 1
 
 - name: Copy mapr.keytab to host
-  copy: src={{ mapr_kerberos_local_keytabs_dir }}/{{ ansible_fqdn }}.keytab dest=/opt/mapr/conf/mapr.keytab group={{ mapr_group }} owner={{ mapr_user }} mode=0600
+  copy: src="{{ mapr_kerberos_local_keytabs_dir }}/{{ ansible_fqdn }}.keytab" dest=/opt/mapr/conf/mapr.keytab group="{{ mapr_group }}" owner="{{ mapr_user }}" mode=0600
   when: impala_security == 'kerberos'
 
 - name: Configure env.sh
-  template: src=env.sh dest={{ impala_path_result.files[0].path }}/conf/env.sh
+  template: src=env.sh dest="{{ impala_path_result.files[0].path }}/conf/env.sh"
 
 - name: Copy core-site.xml to Impala
-  copy: remote_src=true src=/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/etc/hadoop/core-site.xml dest={{ impala_path_result.files[0].path }}/conf/ mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
+  copy: remote_src=true src="/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/etc/hadoop/core-site.xml" dest="{{ impala_path_result.files[0].path }}/conf/" mode=0644 owner="{{ mapr_user }}" group="{{ mapr_group }}"
 
 - name: Get Hive version
   shell: cat /opt/mapr/hive/hiveversion
@@ -24,4 +24,4 @@
   changed_when: no
 
 - name: Copy hive-site.xml to Impala
-  copy: remote_src=true src=/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/hive-site.xml dest={{ impala_path_result.files[0].path }}/conf/ mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
+  copy: remote_src=true src="/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/hive-site.xml" dest="{{ impala_path_result.files[0].path }}/conf/" mode=0644 owner="{{ mapr_user }}" group="{{ mapr_group }}"

@@ -20,10 +20,10 @@
 #- name: Copy mysql driver
 #  copy: remote_src=True src=/tmp/mysql-connector-java-{{ mysql_jdbc_version }}/mysql-connector-java-{{ mysql_jdbc_version }}-bin.jar dest={{ oozie_path_result.files[0].path }}/libext/
 - name: Copy MySQL driver
-  copy: src=mysql-connector-java-5.1.40-bin.jar dest=/opt/mapr/oozie/oozie-{{ version_output.stdout }}/libext/
+  copy: src=mysql-connector-java-5.1.40-bin.jar dest="/opt/mapr/oozie/oozie-{{ version_output.stdout }}/libext/"
   when: oozie_db_type == 'mysql'
 - name: Copy Oracle driver
-  copy: src={{ oracle_jdbc_driver_path }} dest=/opt/mapr/oozie/oozie-{{ version_output.stdout }}/libext/
+  copy: src="{{ oracle_jdbc_driver_path }}" dest="/opt/mapr/oozie/oozie-{{ version_output.stdout }}/libext/"
   when: oozie_db_type == 'oracle'
 - name: Delete stored password for Oozie if exists
   shell: hadoop fs -rm /user/mapr/oozie.jceks
@@ -37,17 +37,17 @@
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
   when: oozie_db_encrypt_password and inventory_hostname == groups["mapr-oozie"][0]
 - name: Configure oozie-site.xml
-  template: src=oozie-site.xml dest=/opt/mapr/oozie/oozie-{{ version_output.stdout }}/conf/oozie-site.xml
+  template: src=oozie-site.xml dest="/opt/mapr/oozie/oozie-{{ version_output.stdout }}/conf/oozie-site.xml"
 - name: Run oozie-setup.sh
   command: "/opt/mapr/oozie/oozie-{{ version_output.stdout }}/bin/oozie-setup.sh -hadoop {{ hadoop_version }} /opt/mapr/hadoop/hadoop-{{ hadoop_version }} {{ '-secure' if oozie_security != 'none' else '' }}"
 
 - name: Set owner mapr-system user
-  file: path=/opt/mapr/oozie owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
+  file: path=/opt/mapr/oozie owner="{{ mapr_user }}" group="{{ mapr_group }}" state=directory recurse=yes
 
 - name: Start all oozie instances
-  lineinfile: dest=/opt/mapr/oozie/oozie-{{ version_output.stdout }}/conf/warden.oozie.conf regexp="^services=" line="services=oozie:all:cldb"
+  lineinfile: dest="/opt/mapr/oozie/oozie-{{ version_output.stdout }}/conf/warden.oozie.conf" regexp="^services=" line="services=oozie:all:cldb"
 - name: Topy to /opt/mapr/conf/conf.d/warden.oozie.conf
-  copy: remote_src=true src=/opt/mapr/oozie/oozie-{{ version_output.stdout }}/conf/warden.oozie.conf dest=/opt/mapr/conf/conf.d/warden.oozie.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
+  copy: remote_src=true src="/opt/mapr/oozie/oozie-{{ version_output.stdout }}/conf/warden.oozie.conf" dest=/opt/mapr/conf/conf.d/warden.oozie.conf mode=0644 owner="{{ mapr_user }}" group="{{ mapr_group }}"
 
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
@@ -55,7 +55,7 @@
 - pause: seconds=10
   when: oozie_result.changed
 - name: Restart Oozie
-  shell: maprcli node services -name oozie -action restart -nodes {{ ansible_fqdn }}
+  shell: "maprcli node services -name oozie -action restart -nodes {{ ansible_fqdn }}"
   register: task_result
   until: task_result.rc == 0
   retries: 10

@@ -9,32 +9,32 @@
   failed_when: spark_path_result.matched != 1
 - set_fact: spark_path="{{ spark_path_result.files[0].path }}"
 - name: Copy hive-site.xml to Spark (otherwise Spark startup throws errors)
-  template: src=hive-site.xml dest={{ spark_path }}/conf/hive-site.xml  mode=0644
+  template: src=hive-site.xml dest="{{ spark_path }}/conf/hive-site.xml" mode=0644
 - name: Copy hbase-site.xml to Spark
-  template: src=hbase-site.xml dest={{ spark_path }}/conf/hbase-site.xml  mode=0644
+  template: src=hbase-site.xml dest="{{ spark_path }}/conf/hbase-site.xml"  mode=0644
 # Other actions
 - name: Create maprfs:///apps/spark
-  shell: hadoop fs -mkdir -p /apps/spark
+  shell: "hadoop fs -mkdir -p /apps/spark"
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
   when: inventory_hostname == groups["mapr-spark-yarn"][0]
 - name: Owner maprfs:///apps/spark
-  shell: hadoop fs -chown -R {{ mapr_user }}:{{ mapr_group }} /apps/spark
+  shell: "hadoop fs -chown -R {{ mapr_user }}:{{ mapr_group }} /apps/spark"
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
   when: inventory_hostname == groups["mapr-spark-yarn"][0]
 - name: Set owner mapr-system user
-  file: path=/opt/mapr/spark owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
+  file: path=/opt/mapr/spark owner="{{ mapr_user }}" group="{{ mapr_group }}" state=directory recurse=yes
 - name: Get rid of Kerberos warning in Spark
   lineinfile: dest={{ spark_path }}/conf/log4j.properties.template regexp="^log4j\.logger\.org\.apache\.hadoop\.security\.authentication\.server" line="log4j.logger.org.apache.hadoop.security.authentication.server=ERROR"
 #- name: Make log file readonly so that configure.sh -R is not overriding
 #  file: path={{ spark_path }}/conf/log4j.properties mode=444 state=file
 - name: Get rid of "Unable to load native-hadoop library for your platform..." warning
-  lineinfile: dest={{ spark_path }}/conf/spark-env.sh line='export SPARK_SUBMIT_OPTS="$SPARK_SUBMIT_OPTS -Djava.library.path=/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/lib/native"'
+  lineinfile: dest="{{ spark_path }}/conf/spark-env.sh" line='export SPARK_SUBMIT_OPTS="$SPARK_SUBMIT_OPTS -Djava.library.path=/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/lib/native"'
 - name: Write Spark spark-defaults.conf
-  template: src=spark-defaults.conf dest={{ spark_path }}/conf/spark-defaults.conf mode=0644
+  template: src=spark-defaults.conf dest="{{ spark_path }}/conf/spark-defaults.conf" mode=0644
 - name: Configure.sh -R
-  shell: /opt/mapr/server/configure.sh -R
+  shell: "/opt/mapr/server/configure.sh -R"
   when: spark_result.changed
 - name: Making Zip of Spark Jars | for Spark
   archive:

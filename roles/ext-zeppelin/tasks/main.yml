@@ -57,8 +57,8 @@
 - name: Configure zeppelin-site.xml
   template: src=zeppelin-site.unsecure.xml dest=/opt/mapr/zeppelin/zeppelin-{{ zeppelin_version }}/conf/zeppelin-site.xml
 - name: Set owner mapr-system user
-  file: path=/opt/mapr/zeppelin owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
+  file: path=/opt/mapr/zeppelin owner="{{ mapr_user }}" group="{{ mapr_group }}" state=directory recurse=yes
 - name: Start Zeppelin
-  shell: /opt/mapr/zeppelin/zeppelin-{{ zeppelin_version }}/bin/zeppelin-daemon.sh start
+  shell: "/opt/mapr/zeppelin/zeppelin-{{ zeppelin_version }}/bin/zeppelin-daemon.sh start"
   become: true
   become_user: "{{ mapr_user }}"

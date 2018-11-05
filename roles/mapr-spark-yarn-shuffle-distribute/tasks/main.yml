@@ -5,7 +5,7 @@
   register: copy_result
 
 - name: Restart Node Manager
-  shell: maprcli node services -name nodemanager -action restart -nodes {{ ansible_fqdn }}
+  shell: "maprcli node services -name nodemanager -action restart -nodes {{ ansible_fqdn }}"
   register: task_result
   until: task_result.rc == 0
   retries: 10

@@ -3,10 +3,10 @@
   register: cldb_key_status
 #- debug: msg={{cldb_key_status.stat.exists}}
 - name: Generate keys
-  shell: /opt/mapr/server/configure.sh -N {{ cluster_name }} -secure -genkeys -Z {{ ansible_fqdn }} -C {{ ansible_fqdn }} -u {{ mapr_user }} -g {{mapr_group}}
+  shell: "/opt/mapr/server/configure.sh -N {{ cluster_name }} -secure -genkeys -Z {{ ansible_fqdn }} -C {{ ansible_fqdn }} -u {{ mapr_user }} -g {{mapr_group}}"
   when: cldb_key_status.stat.exists == false
 - name: Fetch generated files
-  fetch: src=/opt/mapr/conf/{{ item }} dest=/tmp/{{ item }} flat=yes
+  fetch: src="/opt/mapr/conf/{{ item }}" dest="/tmp/{{ item }}" flat=yes
   with_items:
      - cldb.key
      - maprserverticket

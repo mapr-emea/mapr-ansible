@@ -14,10 +14,10 @@
   check_mode: no
   changed_when: no
 - name: Copy MySQL driver
-  copy: src=mysql-connector-java-5.1.40-bin.jar dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/lib/
+  copy: src=mysql-connector-java-5.1.40-bin.jar dest="/opt/mapr/hive/hive-{{ version_output.stdout }}/lib/"
   when: client_install is not defined and hive_db_type == 'mysql'
 - name: Copy Oracle driver
-  copy: src={{ oracle_jdbc_driver_path }} dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/lib/
+  copy: src="{{ oracle_jdbc_driver_path }}" dest="/opt/mapr/hive/hive-{{ version_output.stdout }}/lib/"
   when: client_install is not defined and hive_db_type == 'oracle'
 - name: Delete stored password for Hive if exists
   shell: hadoop fs -rm /user/mapr/hivemetastore.jceks
@@ -31,9 +31,9 @@
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
   when: hive_db_encrypt_password and inventory_hostname == groups["mapr-hive-cli"][0]
 - name: Configure hive-site.xml
-  template: src=hive-site.xml dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/hive-site.xml
+  template: src=hive-site.xml dest="/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/hive-site.xml"
 - name: Set HADOOP_OPTS= in beeline.sh
-  lineinfile: dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/bin/ext/beeline.sh regexp="^HADOOP_OPTS=" line='HADOOP_OPTS="$HADOOP_OPTS${MAPR_HIVE_LOGIN_OPTS}"'
+  lineinfile: dest="/opt/mapr/hive/hive-{{ version_output.stdout }}/bin/ext/beeline.sh" regexp="^HADOOP_OPTS=" line='HADOOP_OPTS="$HADOOP_OPTS${MAPR_HIVE_LOGIN_OPTS}"'
   when: mapr_security == 'maprsasl'
 #- name: Set MAPR_HIVE_SERVER_LOGIN_OPTS in env.sh to maprsasl
 #  lineinfile: dest=/opt/mapr/conf/env_override.sh regexp="^export MAPR_HIVE_SERVER_LOGIN_OPTS" line="export MAPR_HIVE_SERVER_LOGIN_OPTS=\"-Dhadoop.login=maprsasl\"" mode=0755 create=yes owner={{ mapr_user }} group={{ mapr_group }}
@@ -43,14 +43,14 @@
 #  when: mapr_security == 'maprsasl'
 
 - name: Set MAPR_HIVE_SERVER_LOGIN_OPTS in env.sh to hybrid for Kerberos
-  lineinfile: dest=/opt/mapr/conf/env_override.sh regexp="^export MAPR_HIVE_SERVER_LOGIN_OPTS" line="export MAPR_HIVE_SERVER_LOGIN_OPTS=\"-Dhadoop.login=hybrid\"" mode=0755 create=yes owner={{ mapr_user }} group={{ mapr_group }}
+  lineinfile: dest=/opt/mapr/conf/env_override.sh regexp="^export MAPR_HIVE_SERVER_LOGIN_OPTS" line="export MAPR_HIVE_SERVER_LOGIN_OPTS=\"-Dhadoop.login=hybrid\"" mode=0755 create=yes owner="{{ mapr_user }}" group="{{ mapr_group }}"
   when: mapr_security == 'kerberos'
 - name: Set MAPR_HIVE_LOGIN_OPTS= in env.sh to hybrid for Kerberos
-  lineinfile: dest=/opt/mapr/conf/env_override.sh regexp="^export MAPR_HIVE_LOGIN_OPTS=" line="export MAPR_HIVE_LOGIN_OPTS=\"-Dhadoop.login=hybrid\"" mode=0755 create=yes owner={{ mapr_user }} group={{ mapr_group }}
+  lineinfile: dest=/opt/mapr/conf/env_override.sh regexp="^export MAPR_HIVE_LOGIN_OPTS=" line="export MAPR_HIVE_LOGIN_OPTS=\"-Dhadoop.login=hybrid\"" mode=0755 create=yes owner="{{ mapr_user }}" group="{{ mapr_group }}"
   when: mapr_security == 'kerberos'
 # Fix for beeline with Kerberos  https://mapr.com/docs/61/Hive/HiveServer2Client-KerberosAuth.html?hl=mapr_hive_server_login_opts
 - name: Set HADOOP_OPTS= in beeline.sh
-  lineinfile: dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/bin/ext/beeline.sh regexp="^HADOOP_OPTS=" line='HADOOP_OPTS="$HADOOP_OPTS${KERBEROS_LOGIN_OPTS}"'
+  lineinfile: dest="/opt/mapr/hive/hive-{{ version_output.stdout }}/bin/ext/beeline.sh" regexp="^HADOOP_OPTS=" line='HADOOP_OPTS="$HADOOP_OPTS${KERBEROS_LOGIN_OPTS}"'
   when: mapr_security == 'kerberos'
 
 - name: Setup Tez for Hive
@@ -86,11 +86,11 @@
   when: not hive_with_tez
 
 - name: Configure hive-env.sh
-  template: src=hive-env.sh dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/hive-env.sh
+  template: src=hive-env.sh dest="/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/hive-env.sh"
 - name: Add HIVE_HOME to /etc/profile
   lineinfile: dest=/etc/profile state=present line="export HIVE_HOME=/opt/mapr/hive/hive-{{ version_output.stdout }}"
 - name: Set owner mapr-system user
-  file: path=/opt/mapr/hive owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
+  file: path=/opt/mapr/hive owner="{{ mapr_user }}" group="{{ mapr_group }}" state=directory recurse=yes
 - name: Create MySQL tables for hive
   shell: "/opt/mapr/hive/hive-{{ version_output.stdout }}/bin/schematool -dbType mysql -initSchema"
   when: client_install is not defined and inventory_hostname == groups["mapr-hive-cli"][0] and hive_db_type == 'mysql'
@@ -105,15 +105,15 @@
   ignore_errors: True # TODO error result should be handeled
 
 - name: Add MAPR_HIVE_LOGIN_OPTS to /opt/mapr/conf/env_override.sh
-  lineinfile: dest=/opt/mapr/conf/env_override.sh state=present regexp="^export MAPR_HIVE_LOGIN_OPTS=" line='export MAPR_HIVE_LOGIN_OPTS="-Dhadoop.login=maprsasl"' mode=0755 create=yes owner={{ mapr_user }} group={{ mapr_group }}
+  lineinfile: dest=/opt/mapr/conf/env_override.sh state=present regexp="^export MAPR_HIVE_LOGIN_OPTS=" line='export MAPR_HIVE_LOGIN_OPTS="-Dhadoop.login=maprsasl"' mode=0755 create=yes owner="{{ mapr_user }}" group="{{ mapr_group }}"
   when: hive_metastore_security == "maprsasl"
 - name: Add MAPR_HIVE_SERVER_LOGIN_OPTS to /opt/mapr/conf/env_override.sh
-  lineinfile: dest=/opt/mapr/conf/env_override.sh state=present regexp="^export MAPR_HIVE_SERVER_LOGIN_OPTS=" line='export MAPR_HIVE_SERVER_LOGIN_OPTS="-Dhadoop.login=maprsasl_keytab"' mode=0755 create=yes owner={{ mapr_user }} group={{ mapr_group }}
+  lineinfile: dest=/opt/mapr/conf/env_override.sh state=present regexp="^export MAPR_HIVE_SERVER_LOGIN_OPTS=" line='export MAPR_HIVE_SERVER_LOGIN_OPTS="-Dhadoop.login=maprsasl_keytab"' mode=0755 create=yes owner="{{ mapr_user }}" group="{{ mapr_group }}"
   when: hive_metastore_security == "maprsasl"
 
 # required for Hue
 - name: Create maprfs:///user/hive/warehouse
-  shell: hadoop fs -mkdir -p /user/hive/warehouse
+  shell: "hadoop fs -mkdir -p /user/hive/warehouse"
   when: client_install is not defined and inventory_hostname == groups["mapr-hive-cli"][0]
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket

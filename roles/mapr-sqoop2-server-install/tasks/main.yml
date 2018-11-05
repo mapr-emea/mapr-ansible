@@ -6,7 +6,7 @@
 
 # Other actions
 - name: Set owner mapr-system user
-  file: path=/opt/mapr/sqoop owner={{ mapr_user }} group={{ mapr_group }} state=directory recurse=yes
+  file: path=/opt/mapr/sqoop owner="{{ mapr_user }}" group="{{ mapr_group }}" state=directory recurse=yes
 
 #- name: Find Sqoop path
 #  find: paths="/opt/mapr/sqoop/" patterns="sqoop*" file_type=directory
@@ -18,25 +18,25 @@
   check_mode: no
   changed_when: no
 - name: Configure sqoop.properties - unsecure
-  template: src=sqoop.unsecure.properties dest=/opt/mapr/sqoop/sqoop-{{ version_output.stdout }}/conf/sqoop.properties
+  template: src=sqoop.unsecure.properties dest="/opt/mapr/sqoop/sqoop-{{ version_output.stdout }}/conf/sqoop.properties"
   when: sqoop_security == 'none'
 - name: Configure sqoop.properties for Mapr-SASL
-  template: src=sqoop.maprsasl.properties dest=/opt/mapr/sqoop/sqoop-{{ version_output.stdout }}/conf/sqoop.properties
+  template: src=sqoop.maprsasl.properties dest="/opt/mapr/sqoop/sqoop-{{ version_output.stdout }}/conf/sqoop.properties"
   when: sqoop_security == 'maprsasl'
 - name: Configure sqoop.properties for Kerberos
-  template: src=sqoop.kerberos.properties dest=/opt/mapr/sqoop/sqoop-{{ version_output.stdout }}/conf/sqoop.properties
+  template: src=sqoop.kerberos.properties dest="/opt/mapr/sqoop/sqoop-{{ version_output.stdout }}/conf/sqoop.properties"
   when: sqoop_security == 'kerberos'
 
 - name: Copy to /opt/mapr/conf/conf.d/warden.sqoop2.conf
-  copy: remote_src=true src=/opt/mapr/sqoop/sqoop-{{ version_output.stdout }}/conf.d/warden.sqoop2.conf dest=/opt/mapr/conf/conf.d/warden.sqoop2.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
+  copy: remote_src=true src="/opt/mapr/sqoop/sqoop-{{ version_output.stdout }}/conf.d/warden.sqoop2.conf" dest=/opt/mapr/conf/conf.d/warden.sqoop2.conf mode=0644 owner="{{ mapr_user }}" group="{{ mapr_group }}"
 
 - name: Configure.sh -R
-  shell: /opt/mapr/server/configure.sh -R
+  shell: "/opt/mapr/server/configure.sh -R"
   when: sqoop2_result.changed
 - pause: seconds=10
   when: sqoop2_result.changed
 - name: Restart Sqoop2 Server
-  shell: maprcli node services -name sqoop2 -action restart -nodes {{ ansible_fqdn }}
+  shell: "maprcli node services -name sqoop2 -action restart -nodes {{ ansible_fqdn }}"
   register: task_result
   until: task_result.rc == 0
   retries: 10
