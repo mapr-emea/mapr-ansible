@@ -35,7 +35,6 @@ yarn_spark_shuffle: True
 # Default value for all components: mapr core and ecosystem
 # Options: none, maprsasl, kerberos
 security_all: maprsasl
-cleanup_local_keys: True
 
 # Security at rest - also known as DARE - Only for secure clusters
 security_encryption_rest: True
