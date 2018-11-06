@@ -23,8 +23,9 @@
   register: version_output
   check_mode: no
   changed_when: no
+# Setting owner to root so that configure.sh is not removing SSL encryption
 - name: Configure hbase-site.xml
-  template: src=hbase-site.xml dest="/opt/mapr/hbase/hbase-{{ version_output.stdout }}/conf/hbase-site.xml" mode="0444"
+  template: src=hbase-site.xml dest="/opt/mapr/hbase/hbase-{{ version_output.stdout }}/conf/hbase-site.xml" owner=root mode="0444"
 - name: Set MAPR_HBASE_SERVER_OPTS using HYBRID_LOGIN_OPTS
   lineinfile: >
     dest=/opt/mapr/conf/env_override.sh
