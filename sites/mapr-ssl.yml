@@ -31,14 +31,19 @@
         - name: MD5 sum for Key and CRT must be same
           assert: { that: "crt_md5.stdout == key_md5.stdout" }
           any_errors_fatal: yes
-
+- name: Stop Warden
+  hosts: mapr-core
+  tasks:
+  - name: Stop MapR Warden
+    service: name=mapr-warden state=stopped
+- name: Stop Zookeeper
+  hosts: mapr-zookeeper
+  tasks:
+  - name: Stop MapR Zookeeper
+    service: name=mapr-zookeeper state=stopped
 - name: Import ssl_truststore and ssl_keystore
   hosts: mapr-core
   tasks:
-    - name: Stop MapR Warden
-      service: name=mapr-warden state=stopped
-    - name: Stop MapR Zookeeper
-      service: name=mapr-zookeeper state=stopped
     - name: Import certificate to /opt/mapr/conf/ssl_truststore
       java_cert:
         cert_path: "/tmp/rootCA.pem"
@@ -169,11 +174,14 @@
 
 
 # Hue uses certificate from /opt/mapr/conf/ssl_keystore
+- name: Start Zookeeper
+  hosts: mapr-zookeeper
+  tasks:
+  - name: Start MapR Zookeeper
+    service: name=mapr-zookeeper state=started
 
-- name: Start Zookeeper and Warden
+- name: Start Warden
   hosts: mapr-core
   tasks:
-    - name: Start MapR Zookeeper
-      service: name=mapr-zookeeper state=started
     - name: Start MapR Warden
       service: name=mapr-warden state=started
