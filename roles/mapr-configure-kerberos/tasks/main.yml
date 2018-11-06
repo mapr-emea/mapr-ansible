@@ -10,28 +10,35 @@
 - name: Configure.sh to generate keys just run on first mapr-core node
   shell: "/opt/mapr/server/configure.sh -N {{ cluster_name }} -Z {{ zookeeper_string }} -C {{ cldb_string }} -u {{ mapr_user }} -g {{ mapr_group }} -genkeys -secure {{ '-dare' if security_encryption_rest else '' }} -K -P '{{ mapr_user }}/{{ cluster_name }}@{{ mapr_kerberos_realm }}'  -HS {{ historyserver_string }} {{ '--isvm' if virtual_machine else '' }}"
   when: inventory_hostname == groups["mapr-cldb"][0] and not cldb_key_status.stat.exists
-- name: Copy keys to local
+- name: Copy MapR keys to local
   fetch: src="/opt/mapr/conf/{{ item }}" dest="/tmp/{{ item }}" flat=yes
   with_items:
   - maprserverticket
   - cldb.key
+  when: inventory_hostname == groups["mapr-cldb"][0]
+- name: Copy MapR keystores and truststores to local
+  fetch: src="/opt/mapr/conf/{{ item }}" dest="/tmp/{{ item }}" flat=yes
+  with_items:
   - ssl_keystore
   - ssl_keystore.pem
   - ssl_keystore.p12
   - ssl_truststore
   - ssl_truststore.pem
   - ssl_truststore.p12
-  when: inventory_hostname == groups["mapr-cldb"][0]
+  when: inventory_hostname == groups["mapr-cldb"][0] and not https_custom_certs_enabled
 - name: Copy DARE master key to local
   fetch: src=/opt/mapr/conf/dare.master.key dest=/tmp/dare.master.key flat=yes
   when: inventory_hostname == groups["mapr-cldb"][0] and security_encryption_rest
-- name: Copy keys to all nodes
+- name: Copy MapR keys to all nodes
   copy: src="/tmp/{{ item.filename }}" dest="/opt/mapr/conf/{{ item.filename }}" mode="{{ item.mode }}" owner="{{ mapr_user }}" group="{{ mapr_group }}"
   with_items:
   - filename: maprserverticket
     mode: "0600"
   - filename: cldb.key
     mode: "0600"
+- name: Copy MapR keystores and truststores to all nodes
+  copy: src="/tmp/{{ item.filename }}" dest="/opt/mapr/conf/{{ item.filename }}" mode="{{ item.mode }}" owner="{{ mapr_user }}" group="{{ mapr_group }}"
+  with_items:
   - filename: ssl_keystore
     mode: "0400"
   - filename: ssl_keystore.pem
@@ -44,6 +51,7 @@
     mode: "0444"
   - filename: ssl_truststore.p12
     mode: "0444"
+  when: not https_custom_certs_enabled
 - name: Copy DARE master key
   copy: src=/tmp/dare.master.key dest=/opt/mapr/conf/dare.master.key owner="{{ mapr_user }}" group="{{ mapr_group }}" mode="0600"
   when: security_encryption_rest
