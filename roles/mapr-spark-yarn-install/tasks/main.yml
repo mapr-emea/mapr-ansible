@@ -43,7 +43,7 @@
     format: zip
   when: client_install is not defined and inventory_hostname == groups["mapr-spark-yarn"][0]
 - name: Uploading Spark jars to MaprFS | for Spark
-  shell: "hadoop fs -put -f {{ spark_path }}/spark-jars.zip /apps/spark"
+  shell: "hadoop fs -put -f {{ spark_path }}/spark-jars.zip /opt"
   environment:
       MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
   when: client_install is not defined and inventory_hostname == groups["mapr-spark-yarn"][0]
