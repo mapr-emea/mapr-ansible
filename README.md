@@ -32,7 +32,6 @@ The scripts support:
 
 ## Known issues / not yet implemented for MapR 6.1 
 
-* HBase REST and Thrift Server are switched back to non-SSL for some reason
 * Hue HBase Thrift integration is not working
 * Kerberos was not yet tested
 * New ecosystem components delivered with MEP 6.0 are not yet implemented.

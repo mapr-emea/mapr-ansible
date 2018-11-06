@@ -8,10 +8,6 @@
 - name: Install mapr-hbasethrift
   package: name=mapr-hbasethrift state=present
   register: hbasethrift_result
-# Must run before rolling out configs, otherwise it overwrites the configs
-- name: Configure.sh -R
-  shell: /opt/mapr/server/configure.sh -R
-  when: hbaserest_result.changed or hbasethrift_result.changed
 # Other actions
 #- name: Find HBase Path
 #  find: paths="/opt/mapr/hbase/" patterns="hbase*" file_type=directory
@@ -23,9 +19,8 @@
   register: version_output
   check_mode: no
   changed_when: no
-# Setting owner to root so that configure.sh is not removing SSL encryption
 - name: Configure hbase-site.xml
-  template: src=hbase-site.xml dest="/opt/mapr/hbase/hbase-{{ version_output.stdout }}/conf/hbase-site.xml" owner=root mode="0444"
+  template: src=hbase-site.xml dest="/opt/mapr/hbase/hbase-{{ version_output.stdout }}/conf/hbase-site.xml" mode="0444"
 - name: Set MAPR_HBASE_SERVER_OPTS using HYBRID_LOGIN_OPTS
   lineinfile: >
     dest=/opt/mapr/conf/env_override.sh
@@ -35,7 +30,12 @@
     create=yes
     owner="{{ mapr_user }}"
     group="{{ mapr_group }}"
-  when: hbase_thrift_rest_security == 'kerberos'
+# Workaround to enable custom security
+- name: Enable custom security in HBase configuration
+  lineinfile: dest="/opt/mapr/hbase/hbase-{{ version_output.stdout }}/bin/configure.sh" regexp="^CUSTOM="  line="CUSTOM=true"
+- name: Configure.sh -R
+  shell: /opt/mapr/server/configure.sh -R
+  when: hbaserest_result.changed or hbasethrift_result.changed
 
 - name: Start all hbasethrift instances
   lineinfile: dest="/opt/mapr/hbase/hbase-{{ version_output.stdout }}/conf/warden.hbasethrift.conf" regexp="^services=" line="services=hbasethrift:all"
