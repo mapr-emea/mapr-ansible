@@ -36,7 +36,7 @@ yarn_spark_shuffle: True
 # Options: none, maprsasl, kerberos
 security_all: maprsasl
 # SSL certificate roll-out is not included in site-cluster deployment. If set to true, it just won't touch the keystore and truststore.
-https_custom_certs_enabled: True
+https_custom_certs_enabled: False
 # If certificate and private key is is same file, just add same path for both.
 https_custom_certs_path: /root/testsslkeys/
 https_custom_private_key_path: /root/testsslkeys/
