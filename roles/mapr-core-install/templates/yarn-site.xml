@@ -1,40 +1,49 @@
-<configuration>
-    <!-- Resource Manager MapR HA Configs -->
-    <property>
-        <name>yarn.resourcemanager.ha.custom-ha-enabled</name>
-        <value>true</value>
-        <description>MapR Zookeeper based RM Reconnect Enabled. If this is true, set the failover proxy to be the class
-            MapRZKBasedRMFailoverProxyProvider
-        </description>
-    </property>
-    <property>
-        <name>yarn.client.failover-proxy-provider</name>
-        <value>org.apache.hadoop.yarn.client.MapRZKBasedRMFailoverProxyProvider</value>
-        <description>Zookeeper based reconnect proxy provider. Should be set if and only if mapr-ha-enabled property is
-            true.
-        </description>
-    </property>
-    <property>
-        <name>yarn.resourcemanager.recovery.enabled</name>
-        <value>true</value>
-        <description>RM Recovery Enabled</description>
-    </property>
-    <property>
-        <name>yarn.resourcemanager.ha.custom-ha-rmaddressfinder</name>
-        <value>org.apache.hadoop.yarn.client.MapRZKBasedRMAddressFinder</value>
-    </property>
-    {% if mapr_security != 'none' %}
-    <property>
-        <name>yarn.acl.enable</name>
-        <value>true</value>
-    </property>
-    <property>
-        <name>yarn.admin.acl</name>
-        <value>{{ mapr_user }}</value>
-    </property>
-    {% endif %}
+<?xml version="1.0"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
 
-    <!-- :::CAUTION::: DO NOT EDIT ANYTHING ON OR ABOVE THIS LINE -->
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+<configuration>
+  <!-- Resource Manager MapR HA Configs -->
+  <property>
+    <name>yarn.resourcemanager.ha.custom-ha-enabled</name>
+    <value>true</value>
+    <description>MapR Zookeeper based RM Reconnect Enabled. If this is true, set the failover proxy to be the class MapRZKBasedRMFailoverProxyProvider</description>
+  </property>
+  <property>
+    <name>yarn.client.failover-proxy-provider</name>
+    <value>org.apache.hadoop.yarn.client.MapRZKBasedRMFailoverProxyProvider</value>
+    <description>Zookeeper based reconnect proxy provider. Should be set if and only if mapr-ha-enabled property is true.</description>
+  </property>
+  <property>
+    <name>yarn.resourcemanager.recovery.enabled</name>
+    <value>true</value>
+    <description>RM Recovery Enabled</description>
+  </property>
+  <property>
+   <name>yarn.resourcemanager.ha.custom-ha-rmaddressfinder</name>
+   <value>org.apache.hadoop.yarn.client.MapRZKBasedRMAddressFinder</value>
+  </property>
+
+  <property>
+    <name>yarn.acl.enable</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>yarn.admin.acl</name>
+    <value> </value>
+  </property>
+
+  <!-- :::CAUTION::: DO NOT EDIT ANYTHING ON OR ABOVE THIS LINE -->
     <!-- fix for Oozie when user different than mapr -->
     <property>
         <name>yarn.resourcemanager.principal</name>

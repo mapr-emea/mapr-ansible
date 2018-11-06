@@ -177,4 +177,4 @@
 - hosts: 127.0.0.1
   connection: local
   roles:
-    - ../roles/mapr-configure-cleanup
+    - {role: ../roles/mapr-configure-cleanup, when: cleanup_local_keys }
