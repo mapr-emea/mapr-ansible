@@ -1,0 +1,22 @@
+[req]
+distinguished_name = req_distinguished_name
+x509_extensions = v3_req
+req_extensions = v3_req
+prompt = no
+[req_distinguished_name]
+C = DE
+L = Munich
+O = MapR
+OU = MapR Professional Services
+CN = ip-10-0-0-${NODENUMBER}.ps.mapr.com
+
+[v3_req]
+keyUsage = keyEncipherment, dataEncipherment
+extendedKeyUsage = serverAuth
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = ip-10-0-0-${NODENUMBER}.ps.mapr.com
+DNS.2 = 10.0.0.${NODENUMBER}
+DNS.3 = ip-10-0-0-${NODENUMBER}
+DNS.4 = ip-10-0-0-${NODENUMBER}.eu-west-1.compute.internal

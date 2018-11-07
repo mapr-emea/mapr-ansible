@@ -1,0 +1,9 @@
+---
+- name: Find Grafana Path
+  find: paths="/opt/mapr/grafana/" patterns="grafana*" file_type=directory
+  register: grafana_path_result
+  failed_when: grafana_path_result.matched != 1
+- name: Extract key to Grafana directory
+  shell: "openssl rsa -outform pem -in /opt/mapr/conf/ssl_keystore.pem -passin pass:mapr123 -out {{ grafana_path_result.files[0].path }}/etc/grafana/key.pem"
+- name: Extract cert to Grafana directory
+  shell: "openssl x509 -outform pem -in /opt/mapr/conf/ssl_keystore.pem -out {{ grafana_path_result.files[0].path }}/etc/grafana/cert.pem"

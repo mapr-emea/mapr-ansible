@@ -1,0 +1,9 @@
+---
+- name: Find Kibana Path
+  find: paths="/opt/mapr/kibana/" patterns="kibana*" file_type=directory
+  register: kibana_path_result
+  failed_when: kibana_path_result.matched != 1
+- name: Extract key to Kibana directory
+  shell: "openssl rsa -outform pem -in /opt/mapr/conf/ssl_keystore.pem -passin pass:mapr123 -out {{ kibana_path_result.files[0].path }}/config/key.pem"
+- name: Extract cert to Kibana directory
+  shell: "openssl x509 -outform pem -in /opt/mapr/conf/ssl_keystore.pem -out {{ kibana_path_result.files[0].path }}/config/cert.pem"

@@ -23,6 +23,7 @@
   hosts: mapr-grafana
   roles:
     - ../roles/mapr-grafana-install
+    - { role: ../roles/mapr-grafana-customssl, when: https_custom_certs_enabled }
 - name: Uninstall MapR Grafana
   hosts: all:!mapr-grafana
   roles:

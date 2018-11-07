@@ -1,0 +1,12 @@
+---
+# Configure secure cluster
+- name: Enable customer security by creating /opt/mapr/conf/.customSecure
+  file: path=/opt/mapr/conf/.customSecure state=touch mode=0644
+- name: Copy mapr.keytab to host
+  copy: src="{{ mapr_kerberos_local_keytabs_dir }}/{{ ansible_fqdn }}.keytab" dest="/opt/mapr/conf/mapr.keytab" group="{{ mapr_group }}" owner="{{ mapr_user }}" mode=0600
+- name: Check if /opt/mapr/conf/cldb.key exists
+  stat: path=/opt/mapr/conf/cldb.key
+  register: cldb_key_status
+- name: Configure.sh to generate keys just run on first mapr-core node
+  shell: "/opt/mapr/server/configure.sh -N {{ cluster_name }} -Z {{ zookeeper_string }} -C {{ cldb_string }} -u {{ mapr_user }} -g {{ mapr_group }} -genkeys -secure {{ '-dare' if security_encryption_rest else '' }} -K -P '{{ mapr_user }}/{{ cluster_name }}@{{ mapr_kerberos_realm }}'  -HS {{ historyserver_string }} {{ '--isvm' if virtual_machine else '' }}"
+  when: not cldb_key_status.stat.exists

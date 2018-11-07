@@ -1,0 +1,26 @@
+---
+- name: Copy rootCA to node
+  copy: src="{{ https_custom_rootca }}" dest="/tmp/rootCA.pem"
+- name: Copy cert to node
+  copy: src="{{ https_custom_certs_path }}/{{ ansible_fqdn }}.pem" dest="/tmp/{{ ansible_fqdn }}-crt.pem"
+- name: Copy private key to node
+  copy: src="{{ https_custom_private_key_path }}/{{ ansible_fqdn }}.pem" dest="/tmp/{{ ansible_fqdn }}-key.pem"
+- name: Verify CN for certificate
+  shell: "openssl x509 -noout -subject -in /tmp/{{ ansible_fqdn }}-crt.pem | grep ^subject= | grep CN={{ ansible_fqdn }}"
+- name: Validate that certificate is signed with rootCA.pem
+  shell: "openssl verify -CAfile /tmp/rootCA.pem /tmp/{{ ansible_fqdn }}-crt.pem | grep OK"
+  any_errors_fatal: yes
+- name: Get MD5 sum for certificate
+  shell: "openssl x509 -noout -modulus -in /tmp/{{ ansible_fqdn }}-crt.pem | openssl md5"
+  register: crt_md5
+- name: Get MD5 sum for private key
+  shell: "openssl rsa -noout -modulus -in /tmp/{{ ansible_fqdn }}-key.pem | openssl md5"
+  register: key_md5
+- name: MD5 sum for Key and CRT must be same
+  assert: { that: "crt_md5.stdout == key_md5.stdout" }
+  any_errors_fatal: yes
+- name: Cleanup files from certificates
+  file: state=absent path="{{ item }}"
+  with_items:
+  - "/tmp/{{ ansible_fqdn }}-crt.pem"
+  - "/tmp/{{ ansible_fqdn }}-key.pem"

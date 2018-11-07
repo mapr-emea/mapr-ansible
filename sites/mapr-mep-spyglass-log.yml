@@ -19,6 +19,7 @@
   hosts: mapr-kibana
   roles:
     - ../roles/mapr-kibana-install
+    - { role: ../roles/mapr-kibana-customssl, when: https_custom_certs_enabled }
 - name: Uninstall MapR Kibana
   hosts: all:!mapr-kibana
   roles:

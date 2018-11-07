@@ -3,3 +3,4 @@
   hosts: all
   roles:
     - ../roles/mapr-precheck
+    - {role: ../roles/mapr-core-customssl-validate, when: https_custom_certs_enabled }

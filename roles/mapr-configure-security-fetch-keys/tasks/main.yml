@@ -18,7 +18,3 @@
 - name: Copy DARE master key to local
   fetch: src=/opt/mapr/conf/dare.master.key dest=/tmp/dare.master.key flat=yes
   when: security_encryption_rest
-
-
-
-
