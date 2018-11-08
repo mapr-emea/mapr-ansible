@@ -31,7 +31,18 @@
             Valid pattern for user and group names, it must be a valid java regex.
         </description>
     </property>
+    {% if httpfs_security == 'maprsasl' %}
+    <property>
+        <name>httpfs.hadoop.authentication.type</name>
+        <value>multiauth</value>
+    </property>
 
+    <property>
+        <name>httpfs.authentication.type</name>
+        <value>multiauth</value>
+    </property>
+    {% endif %}
+    {if httpfs_security == 'kerberos' %}
     <property>
         <name>httpfs.authentication.type</name>
         <value>kerberos</value>
@@ -43,13 +54,13 @@
     </property>
 
     <property>
-      <name>httpfs.authentication.kerberos.principal</name>
-      <value>HTTP/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}</value>
+        <name>httpfs.authentication.kerberos.principal</name>
+        <value>HTTP/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}</value>
     </property>
 
     <property>
-      <name>httpfs.authentication.kerberos.keytab</name>
-      <value>/opt/mapr/conf/mapr.keytab</value>
+        <name>httpfs.authentication.kerberos.keytab</name>
+        <value>/opt/mapr/conf/mapr.keytab</value>
     </property>
     <property>
         <name>httpfs.hadoop.authentication.kerberos.principal</name>
@@ -65,5 +76,5 @@
         <name>httpfs.authentication.kerberos.name.rules</name>
         <value>DEFAULT</value>
     </property>
-
+    {% endif %}
 </configuration>

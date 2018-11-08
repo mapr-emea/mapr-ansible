@@ -17,15 +17,8 @@
   register: version_output
   check_mode: no
   changed_when: no
-- name: Configure httpfs-site.xml for unsecure
-  template: src=httpfs-site.unsecure.xml dest="/opt/mapr/httpfs/httpfs-{{ version_output.stdout }}/etc/hadoop/httpfs-site.xml"
-  when: httpfs_security == 'none'
-- name: Configure httpfs-site.xml for MapRSASL/PAM
-  template: src=httpfs-site.maprsasl.xml dest="/opt/mapr/httpfs/httpfs-{{ version_output.stdout }}/etc/hadoop/httpfs-site.xml"
-  when: httpfs_security == 'maprsasl'
-- name: Configure httpfs-site.xml for Kerberos
-  template: src=httpfs-site.kerberos.xml dest="/opt/mapr/httpfs/httpfs-{{ version_output.stdout }}/etc/hadoop/httpfs-site.xml"
-  when: httpfs_security == 'kerberos'
+- name: Configure httpfs-site.xml
+  template: src=httpfs-site.xml dest="/opt/mapr/httpfs/httpfs-{{ version_output.stdout }}/etc/hadoop/httpfs-site.xml"
 - name: Enable SSL for HTTPFS since cluster is secure
   copy: remote_src=true src="/opt/mapr/httpfs/httpfs-{{ version_output.stdout }}/share/hadoop/httpfs/tomcat/conf/server.xml.https" dest="/opt/mapr/httpfs/httpfs-{{ version_output.stdout }}/share/hadoop/httpfs/tomcat/conf/server.xml" mode=0644 owner="{{ mapr_user }}" group="{{ mapr_group }}"
   when: httpfs_security != 'none'
