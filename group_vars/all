@@ -24,8 +24,6 @@ virtual_machine: False
 
 # mapr_subnets is optional, if required just remove #
 #mapr_subnets: 10.0.0.0/24
-# mfs_heapsize_percent is optional, if required just remove # and set value, default is 35.
-mfs_heapsize_percent: 20
 mapr_create_user: True
 mapr_user: mapr
 mapr_group: mapr
