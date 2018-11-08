@@ -17,16 +17,8 @@
   register: version_output
   check_mode: no
   changed_when: no
-- name: Configure sqoop.properties - unsecure
-  template: src=sqoop.unsecure.properties dest="/opt/mapr/sqoop/sqoop-{{ version_output.stdout }}/conf/sqoop.properties"
-  when: sqoop_security == 'none'
-- name: Configure sqoop.properties for Mapr-SASL
-  template: src=sqoop.maprsasl.properties dest="/opt/mapr/sqoop/sqoop-{{ version_output.stdout }}/conf/sqoop.properties"
-  when: sqoop_security == 'maprsasl'
-- name: Configure sqoop.properties for Kerberos
-  template: src=sqoop.kerberos.properties dest="/opt/mapr/sqoop/sqoop-{{ version_output.stdout }}/conf/sqoop.properties"
-  when: sqoop_security == 'kerberos'
-
+- name: Configure sqoop.properties
+  template: src=sqoop.properties dest="/opt/mapr/sqoop/sqoop-{{ version_output.stdout }}/conf/sqoop.properties"
 - name: Copy to /opt/mapr/conf/conf.d/warden.sqoop2.conf
   copy: remote_src=true src="/opt/mapr/sqoop/sqoop-{{ version_output.stdout }}/conf.d/warden.sqoop2.conf" dest=/opt/mapr/conf/conf.d/warden.sqoop2.conf mode=0644 owner="{{ mapr_user }}" group="{{ mapr_group }}"
 
