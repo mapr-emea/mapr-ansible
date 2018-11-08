@@ -4,7 +4,7 @@
   hosts: mapr-core
   tasks:
   - name: Backup MapR configuration files
-    archive: path=/opt/mapr/conf dest="/opt/maprconf-{{ ansible_date_time.iso8601_basic_short }}.tar.gz"
+    archive: path=/opt/mapr/conf dest="/opt/maprconf-{{ ansible_date_time.iso8601_basic_short }}.tar.gz" owner="{{ mapr_user }}" group="{{ mapr_group }}" mode="0600"
 - name: Validate and import ssl_truststore
   hosts: mapr-core
   any_errors_fatal: yes
