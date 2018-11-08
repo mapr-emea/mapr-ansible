@@ -48,7 +48,7 @@ yarn_spark_shuffle: True
 security_all: maprsasl
 
 # Custom SSL certificates for all components. Certificates must be <fqdn>.pem in given folder. No password in certicates supported, use ansible-vault.
-https_custom_certs_enabled: True
+https_custom_certs_enabled: False
 # If certificate and private key is is same file, just add same path for both.
 https_custom_certs_path: /root/testsslkeys/crt/
 https_custom_private_key_path: /root/testsslkeys/key/
