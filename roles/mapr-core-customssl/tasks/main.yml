@@ -19,7 +19,7 @@
     dest: /opt/mapr/conf/ssl_truststore
     remote_src: yes
 - name: Remove tmp files
-  file: path=/opt/mapr/conf/ssl_truststore_tmp
+  file: path=/opt/mapr/conf/ssl_truststore_tmp state=absent
 - name: Copy Root-CA to ssl_truststore.pem
   copy:
     src: /tmp/rootCA.pem
@@ -81,7 +81,7 @@
       remote_src: yes
     when: different_fingerprints or https_custom_certs_force_update
   - name: Remove tmp files
-    file: path=/opt/mapr/conf/ssl_keystore_tmp
+    file: path=/opt/mapr/conf/ssl_keystore_tmp state=absent
   - name: Extract private key from PEM (if PEM contains both cert and key) and encrypt key
     shell: "openssl rsa -aes256 -in /tmp/{{ ansible_fqdn }}-key.pem -passout pass:mapr123 -out /tmp/{{ ansible_fqdn }}-keyout.pem"
   - name: Extract certificate from PEM (if PEM contains both cert and key)
