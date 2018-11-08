@@ -22,6 +22,15 @@ rolling_restart: False
 warden_restart_wait_time: 30
 virtual_machine: False
 
+# mapr_subnets is optional, if required just remove #
+#mapr_subnets: 10.0.0.0/24
+mapr_create_user: True
+mapr_user: mapr
+mapr_group: mapr
+# UID only for creation required.
+mapr_group_gid: 5000
+mapr_user_uid: 5000
+
 # YARN settings
 # Enables YARN log aggregation
 yarn_log_aggregation: False
@@ -35,6 +44,14 @@ yarn_spark_shuffle: True
 # Default value for all components: mapr core and ecosystem
 # Options: none, maprsasl, kerberos
 security_all: maprsasl
+
+# Custom SSL certificates for all components. Certificates must be <fqdn>.pem in given folder. No password in certicates supported, use ansible-vault.
+https_custom_certs_enabled: False
+# If certificate and private key is is same file, just add same path for both.
+https_custom_certs_path: /root/testsslkeys/crt/
+https_custom_private_key_path: /root/testsslkeys/key/
+https_custom_rootca: /root/testsslkeys/rootCA.pem
+https_custom_certs_force_update: True
 
 # Security at rest - also known as DARE - Only for secure clusters
 security_encryption_rest: True
@@ -84,15 +101,6 @@ spyglass_log_password: mapr
 # Grafana Password is only required in unsecure mode.
 spyglass_grafana_password: mapr
 ###########################################
-
-# mapr_subnets is optional, if required just remove #
-#mapr_subnets: 10.0.0.0/24
-mapr_create_user: True
-mapr_user: mapr
-mapr_group: mapr
-# UID only for creation required.
-mapr_group_gid: 5000
-mapr_user_uid: 5000
 
 oracle_jdbc_driver_path: /Users/chufe/Downloads/ojdbc6.jar
 

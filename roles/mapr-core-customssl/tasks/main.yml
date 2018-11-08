@@ -1,0 +1,116 @@
+---
+- name: Copy rootCA to node
+  copy: src="{{ https_custom_rootca }}" dest="/tmp/rootCA.pem"
+- name: Copy cert to node
+  copy: src="{{ https_custom_certs_path }}/{{ ansible_fqdn }}.pem" dest="/tmp/{{ ansible_fqdn }}-crt.pem"
+- name: Copy private key to node
+  copy: src="{{ https_custom_private_key_path }}/{{ ansible_fqdn }}.pem" dest="/tmp/{{ ansible_fqdn }}-key.pem"
+- name: Import certificate to /opt/mapr/conf/ssl_truststore_tmp
+  java_cert:
+    cert_path: "/tmp/rootCA.pem"
+    cert_alias: customgrouprootca
+    keystore_path: /opt/mapr/conf/ssl_truststore_tmp
+    keystore_pass: mapr123
+    keystore_create: yes
+    state: present
+- name: Copy ssl_truststore_tmp to ssl_truststore
+  copy:
+    src: /opt/mapr/conf/ssl_truststore_tmp
+    dest: /opt/mapr/conf/ssl_truststore
+    remote_src: yes
+- name: Remove tmp files
+  file: path=/opt/mapr/conf/ssl_truststore_tmp state=absent
+- name: Copy Root-CA to ssl_truststore.pem
+  copy:
+    src: /tmp/rootCA.pem
+    dest: /opt/mapr/conf/ssl_truststore.pem
+    owner: "{{ mapr_user }}"
+    group: "{{ mapr_group }}"
+    mode: 0644
+    remote_src: yes
+- name: Import ssl_keystore
+  block:
+  - name: Build P12 store
+    shell: 'openssl pkcs12 -export -inkey /tmp/{{ ansible_fqdn }}-key.pem -in /tmp/{{ ansible_fqdn }}-crt.pem -name {{ cluster_name }} -out /tmp/{{ ansible_fqdn }}.p12 -passout pass:mapr123'
+  - name: Get fingerprint of /opt/mapr/conf/ssl_keystore
+    shell: 'keytool -list -keystore /opt/mapr/conf/ssl_keystore -storepass mapr123 | grep "Certificate fingerprint (SHA1):" | sed -e "s/^Certificate fingerprint (SHA1): //" | tr -d "[:space:]"'
+    register: mapr_ssl_keystore_fingerprint
+    check_mode: no
+    changed_when: False
+  - name: Get fingerprint of <host>.p12 file
+    shell: 'keytool -list -v -keystore /tmp/{{ ansible_fqdn }}.p12 -storetype PKCS12 -storepass mapr123 | grep "SHA1: " | sed -e "s/SHA1: //" | tr -d "[:space:]"'
+    register: p12_fingerprint
+    check_mode: no
+    changed_when: False
+  - set_fact:
+      different_fingerprints: "{{ p12_fingerprint.stdout != mapr_ssl_keystore_fingerprint.stdout }}"
+#  - name: Copy ssl_keystore and make modifications on this copy
+#    copy:
+#      src: /opt/mapr/conf/ssl_keystore
+#      dest: /opt/mapr/conf/ssl_keystore_tmp
+#      remote_src: yes
+#    check_mode: no
+#    when: different_fingerprints or https_custom_certs_force_update
+#  - name: Remove old certificate
+#    java_cert:
+#      pkcs12_path: "/tmp/{{ ansible_fqdn }}.p12"
+#      cert_alias: "{{ cluster_name }}"
+#      keystore_path: /opt/mapr/conf/ssl_keystore_tmp
+#      keystore_pass: mapr123
+#      keystore_create: yes
+#      state: absent
+#    any_errors_fatal: yes
+#    when: different_fingerprints or https_custom_certs_force_update
+  - name: Import certificate to /opt/mapr/conf/ssl_keystore_tmp
+    java_cert:
+      pkcs12_path: "/tmp/{{ ansible_fqdn }}.p12"
+      cert_alias: "{{ cluster_name }}"
+      pkcs12_alias: "{{ cluster_name }}"
+      #    pkcs12_alias: "{{ p12_aliasname.stdout }}"
+      keystore_path: /opt/mapr/conf/ssl_keystore_tmp
+      keystore_pass: mapr123
+      pkcs12_password: mapr123
+      keystore_create: yes
+      state: present
+    any_errors_fatal: yes
+    when: different_fingerprints or https_custom_certs_force_update
+  - name: Copy ssl_keystore_tmp to ssl_keystore
+    copy:
+      src: /opt/mapr/conf/ssl_keystore_tmp
+      dest: /opt/mapr/conf/ssl_keystore
+      remote_src: yes
+    when: different_fingerprints or https_custom_certs_force_update
+  - name: Remove tmp files
+    file: path=/opt/mapr/conf/ssl_keystore_tmp state=absent
+  - name: Extract private key from PEM (if PEM contains both cert and key) and encrypt key
+    shell: "openssl rsa -aes256 -in /tmp/{{ ansible_fqdn }}-key.pem -passout pass:mapr123 -out /tmp/{{ ansible_fqdn }}-keyout.pem"
+  - name: Extract certificate from PEM (if PEM contains both cert and key)
+    shell: "openssl x509 -outform pem -in /tmp/{{ ansible_fqdn }}-crt.pem -out /tmp/{{ ansible_fqdn }}-crtout.pem"
+  - name: Concat private key and certificate
+    shell: "cat /tmp/{{ ansible_fqdn }}-keyout.pem /tmp/{{ ansible_fqdn }}-crtout.pem >  /tmp/{{ ansible_fqdn }}.pem"
+
+  - name: Copy private key pem
+    copy:
+      src: "/tmp/{{ ansible_fqdn }}.pem"
+      dest: /opt/mapr/conf/ssl_keystore.pem
+      owner: "{{ mapr_user }}"
+      group: "{{ mapr_group }}"
+      mode: 0640
+      remote_src: yes
+  - name: Copy private key p12
+    copy:
+      src: "/tmp/{{ ansible_fqdn }}.p12"
+      dest: /opt/mapr/conf/ssl_keystore.p12
+      owner: "{{ mapr_user }}"
+      group: "{{ mapr_group }}"
+      mode: 0640
+      remote_src: yes
+  - name: Cleanup files from certificates
+    file: state=absent path="{{ item }}"
+    with_items:
+    - "/tmp/{{ ansible_fqdn }}-crt.pem"
+    - "/tmp/{{ ansible_fqdn }}-key.pem"
+    - "/tmp/{{ ansible_fqdn }}-crtout.pem"
+    - "/tmp/{{ ansible_fqdn }}-keyout.pem"
+    - "/tmp/{{ ansible_fqdn }}.p12"
+    - "/tmp/{{ ansible_fqdn }}.pem"

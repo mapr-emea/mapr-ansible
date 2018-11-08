@@ -1,20 +1,20 @@
 ---
 # Configure secure cluster
-- name: Copy keys to local
-  fetch: src=/opt/mapr/conf/{{ item }} dest=/tmp/{{ item }} flat=yes
+- name: Copy MapR keys to local
+  fetch: src="/opt/mapr/conf/{{ item }}" dest="/tmp/{{ item }}" flat=yes
   with_items:
   - maprserverticket
   - cldb.key
+- name: Copy MapR keystores and truststores to local
+  fetch: src="/opt/mapr/conf/{{ item }}" dest="/tmp/{{ item }}" flat=yes
+  with_items:
   - ssl_keystore
   - ssl_keystore.pem
   - ssl_keystore.p12
   - ssl_truststore
   - ssl_truststore.pem
   - ssl_truststore.p12
+  when: not https_custom_certs_enabled
 - name: Copy DARE master key to local
   fetch: src=/opt/mapr/conf/dare.master.key dest=/tmp/dare.master.key flat=yes
   when: security_encryption_rest
-
-
-
-

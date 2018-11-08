@@ -1,0 +1,10 @@
+---
+# Configure secure cluster
+- name: Enable custom security by creating /opt/mapr/conf/.customSecure
+  file: path=/opt/mapr/conf/.customSecure state=touch mode=0644
+- name: Check if /opt/mapr/conf/cldb.key exists
+  stat: path=/opt/mapr/conf/cldb.key
+  register: cldb_key_status
+- name: Configure.sh to generate keys only run on first mapr-cldb node
+  shell: "/opt/mapr/server/configure.sh -N {{ cluster_name }} -Z {{ zookeeper_string }} -C {{ cldb_string }} -u {{ mapr_user }} -g {{ mapr_group }} -genkeys -secure {{ '-dare' if security_encryption_rest else '' }} -HS {{ historyserver_string }} {{ '--isvm' if virtual_machine else '' }}"
+  when: not cldb_key_status.stat.exists

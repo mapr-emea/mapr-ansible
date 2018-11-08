@@ -110,10 +110,22 @@
   roles:
     - ../roles/mapr-nfs-v3-install
 # uninstall NFS on top
+- name: Configure with genkeys (native-security)
+  hosts: mapr-cldb[0]
+  roles:
+  - {role: ../roles/mapr-configure-nativesecurity-secure-genkeys, when: mapr_security == 'maprsasl' }
+- name: Configure with genkeys (kerberos)
+  hosts: mapr-cldb[0]
+  roles:
+  - {role: ../roles/mapr-configure-kerberos-genkeys, when: mapr_security == 'kerberos' }
 - name: Fetch keys, when no CLDB change happened
   hosts: mapr-cldb[0]
   roles:
-   - {role: ../roles/mapr-configure-security-fetch-keys, when: mapr_security != 'none' and (cldb_changes|int) == 0}
+   - {role: ../roles/mapr-configure-security-fetch-keys, when: mapr_security != 'none' }
+- name: Roll out custom SSL certificates
+  hosts: mapr-core
+  roles:
+  - {role: ../roles/mapr-core-customssl, when: https_custom_certs_enabled }
 - name: Configure and start (unsecure)
   hosts: mapr-core
   roles:

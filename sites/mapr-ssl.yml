@@ -1,0 +1,56 @@
+---
+- import_playbook: mapr-include-vars.yml
+- name: Backup conf
+  hosts: mapr-core
+  tasks:
+  - name: Backup MapR configuration files
+    archive: path=/opt/mapr/conf dest="/opt/maprconf-{{ ansible_date_time.iso8601_basic_short }}.tar.gz" owner="{{ mapr_user }}" group="{{ mapr_group }}" mode="0600"
+- name: Validate and import ssl_truststore
+  hosts: mapr-core
+  any_errors_fatal: yes
+  roles:
+  - ../roles/mapr-core-customssl-validate
+- name: Check if custom SSL is enabled
+  hosts: mapr-core
+  tasks:
+  - fail: msg='https_custom_certs_enabled must be set to True to install certificates.'
+    when: not https_custom_certs_enabled
+    any_errors_fatal: yes
+- name: Stop Warden
+  hosts: mapr-core
+  tasks:
+  - name: Stop MapR Warden
+    service: name=mapr-warden state=stopped
+- name: Stop Zookeeper
+  hosts: mapr-zookeeper
+  tasks:
+  - name: Stop MapR Zookeeper
+    service: name=mapr-zookeeper state=stopped
+- name: Import ssl_truststore and ssl_keystore
+  hosts: mapr-core
+  roles:
+  - ../roles/mapr-core-customssl
+
+- name: Grafana custom certs
+  hosts: mapr-grafana
+  roles:
+  - ../roles/mapr-grafana-customssl
+
+# Kibana not configured anywhere? installed but not configured
+- name: Kibana custom certs
+  hosts: mapr-kibana
+  roles:
+    - ../roles/mapr-kibana-customssl
+
+# Hue uses certificate from /opt/mapr/conf/ssl_keystore
+- name: Start Zookeeper
+  hosts: mapr-zookeeper
+  tasks:
+  - name: Start MapR Zookeeper
+    service: name=mapr-zookeeper state=started
+
+- name: Start Warden
+  hosts: mapr-core
+  tasks:
+    - name: Start MapR Warden
+      service: name=mapr-warden state=started

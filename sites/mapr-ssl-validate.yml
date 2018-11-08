@@ -1,0 +1,7 @@
+---
+- import_playbook: mapr-include-vars.yml
+- name: Validate certificates
+  hosts: mapr-core
+  roles:
+  - ../roles/mapr-core-customssl-validate
+
