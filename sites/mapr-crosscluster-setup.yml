@@ -1,0 +1,35 @@
+# This is for cross cluster setup. This script modifies mapr-clusters.conf and merges maprserverticket
+# Please create a new inventory file and don't reuse existing one. Otherwise it would uninstall components on remote cluster when you run site-cluster.yml
+# Template should look like:
+# [remote-crosscluster]
+# first_node_of _remote_cluster (only one node)
+#
+# [mapr-core]
+# list_with_all_cluster_nodes
+#
+- import_playbook: mapr-include-vars.yml
+- name: Register vars required for remote cluster setup
+  hosts: remote-crosscluster
+  tasks:
+  - shell: "head -n 1 /opt/mapr/conf/mapr-clusters.conf"
+    register: mapr_clusters_conf_line
+  - shell: "head -n 1 /opt/mapr/conf/maprserverticket"
+    register: mapr_serverticket_line
+  - shell: "head -n 1 abc |  cut -d ' ' -f1"
+    register: remote_cluster_name
+- name: Run crosscluster setup
+  hosts: mapr-core
+  tasks:
+  - debug: msg="Cluster name {{ cluster_name }}"
+  - debug: msg="Remote cluster name {{ hostvars[item]['remote_cluster_name'].stdout }}"
+    with_items: "{{ groups['remote-crosscluster'] }}"
+  - debug: msg="Remote mapr-clusters.conf {{ hostvars[item]['mapr_clusters_conf_line'].stdout }}"
+    with_items: "{{ groups['remote-crosscluster'] }}"
+  #  - debug: msg="Remote maprserverticket {{ hostvars[item]['mapr_serverticket_line'].stdout }}"
+  #    with_items: "{{ groups['remote-crosscluster'] }}"
+  - name: "Add cluster to mapr-clusters.conf"
+    lineinfile: dest=/opt/mapr/conf/mapr-clusters.conf regexp="^{{ hostvars[item]['remote_cluster_name'].stdout }}" line="{{ hostvars[item]['mapr_clusters_conf_line'].stdout }}"
+    with_items: "{{ groups['remote-crosscluster'] }}"
+  - name: "Add cluster to maprserverticket"
+    lineinfile: dest=/opt/mapr/conf/maprserverticket regexp="^{{ hostvars[item]['remote_cluster_name'].stdout }}" line="{{ hostvars[item]['mapr_serverticket_line'].stdout }}"
+    with_items: "{{ groups['remote-crosscluster'] }}"
