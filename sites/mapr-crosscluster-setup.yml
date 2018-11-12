@@ -15,7 +15,7 @@
     register: mapr_clusters_conf_line
   - shell: "head -n 1 /opt/mapr/conf/maprserverticket"
     register: mapr_serverticket_line
-  - shell: "head -n 1 abc |  cut -d ' ' -f1"
+  - shell: "head -n 1 /opt/mapr/conf/mapr-clusters.conf |  cut -d ' ' -f1"
     register: remote_cluster_name
 - name: Run crosscluster setup
   hosts: mapr-core
