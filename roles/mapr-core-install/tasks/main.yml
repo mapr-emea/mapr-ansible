@@ -8,13 +8,19 @@
   package: name={{ item }} state=present
   with_items: "{{ vars['packages_' + ansible_os_family] }}"
   register: core_result
+- name: Modify configure-hadoop.sh - it should not touch yarn-site.xml
+  lineinfile:
+    path: /opt/mapr/server/configure-hadoop.sh
+    insertafter: '^ConfigureYarnSiteXml'
+    line: '  return 0'
+    backup: yes
 - set_fact: core_local_changes="{{ core_result.results | map(attribute='changed') | map('int') | sum  }}"
 - name: Configure core-site.xml
   template: src=core-site.xml dest=/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/etc/hadoop/core-site.xml
 - name: Configure yarn-site.xml
   template: src=yarn-site.xml dest=/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/etc/hadoop/yarn-site.xml
 - name: Set MAPR_LOGIN_OPTS in env_override.sh to hybrid
-  lineinfile: dest=/opt/mapr/conf/env_override.sh regexp="^export MAPR_LOGIN_OPTS" mode=0755 create=yes  line="export MAPR_LOGIN_OPTS=\"-Dhadoop.login=hybrid ${MAPR_JAAS_CONFIG_OPTS} ${MAPR_ZOOKEEPER_OPTS}\""
+  lineinfile: dest=/opt/mapr/conf/env_override.sh regexp="^export MAPR_LOGIN_OPTS" mode=0644 create=yes  line="export MAPR_LOGIN_OPTS=\"-Dhadoop.login=hybrid ${MAPR_JAAS_CONFIG_OPTS} ${MAPR_ZOOKEEPER_OPTS}\""
   when: mapr_security == 'kerberos'
 
 # mfs_heapsize_percent is optional, if required just remove # and set value, default is 35.

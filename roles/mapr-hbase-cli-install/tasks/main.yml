@@ -7,7 +7,7 @@
     dest=/opt/mapr/conf/env_override.sh
     line="export MAPR_HBASE_CLIENT_OPTS=\"${HYBRID_LOGIN_OPTS}\""
     regexp="^export MAPR_HBASE_CLIENT_OPTS"
-    mode=0755
+    mode=0644
     create=yes
     owner="{{ mapr_user }}"
     group="{{ mapr_group }}"

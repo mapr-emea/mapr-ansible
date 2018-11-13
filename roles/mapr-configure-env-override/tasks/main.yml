@@ -1,7 +1,7 @@
 ---
 - name: Set MapR Subnet
-  lineinfile: dest=/opt/mapr/conf/env_override.sh regexp="^export MAPR_SUBNETS" line="export MAPR_SUBNETS={{ mapr_subnets }}" mode=0755 create=yes owner="{{ mapr_user }}" group="{{ mapr_group }}"
+  lineinfile: dest=/opt/mapr/conf/env_override.sh regexp="^export MAPR_SUBNETS" line="export MAPR_SUBNETS={{ mapr_subnets }}" mode=0644 create=yes owner="{{ mapr_user }}" group="{{ mapr_group }}"
   when: mapr_subnets is defined
 - name: Set MapR User
-  lineinfile: dest=/opt/mapr/conf/env_override.sh regexp="^export MAPR_USER" line="export MAPR_USER={{ mapr_user }}" mode=0755 create=yes owner="{{ mapr_user }}" group="{{ mapr_group }}"
+  lineinfile: dest=/opt/mapr/conf/env_override.sh regexp="^export MAPR_USER" line="export MAPR_USER={{ mapr_user }}" mode=0644 create=yes owner="{{ mapr_user }}" group="{{ mapr_group }}"
   when: mapr_user is defined
