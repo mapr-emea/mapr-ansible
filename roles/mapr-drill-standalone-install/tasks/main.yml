@@ -51,18 +51,18 @@
     dest="/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/drill-env.sh"
     line="export DRILL_JAVA_OPTS=\"$DRILL_JAVA_OPTS -Djava.security.auth.login.config=/opt/mapr/conf/mapr.login.conf -Dzookeeper.sasl.client=false\""
   when: mapr_security == 'none'
-- name: Set Drill Heap memory
-  lineinfile: >
-    dest="/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/drill-env.sh"
-    regexp="^export DRILL_HEAP="
-    line='export DRILL_HEAP=${DRILL_HEAP:-"{{ drill_heap_memory }}"}'
-  when: drill_heap_memory is defined
-- name: Unset Drill Heap memory
-  lineinfile: >
-    dest="/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/drill-env.sh"
-    regexp="^export DRILL_HEAP="
-    state=absent
-  when: drill_heap_memory is undefined
+#- name: Set Drill Heap memory
+#  lineinfile: >
+#    dest="/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/drill-env.sh"
+#    regexp="^export DRILL_HEAP="
+#    line='export DRILL_HEAP=${DRILL_HEAP:-"{{ drill_heap_memory }}"}'
+#  when: drill_heap_memory is defined
+#- name: Unset Drill Heap memory
+#  lineinfile: >
+#    dest="/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/drill-env.sh"
+#    regexp="^export DRILL_HEAP="
+#    state=absent
+#  when: drill_heap_memory is undefined
 - name: Set Drill Max Direct meory
   lineinfile: >
     dest="/opt/mapr/drill/drill-{{ version_output.stdout }}/conf/drill-env.sh"
