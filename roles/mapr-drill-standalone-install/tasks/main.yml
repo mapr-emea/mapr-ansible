@@ -120,11 +120,13 @@
     dest=/opt/mapr/conf/conf.d/warden.drill-bits.conf
     regexp="^service\.env=DRILLBIT_MAX_PROC_MEM"
     line="service.env=DRILLBIT_MAX_PROC_MEM={{ drill_max_proc_mem_in_mb }}m"
+  when: drill_max_proc_mem_in_mb is defined
 - name: Set Drill memory in mb in warden.drill-bits.conf
   lineinfile: >
     dest=/opt/mapr/conf/conf.d/warden.drill-bits.conf
     regexp="^service\.heapsize\.min="
     line="service.heapsize.min={{ drill_max_proc_mem_in_mb }}"
+  when: drill_max_proc_mem_in_mb is defined
 - name: Set Drill memory in mb in warden.drill-bits.conf
   lineinfile: >
     dest=/opt/mapr/conf/conf.d/warden.drill-bits.conf
