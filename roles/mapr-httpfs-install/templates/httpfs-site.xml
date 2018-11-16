@@ -42,7 +42,7 @@
         <value>multiauth</value>
     </property>
     {% endif %}
-    {if httpfs_security == 'kerberos' %}
+    {% if httpfs_security == 'kerberos' %}
     <property>
         <name>httpfs.authentication.type</name>
         <value>kerberos</value>
