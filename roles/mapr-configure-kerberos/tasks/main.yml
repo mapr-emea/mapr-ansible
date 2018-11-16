@@ -31,4 +31,4 @@
 # mfs_heapsize_percent is optional, if required just remove # and set value, default is 35.
 - name: Set MFS memory percent
   lineinfile: dest=/opt/mapr/conf/warden.conf regexp="^service\.command\.mfs\.heapsize\.maxpercent=" line="service.command.mfs.heapsize.maxpercent={{ mfs_heapsize_maxpercent }}"
-  when: mfs_heapsize_percent is defined
+  when: mfs_heapsize_maxpercent is defined
