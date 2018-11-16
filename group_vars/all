@@ -127,6 +127,7 @@ drill_maprspill: False
 # drill pstore options are none, db or zk
 drill_pstore: db
 #drill_max_proc_mem: "1536m"
+#drill_heap_size_in_mb: 1536
 
 # Types are: embedded, oracle, mysql
 hive_db_type: mysql
