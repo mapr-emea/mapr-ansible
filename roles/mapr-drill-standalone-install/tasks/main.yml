@@ -115,11 +115,22 @@
   when: drill_result.changed
 - pause: seconds=10
   when: drill_result.changed
-- name: Set Drill memory in percent
+- name: Set Drill memory in mb in warden.drill-bits.conf
   lineinfile: >
     dest=/opt/mapr/conf/conf.d/warden.drill-bits.conf
     regexp="^service\.env=DRILLBIT_MAX_PROC_MEM"
-    line="service.env=DRILLBIT_MAX_PROC_MEM={{ drill_max_proc_mem_in_percent }}%"
+    line="service.env=DRILLBIT_MAX_PROC_MEM={{ drill_max_proc_mem_in_mb }}m"
+- name: Set Drill memory in mb in warden.drill-bits.conf
+  lineinfile: >
+    dest=/opt/mapr/conf/conf.d/warden.drill-bits.conf
+    regexp="^service\.heapsize\.min="
+    line="service.heapsize.min={{ drill_max_proc_mem_in_mb }}"
+- name: Set Drill memory in mb in warden.drill-bits.conf
+  lineinfile: >
+    dest=/opt/mapr/conf/conf.d/warden.drill-bits.conf
+    regexp="^service\.heapsize\.max="
+    line="service.heapsize.max={{ drill_max_proc_mem_in_mb }}"
+  when: drill_max_proc_mem_in_mb is defined
 - name: Restart Drill
   shell: "maprcli node services -name drill-bits -action restart -nodes {{ ansible_fqdn }}"
   register: task_result

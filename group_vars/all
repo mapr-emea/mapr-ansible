@@ -41,7 +41,7 @@ yarn_local_dir_to_maprfs: False
 yarn_spark_shuffle: True
 
 # If set value will be overriden
-#mfs_heapsize_maxpercent: 20
+#drill_max_proc_mem_in_mb: 20
 
 ####### Enable security features ##########
 # Default value for all components: mapr core and ecosystem

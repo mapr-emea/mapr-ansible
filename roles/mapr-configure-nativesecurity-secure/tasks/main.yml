@@ -29,6 +29,7 @@
  # run configure on other nodes
 - name: Configure.sh secure
   shell: "/opt/mapr/server/configure.sh -N {{ cluster_name }} -Z {{ zookeeper_string }} -C {{ cldb_string }} -u {{ mapr_user }} -g {{mapr_group}} -secure {{ '-dare' if security_encryption_rest else '' }} -HS {{ historyserver_string }} {{ '--isvm' if virtual_machine else '' }}"
-
-
-
+# mfs_heapsize_percent is optional, if required just remove # and set value, default is 35.
+- name: Set MFS memory percent
+  lineinfile: dest=/opt/mapr/conf/warden.conf regexp="^service\.command\.mfs\.heapsize\.maxpercent=" line="service.command.mfs.heapsize.maxpercent={{ mfs_heapsize_maxpercent }}"
+  when: mfs_heapsize_percent is defined
