@@ -126,7 +126,7 @@ hue_db_port: 3306
 drill_maprspill: False
 # drill pstore options are none, db or zk
 drill_pstore: db
-#drill_max_proc_mem: "1536m"
+#drillbit_service_env: "DRILLBIT_MAX_PROC_MEM=5120m,DRILL_HEAP=3072m,DRILL_MAX_DIRECT_MEMORY=1024m,DRILLBIT_CODE_CACHE_SIZE=512m"
 #drill_heap_size_in_mb: 1536
 
 # Types are: embedded, oracle, mysql

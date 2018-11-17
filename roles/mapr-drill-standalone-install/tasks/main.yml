@@ -91,12 +91,12 @@
   when: drill_result.changed
 - pause: seconds=10
   when: drill_result.changed
-- name: Set Drill memory in mb in warden.drill-bits.conf
+- name: Set Drill memory in service.env in warden.drill-bits.conf
   lineinfile: >
     dest=/opt/mapr/conf/conf.d/warden.drill-bits.conf
-    regexp="^service\.env=DRILLBIT_MAX_PROC_MEM"
-    line="service.env=DRILLBIT_MAX_PROC_MEM={{ drill_max_proc_mem }}"
-  when: drill_max_proc_mem is defined
+    regexp="^service\.env="
+    line="service.env={{ drillbit_service_env }}"
+  when: drillbit_service_env is defined
 - name: Set Drill heap size in mb in warden.drill-bits.conf
   lineinfile: >
     dest=/opt/mapr/conf/conf.d/warden.drill-bits.conf
