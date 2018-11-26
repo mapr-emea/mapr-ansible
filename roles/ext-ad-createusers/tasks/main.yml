@@ -7,7 +7,7 @@
   copy: src=ad-change-pwd-0.1.jar dest=/tmp/ad-change-pwd-0.1.jar
 - name: Create kerberos user for cluster
   ldap_entry:
-    dn: "CN={{ mapr_user }}-{{ cluster_name }},{{ mapr_kerberos_ad_user_cn }}"
+    dn: "CN={{ mapr_user_cldb_principal }}-{{ cluster_name }},{{ mapr_kerberos_ad_user_cn }}"
     state: present
 #    start_tls: true
     objectClass:
@@ -16,21 +16,21 @@
       - top
       - user
     attributes:
-      cn: "{{ mapr_user }}-{{ cluster_name }}"
-      displayName: "{{ mapr_user }}-{{ cluster_name }}"
-      name: "{{ mapr_user }}-{{ cluster_name }}"
-      sAMAccountName: "{{ mapr_user }}-{{ cluster_name }}"
+      cn: "{{ mapr_user_cldb_principal }}-{{ cluster_name }}"
+      displayName: "{{ mapr_user_cldb_principal }}-{{ cluster_name }}"
+      name: "{{ mapr_user_cldb_principal }}-{{ cluster_name }}"
+      sAMAccountName: "{{ mapr_user_cldb_principal }}-{{ cluster_name }}"
       instanceType: 4
       objectCategory: "{{ mapr_kerberos_ad_object_category }}"
-      servicePrincipalName: "{{ mapr_user }}/{{ cluster_name }}"
-      userPrincipalName: "{{ mapr_user }}/{{ cluster_name }}@{{ mapr_kerberos_domain }}"
+      servicePrincipalName: "{{ mapr_user_cldb_principal }}/{{ cluster_name }}"
+      userPrincipalName: "{{ mapr_user_cldb_principal }}/{{ cluster_name }}@{{ mapr_kerberos_domain }}"
       userAccountControl: 66080
     server_uri: "ldap://{{ mapr_kerberos_kdc }}/"
     bind_dn: "{{ mapr_kerberos_admin_bind_dn }}"
     bind_pw: "{{ mapr_kerberos_admin_bind_pw }}"
   when: inventory_hostname == groups["ext-kerberos"][0]
 - name: Set password for cluster user
-  command: "java -jar /tmp/ad-change-pwd-0.1.jar {{ mapr_kerberos_kdc }} 636 '{{ mapr_kerberos_admin_bind_dn }}' '{{ mapr_kerberos_admin_bind_pw }}' 'CN={{ mapr_user }}-{{ cluster_name }},{{ mapr_kerberos_ad_user_cn }}' '{{ mapr_kerberos_keytab_passwd }}'"
+  command: "java -jar /tmp/ad-change-pwd-0.1.jar {{ mapr_kerberos_kdc }} 636 '{{ mapr_kerberos_admin_bind_dn }}' '{{ mapr_kerberos_admin_bind_pw }}' 'CN={{ mapr_user_cldb_principal }}-{{ cluster_name }},{{ mapr_kerberos_ad_user_cn }}' '{{ mapr_kerberos_keytab_passwd }}'"
   when: inventory_hostname == groups["ext-kerberos"][0]
 - name: Create kerberos users
   vars:

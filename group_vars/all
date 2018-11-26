@@ -66,6 +66,8 @@ mapr_security: "{{ security_all }}"
 # Additional information for Kerberos
 mapr_kerberos_realm: PS.MAPR.COM
 mapr_kerberos_local_keytabs_dir: /mnt/c/Projects/keytabs
+# This is a wrkaround, since CLDB uses always mapr-user 'mapr' in CLDB principal, don't change
+mapr_user_cldb_principal: mapr
 
 # Will delete existing keys (cldb.key, maprserverticket, ssl_truststore, ssl_keystore) and generate new one: true /false
 

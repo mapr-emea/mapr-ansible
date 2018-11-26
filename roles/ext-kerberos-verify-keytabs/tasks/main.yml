@@ -29,7 +29,7 @@
 #  when: inventory_hostname in groups["mapr-core"]
 
 - name: Verify Cluster keytab
-  command: "kinit -k -t /tmp/mapr.keytab {{ mapr_user }}/{{ cluster_name }}"
+  command: "kinit -k -t /tmp/mapr.keytab {{ mapr_user_cldb_principal }}/{{ cluster_name }}"
 - name: Display current ticket mapr
   command: klist
   register: klist_out

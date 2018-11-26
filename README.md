@@ -30,12 +30,6 @@ The scripts support:
 * MapR 6.0.0 with MEP 4.0.x (branch mapr-6.0.0-MEP-4.x)
 * MapR 5.2.x (branch mapr-5.2-MEP-3.0.x)
 
-## Known issues / not yet implemented for MapR 6.1 
-
-* Hue HBase Thrift integration is not working
-* Kerberos was not yet tested
-* New ecosystem components delivered with MEP 6.0 are not yet implemented.
-
 ## Supported OS
 
 * Redhat 7 or higher

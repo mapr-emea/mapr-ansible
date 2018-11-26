@@ -1,4 +1,4 @@
-add_entry -password -p {{ mapr_user }}/{{ cluster_name }} -k 1 -e  RC4-HMAC
+add_entry -password -p {{ mapr_user_cldb_principal }}/{{ cluster_name }} -k 1 -e  RC4-HMAC
 {{ mapr_kerberos_keytab_passwd }}
 add_entry -password -p {{ mapr_user }}/{{ ansible_fqdn }} -k 1 -e  RC4-HMAC
 {{ mapr_kerberos_keytab_passwd }}
