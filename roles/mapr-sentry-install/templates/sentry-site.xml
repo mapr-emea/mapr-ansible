@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<configuration>
+    <property>
+        <name>sentry.service.security.mode</name>
+        <value>{{ sentry_security }}</value>
+        <description>Options: kerberos, other, none. Authentication mode for Sentry service.</description>
+    </property>
+    {% if sentry_security == 'kerberos' %}
+    <property>
+        <name>sentry.service.server.principal</name>
+        <value>{{ mapr_user }}/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }}</value>
+    </property>
+
+    <property>
+        <name>sentry.service.server.keytab</name>
+        <value>/opt/mapr/conf/mapr.keytab</value>
+    </property>
+    {% endif %}
+    <property>
+        <name>sentry.service.allow.connect</name>
+        <value>mapr,hive,impala</value>
+    </property>
+
+    <property>
+        <name>sentry.service.client.server.rpc-address</name>
+        <value>{{ sentry_server_string }}</value>
+        <description>TCP address of the sentry store server</description>
+    </property>
+
+    <property>
+        <name>sentry.service.client.server.rpc-port</name>
+        <value>8038</value>
+        <description>Port # of the sentry store server</description>
+    </property>
+
+    <property>
+        <name>sentry.service.client.server.rpc-connection-timeout</name>
+        <value>200000</value>
+        <description>Client timeout default(200000) RPC connection timeout in milisecs</description>
+    </property>
+
+    <property>
+        <name>sentry.metastore.service.users</name>
+        <value>mapr</value>
+        <description>
+            Comma separated list of users
+            List of service users (eg hive, impala) to bypass
+            the Sentry metastore authorization. These
+            services handle the metadata authorization
+            on their side.
+        </description>
+    </property>
+
+    <property>
+        <name>sentry.hive.server</name>
+        <value>HS2</value>
+        <description>Deprecated name: hive.sentry.server. Defaut: HS2. Hive Server2 Server identifier like "server1"
+        </description>
+    </property>
+
+    <property>
+        <name>sentry.hive.provider.backend</name>
+        <value>org.apache.sentry.provider.db.SimpleDBProviderBackend</value>
+        <description>Options: {org.apache.sentry.provider.db.SimpleDBProviderBackend,
+            org.apache.sentry.provider.file.SimpleFileProviderBackend}
+            Privilege provider to be used, we support file based or db based
+        </description>
+    </property>
+
+    <!-- property>
+        <name>sentry.hive.provider.resource</name>
+        <value>maprfs:///user/mapr/global-policy.ini</value>
+    </property -->
+
+
+    <property>
+        <name>sentry.hive.testing.mode</name>
+        <value>true</value>
+    </property>
+
+    <property>
+        <name>sentry.service.admin.group</name>
+        <value>{{ mapr_group }}</value>
+    </property>
+
+    <!-- Database -->
+    {% if mysql_hosts is defined and sentry_db_type == 'mysql' %}
+    {% if sentry_db_jdbc_url is defined %}
+    <property>
+        <name>sentry.store.jdbc.url</name>
+        <value>{{ sentry_db_jdbc_url }}</value>
+    </property>
+    {% else %}
+    <property>
+        <name>sentry.store.jdbc.url</name>
+        <value>jdbc:mysql://{{ sentry_db_host }}:3306/{{ sentry_db_schema }}?createDatabaseIfNotExist=true</value>
+        <description>JDBC connect string for a JDBC metastore</description>
+    </property>
+    {% endif %}
+    <property>
+        <name>sentry.store.jdbc.driver</name>
+        <value>com.mysql.jdbc.Driver</value>
+    </property>
+
+    <property>
+        <name>sentry.store.jdbc.user</name>
+        <value>{{ sentry_db_user }}</value>
+    </property>
+
+    <property>
+        <name>sentry.store.jdbc.password</name>
+        <value>{{ sentry_db_password }}</value>
+    </property>
+    {% elif sentry_db_type == 'oracle' %}
+    <property>
+        <name>sentry.store.jdbc.url</name>
+        <value>{{ sentry_db_jdbc_url }}</value>
+    </property>
+    <property>
+        <name>sentry.store.jdbc.driver</name>
+        <value>oracle.jdbc.OracleDriver</value>
+    </property>
+
+    <property>
+        <name>sentry.store.jdbc.user</name>
+        <value>{{ sentry_db_user }}</value>
+    </property>
+
+    <property>
+        <name>sentry.store.jdbc.password</name>
+        <value>{{ sentry_db_password }}</value>
+    </property>
+    {% endif %}
+</configuration>

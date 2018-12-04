@@ -33,6 +33,10 @@ IMPALA_SERVER_ARGS=" \
     -principal={{ mapr_user }}/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }} \
     -keytab_file=/opt/mapr/conf/mapr.keytab \
 {% endif %}
+{% if impala_with_sentry %}
+    -sentry_config={{ sentry_path }}/conf/sentry-site.xml \
+    -server_name=HS2 \
+{% endif %}
 "
 
 # These impact the state store daemon and can be optionally changed
@@ -45,6 +49,10 @@ IMPALA_STATE_STORE_ARGS=" \
     -principal={{ mapr_user }}/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }} \
     -keytab_file=/opt/mapr/conf/mapr.keytab \
 {% endif %}
+{% if impala_with_sentry %}
+    -sentry_config={{ sentry_path }}/conf/sentry-site.xml \
+    -server_name=HS2 \
+{% endif %}
 "
 
 IMPALA_CATALOG_ARGS=" \
@@ -56,6 +64,10 @@ IMPALA_CATALOG_ARGS=" \
     -kerberos_reinit_interval=60 \
     -principal={{ mapr_user }}/{{ ansible_fqdn }}@{{ mapr_kerberos_realm }} \
     -keytab_file=/opt/mapr/conf/mapr.keytab \
+{% endif %}
+{% if impala_with_sentry %}
+    -sentry_config={{ sentry_path }}/conf/sentry-site.xml \
+    -server_name=HS2 \
 {% endif %}
 "
 

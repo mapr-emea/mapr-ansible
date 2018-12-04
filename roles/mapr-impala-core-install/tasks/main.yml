@@ -11,6 +11,13 @@
   copy: src="{{ mapr_kerberos_local_keytabs_dir }}/{{ ansible_fqdn }}.keytab" dest=/opt/mapr/conf/mapr.keytab group="{{ mapr_group }}" owner="{{ mapr_user }}" mode=0600
   when: impala_security == 'kerberos'
 
+- name: Find Sentry Path
+  find: paths="/opt/mapr/sentry" patterns="sentry*" file_type=directory
+  register: sentry_path_result
+  failed_when: sentry_path_result.matched != 1
+  when: impala_with_sentry
+- set_fact: sentry_path="{{ sentry_path_result.files[0].path }}"
+  when: impala_with_sentry
 - name: Configure env.sh
   template: src=env.sh dest="{{ impala_path_result.files[0].path }}/conf/env.sh"
 

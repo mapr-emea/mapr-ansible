@@ -1,0 +1,33 @@
+---
+- name: Find Sentry Path
+  find: paths="/opt/mapr/sentry" patterns="sentry*" file_type=directory
+  register: sentry_path_result
+  failed_when: sentry_path_result.matched != 1
+- set_fact: sentry_path="{{ sentry_path_result.files[0].path }}"
+- name: Create MySQL tables for Sentry
+  shell: "{{ sentry_path }}/bin/sentry --command schema-tool --conffile {{ sentry_path }}/conf/sentry-site.xml --dbType mysql --initSchema"
+  when: inventory_hostname == groups["mapr-sentry-server"][0] and sentry_db_type == 'mysql'
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  ignore_errors: True # TODO error result should be handeled
+- name: Create Oracle tables for Sentry
+  shell: "{{ sentry_path }}/bin/sentry --command schema-tool --conffile {{ sentry_path }}/conf/sentry-site.xml --dbType oracle --initSchema"
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: inventory_hostname == groups["mapr-sentry-server"][0] and sentry_db_type == 'oracle'
+  ignore_errors: True # TODO error result should be handeled
+- name: Enable Sentry Server
+  copy: remote_src=true src="{{ sentry_path }}/conf.d/warden.sentry.conf" dest="/opt/mapr/conf/conf.d/" mode=0644 owner="{{ mapr_user }}" group="{{ mapr_group }}"
+  register: sentry_result
+- pause: seconds=10
+  when: sentry_result.changed
+- name: Restart Sentry
+  shell: "maprcli node services -name sentry -action restart -nodes {{ ansible_fqdn }}"
+  register: task_result
+  until: task_result.rc == 0
+  retries: 10
+  delay: 10
+  ignore_errors: yes
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: sentry_result.changed

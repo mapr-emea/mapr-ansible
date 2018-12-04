@@ -24,9 +24,9 @@ virtual_machine: False
 
 # mapr_subnets is optional, if required just remove #
 #mapr_subnets: 10.0.0.0/24
-mapr_create_user: True
+mapr_create_user: False
 mapr_user: mapr
-mapr_group: mapr
+mapr_group: maprdgrp
 # UID only for creation required.
 mapr_group_gid: 5000
 mapr_user_uid: 5000
@@ -72,7 +72,20 @@ mapr_user_cldb_principal: mapr
 # Will delete existing keys (cldb.key, maprserverticket, ssl_truststore, ssl_keystore) and generate new one: true /false
 
 # Impala security: none, kerberos
-impala_security: none
+impala_security: kerberos
+impala_with_sentry: True
+# Sentry security: none, kerberos
+sentry_security: kerberos
+# Types are: embedded, oracle, mysql
+sentry_db_type: mysql
+sentry_db_mysql_create_schema_and_user: True
+sentry_db_user: hive
+sentry_db_password: hive
+sentry_db_schema: hive
+# MySQL JDBC Url, if you set it overrides the default which is taken from installed MySQL
+#sentry_db_jdbc_url: jdbc:mysql://mysqlhost:3306/sentry?createDatabaseIfNotExist=true
+# Oracle JDBC Url
+#sentry_db_jdbc_url: jdbc:oracle:thin:@ip-10-0-0-72.ps.mapr.com:1521:mapr
 
 # Hive security: none, maprsasl, pam or kerberos
 hive_server_security: "{{ security_all }}"

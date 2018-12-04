@@ -1,0 +1,11 @@
+---
+- name: Stop Sentry
+  shell: "maprcli node services -name sentry -action stop -nodes {{ ansible_fqdn }}"
+  register: maprcli_result
+  failed_when: maprcli_result.rc > 1
+  changed_when: maprcli_result.rc == 0
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+# Uninstall Sentry
+- name: Uninstall mapr-sentry
+  package: name=mapr-sentry state=absent

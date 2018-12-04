@@ -158,6 +158,9 @@ common
 [mapr-impala-statestore]
 #common
 
+[mapr-sentry-server]
+# common
+
 [mapr-kafka-connect-jdbc]
 #common
 

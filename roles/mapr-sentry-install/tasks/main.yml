@@ -1,0 +1,27 @@
+---
+# Install MapR Sentry
+- name: Install mapr-sentry
+  package: name=mapr-sentry state=present
+
+- name: Copy mapr.keytab to host
+  copy: src="{{ mapr_kerberos_local_keytabs_dir }}/{{ ansible_fqdn }}.keytab" dest=/opt/mapr/conf/mapr.keytab group="{{ mapr_group }}" owner="{{ mapr_user }}" mode=0600
+  when: sentry_security == 'kerberos'
+
+- name: Find Sentry Path
+  find: paths="/opt/mapr/sentry" patterns="sentry*" file_type=directory
+  register: sentry_path_result
+  failed_when: sentry_path_result.matched != 1
+- set_fact: sentry_path="{{ sentry_path_result.files[0].path }}"
+
+- name: Configure sentry-site.xml
+  template: src=sentry-site.xml dest="{{ sentry_path }}/conf/sentry-site.xml"
+
+- name: Copy MySQL driver
+  copy: src=mysql-connector-java-5.1.40-bin.jar dest="{{ sentry_path }}/lib/"
+  when: sentry_db_type == 'mysql'
+- name: Copy Oracle driver
+  copy: src="{{ oracle_jdbc_driver_path }}" dest="{{ sentry_path }}/lib/"
+  when: sentry_db_type == 'oracle'
+
+
+

@@ -1,0 +1,8 @@
+---
+- name: Get Sentry Server
+  set_fact: sentry_server_item={{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item }}
+  with_items:
+    - "{{ groups['mapr-sentry-server'] }}"
+  register: sentry_server_hosts
+- name: Make Sentry Server String
+  set_fact: sentry_server_string={{ sentry_server_hosts.results | map(attribute='ansible_facts.sentry_server_item') | list | join(',')}}

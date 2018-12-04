@@ -4,9 +4,9 @@
 
 # ALIASES does NOT work with ROLLING upgrades!
 [all]
-node1 ansible_host=10.0.0.85 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-node2 ansible_host=10.0.0.91 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-node3 ansible_host=10.0.0.174 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+node1 ansible_host=10.0.0.41 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+node2 ansible_host=10.0.0.170 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+node3 ansible_host=10.0.0.238 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
 [unprovision]
 
@@ -104,9 +104,9 @@ node3
 
 # Apache Drill
 [mapr-drill-standalone]
-node1
-node2
-node3
+#node1
+#node2
+#node3
 
 # Apache Drill
 [mapr-drill-yarn]
@@ -186,15 +186,17 @@ node2
 #node3
 
 [mapr-impala-server]
-#node1
-#node2
-#node3
+node2
+node3
 
 [mapr-impala-catalog]
-#node1
+node1
 
 [mapr-impala-statestore]
-#node2
+node1
+
+[mapr-sentry-server]
+node1
 
 [mapr-kafka-connect-jdbc]
 #node2

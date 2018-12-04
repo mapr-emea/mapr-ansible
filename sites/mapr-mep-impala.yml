@@ -1,12 +1,22 @@
 - import_playbook: mapr-include-vars.yml
-- name: Install Impala Vars
+- name: Install Impala and Sentry Vars
   hosts: all
+  vars:
+    num_mysql_hosts: "{{ groups['ext-mysql']|length }}"
   roles:
     - ../roles/mapr-impala-vars
+    - ../roles/mapr-sentry-vars
+    - { role: ../roles/mapr-sentry-mysql, when: impala_with_sentry and sentry_db_type == 'mysql' and sentry_db_mysql_create_schema_and_user and num_mysql_hosts != '0' }
+- name: Install Sentry Server
+  hosts: mapr-sentry-server
+  roles:
+    - ../roles/mapr-sentry-install
+    - ../roles/mapr-sentry-server-enable
 - name: Install Impala
   hosts: mapr-impala-catalog:mapr-impala-statestore:mapr-impala-server
   roles:
-    - ../roles/mapr-impala-core-install
+  - { role: ../roles/mapr-sentry-install, when: impala_with_sentry }
+  - ../roles/mapr-impala-core-install
 - name: Install Impala Catalog
   hosts: mapr-impala-catalog
   roles:
@@ -31,6 +41,14 @@
   hosts: all:!mapr-impala-server
   roles:
     - ../roles/mapr-impala-server-uninstall
+- name: Uninstall Sentry Server
+  hosts: all:!mapr-sentry-server
+  roles:
+    - ../roles/mapr-sentry-server-disable
+- name: Uninstall Sentry
+  hosts: all:!(mapr-impala-catalog:&mapr-impala-statestore:&mapr-impala-server:&mapr-sentry-server)
+  roles:
+    - ../roles/mapr-sentry-uninstall
 - name: Uninstall Impala
   hosts: all:!(mapr-impala-catalog:&mapr-impala-statestore:&mapr-impala-server)
   roles:

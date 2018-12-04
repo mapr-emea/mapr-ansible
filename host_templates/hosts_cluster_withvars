@@ -154,6 +154,8 @@ ansible_become=yes
 
 [mapr-impala-statestore]
 
+[mapr-sentry-server]
+
 [mapr-kafka-connect-jdbc]
 
 [mapr-kafka-rest]
