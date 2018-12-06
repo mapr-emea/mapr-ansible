@@ -8,7 +8,7 @@
   - ssl_keystore
 
 - name: Copy mapruserticket to all nodes (required for FUSE or nfsloopback)
-  copy: src="/tmp/mapruserticket" dest="/opt/mapr/conf/mapruserticket" mode="0600" owner="{{ mapr_user }}" group="{{ mapr_group }}"  
+  copy: src="/tmp/mapruserticket" dest="/opt/mapr/conf/mapruserticket" mode="0600" owner="{{ mapr_user }}" group="{{ mapr_group }}"
 # copy to other nodes
 # run configure on other nodes
 

@@ -44,23 +44,6 @@
     changed_when: False
   - set_fact:
       different_fingerprints: "{{ p12_fingerprint.stdout != mapr_ssl_keystore_fingerprint.stdout }}"
-#  - name: Copy ssl_keystore and make modifications on this copy
-#    copy:
-#      src: /opt/mapr/conf/ssl_keystore
-#      dest: /opt/mapr/conf/ssl_keystore_tmp
-#      remote_src: yes
-#    check_mode: no
-#    when: different_fingerprints or https_custom_certs_force_update
-#  - name: Remove old certificate
-#    java_cert:
-#      pkcs12_path: "/tmp/{{ ansible_fqdn }}.p12"
-#      cert_alias: "{{ cluster_name }}"
-#      keystore_path: /opt/mapr/conf/ssl_keystore_tmp
-#      keystore_pass: mapr123
-#      keystore_create: yes
-#      state: absent
-#    any_errors_fatal: yes
-#    when: different_fingerprints or https_custom_certs_force_update
   - name: Import certificate to /opt/mapr/conf/ssl_keystore_tmp
     java_cert:
       pkcs12_path: "/tmp/{{ ansible_fqdn }}.p12"
