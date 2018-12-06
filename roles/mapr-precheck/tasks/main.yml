@@ -71,4 +71,4 @@
   when: mapr_security == 'none' and security_encryption_rest
   any_errors_fatal: true
 
-# CHUFE check posix basic,posix plat, nfs -> only one
+  # CHUFE check posix basic,posix plat, nfs -> only one

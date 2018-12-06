@@ -166,5 +166,5 @@
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
   when: hue_result.changed
 
-# http://maprdocs.mapr.com/home/Hue/ConfigureHuetouseKerberosYARN.html
-#http://maprdocs.mapr.com/home/Hue/ConfigureDBsforHueStorage.html
+  # http://maprdocs.mapr.com/home/Hue/ConfigureHuetouseKerberosYARN.html
+  # http://maprdocs.mapr.com/home/Hue/ConfigureDBsforHueStorage.html

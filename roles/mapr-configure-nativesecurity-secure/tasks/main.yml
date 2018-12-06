@@ -25,8 +25,8 @@
 - name: Copy DARE master key
   copy: src=/tmp/dare.master.key dest=/opt/mapr/conf/dare.master.key owner="{{ mapr_user }}" group="{{ mapr_group }}" mode="0600"
   when: security_encryption_rest
- # copy to other nodes
- # run configure on other nodes
+# copy to other nodes
+# run configure on other nodes
 - name: Configure.sh secure
   shell: "/opt/mapr/server/configure.sh -N {{ cluster_name }} -Z {{ zookeeper_string }} -C {{ cldb_string }} -u {{ mapr_user }} -g {{mapr_group}} -secure {{ '-dare' if security_encryption_rest else '' }} -HS {{ historyserver_string }} {{ '--isvm' if virtual_machine else '' }}"
 # mfs_heapsize_percent is optional, if required just remove # and set value, default is 35.

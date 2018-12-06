@@ -12,12 +12,13 @@
   shell: /opt/mapr/server/configure.sh -R -OT {{ opentsdb_string }} -EPgrafana '-password {{ spyglass_grafana_password }}' -EPcollectd {{ "-minimal" if spyglass_metrics_collect == "minimal" else "-all" }}
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
-# Workaround for custom security bug
+    # Workaround for custom security bug
     GRAFANA_ADMIN_ID: "{{ mapr_user }}"
     GRAFANA_ADMIN_PASSWORD: mapr
-#  when: mapr_security != 'none'
-#- name: Configure.sh
-#  shell: /opt/mapr/server/configure.sh -R -OT {{ opentsdb_string }} -EPgrafana '-password {{ spyglass_grafana_password }}'
-#  environment:
-#    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
-#  when: mapr_security == 'none'
+    # when: mapr_security != 'none'
+
+# - name: Configure.sh
+#   shell: /opt/mapr/server/configure.sh -R -OT {{ opentsdb_string }} -EPgrafana '-password {{ spyglass_grafana_password }}'
+#   environment:
+#     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+#   when: mapr_security == 'none'

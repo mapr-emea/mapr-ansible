@@ -79,10 +79,10 @@
     disable_gpg_check: "{{ 'no' if mapr_gpg_check == 'yes' else 'no' }}"
     state: present
   when: ansible_os_family == 'Suse'
-#- name: Create MapR Patch Repository for Suse
-#  zypper_repository:
-#    name: maprpatch
-#    repo: "{{ mapr_patch_url }}/redhat/"
-#    disable_gpg_check: "{{ 'no' if mapr_gpg_check == 'yes' else 'no' }}"
-#    state: present
-#  when: ansible_os_family == 'Suse' and mapr_patch_url is defined
+# - name: Create MapR Patch Repository for Suse
+#   zypper_repository:
+#     name: maprpatch
+#     repo: "{{ mapr_patch_url }}/redhat/"
+#     disable_gpg_check: "{{ 'no' if mapr_gpg_check == 'yes' else 'no' }}"
+#     state: present
+#   when: ansible_os_family == 'Suse' and mapr_patch_url is defined

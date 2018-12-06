@@ -12,10 +12,10 @@
   with_items:
   - git
   - nodejs
-#  - npm
-#  - libfontconfig
+  # - npm
+  # - libfontconfig
   when: ansible_os_family == 'RedHat'
- # Suse
+# Suse
 - name: Create NodeJS Repo for Suse
   zypper_repository: name=Node.js disable_gpg_check=yes repo=http://download.opensuse.org/repositories/devel:/languages:/nodejs/openSUSE_13.1/
   when: ansible_os_family == 'Suse'

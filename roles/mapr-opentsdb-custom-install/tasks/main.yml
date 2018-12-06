@@ -35,7 +35,7 @@
   register: asynchbase_jar_path_result
   failed_when: asynchbase_jar_path_result.matched == 0
 - name: Link Asynchbase.jar to OpenTSDB
-#  debug: msg="{{ item.path }}"
+  # debug: msg="{{ item.path }}"
   file: src="{{ item.path }}" dest="/opt/mapr/opentsdb/opentsdb-{{ version_output.stdout }}/share/opentsdb/lib/{{ item.path | basename }}" state=link
   with_items: "{{ asynchbase_jar_path_result.files }}"
 - name: Create custom OpenTSDB table structure

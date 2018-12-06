@@ -1,7 +1,7 @@
 ---
 # Install MapR log monitoring configure
 - name: Configure.sh
-#  shell: /opt/mapr/server/configure.sh -R -ES {{ elasticsearch_string }}
+  # shell: /opt/mapr/server/configure.sh -R -ES {{ elasticsearch_string }}
   shell: "/opt/mapr/server/configure.sh -R -v -ES {{ elasticsearch_string }} -EPelasticsearch '-password {{ spyglass_log_password }}' -EPkibana '-password {{ spyglass_log_password }}' -EPfluentd '-password {{ spyglass_log_password }}'"
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket

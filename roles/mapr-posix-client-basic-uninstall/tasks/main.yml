@@ -9,5 +9,5 @@
 - name: Uninstall mapr-posix-client-basic
   package: name=mapr-posix-client-basic state=absent
 # Other actions
-#- name: Remove /mapr dir
-#  file: path=/mapr state=absent
+# - name: Remove /mapr dir
+#   file: path=/mapr state=absent

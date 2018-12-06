@@ -8,6 +8,7 @@
   when: service_status.stat.exists
 - name: Uninstall mapr-posix-client-platinum
   package: name=mapr-posix-client-platinum state=absent
+
 # Other actions
-#- name: Remove /mapr dir
-#  file: path=/mapr state=absent
+# - name: Remove /mapr dir
+#   file: path=/mapr state=absent

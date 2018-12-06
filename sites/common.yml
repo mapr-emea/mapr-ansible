@@ -3,7 +3,7 @@
   hosts: common
   roles:
     - ../roles/common-prereq
-#    - ../roles/common-selinux
+    # - ../roles/common-selinux
     - {role: ../roles/common-oraclejdk18, when: jdk == 'oraclejdk18'}
     - {role: ../roles/common-openjdk18, when: jdk == 'openjdk18'}
     - {role: ../roles/common-mapruser, when: mapr_create_user}

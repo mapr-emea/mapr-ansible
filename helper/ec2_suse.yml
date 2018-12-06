@@ -43,7 +43,7 @@
         assign_public_ip: yes
         ebs_optimized: yes
 
-#http://docs.aws.amazon.com/cli/latest/userguide/generate-cli-skeleton.html
+# http://docs.aws.amazon.com/cli/latest/userguide/generate-cli-skeleton.html
 #        aws ec2 describe-instances --output text  | awk -F"\t" '$1=="INSTANCES" {print $8}'
-#aws ec2 run-instances --image-id ami-8b8c57f8 --count 1 --key-name "Carsten Hufe" --security-group-ids sg-0a4ca16d --instance-type r3.xlarge --associate-public-ip-address --ebs-optimized --subnet-id subnet-0bd9337d --output text
-#aws ec2 create-tags --resources i-97712d1d --tags Key=Name,Value=CarstenHufeBlub Key=Owner,Value=CarstenHufe"
+# aws ec2 run-instances --image-id ami-8b8c57f8 --count 1 --key-name "Carsten Hufe" --security-group-ids sg-0a4ca16d --instance-type r3.xlarge --associate-public-ip-address --ebs-optimized --subnet-id subnet-0bd9337d --output text
+# aws ec2 create-tags --resources i-97712d1d --tags Key=Name,Value=CarstenHufeBlub Key=Owner,Value=CarstenHufe"

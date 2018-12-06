@@ -78,11 +78,11 @@
     environment:
       MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
     when: rolling_upgrade is undefined or not rolling_upgrade
-#- name: Disable maintenance mode
-#  hosts: mapr-core
-#  tasks:
-#  - name: Disable maintenance mode
-#    shell: "maprcli node maintenance -nodes {{ ansible_fqdn }} -timeoutminutes 0"
-#    when: rolling_upgrade is defined and rolling_upgrade
-#    environment:
-#      MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+# - name: Disable maintenance mode
+#   hosts: mapr-core
+#   tasks:
+#   - name: Disable maintenance mode
+#     shell: "maprcli node maintenance -nodes {{ ansible_fqdn }} -timeoutminutes 0"
+#     when: rolling_upgrade is defined and rolling_upgrade
+#     environment:
+#       MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket

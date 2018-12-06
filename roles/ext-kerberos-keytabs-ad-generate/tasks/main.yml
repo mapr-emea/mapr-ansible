@@ -1,5 +1,5 @@
 ---
-    # http://stackoverflow.com/questions/4322243/adding-a-user-with-a-password-in-active-directory-ldaps
+# http://stackoverflow.com/questions/4322243/adding-a-user-with-a-password-in-active-directory-ldaps
 - name: Delete existing keytab
   file: path=/tmp/mapr.keytab state=absent
 - name: Copy ktutil script

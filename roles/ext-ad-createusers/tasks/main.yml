@@ -9,7 +9,7 @@
   ldap_entry:
     dn: "CN={{ mapr_user_cldb_principal }}-{{ cluster_name }},{{ mapr_kerberos_ad_user_cn }}"
     state: present
-#    start_tls: true
+    # start_tls: true
     objectClass:
       - organizationalPerson
       - person
@@ -38,7 +38,7 @@
   ldap_entry:
     dn: "CN={{ item }}-{{ ansible_hostname }},{{ mapr_kerberos_ad_user_cn }}"
     state: present
-#    start_tls: true
+    # start_tls: true
     objectClass:
       - organizationalPerson
       - person
@@ -64,4 +64,4 @@
   command: "java -jar /tmp/ad-change-pwd-0.1.jar {{ mapr_kerberos_kdc }} 636 '{{ mapr_kerberos_admin_bind_dn }}' '{{ mapr_kerberos_admin_bind_pw }}' 'CN={{ item }}-{{ ansible_hostname }},{{ mapr_kerberos_ad_user_cn }}' '{{ mapr_kerberos_keytab_passwd }}'"
   with_items: "{{ kerbusers }}"
 
-    # http://stackoverflow.com/questions/4322243/adding-a-user-with-a-password-in-active-directory-ldaps
+# http://stackoverflow.com/questions/4322243/adding-a-user-with-a-password-in-active-directory-ldaps
