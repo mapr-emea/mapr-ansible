@@ -1,4 +1,5 @@
 # MapR Ansible Scripts
+[![Build Status](https://travis-ci.org/mapr-emea/mapr-ansible.svg?branch=master)](https://travis-ci.org/mapr-emea/mapr-ansible)
 
 This is a collection of Ansible scripts which help you to setup a MapR-cluster.
 
