@@ -16,4 +16,4 @@
 - name: Copy to /opt/mapr/conf/conf.d/warden.opentsdb.conf
   copy: remote_src=true src="/opt/mapr/opentsdb/opentsdb-{{ version_output.stdout }}/etc/conf/warden.opentsdb.conf" dest=/opt/mapr/conf/conf.d/warden.opentsdb.conf mode=0644 owner="{{ mapr_user }}" group="{{ mapr_group }}"
 - name: Register higher memory for OpenTSDB in service script
-  lineinfile: dest="/opt/mapr/opentsdb/opentsdb-{{ version_output.stdout }}/etc/init.d/opentsdb" regexp="^export JVMARGS" line="export JVMARGS=-enableassertions -enablesystemassertions -Xmx{{ spyglass_opentsdb_max_memory_in_mb }}m -Xss1m -XX:MaxMetaspaceSize=128m"
+  lineinfile: dest="/opt/mapr/opentsdb/opentsdb-{{ version_output.stdout }}/etc/init.d/opentsdb" regexp="^export JVMARGS" line="export JVMARGS='-enableassertions -enablesystemassertions -Xmx{{ spyglass_opentsdb_max_memory_in_mb }}m -Xss1m -XX:MaxMetaspaceSize=128m'"
