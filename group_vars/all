@@ -103,7 +103,7 @@ spyglass_metrics_collect: all
 spyglass_opentsdb_max_memory_in_mb: 2048
 spyglass_elasticsearch_secure: True
 spyglass_log_password: mapr
-# Grafana Password is only required in unsecure mode.
+# Grafana Password is required to setup Grafana dashboards and datasources
 spyglass_grafana_password: mapr
 ###########################################
 
