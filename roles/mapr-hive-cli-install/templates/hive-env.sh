@@ -5,5 +5,5 @@ export TEZ_JARS={{ tez_path_result.files[0].path }}/*:{{ tez_path_result.files[0
 export HADOOP_CLASSPATH=$TEZ_CONF_DIR:$TEZ_JARS:$HADOOP_CLASSPATH
 {% endif %}
 {% if mapr_security != 'none' %}
-export HADOOP_CLIENT_OPTS="-Dmapr_sec_enabled=true"
+export HADOOP_OPTS="-Dmapr_sec_enabled=true $HADOOP_OPTS"
 {% endif %}
