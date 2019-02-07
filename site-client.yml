@@ -31,7 +31,7 @@
   roles:
     - mapr-configure-repository
     - mapr-client-install
-    - mapr-configure-subnets
+    - mapr-configure-env-override
     - {role: mapr-client-configure-unsecure, when: mapr_security == 'none'}
     - {role: mapr-client-configure-nativesecurity-secure, when: mapr_security != 'none'}
 - name: Setup Hive Variables
