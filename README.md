@@ -26,7 +26,8 @@ The scripts support:
 
 ## Supported MapR Versions
 
-* MapR 6.1.0 with MEP 6.0.0 (branch master)
+* MapR 6.1.0 with MEP 6.1.0 (branch master)
+* MapR 6.1.0 with MEP 6.0.0 (branch mapr-6.1.0-MEP-6.0.x)
 * MapR 6.0.1 with MEP 5.0.0 (branch mapr-6.0.1-MEP-5.x)
 * MapR 6.0.0 with MEP 4.0.x (branch mapr-6.0.0-MEP-4.x)
 * MapR 5.2.x (branch mapr-5.2-MEP-3.0.x)

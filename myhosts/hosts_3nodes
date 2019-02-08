@@ -4,9 +4,9 @@
 
 # ALIASES does NOT work with ROLLING upgrades!
 [all]
-node1 ansible_host=10.0.0.85 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-node2 ansible_host=10.0.0.91 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
-node3 ansible_host=10.0.0.174 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+node1 ansible_host=10.0.0.8 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+node2 ansible_host=10.0.0.118 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+node3 ansible_host=10.0.0.182 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
 
 [unprovision]
 
@@ -113,9 +113,9 @@ node3
 
 # Flume
 [mapr-flume]
-#node1
-#node2
-#node3
+node1
+node2
+node3
 
 # HBase CLI
 [mapr-hbase-cli]
@@ -125,7 +125,7 @@ node3
 
 # HBase REST and Thrift
 [mapr-hbase-thrift-rest]
-#node1
+node1
 
 # Hive CLI
 [mapr-hive-cli]
@@ -149,11 +149,11 @@ node2
 
 # HttpFS
 [mapr-httpfs]
-#node1
-#node2
+node1
+node2
 
 [mapr-hue]
-#node3
+node3
 
 # Sqoop1
 [mapr-sqoop1]
@@ -163,7 +163,7 @@ node2
 
 # Sqoop2 Server
 [mapr-sqoop2-server]
-#node2
+node2
 
 # Sqoop2 Client
 [mapr-sqoop2-client]
@@ -173,17 +173,17 @@ node2
 
 # Pig
 [mapr-pig]
-#node1
-#node2
-#node3
+node1
+node2
+node3
 
 # Oozie
 [mapr-oozie]
-#node2
+node2
 
 # File Migrate Service
 [mapr-filemigrate]
-#node3
+node3
 
 [mapr-impala-server]
 #node1
@@ -197,21 +197,21 @@ node2
 #node2
 
 [mapr-kafka-connect-jdbc]
-#node2
+node2
 
 [mapr-kafka-rest]
-#node1
+node1
 
 [mapr-data-access-gateway]
-#node3
+node3
 
 # CollectD
 [mapr-collectd:children]
-#mapr-core
+mapr-core
 
 # OpenTSDB
 [mapr-opentsdb]
-#node1
+node1
 
 # Custom OpenTSDB, do NOT install on same node as mapr-opentsdb
 [mapr-opentsdb-custom]
@@ -219,20 +219,20 @@ node2
 
 # Grafana
 [mapr-grafana]
-#node1
+node1
 
 # FluentD
 [mapr-fluentd:children]
-#mapr-core
+mapr-core
 
 # ElasticSearch
 [mapr-elasticsearch]
-#node2
-#node3
+node2
+node3
 
 # Kibana
 [mapr-kibana]
-#node3
+node3
 
 
 

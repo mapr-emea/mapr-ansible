@@ -14,15 +14,12 @@
   - src: sg/ca/es-root-ca.pem
     dst: config/ca/
     mode: "0600"
-  - src: sg/ca/es-root-ca.pem
-    dst: config/ca/
-    mode: "0600"
   - src: sg/kibanaserver-usr-clientCombo.pem
     dst: config/certs/
     mode: "0600"
   - src: sg/kibanaserver-usr-signed.pem
     dst: config/certs/
     mode: "0600"
-  - src: .keystore_password
-    dst: config/.keystore_password
+  - src: sg/kibanaserver-usr-private-key.pem
+    dst: config/certs/
     mode: "0600"

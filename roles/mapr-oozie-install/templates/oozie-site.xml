@@ -50,6 +50,31 @@
             in the property name.
         </description>
     </property>
+    {% if oozie_ssl %}
+    <property>
+        <name>oozie.https.enabled</name>
+        <value>true</value>
+        <description>Controls whether SSL encryption is enabled.</description>
+    </property>
+
+    <property>
+        <name>oozie.https.truststore.file</name>
+        <value>/opt/mapr/conf/ssl_truststore</value>
+        <description>Path to a TrustStore file.</description>
+    </property>
+
+    <property>
+        <name>oozie.https.keystore.file</name>
+        <value>/opt/mapr/conf/ssl_keystore</value>
+        <description>Path to a KeyStore file.</description>
+    </property>
+
+    <property>
+        <name>oozie.https.keystore.pass</name>
+        <value>mapr123</value>
+        <description>Password to the KeyStore.</description>
+    </property>
+    {% endif %}
     {% if oozie_db_type == 'mysql' %}
     <property>
         <name>oozie.service.JPAService.jdbc.driver</name>

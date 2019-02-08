@@ -13,9 +13,9 @@
   check_mode: no
   changed_when: no
 - name: Start all hive meta instances
-  lineinfile: dest="/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/warden.hivemeta.conf" regexp="^services=" line="services=hivemeta:all"
+  lineinfile: dest="/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/warden.hivemeta.conf.template" regexp="^services=" line="services=hivemeta:all"
 - name: Copy to /opt/mapr/conf/conf.d/warden.hivemeta.conf
-  copy: remote_src=true src="/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/warden.hivemeta.conf" dest=/opt/mapr/conf/conf.d/warden.hivemeta.conf mode=0644 owner="{{ mapr_user }}" group="{{ mapr_group }}"
+  copy: remote_src=true src="/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/warden.hivemeta.conf.template" dest=/opt/mapr/conf/conf.d/warden.hivemeta.conf mode=0644 owner="{{ mapr_user }}" group="{{ mapr_group }}"
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R
   when: hivemeta_result.changed

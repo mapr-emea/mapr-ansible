@@ -15,9 +15,9 @@
   check_mode: no
   changed_when: no
 #- name: Start all hcat instances
-#  lineinfile: dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/warden.hcat.conf regexp="^services=" line="services=hcat:all:cldb"
+#  lineinfile: dest=/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/warden.hcat.conf.template regexp="^services=" line="services=hcat:all:cldb"
 #- name: Copy to /opt/mapr/conf/conf.d/warden.hcat.conf
-#  copy: remote_src=true src=/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/warden.hcat.conf dest=/opt/mapr/conf/conf.d/warden.hcat.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
+#  copy: remote_src=true src=/opt/mapr/hive/hive-{{ version_output.stdout }}/conf/warden.hcat.conf.template dest=/opt/mapr/conf/conf.d/warden.hcat.conf mode=0644 owner={{ mapr_user }} group={{ mapr_group }}
 
 - name: Configure.sh -R
   shell: /opt/mapr/server/configure.sh -R

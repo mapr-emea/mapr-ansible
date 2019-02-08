@@ -1,5 +1,5 @@
 mapr_release_url: http://package.mapr.com/releases/v6.1.0
-mapr_ecosystem_url: http://package.mapr.com/releases/MEP/MEP-6.0.0/
+mapr_ecosystem_url: http://package.mapr.com/releases/MEP/MEP-6.1.0/
 mapr_gpg_url: http://package.mapr.com/releases/pub/maprgpg.key
 mapr_gpg_check: yes
 
@@ -87,6 +87,7 @@ hbase_thrift_rest_security: "{{ security_all }}"
 httpfs_security: "{{ security_all }}"
 # Oozie: none, maprsasl, kerberos
 oozie_security: "{{ security_all }}"
+oozie_ssl: True
 # Sqoop2: none, maprsasl, kerberos
 sqoop_security: "{{ security_all }}"
 # Spark settings, enable only on secure cluster, otherwise installation fails
