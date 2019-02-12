@@ -34,5 +34,9 @@
     </property>
     {% endif %}
     {% endif %}
-
+    <property>
+        <name>hive.exec.scratchdir</name>
+        <value>maprfs:///tmp/hive</value>
+        <description>Scratch space for Hive jobs</description>
+    </property>
 </configuration>

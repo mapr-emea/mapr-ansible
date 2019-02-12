@@ -17,7 +17,16 @@
   limitations under the License.
 -->
 <configuration>
-
+    <!-- when working with different users on Hive table -->
+    <property>
+        <name>hive.warehouse.subdir.inherit.perms</name>
+        <value>false</value>
+    </property>
+    <property>
+        <name>hive.exec.scratchdir</name>
+        <value>maprfs:///tmp/hive</value>
+        <description>Scratch space for Hive jobs</description>
+    </property>
     <property>
         <name>hive.compactor.initiator.on</name>
         <value>true</value>
@@ -263,7 +272,6 @@
         <name>hive.server2.use.SSL</name>
         <value>true</value>
     </property>
-    {% endif %}
     <!-- always this config but not enabled -->
     <property>
         <name>hive.server2.keystore.path</name>
@@ -273,4 +281,10 @@
         <name>hive.server2.keystore.password</name>
         <value>mapr123</value>
     </property>
+    {% else %}
+    <property>
+        <name>hive.server2.use.SSL</name>
+        <value>false</value>
+    </property>
+    {% endif %}
 </configuration>

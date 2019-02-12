@@ -75,7 +75,7 @@ mapr_user_cldb_principal: mapr
 impala_security: none
 
 # Hive security: none, maprsasl, pam or kerberos
-hive_server_security: "{{ security_all }}"
+hive_server_security: "pam"
 hive_metastore_security: "{{ security_all }}"
 hive_server_ui_ssl: True
 hive_server_jdbc_ssl: False

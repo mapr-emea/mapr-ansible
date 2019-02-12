@@ -110,7 +110,16 @@
 - name: Add MAPR_HIVE_SERVER_LOGIN_OPTS to /opt/mapr/conf/env_override.sh
   lineinfile: dest=/opt/mapr/conf/env_override.sh state=present regexp="^export MAPR_HIVE_SERVER_LOGIN_OPTS=" line='export MAPR_HIVE_SERVER_LOGIN_OPTS="-Dhadoop.login=maprsasl_keytab"' mode=0644 create=yes owner="{{ mapr_user }}" group="{{ mapr_group }}"
   when: hive_metastore_security == "maprsasl"
-
+- name: Create maprfs:///tmp/hive
+  shell: "hadoop fs -mkdir -p /tmp/hive"
+  when: client_install is not defined and inventory_hostname == groups["mapr-hive-cli"][0]
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+- name: Chmod 777 maprfs:///tmp/hive
+  shell: "hadoop fs -chmod 777 /tmp/hive"
+  when: client_install is not defined and inventory_hostname == groups["mapr-hive-cli"][0]
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
 # required for Hue
 - name: Create maprfs:///user/hive/warehouse
   shell: "hadoop fs -mkdir -p /user/hive/warehouse"
