@@ -9,4 +9,4 @@
 # format:
 # <file system> <mount point> <options>
 
-localhost:/mapr /mapr nolock,nfsvers=3
+localhost:/mapr /mapr nolock,nfsvers=3,nosuid
