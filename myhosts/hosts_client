@@ -24,6 +24,10 @@ ansible_become=yes
 10.0.0.63
 10.0.0.110
 
+# YARN Timeline Server, required for Tez, IMPORTANT: only one
+[mapr-timelineserver]
+10.0.0.63
+
 ######################################################################################
 
 # sets up ntp, rpcbind, Java and mapr default user with standard password mapr123

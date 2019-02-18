@@ -70,6 +70,8 @@
     - name: Find Tez Path
       find: paths="/opt/mapr/tez/" patterns="tez*" file_type=directory
       register: tez_path_result
+    - name: Configure tez-site.xml
+      template: src=tez-site.xml dest="{{ tez_path_result.files[0].path }}/conf/tez-site.xml"
     - name: Upload libraries to maprfs:///apps/tez
       shell: hadoop fs -put -f {{ tez_path_result.files[0].path }} /apps/tez
       when: inventory_hostname == groups["mapr-hive-cli"][0]

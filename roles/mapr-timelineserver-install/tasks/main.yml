@@ -1,0 +1,9 @@
+---
+# Install MapR Core components for all machines
+- name: Install mapr-timelineserver
+  package: name=mapr-timelineserver state=present
+# /opt/mapr/server/configure.sh -R -TL <hostname> is not required since, we are managing hive-site.xml
+# https://mapr.com/docs/61/Tez/ConfiguringHiveonTezUI.html
+# TODO as [tez-ui] Requires also https://mapr.com/docs/61/Tez/ConfiguringTomcatServer.html
+# TODO make SSL
+# TODO Warden Config for Tez-UI

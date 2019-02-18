@@ -64,6 +64,10 @@ node1
 node2
 node3
 
+# YARN Timeline Server, required for Tez, IMPORTANT: only one
+[mapr-timelineserver]
+node1
+
 # Job History Server, IMPORTANT: only one
 [mapr-historyserver]
 node3
@@ -88,15 +92,15 @@ node2
 
 # NFS
 [mapr-nfs-v3]
-#node1
-#node2
-#node3
-
-# MapR Fuse Posix Client Basic
-[mapr-posix-client-basic]
 node1
 node2
 node3
+
+# MapR Fuse Posix Client Basic
+[mapr-posix-client-basic]
+#node1
+#node2
+#node3
 
 # MapR Fuse Posix Client Platinum
 [mapr-posix-client-platinum]

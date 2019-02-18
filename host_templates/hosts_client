@@ -22,6 +22,10 @@ ansible_become=yes
 [mapr-hive-metastore]
 10.0.0.243
 
+# YARN Timeline Server, required for Tez, IMPORTANT: only one
+[mapr-timelineserver]
+10.0.0.242
+
 ######################################################################################
 
 # sets up ntp, rpcbind, Java and mapr default user with standard password mapr123

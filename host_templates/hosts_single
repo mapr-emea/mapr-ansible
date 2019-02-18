@@ -49,6 +49,10 @@ common
 [mapr-nodemanager:children]
 common
 
+# YARN Timeline Server, required for Tez, IMPORTANT: only one
+[mapr-timelineserver:children]
+common
+
 # Job History Server, IMPORTANT: only one
 [mapr-historyserver:children]
 common

@@ -1,6 +1,4 @@
 ---
-# Configure unsecure cluster
-
 - name: Get Resource Manager
   set_fact: resourcemanager_item={{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item  }}
   with_items:

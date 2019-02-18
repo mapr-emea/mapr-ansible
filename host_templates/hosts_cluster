@@ -44,6 +44,9 @@ ansible_become=yes
 [mapr-nodemanager]
 10.0.0.132
 
+# YARN Timeline Server, required for Tez, IMPORTANT: only one
+[mapr-timelineserver]
+node1
 
 # Job History Server, IMPORTANT: only one
 [mapr-historyserver]

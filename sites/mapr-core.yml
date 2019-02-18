@@ -24,6 +24,7 @@
     - ../roles/mapr-configure-vars-cldb
     - ../roles/mapr-configure-vars-rm
     - ../roles/mapr-configure-vars-hs
+    - ../roles/mapr-configure-vars-timelineserver
 - name: Install MapR Core
   hosts: mapr-core
   roles:
@@ -69,6 +70,14 @@
   hosts: all:!mapr-fileserver
   roles:
     - ../roles/mapr-fileserver-uninstall
+- name: Install YARN Timeline Server
+  hosts: mapr-timelineserver
+  roles:
+  - ../roles/mapr-timelineserver-install
+- name: Uninstall YARN Timeline Server
+  hosts: all:!mapr-timelineserver
+  roles:
+  - ../roles/mapr-timelineserver-uninstall
 - name: Install YARN Node Manager
   hosts: mapr-nodemanager
   roles:

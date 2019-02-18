@@ -1,0 +1,11 @@
+---
+- name: Get Timeline Server
+  set_fact: timelineserver_item={{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item }}
+  with_items:
+  - "{{ groups['mapr-timelineserver'] }}"
+  register: timelineserver_hosts
+  when: groups['mapr-timelineserver'] is defined
+
+- name: Make Timeline Server String
+  set_fact: timelineserver_string={{ timelineserver_hosts.results | map(attribute='ansible_facts.timelineserver_item') | list | join(',')}}
+  when: groups['mapr-timelineserver'] is defined and timelineserver_hosts.results|length > 0

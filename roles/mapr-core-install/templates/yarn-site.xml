@@ -146,4 +146,54 @@
     </property>
     {% endif %}
 
+    {% if timelineserver_string is defined %}
+    <!--TIMELINE SERVER SECTION-->
+    <property>
+        <description>Indicate to clients whether Timeline service is enabled or not. If enabled, the TimelineClient library used by end-users will post entities and events to the Timeline server.</description>
+        <name>yarn.timeline-service.enabled</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>yarn.timeline-service.hostname</name>
+        <value>{{ timelineserver_string }}</value>
+    </property>
+    <property>
+        <description>The setting that controls whether yarn system metrics is published on the timeline server or not by RM.</description>
+        <name>yarn.resourcemanager.system-metrics-publisher.enabled</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>yarn.timeline-service.http-cross-origin.enabled</name>
+        <value>true</value>
+    </property>
+    <!--TIMELINE SERVER SECTION END-->
+
+    <!--TIMELINE SECURITY SECTION-->
+    <!-- property>
+        <name>yarn.timeline-service.http-authentication.type</name>
+        <value>com.mapr.security.maprauth.MaprDelegationTokenAuthenticationHandler</value>
+    </property -->
+    <!--TIMELINE SECURITY SECTION END-->
+
+    {% if mapr_security == 'kerberos' %}
+    <property>
+        <name>yarn.timeline-service.principal</name>
+        <value>{{ mapr_user }}/_HOST@{{ mapr_kerberos_realm }}</value>
+    </property>
+    <property>
+        <name>yarn.timeline-service.keytab</name>
+        <value>/opt/mapr/conf/mapr.keytab</value>
+    </property>
+    <property>
+        <name>yarn.timeline-service.http-authentication.kerberos.principal</name>
+        <value>HTTP/_HOST@{{ mapr_kerberos_realm }}</value>
+    </property>
+    <property>
+        <name>yarn.timeline-service.http-authentication.kerberos.keytab</name>
+        <value>/opt/mapr/conf/mapr.keytab</value>
+    </property>
+    {% endif %}
+    {% endif %}
+
+
 </configuration>
