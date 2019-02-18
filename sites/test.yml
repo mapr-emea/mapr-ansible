@@ -1,26 +1,6 @@
 - import_playbook: mapr-include-vars.yml
-- name: Configure and start (native-security)
-  hosts: mapr-core
-  tasks:
-  - name: Import ssl_keystore
-    block:
-    - name: Copy rootCA to node
-      copy: src="{{ https_custom_rootca }}" dest="/tmp/rootCA.pem"
-    - name: Copy cert to node
-      copy: src="{{ https_custom_certs_path }}/{{ ansible_fqdn }}.pem" dest="/tmp/{{ ansible_fqdn }}-crt.pem"
-    - name: Copy private key to node
-      copy: src="{{ https_custom_private_key_path }}/{{ ansible_fqdn }}.pem" dest="/tmp/{{ ansible_fqdn }}-key.pem"
-    - name: Build P12 store
-      shell: 'openssl pkcs12 -export -inkey /tmp/{{ ansible_fqdn }}-key.pem -in /tmp/{{ ansible_fqdn }}-crt.pem -name {{ cluster_name }} -out /tmp/{{ ansible_fqdn }}.p12 -passout pass:mapr123'
-
-    - name: Import certificate to /opt/mapr/conf/ssl_keystore_tmp
-      java_cert:
-        pkcs12_path: "/tmp/{{ ansible_fqdn }}.p12"
-        cert_alias: "{{ cluster_name }}"
-        pkcs12_alias: "{{ cluster_name }}"
-        #    pkcs12_alias: "{{ p12_aliasname.stdout }}"
-        keystore_path: /opt/mapr/conf/ssl_keystore_new
-        keystore_pass: mapr123
-        pkcs12_password: mapr123
-        keystore_create: yes
-        state: present
+- name: Install mapr-posix-client-basic (FUSE)
+  hosts: mapr-posix-client-basic
+  roles:
+  - ../roles/mapr-posix-client-basic-install
+  - {role: ../roles/mapr-patch-posix-client-basic-install, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
