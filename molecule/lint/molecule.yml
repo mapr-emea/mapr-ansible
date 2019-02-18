@@ -15,7 +15,13 @@ provisioner:
   lint:
     name: ansible-lint
     options:
-      x: ["ANSIBLE0002,ANSIBLE0006,ANSIBLE0011,ANSIBLE0012,ANSIBLE0013,ANSIBLE0016"]
+      x:
+        - ANSIBLE0002
+        - ANSIBLE0006
+        - ANSIBLE0011
+        - ANSIBLE0012
+        - ANSIBLE0013
+        - ANSIBLE0016
 scenario:
   name: lint
   test_sequence:

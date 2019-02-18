@@ -1,24 +1,48 @@
 ---
 # Oracle JDK playbook
 - name: Downloading Java JDK
-  get_url: url={{ oracle_jdk_url }} force=yes mode=0440 headers="Cookie:oraclelicense=accept-securebackup-cookie" dest=/tmp/oracle-jdk.tar.gz timeout=120
+  get_url:
+    url: "{{oracle_jdk_url}}"
+    force: true
+    mode: 0440
+    headers: "Cookie:oraclelicense=accept-securebackup-cookie"
+    dest: /tmp/oracle-jdk.tar.gz
+    timeout: 120
 
-#- name: Downloading Java JDK
-#  shell:  curl -v -j -k -L -H "Cookie:oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u92-b14/jdk-8u92-linux-x64.rpm > /tmp/jdk-8u92-linux-x64.rpm
 - name: Create /opt/java
-  file: path=/opt/java mode=0755 state=directory
+  file:
+    path: /opt/java
+    mode: 0755
+    state: directory
 - name: Install Java JDK
-  unarchive: src=/tmp/oracle-jdk.tar.gz dest=/opt/java copy=no
+  unarchive:
+    src: /tmp/oracle-jdk.tar.gz
+    dest: /opt/java
+    copy: false
 - name: Create link /usr/bin/java
-  file: src={{ jdk_folder }}/bin/java dest=/usr/bin/java state=link
+  file:
+    src: "{{jdk_folder}}/bin/java"
+    dest: /usr/bin/java
+    state: link
 # Other actions
 - name: Copy Local Policy
-  copy: src="../files/UnlimitedJCEPolicyJDK8/local_policy.jar" dest="{{ jdk_folder }}/jre/lib/security/" mode=0644
+  copy:
+    src: "../files/UnlimitedJCEPolicyJDK8/local_policy.jar"
+    dest: "{{jdk_folder}}/jre/lib/security/"
+    mode: 0644
 # - name: Copy US Export Policy
-#  copy: src="../files/UnlimitedJCEPolicyJDK8/US_export_policy.jar" dest="{{ jdk_folder }}/jre/lib/security/" mode=0644
+#  copy:
+#    src: "../files/UnlimitedJCEPolicyJDK8/US_export_policy.jar"
+#    dest: "{{jdk_folder}}/jre/lib/security/"
+#    mode: 0644
 - name: Add JAVA_HOME to /etc/profile
-  lineinfile: dest=/etc/profile state=present line="export JAVA_HOME={{ jdk_folder }}"
+  lineinfile:
+    dest: /etc/profile
+    state: present
+    line: "export JAVA_HOME={{jdk_folder}}"
 
 
 #  - name: Copy /etc/environment with java and path settings
-#    copy: src="../files/environment" dest="/etc/environment"
+#    copy:
+#      src: "../files/environment"
+#      dest: "/etc/environment"

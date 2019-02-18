@@ -1,0 +1,4 @@
+---
+- name: Reload Sysctl
+  command: sysctl -p
+  ignore_errors: true

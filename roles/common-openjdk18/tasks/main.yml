@@ -1,7 +1,9 @@
 ---
 - name: Install OpenJDK 1.8.0
   vars:
-    packages_RedHat: ['java-1.8.0-openjdk', 'java-1.8.0-openjdk-devel', 'java-1.8.0-openjdk-headless']
+    packages_RedHat: ['java-1.8.0-openjdk',
+                      'java-1.8.0-openjdk-devel',
+                      'java-1.8.0-openjdk-headless']
     packages_Debian: ['openjdk-8-jdk']
     packages_Suse: ['java-1_8_0-openjdk', 'java-1_8_0-openjdk-devel']
   package: name={{ item }} state=present

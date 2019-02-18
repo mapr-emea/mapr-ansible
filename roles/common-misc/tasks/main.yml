@@ -1,10 +1,14 @@
 ---
-- name: Install misc stuff - Midnight commander, wget, Python MySQL
+- name: Install misc stuff - Midnight commander, wget, Python MySQL, openssl
   vars:
-    packages_Suse: ['mc', 'wget', 'python-mysql']
-    packages_RedHat: ['mc', 'wget', 'MySQL-python']
+    packages_Suse: ['mc', 'wget', 'python-mysql', 'openssl']
+    packages_RedHat: ['mc', 'wget', 'MySQL-python', 'openssl']
     # syslinux-utils is for gethostip, libpython is required for collectd
-    packages_Debian: ['mc', 'wget', 'python-mysqldb', 'syslinux-utils', 'libpython2.7']
+    packages_Debian: ['mc',
+                      'wget',
+                      'python-mysqldb',
+                      'openssl',
+                      'syslinux-utils',
+                      'libpython2.7']
   package: name={{ item }} state=present
   with_items: "{{ vars['packages_' + ansible_os_family] }}"
-
