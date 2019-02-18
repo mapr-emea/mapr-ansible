@@ -3,6 +3,6 @@
 - name: Install mapr-patch-posix-client-platinum
   package: name=mapr-patch-posix-client-platinum state=present
 - name: Set /opt/mapr/conf/mapruserticket in fuse.conf
-  lineinfile: dest=/opt/mapr/conf/fuse.conf regexp="^fuse\.ticketfile\.location" line="fuse.ticketfile.location=/opt/mapr/conf/mapruserticket"
+  lineinfile: dest=/opt/mapr/conf/fuse.conf regexp="^fuse\.ticketfile\.location" line="fuse.ticketfile.location=/opt/mapr/conf/mapruserticketwithimpersonation"
 - name: Start the mapr-posix-client-platinum service
   service: name=mapr-posix-client-platinum state=restarted enabled=yes

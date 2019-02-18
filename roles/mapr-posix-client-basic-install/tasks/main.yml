@@ -5,8 +5,12 @@
   with_items:
   - mapr-posix-client-basic
   - rpcbind
+- name: Generate FUSE serviceticket with impersonation
+  shell: "maprlogin generateticket -type servicewithimpersonation -user {{ mapr_user }} -duration 100000:0:0 -out /opt/mapr/conf/mapruserticketwithimpersonation"
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
 - name: Set /opt/mapr/conf/mapruserticket in fuse.conf
-  lineinfile: dest=/opt/mapr/conf/fuse.conf regexp="^fuse\.ticketfile\.location" line="fuse.ticketfile.location=/opt/mapr/conf/mapruserticket"
+  lineinfile: dest=/opt/mapr/conf/fuse.conf regexp="^fuse\.ticketfile\.location" line="fuse.ticketfile.location=/opt/mapr/conf/mapruserticketwithimpersonation"
 # Other actions
 - name: Create /mapr dir
   file: path=/mapr state=directory
