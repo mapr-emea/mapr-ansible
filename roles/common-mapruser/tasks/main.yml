@@ -1,7 +1,19 @@
 ---
 
 - name: Create MapR Group
-  group: name="{{ mapr_group }}" gid="{{ mapr_group_gid }}" state=present
+  group:
+    name: "{{ mapr_group }}"
+    gid: "{{ mapr_group_gid }}"
+    state: present
 - name: Create MapR User
-  user: name="{{ mapr_user }}" comment="MapR default user" uid="{{ mapr_user_uid }}" group="{{mapr_group}}" groups="{{ mapr_group }},root" password="{{ mapr_passwd }}" createhome=yes state=present
-#  user: name={{ mapr_user }} comment="MapR default user" uid={{ mapr_user_uid }} groups={{ mapr_group }},root,wheel password={{ mapr_passwd }} createhome=yes state=present
+  user:
+    name: "{{ mapr_user }}"
+    comment: "MapR default user"
+    uid: "{{ mapr_user_uid }}"
+    group: "{{mapr_group}}"
+    groups: "{{ mapr_group }},root"
+    password: "{{ mapr_passwd }}"
+    createhome: true
+    state: present
+    append: true
+#   groups={{ mapr_group }},root,wheel

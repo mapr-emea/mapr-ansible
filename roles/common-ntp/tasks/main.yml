@@ -2,10 +2,15 @@
 - name: Install NTP
   package: name=ntp state=present
 
+# ntp can't start in a container, hence no molecule tests
 - name: Start the ntp service
   vars:
     service_Suse: ntpd
     service_RedHat: ntpd
     service_Debian: ntp
-  service: name="{{ vars['service_' + ansible_os_family] }}" state=started enabled=yes
-
+  service:
+    name: "{{ vars['service_' + ansible_os_family] }}"
+    state: started
+    enabled: true
+  tags:
+    - skip-docker
