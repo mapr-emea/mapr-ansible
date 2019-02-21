@@ -1,4 +1,5 @@
 ---
+- import_playbook: mapr-include-vars.yml
 - name: Setup Trial License
   hosts: mapr-cldb[0]
   roles:
