@@ -1,4 +1,6 @@
 ---
+- name: Enable customer security by creating /opt/mapr/conf/.customSecure
+  file: path=/opt/mapr/conf/.customSecure state=touch mode=0644
 - name: Copy MapR keys to all nodes
   copy: src="/tmp/{{ item.filename }}" dest="/opt/mapr/conf/{{ item.filename }}" mode="{{ item.mode }}" owner="{{ mapr_user }}" group="{{ mapr_group }}"
   with_items:
