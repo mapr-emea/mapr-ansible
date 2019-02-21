@@ -3,3 +3,7 @@
   hosts: mapr-cldb[0]
   roles:
     - ../roles/mapr-trial-license
+- name: Restarting mapr-warden on all nodes
+  hosts: mapr-core
+  roles:
+  - ../roles/mapr-configure-warden-restart
