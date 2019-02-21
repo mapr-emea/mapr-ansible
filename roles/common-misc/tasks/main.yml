@@ -2,8 +2,10 @@
 - name: Install misc stuff - Midnight commander, wget, Python MySQL, openssl
   vars:
     packages_Suse: ['mc', 'wget', 'python-mysql', 'openssl']
-    packages_RedHat: ['mc', 'wget', 'MySQL-python', 'yum-utils', 'unzip', 'openssl',
-                      'syslinux', 'sdparm', 'hdparm', 'redhat-lsb-core', 'lsof']
+    packages_RedHat: ['mc', 'wget', 'MySQL-python',
+                      'yum-utils', 'unzip', 'openssl',
+                      'syslinux', 'sdparm', 'hdparm',
+                      'redhat-lsb-core', 'lsof']
     # syslinux-utils is for gethostip, libpython is required for collectd
     packages_Debian: ['mc',
                       'wget',
