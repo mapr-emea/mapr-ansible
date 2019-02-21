@@ -2,7 +2,8 @@
 - name: Install misc stuff - Midnight commander, wget, Python MySQL
   vars:
     packages_Suse: ['mc', 'wget', 'python-mysql']
-    packages_RedHat: ['mc', 'wget', 'MySQL-python']
+    packages_RedHat: ['mc', 'wget', 'MySQL-python', 'yum-utils', 'unzip',
+                      'syslinux', 'sdparm', 'hdparm', 'redhat-lsb-core']
     # syslinux-utils is for gethostip, libpython is required for collectd
     packages_Debian: ['mc', 'wget', 'python-mysqldb', 'syslinux-utils', 'libpython2.7']
   package: name={{ item }} state=present
