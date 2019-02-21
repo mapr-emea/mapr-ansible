@@ -2,7 +2,7 @@
   shell: echo {{ disks }} | tr , '\n' > /tmp/disks.txt
   when: disks != "find_unused"
 - name: Copy find disks script
-  copy: src="write_unused_disks.sh" dest="/tmp/write_unused_disks.sh" mode="755" owner="{{ mapr_user }}" group="{{ mapr_group }}"
+  copy: src="write_unused_disks.sh" dest="/tmp/write_unused_disks.sh" mode="0755" owner="{{ mapr_user }}" group="{{ mapr_group }}"
   when: disks == "find_unused"
 - name: Write unused disks tmp file
   shell: /tmp/write_unused_disks.sh
