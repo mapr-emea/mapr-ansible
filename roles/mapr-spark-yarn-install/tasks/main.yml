@@ -22,6 +22,10 @@
   shell: "hadoop fs -chown -R {{ mapr_user }}:{{ mapr_group }} /apps/spark"
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+- name: Set 777 permission maprfs:///apps/spark
+  shell: "hadoop fs -chmod 777 /apps/spark"
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
   when: inventory_hostname == groups["mapr-spark-yarn"][0]
 - name: Set owner mapr-system user
   file: path=/opt/mapr/spark owner="{{ mapr_user }}" group="{{ mapr_group }}" state=directory recurse=yes
