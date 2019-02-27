@@ -13,8 +13,8 @@
     group: "{{mapr_group}}"
     groups: "{{ mapr_group }}"
     password: "{{ mapr_passwd }}"
-    createhome: yes
+    createhome: true
     update_password: on_create
     state: present
-    append: yes
+    append: true
 #   groups={{ mapr_group }},root,wheel
