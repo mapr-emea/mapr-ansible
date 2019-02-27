@@ -1,6 +1,5 @@
 - import_playbook: mapr-include-vars.yml
-- name: Install mapr-posix-client-basic (FUSE)
-  hosts: mapr-posix-client-basic
+- name: Test user
+  hosts: all
   roles:
-  - ../roles/mapr-posix-client-basic-install
-  - {role: ../roles/mapr-patch-posix-client-basic-install, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
+  - ../roles/common-mapruser

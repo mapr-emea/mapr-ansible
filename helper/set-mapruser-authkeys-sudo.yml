@@ -1,0 +1,16 @@
+- name: Update version in MapR config
+  hosts: all
+  tasks:
+  - name: include global config
+    include_vars: file="../group_vars/all"
+  - name: Set mapr as sudoers
+    lineinfile:
+      path: /etc/sudoers
+      state: present
+      regexp: '^{{ mapr_user }}\s'
+      line: '%{{ mapr_user }} ALL=(ALL) NOPASSWD: ALL'
+  - name: Set authorized key taken from file
+    authorized_key:
+      user: "{{ mapr_user }}"
+      state: present
+      key: "{{ lookup('file', mapr_public_key_path ) }}"

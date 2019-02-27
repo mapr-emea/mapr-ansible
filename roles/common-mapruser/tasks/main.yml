@@ -11,9 +11,10 @@
     comment: "MapR default user"
     uid: "{{ mapr_user_uid }}"
     group: "{{mapr_group}}"
-    groups: "{{ mapr_group }},root"
+    groups: "{{ mapr_group }}"
     password: "{{ mapr_passwd }}"
-    createhome: true
+    createhome: yes
+    update_password: on_create
     state: present
-    append: true
+    append: yes
 #   groups={{ mapr_group }},root,wheel
