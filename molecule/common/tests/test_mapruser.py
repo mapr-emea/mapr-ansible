@@ -12,7 +12,7 @@ def test_mapr_user(host):
     assert u.exists
     assert u.name == "mapr"
     assert u.group == "mapr"
-    for g in ['mapr', 'root']:
+    for g in ['mapr']:
         assert g in u.groups
     assert u.gid == 5000
 
