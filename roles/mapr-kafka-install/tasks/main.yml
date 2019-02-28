@@ -2,3 +2,5 @@
 # Install MapR-Kafka
 - name: Install mapr-kafka
   package: name=mapr-kafka state=present
+- name: Install mapr-librdkafka
+  package: name=mapr-librdkafka state=present

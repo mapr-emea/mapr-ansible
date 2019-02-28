@@ -111,6 +111,8 @@
     - role: ../../roles/mapr-kafka-connect-jdbc-install
     - role: ../../roles/mapr-kafka-connect-jdbc-uninstall
     - role: ../../roles/mapr-kafka-install
+    - role: ../../roles/mapr-kafka-ksql-install
+    - role: ../../roles/mapr-kafka-ksql-uninstall
     - role: ../../roles/mapr-kafka-rest-install
     - role: ../../roles/mapr-kafka-rest-uninstall
     - role: ../../roles/mapr-kafka-uninstall

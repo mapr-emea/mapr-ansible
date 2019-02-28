@@ -164,6 +164,9 @@ common
 [mapr-kafka-rest]
 #common
 
+[mapr-kafka-ksql]
+#common
+
 [mapr-data-access-gateway]
 #common
 

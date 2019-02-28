@@ -2,3 +2,5 @@
 # Uninstall MapR Kafka
 - name: Uninstall mapr-kafka
   package: name=mapr-kafka state=absent
+- name: Uninstall mapr-librdkafka
+  package: name=mapr-librdkafka state=absent

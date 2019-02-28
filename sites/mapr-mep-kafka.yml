@@ -23,3 +23,11 @@
   hosts: all:!mapr-kafka-rest
   roles:
     - ../roles/mapr-kafka-rest-uninstall
+- name: Install Kafka KSQL
+  hosts: mapr-kafka-ksql
+  roles:
+    - ../roles/mapr-kafka-ksql-install
+- name: Uninstall Kafka KSQL
+  hosts: all:!mapr-kafka-ksql
+  roles:
+    - ../roles/mapr-kafka-ksql-uninstall

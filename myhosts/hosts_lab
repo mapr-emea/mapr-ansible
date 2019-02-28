@@ -202,6 +202,11 @@ node2
 [mapr-kafka-rest]
 node1
 
+[mapr-kafka-ksql]
+node1
+node2
+node3
+
 [mapr-data-access-gateway]
 node3
 

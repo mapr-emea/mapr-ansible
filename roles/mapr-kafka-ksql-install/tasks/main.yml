@@ -1,0 +1,5 @@
+# Install MapR mapr-kafka-ksql
+- name: Install mapr-kafka-ksql
+  package: name=mapr-kafka-ksql state=present
+
+

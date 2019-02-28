@@ -1,0 +1,3 @@
+# Uninstall MapR Kafka KSQL
+- name: Uninstall mapr-kafka-ksql
+  package: name=mapr-kafka-ksql state=absent

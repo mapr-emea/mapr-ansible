@@ -157,6 +157,7 @@ ansible_become=yes
 
 [mapr-kafka-rest]
 
+[mapr-kafka-ksql]
 
 [mapr-data-access-gateway]
 
