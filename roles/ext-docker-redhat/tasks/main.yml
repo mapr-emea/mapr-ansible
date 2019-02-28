@@ -10,8 +10,8 @@
     group: root
     mode: 0644
 
-#- name: Configure Docker Edge repo.
-#  ini_file:
+# - name: Configure Docker Edge repo.
+#   ini_file:
 #    dest: '/etc/yum.repos.d/docker-ce.repo'
 #    section: 'docker-{{ docker_edition }}-edge'
 #    option: enabled

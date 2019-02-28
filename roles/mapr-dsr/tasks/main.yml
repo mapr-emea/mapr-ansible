@@ -2,7 +2,7 @@
 - name: Create a docker container
   docker_container:
     name: mapr-dsr
-    image: {{ mapr_dsr_docker_image }}
+    image: "{{ mapr_dsr_docker_image }}"
     pull: true
     detach: true
     tty: true
