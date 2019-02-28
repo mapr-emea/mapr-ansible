@@ -19,6 +19,7 @@
 
 - name: Install container-selinux from CentOS
   package: name="{{ container_selinux_url }}"
+  when: ansible_distribution == 'Red Hat Enterprise Linux'
 
 - name: Install Docker
   package: name=docker-ce state=present
