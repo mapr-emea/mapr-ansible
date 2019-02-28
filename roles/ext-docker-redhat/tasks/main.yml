@@ -1,0 +1,49 @@
+---
+- name: Add Docker GPG key
+  rpm_key: key="{{ docker_gpg_key }}" state=present
+
+- name: Add Docker repository
+  get_url:
+    url: "{{ docker_yum_repo_url }}"
+    dest: '/etc/yum.repos.d/docker-ce.repo'
+    owner: root
+    group: root
+    mode: 0644
+
+#- name: Configure Docker Edge repo.
+#  ini_file:
+#    dest: '/etc/yum.repos.d/docker-ce.repo'
+#    section: 'docker-{{ docker_edition }}-edge'
+#    option: enabled
+#    value: '{{ docker_yum_repo_enable_edge }}'
+
+- name: Install container-selinux from CentOS
+  package: name="{{ container_selinux_url }}"
+
+- name: Install Docker
+  package: name=docker-ce state=present
+
+- name: Enable Docker Service at boot
+  service: name=docker state=started enabled=true
+
+- name: Add users to Docker group
+  user: name="{{ item }}" groups=docker append=true
+  with_items: "{{ docker_users }}"
+
+- name: Remove python-requests, because it conflicts with PIP
+  package: name=python-requests state=absent
+
+- name: Download get-pip.py
+  get_url:
+    url: https://bootstrap.pypa.io/get-pip.py
+    dest: /tmp/get-pip.py
+    mode: 0755
+
+- name: Install PIP
+  shell: "python /tmp/get-pip.py"
+
+- name: Install Python Docker module
+  pip: name=docker
+
+- name: Restart docker
+  service: name=docker state=restarted

@@ -1,0 +1,5 @@
+---
+docker_yum_repo_url: https://download.docker.com/linux/{{ (ansible_distribution == "Fedora") | ternary("fedora","centos") }}/docker-ce.repo
+docker_gpg_key: https://download.docker.com/linux/centos/gpg
+container_selinux_url: http://mirror.centos.org/centos/7/extras/x86_64/Packages/container-selinux-2.74-1.el7.noarch.rpm
+docker_users: ["{{ mapr_user }}"]

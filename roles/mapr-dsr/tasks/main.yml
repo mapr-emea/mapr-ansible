@@ -1,0 +1,57 @@
+---
+- name: Create a docker container
+  docker_container:
+    name: mapr-dsr
+    image: {{ mapr_dsr_docker_image }}
+    pull: true
+    detach: true
+    tty: true
+    interactive: true
+    privileged: true
+    published_ports:
+      - "9995:9995"
+      - "10000:10000"
+      - "10001:10001"
+      - "10002:10002"
+      - "10003:10003"
+      - "10004:10004"
+      - "10005:10005"
+      - "10006:10006"
+      - "10007:10007"
+      - "10008:10008"
+      - "10009:10009"
+      - "10010:10010"
+      - "11000:11000"
+      - "11001:11001"
+      - "11002:11002"
+      - "11003:11003"
+      - "11004:11004"
+      - "11005:11005"
+      - "11006:11006"
+      - "11007:11007"
+      - "11008:11008"
+      - "11009:11009"
+      - "11010:11010"
+    volumes:
+      - "/etc/mapruserticket_dsr:/tmp/mapr_ticket:ro"
+    capabilities:
+      - SYS_ADMIN
+      - SYS_RESOURCE
+    devices:
+      - "/dev/fuse"
+    security_opts:
+      - "apparmor:unconfined"
+    env:
+      HOST_IP: "{{ ansible_eth0.ipv4.address }}"
+      MAPR_CLUSTER: "{{ cluster_name }}"
+      MAPR_CLDB_HOSTS: "{{ cldb_string }}"
+      MAPR_CONTAINER_USER: "{{ mapr_user }}"
+      MAPR_CONTAINER_PASSWORD: "{{ mapr_user_container_password }}"
+      MAPR_CONTAINER_GROUP: "{{ mapr_group }}"
+      MAPR_CONTAINER_UID: "{{ mapr_user_uid }}"
+      MAPR_CONTAINER_GID: "{{ mapr_group_gid }}"
+      MAPR_TICKETFILE_LOCATION: /tmp/mapr_ticket
+      MAPR_MOUNT_PATH: /mapr
+      MAPR_HS_HOST: "{{ dsr_hiveserver2_string }}"
+      ZEPPELIN_NOTEBOOK_DIR: "/mapr/{{ cluster_name }}/user/mapr/notebook"
+      MAPR_TZ: US/Pacific

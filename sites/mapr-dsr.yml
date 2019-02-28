@@ -1,0 +1,42 @@
+---
+# NOTE: only tested with Redhat! wont work with Ubuntu
+- import_playbook: mapr-include-vars.yml
+- name: Setup CLDB vars
+  hosts: all
+  roles:
+    - ../roles/mapr-configure-vars-cldb
+- name: Setup CLDB vars
+  hosts: all
+  tasks:
+    - name: Set empty HiveServer 2 String
+      set_fact: dsr_hiveserver2_string=""
+    - name: Get HiveServer 2
+      set_fact: hiveserver2_item="{{ hostvars[item]['ansible_fqdn'] if 'ansible_fqdn' in hostvars[item] else item  }}"
+      with_items:
+        - "{{ groups['mapr-hive-server2'] }}"
+      register: hiveserver2_hosts
+    - name: Make HiveServer 2 String
+      set_fact: dsr_hiveserver2_string="{{ hiveserver2_hosts.results[0].ansible_facts.hiveserver2_item }}"
+      when: hiveserver2_hosts.results|length > 0
+
+- name: Fetch MapR ticket
+  hosts: mapr-cldb[0]
+  tasks:
+    - name: Copy keys to local
+      fetch: src=/opt/mapr/conf/mapruserticket dest=/tmp/mapruserticket_dsr flat=yes
+- name: Create MapR user
+  hosts: mapr-dsr
+  roles:
+    - ../roles/common-mapruser
+- name: Push mapr ticket to Docker node
+  hosts: mapr-dsr
+  tasks:
+    - name: Copy mapruserticket to DSR nodes
+      copy: src="/tmp/mapruserticket_dsr" dest="/etc/mapruserticket_dsr" mode="0600" owner="{{ mapr_user }}" group="{{ mapr_group }}"
+
+- name: Install Docker
+  hosts: mapr-dsr
+  roles:
+    - ../roles/ext-docker-redhat
+    - ../roles/mapr-dsr
+

@@ -1,0 +1,17 @@
+###### These ones are not installed, just required for config generation ############
+
+# Container Location DataBase
+[mapr-cldb]
+10.0.0.153 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.210 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.213 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+[mapr-hive-server2]
+10.0.0.153 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+10.0.0.210 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
+######################################################################################
+
+[mapr-dsr]
+10.0.0.66 ansible_user=ec2-user ansible_become=yes ansible_become_method=sudo
+
