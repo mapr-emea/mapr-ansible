@@ -42,7 +42,7 @@
     security_opts:
       - "apparmor:unconfined"
     env:
-      HOST_IP: "{{ ansible_eth0.ipv4.address }}"
+      HOST_IP: "{{ ansible_default_ipv4.address }}"
       MAPR_CLUSTER: "{{ cluster_name }}"
       MAPR_CLDB_HOSTS: "{{ cldb_string }}"
       MAPR_CONTAINER_USER: "{{ mapr_user }}"
