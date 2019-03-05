@@ -21,6 +21,8 @@ force_reconfigure_sh: True
 rolling_restart: False
 warden_restart_wait_time: 30
 virtual_machine: False
+# Used on Ansible host to store tmp files
+local_tmp_path: /tmp/mapr-ansible
 
 # mapr_subnets is optional, if required just remove #
 #mapr_subnets: 10.0.0.0/24

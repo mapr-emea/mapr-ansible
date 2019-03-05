@@ -11,4 +11,4 @@
   failed_when: shuffle_jar_path_result.matched != 1
 
 - name: Fetch Spark Shuffle JAR
-  fetch: src="{{ shuffle_jar_path_result.files[0].path }}" dest=/tmp/spark-yarn-shuffle.jar flat=yes
+  fetch: src="{{ shuffle_jar_path_result.files[0].path }}" dest="{{ local_tmp_path }}/spark-yarn-shuffle.jar" flat=yes

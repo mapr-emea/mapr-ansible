@@ -10,7 +10,7 @@
   check_mode: no
   changed_when: no
 - name: Copy ElasticSearch files for Security
-  copy: src="/tmp/mapr_spyglass/es/{{ item.src }}" dest="/opt/mapr/elasticsearch/elasticsearch-{{ version_output.stdout }}/{{ item.dst }}" owner="{{ mapr_user }}" group="{{ mapr_group }}" mode="{{ item.mode }}"
+  copy: src="{{ local_tmp_path }}/mapr_spyglass/es/{{ item.src }}" dest="/opt/mapr/elasticsearch/elasticsearch-{{ version_output.stdout }}/{{ item.dst }}" owner="{{ mapr_user }}" group="{{ mapr_group }}" mode="{{ item.mode }}"
   with_items:
     - src: sg/ca/es-root-ca.pem
       dst: etc/elasticsearch/ca/

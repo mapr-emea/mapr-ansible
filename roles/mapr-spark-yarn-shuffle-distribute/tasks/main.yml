@@ -1,7 +1,7 @@
 ---
 # Copy JAR for MapR Spark YARN shuffle
 - name: Copy JAR for MapR Spark YARN shuffle
-  copy: src="/tmp/spark-yarn-shuffle.jar" dest="/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/share/hadoop/yarn/lib/" mode=0644
+  copy: src="{{ local_tmp_path }}/spark-yarn-shuffle.jar" dest="/opt/mapr/hadoop/hadoop-{{ hadoop_version }}/share/hadoop/yarn/lib/" mode=0644
   register: copy_result
 
 - name: Restart Node Manager

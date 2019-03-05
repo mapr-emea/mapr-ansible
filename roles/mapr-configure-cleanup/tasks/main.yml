@@ -1,7 +1,7 @@
 ---
 # Configure secure cluster
 - name: Clean up of security files copied locally
-  file: path="/tmp/{{ item }}" state=absent
+  file: path="{{ local_tmp_path }}/{{ item }}" state=absent
   become: no
   with_items:
   - maprserverticket

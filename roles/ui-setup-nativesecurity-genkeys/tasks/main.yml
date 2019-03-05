@@ -6,7 +6,7 @@
   shell: "/opt/mapr/server/configure.sh -N {{ cluster_name }} -secure -genkeys -Z {{ ansible_fqdn }} -C {{ ansible_fqdn }} -u {{ mapr_user }} -g {{mapr_group}}"
   when: cldb_key_status.stat.exists == false
 - name: Fetch generated files
-  fetch: src="/opt/mapr/conf/{{ item }}" dest="/tmp/{{ item }}" flat=yes
+  fetch: src="/opt/mapr/conf/{{ item }}" dest="{{ local_tmp_path }}/{{ item }}" flat=yes
   with_items:
      - cldb.key
      - maprserverticket

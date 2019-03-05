@@ -21,12 +21,12 @@
   find: path="/opt/mapr/elasticsearch/elasticsearch-{{ version_output.stdout }}/etc/elasticsearch/sg" recurse=no
   register: files_to_copy
 - name: Fetch ES files SG
-  fetch: src={{ item.path }} dest=/tmp/mapr_spyglass/es/sg/ flat=yes
+  fetch: src="{{ item.path }}" dest="{{ local_tmp_path }}/mapr_spyglass/es/sg/" flat=yes
   with_items: "{{ files_to_copy.files }}"
 - name: Fetch ES files
   fetch: src="/opt/mapr/elasticsearch/elasticsearch-{{ version_output.stdout }}{{ item.src_file }}" dest="{{ item.dst_file }}" flat=yes
   with_items:
-    - src_file: /etc/elasticsearch/.keystore_password
-      dst_file: /tmp/mapr_spyglass/es/.keystore_password
-    - src_file: /etc/elasticsearch/sg/ca/es-root-ca.pem
-      dst_file: /tmp/mapr_spyglass/es/sg/ca/es-root-ca.pem
+    - src_file: "/etc/elasticsearch/.keystore_password"
+      dst_file: "{{ local_tmp_path }}/mapr_spyglass/es/.keystore_password"
+    - src_file: "/etc/elasticsearch/sg/ca/es-root-ca.pem"
+      dst_file: "{{ local_tmp_path }}/mapr_spyglass/es/sg/ca/es-root-ca.pem"

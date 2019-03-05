@@ -8,7 +8,7 @@
 - name: Create CA dir
   file: path="/opt/mapr/fluentd/fluentd-{{ version_output.stdout }}/etc/fluentd/ca/" state=directory
 - name: Copy Kibana files for Security
-  copy: src="/tmp/mapr_spyglass/es/{{ item.src }}" dest="/opt/mapr/fluentd/fluentd-{{ version_output.stdout }}/{{ item.dst }}" owner="{{ mapr_user }}" group="{{ mapr_group }}" mode="{{ item.mode }}"
+  copy: src="{{ local_tmp_path }}/mapr_spyglass/es/{{ item.src }}" dest="/opt/mapr/fluentd/fluentd-{{ version_output.stdout }}/{{ item.dst }}" owner="{{ mapr_user }}" group="{{ mapr_group }}" mode="{{ item.mode }}"
   with_items:
   - src: sg/ca/es-root-ca.pem
     dst: etc/fluentd/ca/

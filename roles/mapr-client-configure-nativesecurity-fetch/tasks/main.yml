@@ -8,6 +8,6 @@
 - debug: msg="Find Hadoop YARN server JARs {{ item | basename }}"
   with_items: "{{ yarnserver_jars_list }}"
 - name: Copy Jars to local, required for Hive Server and Spark
-  fetch: src={{ item }} dest=/tmp/{{ item | basename }} flat=yes
+  fetch: src="{{ item }}" dest="{{ local_tmp_path }}/{{ item | basename }}" flat=yes
   with_items: "{{ yarnserver_jars_list }}"
   when: inventory_hostname == groups["mapr-cldb"][0]

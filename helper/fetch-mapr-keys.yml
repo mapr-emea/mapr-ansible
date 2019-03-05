@@ -4,7 +4,7 @@
       stat: path=/opt/mapr/conf/cldb.key
       register: cldb_key
     - name: Copy keys to local
-      fetch: src=/opt/mapr/conf/{{ item }} dest=/tmp/{{ item }} flat=yes
+      fetch: src=/opt/mapr/conf/{{ item }} dest="{{ local_tmp_path }}/{{ item }}" flat=yes
       when: cldb_key.stat.exists
       with_items:
       - maprserverticket

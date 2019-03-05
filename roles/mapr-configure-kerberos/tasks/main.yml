@@ -2,14 +2,14 @@
 - name: Enable customer security by creating /opt/mapr/conf/.customSecure
   file: path=/opt/mapr/conf/.customSecure state=touch mode=0644
 - name: Copy MapR keys to all nodes
-  copy: src="/tmp/{{ item.filename }}" dest="/opt/mapr/conf/{{ item.filename }}" mode="{{ item.mode }}" owner="{{ mapr_user }}" group="{{ mapr_group }}"
+  copy: src="{{ local_tmp_path }}/{{ item.filename }}" dest="/opt/mapr/conf/{{ item.filename }}" mode="{{ item.mode }}" owner="{{ mapr_user }}" group="{{ mapr_group }}"
   with_items:
   - filename: maprserverticket
     mode: "0600"
   - filename: cldb.key
     mode: "0600"
 - name: Copy MapR keystores and truststores to all nodes
-  copy: src="/tmp/{{ item.filename }}" dest="/opt/mapr/conf/{{ item.filename }}" mode="{{ item.mode }}" owner="{{ mapr_user }}" group="{{ mapr_group }}"
+  copy: src="{{ local_tmp_path }}/{{ item.filename }}" dest="/opt/mapr/conf/{{ item.filename }}" mode="{{ item.mode }}" owner="{{ mapr_user }}" group="{{ mapr_group }}"
   with_items:
   - filename: ssl_keystore
     mode: "0400"
@@ -25,7 +25,7 @@
     mode: "0444"
   when: not https_custom_certs_enabled
 - name: Copy DARE master key
-  copy: src=/tmp/dare.master.key dest=/opt/mapr/conf/dare.master.key owner="{{ mapr_user }}" group="{{ mapr_group }}" mode="0600"
+  copy: src="{{ local_tmp_path }}/dare.master.key" dest="/opt/mapr/conf/dare.master.key" owner="{{ mapr_user }}" group="{{ mapr_group }}" mode="0600"
   when: security_encryption_rest
 
 - name: Configure.sh kerberos

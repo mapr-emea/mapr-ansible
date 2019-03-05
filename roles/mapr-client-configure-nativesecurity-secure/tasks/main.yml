@@ -2,13 +2,13 @@
 # Configure secure client
 # key store is required for Spark UI
 - name: Copy SSL keys to all nodes
-  copy: src="/tmp/{{ item }}" dest="/opt/mapr/conf/{{ item }}"
+  copy: src="{{ local_tmp_path }}/{{ item }}" dest="/opt/mapr/conf/{{ item }}"
   with_items:
   - ssl_truststore
   - ssl_keystore
 
 - name: Copy mapruserticket to all nodes (required for FUSE or nfsloopback)
-  copy: src="/tmp/mapruserticket" dest="/opt/mapr/conf/mapruserticket" mode="0600" owner="{{ mapr_user }}" group="{{ mapr_group }}"
+  copy: src="{{ local_tmp_path }}/mapruserticket" dest="/opt/mapr/conf/mapruserticket" mode="0600" owner="{{ mapr_user }}" group="{{ mapr_group }}"
 # copy to other nodes
 # run configure on other nodes
 

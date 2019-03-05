@@ -21,7 +21,7 @@
 #  debug: msg="{{ cldb_string }}"
 
 - name: Copy security files
-  copy: src="/tmp/{{ item }}" dest="/opt/mapr/conf/{{ item }}" owner="{{ mapr_user }}" group="{{mapr_group}}" mode=0600 backup=yes
+  copy: src="{{ local_tmp_path }}/{{ item }}" dest="/opt/mapr/conf/{{ item }}" owner="{{ mapr_user }}" group="{{mapr_group}}" mode=0600 backup=yes
   with_items:
      - cldb.key
      - maprserverticket
