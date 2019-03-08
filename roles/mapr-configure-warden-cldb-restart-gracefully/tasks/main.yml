@@ -22,6 +22,8 @@
   when: mapruserticket_file.stat.exists
 - name: Stop MapR Warden
   service: name=mapr-warden state=stopped enabled=yes
+- name: Delete /opt/mapr/logs/cldb.log
+  file: path=/opt/mapr/logs/cldb.log state=absent
 - name: Copy mfs.log-3 to backup
   copy: remote_src=True src=/opt/mapr/logs/mfs.log-3 dest=/opt/mapr/logs/mfs.log-3.bak backup=true
   when: mapruserticket_file.stat.exists
@@ -50,10 +52,6 @@
   environment:
     MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
   when: mapruserticket_file.stat.exists
-- name: Delete /opt/mapr/logs/cldb.log
-  file: path=/opt/mapr/logs/cldb.log state=absent
-- name: Start Warden
-  service: name=mapr-warden state=started enabled=yes
 # Check on license is required, because when doing first installation, no license was applied
 - name: Wait for CLDB
   wait_for: path=/opt/mapr/logs/cldb.log state=present search_regex="CLDB State change \\:\ RUNNING|CLDBShutdown\\:\ license not found for CLDB HA|Becoming Slave Thread" timeout=1800
