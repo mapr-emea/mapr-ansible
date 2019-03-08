@@ -61,6 +61,14 @@
   hosts: all:!mapr-gateway
   roles:
     - ../roles/mapr-gateway-uninstall
+- name: Install MAST-Gateway
+  hosts: mapr-mastgateway
+  roles:
+    - ../roles/mapr-gateway-install
+- name: Uninstall MAST-Gateway
+  hosts: all:!mapr-mastgateway
+  roles:
+    - ../roles/mapr-mastgateway-uninstall
 - name: Install MapR-Fileserver
   hosts: mapr-fileserver
   roles:
