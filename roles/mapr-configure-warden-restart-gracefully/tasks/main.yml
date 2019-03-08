@@ -1,0 +1,43 @@
+---
+# Restart  Warden
+- pause: seconds="{{ warden_restart_wait_time }}"
+  when: ansible_check_mode is undefined or not ansible_check_mode
+- name: Check if mapruserticket exists, if not it's first startup
+  stat: path=/opt/mapr/conf/mapruserticket
+  register: mapruserticket_file
+- name: Set node to maintenance mode
+  shell: "maprcli node maintenance -nodes {{ ansible_fqdn }} -timeoutminutes 1440"
+  check_mode: no
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: mapruserticket_file.stat.exists
+- name: Stop MapR Warden
+  service: name=mapr-warden state=stopped enabled=yes
+- name: Copy mfs.log-3 to backup
+  copy: remote_src=True src=/opt/mapr/logs/mfs.log-3 dest=/opt/mapr/logs/mfs.log-3.bak backup=true
+  when: mapruserticket_file.stat.exists
+- name: Remove old mfs.log-3 so that search for MFS start can be performed
+  file: path=/opt/mapr/logs/mfs.log-3 state=absent
+  when: mapruserticket_file.stat.exists
+- name: Start MapR Warden
+  service: name=mapr-warden state=started enabled=yes
+- name: Disable maintenance mode
+  shell: "maprcli node maintenance -nodes {{ ansible_fqdn }} -timeoutminutes 0"
+  check_mode: no
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: mapruserticket_file.stat.exists
+- name: Wait for MFS to be started
+  wait_for: path=/opt/mapr/logs/mfs.log-3 state=present search_regex="Registered with cldb" timeout=86400
+  when: mapruserticket_file.stat.exists
+- name: Waiting for MFS container resync.
+  shell: /opt/mapr/server/mrconfig info containers resync
+  failed_when: false
+  check_mode: no
+  register: resync_result
+  retries: 8640 # max a day :-)
+  delay: 10
+  until: resync_result.rc == 0 and (resync_result.stdout_lines | reject('search','^---') | reject('search','^Time') | reject('search','^$') | list | count) == 0
+  environment:
+    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+  when: mapruserticket_file.stat.exists

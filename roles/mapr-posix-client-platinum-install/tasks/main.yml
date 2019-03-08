@@ -5,16 +5,16 @@
   with_items:
   - mapr-posix-client-platinum
   - rpcbind
-- name: Check if maprfuseticket exists
-  stat: path=/opt/mapr/conf/maprfuseticket
-  register: fuse_maprticket
-- name: Generate FUSE serviceticket with impersonation
-  shell: "maprlogin generateticket -type servicewithimpersonation -user {{ mapr_user }} -duration 100000:0:0 -out /opt/mapr/conf/maprfuseticket"
-  environment:
-    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
-  when: not fuse_maprticket.stat.exists
+#- name: Check if maprfuseticket exists
+#  stat: path=/opt/mapr/conf/maprfuseticket
+#  register: fuse_maprticket
+#- name: Generate FUSE serviceticket with impersonation
+#  shell: "maprlogin generateticket -type servicewithimpersonation -user {{ mapr_user }} -duration 100000:0:0 -out /opt/mapr/conf/maprfuseticket"
+#  environment:
+#    MAPR_TICKETFILE_LOCATION: /opt/mapr/conf/mapruserticket
+#  when: not fuse_maprticket.stat.exists
 - name: Set /opt/mapr/conf/mapruserticket in fuse.conf
-  lineinfile: dest=/opt/mapr/conf/fuse.conf regexp="^fuse\.ticketfile\.location" line="fuse.ticketfile.location=/opt/mapr/conf/maprfuseticket"
+  lineinfile: dest=/opt/mapr/conf/fuse.conf regexp="^fuse\.ticketfile\.location" line="fuse.ticketfile.location=/opt/mapr/conf/mapruserticket"
 # Other actions
 - name: Create /mapr dir
   file: path=/mapr state=directory
