@@ -10,6 +10,7 @@
 - set_fact: spark_path="{{ spark_path_result.files[0].path }}"
 - name: Copy hive-site.xml to Spark (otherwise Spark startup throws errors)
   template: src=hive-site.xml dest="{{ spark_path }}/conf/hive-site.xml" mode=0644
+  when: groups['mapr-hive-metastore'] is defined
 - name: Copy hbase-site.xml to Spark
   template: src=hbase-site.xml dest="{{ spark_path }}/conf/hbase-site.xml"  mode=0644
 # Other actions

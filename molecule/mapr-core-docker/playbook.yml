@@ -1,0 +1,4 @@
+---
+
+- import_playbook: plays/prepare-one-node.yml
+- import_playbook: plays/prepare-one-node-with-mep.yml

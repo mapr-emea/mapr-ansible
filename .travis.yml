@@ -20,7 +20,12 @@ script:
      -w /tmp/$(basename "${PWD}")
      retr0h/molecule:latest
      sudo molecule test -s common
-
+  - docker run --rm -it
+     -v "$(pwd)":/tmp/$(basename "${PWD}"):ro
+     -v /var/run/docker.sock:/var/run/docker.sock
+     -w /tmp/$(basename "${PWD}")
+     retr0h/molecule:latest
+     sudo molecule test -s mapr-core-docker
 
 matrix:
   fast_finish: true

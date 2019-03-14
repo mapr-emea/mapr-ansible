@@ -1,0 +1,61 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint:
+  name: yamllint
+
+platforms:
+
+  - name: basic-core
+    image: centos:7
+    command: /sbin/init
+    capabilities:
+      - SYS_RESOURCE
+      - SYS_NICE
+      - SYS_ADMIN
+    security_opts:
+      - seccomp=unconfined
+      - apparmor=unconfined
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    groups:
+      - common
+      - mapr-core
+      - mapr-zookeeper
+      - mapr-fileserver
+      - mapr-cldb
+      - mapr-mcs
+      - mapr-spark-historyserver
+      - mapr-hbase-cli
+      - mapr-oozie
+      - mapr-historyserver
+      - mapr-resourcemanager
+      - mapr-spark-yarn
+      - mapr-nodemanager
+      - ext-mysql
+
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+  options:
+    skip-tags: molecule-notest,notest,skip-docker
+
+scenario:
+  name: mapr-core-docker
+  test_sequence:
+    - destroy
+    - create
+    - converge
+    - verify
+    - destroy
+
+verifier:
+  name: testinfra
+  additional_files_or_dirs:
+    - ../../tests-mapr-core/test_mapr_core_*.py
+    - ../roles/*/molecule/default/tests/*.py
+  lint:
+    name: flake8
