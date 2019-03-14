@@ -2,6 +2,3 @@
 # Uninstall MapR Kafka
 - name: Uninstall mapr-kafka
   package: name=mapr-kafka state=absent
-# Disabled because Zookeeper and mapr-core have dep to that package.
-# - name: Uninstall mapr-librdkafka
-#  package: name=mapr-librdkafka state=absent
