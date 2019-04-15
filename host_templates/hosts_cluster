@@ -32,6 +32,10 @@ ansible_become=yes
 [mapr-gateway]
 10.0.0.132
 
+[mapr-mastgateway]
+10.0.0.132
+
+
 # MapR Control System
 [mapr-mcs]
 10.0.0.132

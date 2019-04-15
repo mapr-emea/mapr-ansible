@@ -19,6 +19,8 @@ force_warden_restart: True
 force_reconfigure_sh: True
 # if true only one node at once will be restarted, if false all nodes will be restarted at the same time.
 rolling_restart: False
+# Wait for container resync. only with rolling restarts, do not enable at first installation
+graceful_restart: False
 warden_restart_wait_time: 30
 virtual_machine: False
 # Used on Ansible host to store tmp files

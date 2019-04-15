@@ -49,6 +49,8 @@
     - role: ../../roles/mapr-configure-vars-zk
     - role: ../../roles/mapr-configure-warden-cldb-restart
     - role: ../../roles/mapr-configure-warden-restart
+    - role: ../../roles/mapr-configure-warden-cldb-restart-gracefully
+    - role: ../../roles/mapr-configure-warden-restart-gracefully
     - role: ../../roles/mapr-configure-zookeeper-restart
     - role: ../../roles/mapr-core-install
     - role: ../../roles/mapr-core-uninstall

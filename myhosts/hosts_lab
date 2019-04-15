@@ -49,6 +49,9 @@ node1
 node2
 node3
 
+[mapr-mastgateway]
+node3
+
 # MapR Control System
 [mapr-mcs]
 node1
