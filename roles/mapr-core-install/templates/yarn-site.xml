@@ -74,7 +74,7 @@
     {% if yarn_local_dir_to_maprfs %}
     <property>
         <name>yarn.nodemanager.local-dirs</name>
-        <value>/mapr/{{ cluster_name }}/var/mapr/local/{{ ansible_fqdn }}/nm-local-dir</value>
+        <value>/mapr/{{ cluster_name }}/var/mapr/local/{{ ansible_fqdn }}/mapred/nm-local-dir</value>
     </property>
     {% endif %}
     {% if yarn_spark_shuffle %}
