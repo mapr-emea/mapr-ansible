@@ -1,0 +1,40 @@
+---
+# - import_playbook: ext-mysql.yml
+- name: Install MySQL
+  hosts: all
+  become: true
+  roles:
+    - ../../roles/ext-mysql-install
+
+
+# - import_playbook: ../../sites/mapr-mep-spark.yml
+- name: Install Spark on YARN
+  hosts: all
+  become: true
+  roles:
+    - ../../roles/mapr-spark-yarn-install
+
+- name: Install Spark History Server
+  hosts: all
+  become: true
+  roles:
+    - ../../roles/mapr-spark-historyserver-install
+
+# - import_playbook: mapr-mep-oozie.yml
+- name: Setup Zookeeper String
+  hosts: all
+  become: true
+  roles:
+    - ../../roles/mapr-configure-vars-zk
+- name: Set Oozie Vars
+  hosts: all
+  become: true
+  vars:
+    num_mysql_hosts: "{{ groups['ext-mysql']|length }}"
+  roles:
+    - {role: ../../roles/mapr-oozie-mysql, when: oozie_db_type == 'mysql' and oozie_db_mysql_create_schema_and_user and num_mysql_hosts != '0'}
+- name: Install Oozie
+  hosts: all
+  become: true
+  roles:
+    - ../../roles/mapr-oozie-install

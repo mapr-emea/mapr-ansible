@@ -1,0 +1,193 @@
+---
+# Uninstall POSIX clients first, otherwise if user changes from NFS to Fuse it will conflict.
+- name: Uninstall NFS v3
+  hosts: all:!mapr-nfs-v3
+  roles:
+    - ../roles/mapr-nfs-v3-uninstall
+- name: Uninstall mapr-posix-client-basic (FUSE)
+  hosts: all:!mapr-posix-client-basic
+  roles:
+    - ../roles/mapr-patch-posix-client-basic-uninstall
+    - ../roles/mapr-posix-client-basic-uninstall
+- name: Uninstall mapr-posix-client-platinum (FUSE)
+  hosts: all:!mapr-posix-client-platinum
+  roles:
+    - ../roles/mapr-patch-posix-client-platinum-uninstall
+    - ../roles/mapr-posix-client-platinum-uninstall
+
+# used by configure.sh and drill
+- name: Setup global vars
+  hosts: all
+  roles:
+    - ../roles/mapr-global-vars
+    - ../roles/mapr-configure-vars-zk
+    - ../roles/mapr-configure-vars-cldb
+    - ../roles/mapr-configure-vars-rm
+    - ../roles/mapr-configure-vars-hs
+- name: Install MapR Core
+  hosts: mapr-core
+  roles:
+    - ../roles/mapr-core-install
+    - ../roles/mapr-configure-env-override
+- name: Install Zookeeper
+  hosts: mapr-zookeeper
+  roles:
+    - ../roles/mapr-zookeeper-install
+- name: Uninstall Zookeeper
+  hosts: all:!mapr-zookeeper
+  roles:
+    - ../roles/mapr-zookeeper-uninstall
+- name: Count Zookeeper changes
+  hosts: all
+  roles:
+    - ../roles/mapr-zookeeper-changes
+- name: Install CLDB
+  hosts: mapr-cldb
+  roles:
+    - ../roles/mapr-cldb-install
+- name: Uninstall CLDB
+  hosts: all:!mapr-cldb
+  roles:
+    - ../roles/mapr-cldb-uninstall
+- name: Count CLDB changes
+  hosts: all
+  roles:
+    - ../roles/mapr-cldb-changes
+- name: Install Gateway
+  hosts: mapr-gateway
+  roles:
+    - ../roles/mapr-gateway-install
+- name: Uninstall Gateway
+  hosts: all:!mapr-gateway
+  roles:
+    - ../roles/mapr-gateway-uninstall
+- name: Install MapR-Fileserver
+  hosts: mapr-fileserver
+  roles:
+    - ../roles/mapr-fileserver-install
+- name: Uninstall MapR-Fileserver
+  hosts: all:!mapr-fileserver
+  roles:
+    - ../roles/mapr-fileserver-uninstall
+- name: Install YARN Node Manager
+  hosts: mapr-nodemanager
+  roles:
+    - ../roles/mapr-nodemanager-install
+- name: Uninstall YARN Node Manager
+  hosts: all:!mapr-nodemanager
+  roles:
+    - ../roles/mapr-nodemanager-uninstall
+- name: Install YARN Resource Manager
+  hosts: mapr-resourcemanager
+  roles:
+    - ../roles/mapr-resourcemanager-install
+- name: Uninstall YARN Resource Manager
+  hosts: all:!mapr-resourcemanager
+  roles:
+    - ../roles/mapr-resourcemanager-uninstall
+- name: Install History Server
+  hosts: mapr-historyserver
+  roles:
+    - ../roles/mapr-historyserver-install
+- name: Uninstall History Server
+  hosts: all:!mapr-historyserver
+  roles:
+    - ../roles/mapr-historyserver-uninstall
+- name: Count Historyserver changes
+  hosts: all
+  roles:
+    - ../roles/mapr-historyserver-changes
+- name: Install MCS
+  hosts: mapr-mcs
+  roles:
+    - ../roles/mapr-mcs-install
+- name: Uninstall MCS
+  hosts: all:!mapr-mcs
+  roles:
+    - ../roles/mapr-mcs-uninstall
+- name: Install NFS v3
+  hosts: mapr-nfs-v3
+  roles:
+    - ../roles/mapr-nfs-v3-install
+# uninstall NFS on top
+- name: Configure with genkeys (native-security)
+  hosts: mapr-cldb[0]
+  roles:
+    - {role: ../roles/mapr-configure-nativesecurity-secure-genkeys, when: mapr_security == 'maprsasl'}
+- name: Configure with genkeys (kerberos)
+  hosts: mapr-cldb[0]
+  roles:
+    - {role: ../roles/mapr-configure-kerberos-genkeys, when: mapr_security == 'kerberos'}
+- name: Fetch keys, when no CLDB change happened
+  hosts: mapr-cldb[0]
+  roles:
+    - {role: ../roles/mapr-configure-security-fetch-keys, when: mapr_security != 'none'}
+- name: Roll out custom SSL certificates
+  hosts: mapr-core
+  roles:
+    - {role: ../roles/mapr-core-customssl, when: https_custom_certs_enabled}
+- name: Configure and start (unsecure)
+  hosts: mapr-core
+  roles:
+    - {role: ../roles/mapr-configure-unsecure, when: mapr_security == 'none' and (force_reconfigure_sh or (zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0 or (historyserver_changes|int) > 0)}
+- name: Configure and start (native-security)
+  hosts: mapr-core
+  roles:
+    - {role: ../roles/mapr-configure-nativesecurity-secure, when: mapr_security == 'maprsasl' and (force_reconfigure_sh or (zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0 or (historyserver_changes|int) > 0)}
+- name: Configure and start (kerberos)
+  hosts: mapr-core
+  roles:
+    - {role: ../roles/mapr-configure-kerberos, when: mapr_security == 'kerberos' and (force_reconfigure_sh or (zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0 or (historyserver_changes|int) > 0)}
+- name: Disk setup
+  hosts: mapr-fileserver:mapr-nodemanager:mapr-cldb
+  roles:
+    - ../roles/mapr-configure-disks
+- name: Restarting mapr-zookeeper (rolling)
+  hosts: mapr-zookeeper
+  roles:
+    - {role: ../roles/mapr-configure-zookeeper-restart, when: rolling_restart and (force_zookeeper_restart or (zookeeper_changes|int) > 0)}
+  serial: 1
+- name: Restarting mapr-zookeeper
+  hosts: mapr-zookeeper
+  roles:
+    - {role: ../roles/mapr-configure-zookeeper-restart, when: not rolling_restart and (force_zookeeper_restart or (zookeeper_changes|int) > 0)}
+
+# - name: Restarting mapr-warden (rolling)
+#   hosts: mapr-fileserver:mapr-nodemanager:!mapr-cldb
+#   roles:
+#     - { role: ../roles/mapr-configure-warden-restart, when: rolling_restart and (force_warden_restart or (zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0 or (historyserver_changes|int) > 0) }
+#   serial: 1
+#
+# - name: Restarting mapr-warden on CLDB nodes (rolling)
+#   hosts: mapr-cldb
+#   roles:
+#     - { role: ../roles/mapr-configure-warden-cldb-restart, when: rolling_restart and (force_warden_restart or (zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0 or (historyserver_changes|int) > 0)}
+#   serial: 1
+#
+# - name: Restarting mapr-warden
+#   hosts: mapr-fileserver:mapr-nodemanager
+#   roles:
+#     - { role: ../roles/mapr-configure-warden-restart, when: not rolling_restart and (force_warden_restart or (zookeeper_changes|int) > 0  or (cldb_changes|int) > 0 or (core_local_changes|int) > 0 or (mfs_local_changes|int) > 0 or (historyserver_changes|int) > 0)}
+#
+- name: Configure NodeManager Local Dir to MapRFS
+  hosts: mapr-nodemanager
+  roles:
+    - {role: ../../roles/mapr-nodemanager-localdir, when: yarn_local_dir_to_maprfs}
+
+- name: Install mapr-posix-client-basic (FUSE)
+  hosts: mapr-posix-client-basic
+  roles:
+    - ../../roles/mapr-posix-client-basic-install
+    - {role: ../../roles/mapr-patch-posix-client-basic-install, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
+# uninstall Fuse on top
+- name: Install mapr-posix-client-platinum (FUSE)
+  hosts: mapr-posix-client-platinum
+  roles:
+    - ../../roles/mapr-posix-client-platinum-install
+    - {role: ../../roles/mapr-patch-posix-client-platinum-install, when: mapr_patch_url is defined and ansible_os_family != 'Debian'}
+
+# Local cleanup of security relevant files
+# - hosts: 127.0.0.1
+#   connection: local
+#   roles:
+#     - {role: ../../roles/mapr-configure-cleanup, when: cleanup_local_keys }

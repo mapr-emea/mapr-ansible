@@ -19,52 +19,52 @@
 
 - name: Hive MySQL required
   fail: msg="Hive - Install MySQL or set hive_db_jdbc_url in all configuration when setting hive_db_type = 'mysql'"
-  when: (groups['mapr-hive-cli']|length) > 0 and (groups['ext-mysql']|length) == 0 and hive_db_jdbc_url is undefined and hive_db_type == 'mysql'
+  when: (groups['mapr-hive-cli'] is defined and groups['mapr-hive-cli']|length) > 0 and (groups['ext-mysql']|length) == 0 and hive_db_jdbc_url is undefined and hive_db_type == 'mysql'
 
 - name: Hive Oracle required
   fail: msg="Hive - Set hive_db_jdbc_url in all configuration when setting hive_db_type = 'oracle'"
-  when: (groups['mapr-hive-cli']|length) > 0 and hive_db_jdbc_url is undefined and hive_db_type == 'oracle'
+  when: (groups['mapr-hive-cli'] is defined and groups['mapr-hive-cli']|length) > 0 and hive_db_jdbc_url is undefined and hive_db_type == 'oracle'
 
 - name: Oozie MySQL required
   fail: msg="Oozie - Install MySQL or set oozie_db_jdbc_url in all configuration when setting oozie_db_type = 'mysql'"
-  when: (groups['mapr-oozie']|length) > 0 and (groups['ext-mysql']|length) == 0 and oozie_db_jdbc_url is undefined and oozie_db_type == 'mysql'
+  when: (groups['mapr-oozie'] is defined and groups['mapr-oozie']|length) > 0 and (groups['ext-mysql']|length) == 0 and oozie_db_jdbc_url is undefined and oozie_db_type == 'mysql'
 
 - name: Oozie Oracle required
   fail: msg="Oozie - Set oozie_db_jdbc_url in all configuration when setting oozie_db_type = 'oracle'"
-  when: (groups['mapr-oozie']|length) > 0 and oozie_db_jdbc_url is undefined and oozie_db_type == 'oracle'
+  when: (groups['mapr-oozie'] is defined and groups['mapr-oozie']|length) > 0 and oozie_db_jdbc_url is undefined and oozie_db_type == 'oracle'
 
 - name: Hue MySQL required
   fail: msg="Hue - Install MySQL or set hue_db_host in all configuration when setting hue_db_type = 'mysql'"
-  when: (groups['mapr-hue']|length) > 0 and (groups['ext-mysql']|length) == 0 and hue_db_host is undefined and hue_db_type == 'mysql'
+  when: (groups['mapr-hue'] is defined and groups['mapr-hue']|length) > 0 and (groups['ext-mysql']|length) == 0 and hue_db_host is undefined and hue_db_type == 'mysql'
 
 - name: Hue Oracle required
   fail: msg="Hue - Set hue_db_host in all configuration when setting hue_db_type = 'oracle'"
-  when: (groups['mapr-hue']|length) > 0 and hue_db_host is undefined and hue_db_type == 'oracle'
+  when: (groups['mapr-hue'] is defined and groups['mapr-hue']|length) > 0 and hue_db_host is undefined and hue_db_type == 'oracle'
 
 - name: Hue Oracle Instant Basic Client required check
   shell: "rpm -qa | grep oracle-instantclient.*basic"
   failed_when: false
   register: result_oracle_instantclientbasic
-  when: (groups['mapr-hue']|length) > 0 and hue_db_type == 'oracle' and inventory_hostname in groups["mapr-hue"]
+  when: (groups['mapr-hue'] is defined and groups['mapr-hue']|length) > 0 and hue_db_type == 'oracle' and inventory_hostname in groups["mapr-hue"]
   check_mode: no
 - name: Hue Oracle Instant Basic Client
   fail: msg="oracle-instantclient-basic is required on Hue node, please download from http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html"
-  when: (groups['mapr-hue']|length) > 0 and hue_db_type == 'oracle' and inventory_hostname in groups["mapr-hue"] and result_oracle_instantclientbasic.rc != 0
+  when: (groups['mapr-hue'] is defined and groups['mapr-hue']|length) > 0 and hue_db_type == 'oracle' and inventory_hostname in groups["mapr-hue"] and result_oracle_instantclientbasic.rc != 0
   any_errors_fatal: true
 
 - name: Hue Oracle Instant Devel Client required check
   shell: "rpm -qa | grep oracle-instantclient.*devel"
   failed_when: false
   register: result_oracle_instantclientdevel
-  when: (groups['mapr-hue']|length) > 0 and hue_db_type == 'oracle' and inventory_hostname in groups["mapr-hue"]
+  when: (groups['mapr-hue'] is defined and groups['mapr-hue']|length) > 0 and hue_db_type == 'oracle' and inventory_hostname in groups["mapr-hue"]
   check_mode: no
 - name: Hue Oracle Instant DevelClient
   fail: msg="oracle-instantclient-devel is required on Hue node, please download from http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html"
-  when: (groups['mapr-hue']|length) > 0 and hue_db_type == 'oracle' and inventory_hostname in groups["mapr-hue"] and result_oracle_instantclientdevel.rc != 0
+  when: (groups['mapr-hue'] is defined and groups['mapr-hue']|length) > 0 and hue_db_type == 'oracle' and inventory_hostname in groups["mapr-hue"] and result_oracle_instantclientdevel.rc != 0
   any_errors_fatal: true
 - name: Custom OpenTSDB must NOT be installed on OpenTSDB node
   fail: msg="Custom OpenTSDB [mapr-opentsdb-custom] must NOT be installed on OpenTSDB node [mapr-opentsdb]"
-  when: inventory_hostname in groups["mapr-opentsdb-custom"] and inventory_hostname in groups["mapr-opentsdb"]
+  when: groups["mapr-opentsdb-custom"] is defined and inventory_hostname in groups["mapr-opentsdb-custom"] and inventory_hostname in groups["mapr-opentsdb"]
   any_errors_fatal: true
 - name: When enabling encryption at rest, mapr_security must not be 'none'
   fail: msg="When enabling encryption at rest, mapr_security must not be 'none'"

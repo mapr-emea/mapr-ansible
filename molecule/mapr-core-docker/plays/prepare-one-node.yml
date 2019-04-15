@@ -1,0 +1,139 @@
+---
+- name: Group vars
+  hosts: all
+  tasks:
+    - name: include global config
+      include_vars: file="../group_vars/all_vars"
+
+- name: Check files
+  hosts: all
+  become: true
+  tasks:
+    # https://mapr.com/docs/home/ReferenceGuide/disksetup.html
+    - name: Check storagefile1
+      stat:
+        path: /root/storagefile1
+      register: storagefile1
+    - name: Check storagefile2
+      stat:
+        path: /root/storagefile2
+      register: storagefile2
+    - name: Check storagefile3
+      stat:
+        path: /root/storagefile3
+      register: storagefile3
+
+- name: Prepare disk file
+  hosts: all
+  become: true
+  tasks:
+    # https://mapr.com/docs/home/ReferenceGuide/disksetup.html
+    - name: Create empty file
+      command: "dd if=/dev/zero of={{ item }} bs=1G count=5"
+      with_items:
+        - /root/storagefile1
+        - /root/storagefile2
+        - /root/storagefile3
+      when: not storagefile1.stat.exists and not storagefile2.stat.exists and not storagefile3.stat.exists
+
+- name: check storagefiles access rights
+  hosts: all
+  become: true
+  tasks:
+    - name: root dir access
+      file:
+        path: /root
+        mode: 0755
+    - name: storage files access
+      file:
+        path: "{{ item }}"
+        mode: 0666
+      with_items:
+        - /root/storagefile1
+        - /root/storagefile2
+        - /root/storagefile3
+
+- import_playbook: common.yml
+- import_playbook: mapr-precheck.yml
+- import_playbook: mapr-repository.yml
+
+- name: sites/mapr-core
+  hosts: all
+  become: true
+  roles:
+    - ../../../roles/mapr-global-vars
+    - ../../../roles/mapr-configure-vars-zk
+    - ../../../roles/mapr-configure-vars-cldb
+    - ../../../roles/mapr-configure-vars-rm
+    - ../../../roles/mapr-configure-vars-hs
+
+    - ../../../roles/mapr-core-install
+
+    - ../../../roles/mapr-zookeeper-install
+    - ../../../roles/mapr-zookeeper-changes
+
+    - ../../../roles/mapr-cldb-install
+    - ../../../roles/mapr-cldb-changes
+
+    - ../../../roles/mapr-fileserver-install
+
+    - ../../../roles/mapr-resourcemanager-install
+    - ../../../roles/mapr-nodemanager-install
+
+    - ../../../roles/mapr-historyserver-install
+    - ../../../roles/mapr-historyserver-changes
+
+    - {role: ./../../roles/mapr-configure-nativesecurity-secure-genkeys, when: mapr_security == 'maprsasl'}
+    - {role: ../../roles/mapr-configure-security-fetch-keys, when: mapr_security != 'none'}
+    - {role: ../../../roles/mapr-configure-nativesecurity-secure, when: mapr_security == 'maprsasl'}
+    - {role: ../../../roles/mapr-configure-kerberos, when: mapr_security == 'kerberos'}
+
+    - ../../../roles/mapr-configure-disks
+    - ../../../roles/mapr-configure-zookeeper-restart
+
+- name: Molecule specific steps
+  hosts: all
+  become: true
+  tasks:
+    - name: Modify /opt/mapr/initscripts/mapr-warden
+      replace:
+        path: "/opt/mapr/initscripts/{{ item.f }}"
+        regexp: "{{ item.r }}"
+        replace: coresDir=/opt/cores
+      with_items:
+        - r: coresDir=..dirname ...cat /proc/sys/kernel/core_pattern...
+          f: mapr-warden
+        - r: coresDir=..dirname ..cat /proc/sys/kernel/core_pattern..
+          f: mapr-warden
+        - r: coresDir=..dirname ...cat /proc/sys/kernel/core_pattern...
+          f: mapr-gateway
+        - r: coresDir=..dirname ..cat /proc/sys/kernel/core_pattern..
+          f: mapr-gateway
+        - r: coresDir=..dirname ...cat /proc/sys/kernel/core_pattern...
+          f: mapr-cldb
+        - r: coresDir=..dirname ..cat /proc/sys/kernel/core_pattern..
+          f: mapr-cldb
+
+- name: Restart cldb
+  hosts: all
+  gather_facts: false
+  become: true
+  roles:
+    - ../../../roles/mapr-configure-warden-cldb-restart
+
+- name: Set yarn admin user
+  hosts: all
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Get version
+      command: cat /opt/mapr/hadoop/hadoopversion
+      register: version_output
+      changed_when: false
+    - name: Replace in yarn-site.xml
+      replace:
+        dest: "/opt/mapr/hadoop/hadoop-{{ version_output.stdout }}/etc/hadoop/yarn-site.xml"
+        regexp: '<property>\n(\s+)<name>yarn.admin.acl</name>\n(\s+)<value> </value>\n(\s+)</property>'
+        replace: ''
+        backup: true
+      when: version_output.rc == 0

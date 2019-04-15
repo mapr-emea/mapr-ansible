@@ -1,0 +1,189 @@
+mapr_release_url: http://package.mapr.com/releases/v6.1.0
+mapr_ecosystem_url: http://package.mapr.com/releases/MEP/MEP-6.1.0/
+mapr_gpg_url: http://package.mapr.com/releases/pub/maprgpg.key
+mapr_gpg_check: yes
+
+# JDK choose: openjdk18 or oraclejdk18
+jdk: openjdk18
+#jdk_folder: /opt/java/jdk1.8.0_111
+# redhat openjdk java path
+jdk_folder: /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.121-0.b13.el7_3.x86_64
+oracle_jdk_url: http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.tar.gz
+use_ntp: True
+
+hadoop_version: 2.7.0
+cluster_name: molecule-cluster
+# required when aborted in wrong stage or changing security type
+force_zookeeper_restart: True
+force_warden_restart: True
+force_reconfigure_sh: True
+# if true only one node at once will be restarted, if false all nodes will be restarted at the same time.
+rolling_restart: False
+warden_restart_wait_time: 30
+virtual_machine: False
+# Used on Ansible host to store tmp files
+local_tmp_path: /tmp/mapr-ansible-tmp
+
+# mapr_subnets is optional, if required just remove #
+#mapr_subnets: 10.0.0.0/24
+mapr_create_user: True
+mapr_user: mapr
+mapr_group: mapr
+# UID only for creation required.
+mapr_group_gid: 5000
+mapr_user_uid: 5000
+
+# YARN settings
+# Enables YARN log aggregation
+yarn_log_aggregation: False
+# Maximum size for one YARN container
+yarn_max_container_allocation_in_mb: 131072
+# Create local dir for NodeManager temporary data like shuffle and sort. This requires mapr-nfs on the same node!
+yarn_local_dir_to_maprfs: False
+yarn_spark_shuffle: False
+
+# If set value will be overriden
+#drill_max_proc_mem_in_mb: 20
+
+####### Enable security features ##########
+# Default value for all components: mapr core and ecosystem
+# Options: none, maprsasl, kerberos
+security_all: maprsasl
+
+# Custom SSL certificates for all components. Certificates must be <fqdn>.pem in given folder. No password in certicates supported, use ansible-vault.
+https_custom_certs_enabled: False
+# If certificate and private key is is same file, just add same path for both.
+https_custom_certs_path: /root/testsslkeys/crt/
+https_custom_private_key_path: /root/testsslkeys/key/
+https_custom_rootca: /root/testsslkeys/rootCA.pem
+https_custom_certs_force_update: True
+
+# Security at rest - also known as DARE - Only for secure clusters
+security_encryption_rest: True
+
+# MapR-Core security
+# Options: none, maprsasl, kerberos
+mapr_security: "{{ security_all }}"
+
+# Additional information for Kerberos
+mapr_kerberos_realm: PS.MAPR.COM
+mapr_kerberos_local_keytabs_dir: /mnt/c/Projects/keytabs
+# This is a wrkaround, since CLDB uses always mapr-user 'mapr' in CLDB principal, don't change
+mapr_user_cldb_principal: mapr
+
+# Will delete existing keys (cldb.key, maprserverticket, ssl_truststore, ssl_keystore) and generate new one: true /false
+
+# Impala security: none, kerberos
+impala_security: none
+
+# Hive security: none, maprsasl, pam or kerberos
+hive_server_security: "pam"
+hive_metastore_security: "{{ security_all }}"
+hive_server_ui_ssl: True
+hive_server_jdbc_ssl: False
+# Drill security (only standalone): none, maprsasl, kerberos
+drill_security: "{{ security_all }}"
+# HBase REST/Thrift: none, kerberos, maprsasl
+hbase_thrift_rest_security: "{{ security_all }}"
+# HttpFS: none, maprsasl, kerberos
+httpfs_security: "{{ security_all }}"
+# Oozie: none, maprsasl, kerberos
+oozie_security: "{{ security_all }}"
+oozie_ssl: True
+# Sqoop2: none, maprsasl, kerberos
+sqoop_security: "{{ security_all }}"
+# Spark settings, enable only on secure cluster, otherwise installation fails
+spark_authenticate: True
+spark_ssl_encryption: True
+spark_sasl_encryption: True
+# Hue will use PAM auth and depending what was configured for other components use these settings
+hue_ssl: True
+hbase_thrift_rest_ssl: True
+
+# Spyglass metrics collect
+# Options: minimal or all
+spyglass_metrics_collect: all
+spyglass_opentsdb_max_memory_in_mb: 2048
+spyglass_elasticsearch_secure: True
+spyglass_log_password: mapr
+# Grafana Password is required to setup Grafana dashboards and datasources
+spyglass_grafana_password: mapr
+###########################################
+
+oracle_jdbc_driver_path: /Users/chufe/Downloads/ojdbc6.jar
+
+# Hue with Oracle requires Oracle Instant client http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html
+# Packages: instant-client-basic and instant-client-sdk-linux
+# Types are: embedded, oracle, mysql
+hue_db_type: mysql
+hue_db_mysql_create_schema_and_user: True
+# set only for Oracle or when MySQL is external, comment out it should take host from installed DB (ext-mysql)
+#hue_db_host: oracle.db
+hue_db_user: hue
+hue_db_password: hue
+# For Oracle add SID here
+hue_db_schema: hue
+# MySQL: 3306 / Oracle: 1521
+#hue_db_port: 1521
+hue_db_port: 3306
+
+# move the spill from the local file system (/tmp) to a mapr fs local volume
+drill_maprspill: False
+# drill pstore options are none, db or zk
+drill_pstore: db
+#drillbit_service_env: "DRILLBIT_MAX_PROC_MEM=5120m,DRILL_HEAP=3072m,DRILL_MAX_DIRECT_MEMORY=1024m,DRILLBIT_CODE_CACHE_SIZE=512m"
+#drill_heap_size_in_mb: 1536
+
+# Types are: embedded, oracle, mysql
+hive_db_type: mysql
+hive_with_tez: True
+hive_db_mysql_create_schema_and_user: True
+hive_db_user: hive
+hive_db_password: hive
+hive_db_schema: hive
+# Uses hadoop credential to store the password
+hive_db_encrypt_password: True
+
+# MySQL JDBC Url, if you set it overrides the default which is taken from installed MySQL
+#hive_db_jdbc_url: jdbc:mysql://mysqlhost:3306/hive?createDatabaseIfNotExist=true
+# Oracle JDBC Url
+#hive_db_jdbc_url: jdbc:oracle:thin:@ip-10-0-0-72.ps.mapr.com:1521:mapr
+
+# Types are: embedded, oracle, mysql
+oozie_db_type: mysql
+oozie_db_mysql_create_schema_and_user: True
+oozie_db_user: oozie
+oozie_db_password: oozie
+oozie_db_schema: oozie
+# Uses hadoop credential to store the password
+oozie_db_encrypt_password: True
+# MySQL JDBC Url, if you set it overrides the default which is taken from installed MySQL
+#oozie_db_jdbc_url: jdbc:mysql://mysqlhost:3306/oozie
+# Oracle JDBC Url
+#oozie_db_jdbc_url: jdbc:oracle:thin:@ip-10-0-0-72.ps.mapr.com:1521:mapr
+
+
+# Oozie Email
+oozie_smtp_host: localhost
+oozie_smtp_port: 25
+oozie_smtp_auth: "false"
+oozie_smtp_username:
+oozie_smtp_password:
+
+# sudo gem install mkpasswd
+#
+# passwd is mapr123
+# mapr_passwd: $6$X4.bqoTK$RTAwnhg2BG/y.3Dugw9Vc31ZdXFsZAitwKtKuu3HgKSNutcQmZ7zLy4cXasivlv2gKD8QGouAjND5fU7H.HDW0
+# passwd is mapr
+mapr_passwd: $6$GzlcP5ei$E6P9QM40O6KJFLZ3wMcg3jzQBNxGXrf8yc77CbCmf0KtFSxK0mpCParhc3WVNEAm4fHKPAqyRV9rsiF6DAFlW0
+
+disks: /root/storagefile1,/root/storagefile2,/root/storagefile3
+disk_storage_pool_size: 3
+
+# Third party components
+zeppelin_version: 0.7.3
+zeppelin_git_repo: https://github.com/apache/incubator-zeppelin.git
+zeppelin_git_hash: v0.7.3
+
+# Get url from https://www.rstudio.com/products/rstudio/download-commercial/
+rstudio_server_pro_deb: http://download2.rstudio.org/rstudio-server-pro-0.99.903-amd64.deb
