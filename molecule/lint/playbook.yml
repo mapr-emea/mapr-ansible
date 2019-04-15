@@ -133,7 +133,6 @@
     - role: ../../roles/mapr-nfsloopback-install
     - role: ../../roles/mapr-nfs-v3-uninstall
     - role: ../../roles/mapr-nodemanager-install
-   # - role: ../../roles/mapr-nodemanager-localdir
     - role: ../../roles/mapr-nodemanager-uninstall
     - role: ../../roles/mapr-oozie-install
     - role: ../../roles/mapr-oozie-mysql
