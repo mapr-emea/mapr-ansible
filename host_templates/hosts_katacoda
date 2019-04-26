@@ -1,0 +1,167 @@
+# If you do not want to install a component leave the block empty
+# sets up ntp, rpcbind, Java and mapr default user with standard password mapr123
+# Write unprovisioned instances here, so that Ansible is aware of host and can uninstall
+# This stays empty unless you want to remove a node
+
+[all:vars]
+ansible_connection=local
+
+[unprovision]
+
+[common]
+maprdemo
+
+[mapr-core]
+maprdemo
+
+# Zookeeper
+[mapr-zookeeper]
+maprdemo
+
+# Contains MapR FileServer (MFS)git checko
+[mapr-fileserver]
+maprdemo
+
+# Container Location DataBase
+[mapr-cldb]
+maprdemo
+
+# Kafka API for MapR-Streams
+[mapr-kafka]
+maprdemo
+
+# Gateway for Streams and MapR-DB
+[mapr-gateway]
+
+# MapR Control System
+[mapr-mcs]
+maprdemo
+
+# YARN resource manager
+[mapr-resourcemanager]
+maprdemo
+
+# Contains YARN Node Manager
+[mapr-nodemanager]
+maprdemo
+
+# Job History Server, IMPORTANT: only one
+[mapr-historyserver]
+maprdemo
+
+[mapr-mastgateway]
+
+# MySQL, required for Hive MetaStore and Oozie, IMPORTANT: only one
+[ext-mysql]
+maprdemo
+
+# Spark on YARN
+[mapr-spark-yarn]
+maprdemo
+
+# Spark ThriftServer
+[mapr-spark-thriftserver]
+
+# Spark HistoryServer
+[mapr-spark-historyserver]
+
+# MapR Fuse Posix Client Basic
+[mapr-posix-client-basic]
+maprdemo
+
+# MapR Fuse Posix Client Platinum
+[mapr-posix-client-platinum]
+
+# NFS
+[mapr-nfs]
+
+# Apache Drill
+[mapr-drill-standalone]
+maprdemo
+
+# Apache Drill
+[mapr-drill-yarn]
+
+# Flume
+[mapr-flume]
+maprdemo
+
+# HBase CLI
+[mapr-hbase-cli]
+maprdemo
+
+# HBase REST and Thrift
+[mapr-hbase-thrift-rest]
+
+# Hive CLI
+[mapr-hive-cli]
+maprdemo
+
+# Hive Meta Store
+[mapr-hive-metastore]
+maprdemo
+
+# Hive Server2
+[mapr-hive-server2]
+maprdemo
+
+# Hive WebHCat
+[mapr-hive-webhcat]
+
+# HttpFS
+[mapr-httpfs]
+
+[mapr-hue]
+
+# Sqoop1
+[mapr-sqoop1]
+maprdemo
+
+# Sqoop2 Server
+[mapr-sqoop2-server]
+
+# Sqoop2 Client
+[mapr-sqoop2-client]
+
+# Pig
+[mapr-pig]
+maprdemo
+
+# Oozie
+[mapr-oozie]
+
+# File Migrate Service
+[mapr-filemigrate]
+
+[mapr-impala-server]
+
+[mapr-impala-catalog]
+
+[mapr-impala-statestore]
+
+[mapr-kafka-connect-jdbc]
+
+[mapr-kafka-rest]
+
+[mapr-data-access-gateway]
+
+# CollectD
+[mapr-collectd]
+
+# OpenTSDB
+[mapr-opentsdb]
+
+# Custom OpenTSDB, do NOT install on same node as mapr-opentsdb
+[mapr-opentsdb-custom]
+
+# Grafana
+[mapr-grafana]
+
+# FluentD
+[mapr-fluentd]
+
+# ElasticSearch
+[mapr-elasticsearch]
+
+# Kibana
+[mapr-kibana]

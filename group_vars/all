@@ -61,7 +61,7 @@ https_custom_rootca: /root/testsslkeys/rootCA.pem
 https_custom_certs_force_update: True
 
 # Security at rest - also known as DARE - Only for secure clusters
-security_encryption_rest: True
+security_encryption_rest: False
 
 # MapR-Core security
 # Options: none, maprsasl, kerberos
