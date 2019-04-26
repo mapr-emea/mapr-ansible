@@ -8,3 +8,8 @@
     packages_Suse: ['java-1_8_0-openjdk', 'java-1_8_0-openjdk-devel']
   package: name={{ item }} state=present
   with_items: "{{ vars['packages_' + ansible_os_family] }}"
+- name: Add JAVA_HOME to /etc/profile
+  lineinfile:
+    dest: /etc/profile
+    state: present
+    line: "export JAVA_HOME={{jdk_folder}}"
