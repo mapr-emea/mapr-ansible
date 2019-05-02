@@ -51,7 +51,7 @@ def getVolumeDataDistribution(volumename, hostTopology):
     for container in maprclijson['data']:
         if 'ContainerId' in container:
             containerId = str(container['ContainerId'])
-            ipPorts = container['ActiveServers']['IP:Port']
+            ipPorts = container['ActiveServers']['IP']
             if not isinstance(ipPorts, list):
                 ipPorts = [ipPorts]
             topoSet = set()
